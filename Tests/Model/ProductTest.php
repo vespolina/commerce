@@ -18,6 +18,15 @@ use Vespolina\ProductBundle\Model\ProductNode;
  */
 class ProductTest extends WebTestCase
 {
+    public function testProduct()
+    {
+        $this->assert(, $product->getIdentifiers(), 'a product must have an identifier array');
+        $this->assert(, $product->getType(), 'a product must have a type');
+        $this->assert(, $product->getName(), 'a product must have a name');
+        $this->assert(, $product->getDescription(), 'a product must have a description');
+        $this->assert(, $product->getFeatures(), 'a product must have a feature array');
+    }
+
     public function testNodes()
     {
         $product = new Product();
