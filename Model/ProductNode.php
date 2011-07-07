@@ -13,21 +13,7 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductNode implements ProductNodeInterface
+abstract class ProductNode implements ProductNodeInterface
 {
 
-    protected $productReferences;
-    protected $nodes;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->productReferences = array();
-
-    }
- 
-
-   
 }
