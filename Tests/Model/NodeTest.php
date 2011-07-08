@@ -20,9 +20,9 @@ class NodeTest extends WebTestCase
     public function testNode()
     {
         $node1 = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\ProductNode');
-        $node1->setName('node 1');
+        $node1->setName((integer)1);
 
-        $this->assertEquals('node 1', $node1->getName(), 'a node must have a name');
+        $this->assertEquals('node 1', $node1->getName(), 'the name must be set as a string type');
         $this->assertTrue($node1->isRoot(), 'this is a root node');
 
         $this->assertFalse($node1, 'the child should be set in the parent');
