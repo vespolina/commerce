@@ -24,7 +24,9 @@ abstract class ProductNode implements ProductNodeInterface
      */
     public function addChild(ProductNodeInterface $node)
     {
-        $nodeName = $node->getName();
+        if (!$nodeName = $node->getName() ) {
+            throw new \InvalidArgumentException('The child node must have a name set');
+        }
         $this->children[$nodeName] = $node;
 
         // disconnect child from previous parent
