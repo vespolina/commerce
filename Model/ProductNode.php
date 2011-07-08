@@ -22,6 +22,39 @@ abstract class ProductNode implements ProductNodeInterface
     /**
      * @inheritdoc
      */
+    public function addChild(ProductNodeInterface $node)
+    {
+        $key = $node->getName();
+        $this->children[$key] = $node;
+
+        // set this as the parent in the child
+        $rm = new \ReflectionProperty('Vespolina\ProductBundle\Model\ProductNode', 'parent');
+        $rm->setAccessible(true);
+        $rm->setValue($node, $this);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getChild($name)
+    {
+        if (isset($this->children[$name])) {
+            return $this->children[$name];
+        }
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function isRoot()
     {
         return $this->parent ? false : true;

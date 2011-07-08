@@ -14,6 +14,28 @@ namespace Vespolina\ProductBundle\Model;
 interface ProductNodeInterface
 {
     /**
+     * Add a child node to this node
+     *
+     * @param Vespolina\ProductBundle\Model\ProductNodeInterface $node
+     */
+    public function addChild(ProductNodeInterface $node);
+
+        /**
+     * Get a specific child node
+     *
+     * @param $name name of the node
+     * @return Vespolina\ProductBundle\Model\ProductNodeInterface or null
+     */
+    public function getChild($name);
+
+    /**
+     * Get the parent node, if this node is a child node
+     * 
+     * @return Vespolina\ProductBundle\Model\ProductNodeInterface or null
+     */
+    public function getParent();
+
+    /**
      * Test to see if this node is at root level or not
      *
      * @return bool
