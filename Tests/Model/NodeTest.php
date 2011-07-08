@@ -35,20 +35,23 @@ class NodeTest extends WebTestCase
         $node2->setName('node 2');
 
         $node1->addChild($node2);
-        $this->assertEquals($node2, $node1->getChild('node 2'), 'the child should be set in the parent');
+        $this->assertSame($node2, $node1->getChild('node 2'), 'the child should be set in the parent');
         $this->assertSame($node1, $node2->getParent(), 'the parent should be set in the child');
-        $this->assertTrue($node2->isRoot(), 'node2 should not be a root node');
+        $this->assertFalse($node2->isRoot(), 'node2 should not be a root node');
 
         $node3 = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\ProductNode');
         $node3->setName('node 3');
 
-        $node1->addChilde($node3);
+        $node1->addChild($node3);
         $this->assertEquals(2, count($node1->getChildren()), 'node1 should have 2 children');
 
         $node2->addChild($node3);
-        $this->assertFalse($node2, $node3->getParent(), 'node 3 should have node 2 as a parent now');
+        $this->assertSame($node2, $node3->getParent(), 'node 3 should have node 2 as a parent now');
         $this->assertNull($node1->getChild('node 3'), 'node 1 should not have node 3 as a child now');
-        $this->assertNull($node2->getChild('node 3'), 'node 2 should have node 3 as a child now');
+        $this->assertSame($node3, $node2->getChild('node 3'), 'node 2 should have node 3 as a child now');
 
+        $this->setExpectedException('InvalidArgumentException', 'The child node must have a name set');
+        $node4 = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\ProductNode');
+        $node1->addChild($node4);
     }
 }
