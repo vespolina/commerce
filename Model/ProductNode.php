@@ -15,5 +15,23 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
  */
 abstract class ProductNode implements ProductNodeInterface
 {
+    protected $children;
+    protected $name;
+    protected $parent;
 
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        $this->name = (string)$name;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 }

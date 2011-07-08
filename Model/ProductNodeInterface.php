@@ -13,5 +13,17 @@ namespace Vespolina\ProductBundle\Model;
  */
 interface ProductNodeInterface
 {
+    /**
+     * Set the name of this node
+     *
+     * @param $name
+     */
+    public function setName($name);
 
+    /**
+     * Get the name of this node
+     *
+     * @return string name of node
+     */
+    public function getName();
 }
