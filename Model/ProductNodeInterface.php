@@ -14,6 +14,13 @@ namespace Vespolina\ProductBundle\Model;
 interface ProductNodeInterface
 {
     /**
+     * Test to see if this node is at root level or not
+     *
+     * @return bool
+     */
+    public function isRoot();
+
+    /**
      * Set the name of this node
      *
      * @param $name

@@ -22,6 +22,14 @@ abstract class ProductNode implements ProductNodeInterface
     /**
      * @inheritdoc
      */
+    public function isRoot()
+    {
+        return $this->parent ? false : true;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setName($name)
     {
         $this->name = (string)$name;
