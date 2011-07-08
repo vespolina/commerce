@@ -32,7 +32,7 @@ abstract class ProductNode implements ProductNodeInterface
      */
     public function setName($name)
     {
-        $this->name = (string)$name;
+        $this->name = (string) $name;
     }
 
     /**
