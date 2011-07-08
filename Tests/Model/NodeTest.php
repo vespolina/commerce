@@ -19,10 +19,16 @@ class NodeTest extends WebTestCase
 {
     public function testNode()
     {
+        $nameProperty = new \ReflectionProperty(
+          'Vespolina\ProductBundle\Model\ProductNode', 'name'
+        );
+
+        $nameProperty->setAccessible(true);
+
         $node1 = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\ProductNode');
         $node1->setName((integer)1);
 
-        $this->assertEquals('node 1', $node1->getName(), 'the name must be set as a string type');
+        $this->assertInternalType('string', $nameProperty->getValue($node1), 'the name must be set as a string type');
         $this->assertTrue($node1->isRoot(), 'this is a root node');
 
         $this->assertFalse($node1, 'the child should be set in the parent');
