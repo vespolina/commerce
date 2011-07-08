@@ -20,13 +20,20 @@ interface ProductNodeInterface
      */
     public function addChild(ProductNodeInterface $node);
 
-        /**
+    /**
      * Get a specific child node
      *
      * @param $name name of the node
      * @return Vespolina\ProductBundle\Model\ProductNodeInterface or null
      */
     public function getChild($name);
+
+    /**
+     * Get all of the children nodes
+     *
+     * @return array of children
+     */
+    public function getChildren();
 
     /**
      * Get the parent node, if this node is a child node

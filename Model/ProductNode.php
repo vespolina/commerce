@@ -47,6 +47,14 @@ abstract class ProductNode implements ProductNodeInterface
     /**
      * @inheritdoc
      */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getParent()
     {
         return $this->parent;
