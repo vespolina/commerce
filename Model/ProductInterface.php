@@ -9,6 +9,12 @@
 namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
+use Vespolina\ProductBundle\Model\Node\FeatureInterface;
+use Vespolina\ProductBundle\Model\Node\IdentifierInterface;
+use Vespolina\ProductBundle\Model\Node\OptionInterface;
+use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -65,6 +71,13 @@ interface ProductInterface
     public function setIdentifiers(ProductIdentifiersInterface $identifiers);
 
     /**
+     * Add an identifier to the product
+     *
+     * @param IdentifierNodeInterface $identifier
+     */
+    public function addIdentifier(IdentifierNodeInterface $identifier);
+
+    /**
      * Return the identifiers of the product
      *
      * @return Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
@@ -90,8 +103,13 @@ interface ProductInterface
      *
      * @param Vespolina\ProductBundle\Node\ProductOptionsInterface $options
      */
-    public function setOptions($options);
+    public function setOptions(ProductOptionsInterface $options);
 
+    /**
+     * Add an option to the product
+     */
+    public function addOption(OptionNodeInterface $option);
+    
     /**
      * Return the options of the product
      *
