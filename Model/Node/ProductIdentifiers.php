@@ -8,6 +8,7 @@
 namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNode;
+use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
 
 /**
@@ -15,5 +16,35 @@ use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
  */
 class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterface
 {
+    /*
+     * @inheritdoc
+     */
+    public function addIdentifier(IdentifierNodeInterface $feature)
+    {
+        $this->addChild($feature);
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function clearIdentifiers()
+    {
+        $this->clearChildren();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIdentifier($features)
+    {
+        $this->setChildren($features);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeIdentifier(IdentifierNodeInterface $feature)
+    {
+        $this->removeChild($feature->getName());
+    }
 }
