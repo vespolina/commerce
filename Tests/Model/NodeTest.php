@@ -53,6 +53,13 @@ class NodeTest extends WebTestCase
         $node1->removeChild('node 2');
         $this->assertNull($node2->getParent(), 'removing a child should remove the parent in the child');
 
+        $node1->addChild($node2);
+        $node1->addChild($node3);
+        $node1->clearChildren();
+        $this->assertNull($node1->getChildren(), 'clear children should remove all children from node');
+        $this->assertNull($node2->getParent(), 'clearing children should leave children without parent');
+        $this->assertNull($node3->getParent(), 'clearing children should leave children without parent');
+
         $this->setExpectedException('InvalidArgumentException', 'The child node must have a name set');
         $node4 = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\ProductNode');
         $node1->addChild($node4);
