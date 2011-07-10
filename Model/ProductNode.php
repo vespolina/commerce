@@ -69,6 +69,17 @@ abstract class ProductNode implements ProductNodeInterface
     /**
      * @inheritdoc
      */
+    public function setChildren($children)
+    {
+        $this->clearChildren();
+        foreach ($children as $child) {
+            $this->addChild($child);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getChild($name)
     {
         if (isset($this->children[$name])) {

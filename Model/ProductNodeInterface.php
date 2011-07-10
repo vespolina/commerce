@@ -33,6 +33,13 @@ interface ProductNodeInterface
     public function removeChild($name);
 
     /**
+     * Set a collection of children
+     *
+     * @param array $children
+     */
+    public function setChildren($children);
+    
+    /**
      * Get a specific child node
      *
      * @param $name name of the node
