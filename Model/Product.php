@@ -12,8 +12,11 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Node\FeatureInterface;
 use Vespolina\ProductBundle\Model\Node\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Node\OptionInterface;
+use Vespolina\ProductBundle\Model\Node\ProductFeatures;
 use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifiers;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductOptions;
 use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
 
 /**
@@ -29,9 +32,17 @@ class Product implements ProductInterface
     protected $options;
     protected $type;
 
+    public function __construct()
+    {
+        $this->features = new ProductFeatures();
+        $this->identifiers = new ProductIdentifiers();
+        $this->options = new ProductOptions();
+    }
+
     /**
      * @inheritdoc
      */
+
     public function getId()
     {
         return $this->id;
