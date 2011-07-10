@@ -8,6 +8,7 @@
 namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNode;
+use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
 
 /**
