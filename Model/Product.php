@@ -42,7 +42,6 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-
     public function getId()
     {
         return $this->id;
