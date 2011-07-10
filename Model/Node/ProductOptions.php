@@ -15,5 +15,35 @@ use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
  */
 class ProductOptions extends ProductNode implements ProductOptionsInterface
 {
+    /*
+     * @inheritdoc
+     */
+    public function addProduct(ProductNodeInterface $product)
+    {
+        $this->addChild($product);
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function clearProducts()
+    {
+        $this->clearChildren();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setProduct($products)
+    {
+        $this->setChildren($products);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeProduct(ProductNodeInterface $product)
+    {
+        $this->removeChild($product->getName());
+    }
 }
