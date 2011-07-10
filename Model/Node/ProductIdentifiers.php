@@ -19,9 +19,9 @@ class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterf
     /*
      * @inheritdoc
      */
-    public function addIdentifier(IdentifierNodeInterface $feature)
+    public function addIdentifier(IdentifierNodeInterface $identifier)
     {
-        $this->addChild($feature);
+        $this->addChild($identifier);
     }
 
     /**
@@ -35,16 +35,16 @@ class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterf
     /**
      * @inheritdoc
      */
-    public function setIdentifier($features)
+    public function setIdentifier($identifiers)
     {
-        $this->setChildren($features);
+        $this->setChildren($identifiers);
     }
 
     /**
      * @inheritdoc
      */
-    public function removeIdentifier(IdentifierNodeInterface $feature)
+    public function removeIdentifier(IdentifierNodeInterface $identifier)
     {
-        $this->removeChild($feature->getName());
+        $this->removeChild($identifier->getName());
     }
 }
