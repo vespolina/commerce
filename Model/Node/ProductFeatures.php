@@ -15,5 +15,35 @@ use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
  */
 class ProductFeatures extends ProductNode implements ProductFeaturesInterface
 {
+    /*
+     * @inheritdoc
+     */
+    public function addFeature(FeatureNodeInterface $feature)
+    {
+        $this->addChild($feature);
+    }
 
+    /**
+     * @inheritdoc
+     */
+    public function clearFeatures()
+    {
+        $this->clearChildren();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setFeature($features)
+    {
+        $this->setChildren($features);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeFeature(FeatureNodeInterface $feature)
+    {
+        $this->removeChild($feature->getName());
+    }
 }
