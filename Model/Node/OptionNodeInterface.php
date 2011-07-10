@@ -14,5 +14,31 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
  */
 interface OptionNodeInterface extends ProductNodeInterface
 {
+    /**
+     * Set the value that is displayed for this option. ie, red, large
+     *
+     * @param $value
+     */
+    public function setValue($value);
 
+    /**
+     * Return the option value
+     *
+     * @return string
+     */
+    public function getValue();
+
+    /**
+     * Set the type of option. ie color, size
+     *
+     * @param $type
+     */
+    public function setType($type);
+
+    /**
+     * Return the type of option
+     *
+     * @return string
+     */
+    public function getType();
 }
