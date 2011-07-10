@@ -21,6 +21,11 @@ interface ProductNodeInterface
     public function addChild(ProductNodeInterface $node);
 
     /**
+     * Clear all children from this node
+     */
+    public function clearChildren();
+
+    /**
      * Remove a child node
      * 
      * @param $name name of node
