@@ -18,15 +18,15 @@ class ProductOptions extends ProductNode implements ProductOptionsInterface
     /*
      * @inheritdoc
      */
-    public function addProduct(ProductNodeInterface $product)
+    public function addOption(OptionNodeInterface $option)
     {
-        $this->addChild($product);
+        $this->addChild($option);
     }
 
     /**
      * @inheritdoc
      */
-    public function clearProducts()
+    public function clearOptions()
     {
         $this->clearChildren();
     }
@@ -34,16 +34,16 @@ class ProductOptions extends ProductNode implements ProductOptionsInterface
     /**
      * @inheritdoc
      */
-    public function setProduct($products)
+    public function setOptions($options)
     {
-        $this->setChildren($products);
+        $this->setChildren($options);
     }
 
     /**
      * @inheritdoc
      */
-    public function removeProduct(ProductNodeInterface $product)
+    public function removeOption(OptionNodeInterface $option)
     {
-        $this->removeChild($product->getName());
+        $this->removeChild($option->getName());
     }
 }

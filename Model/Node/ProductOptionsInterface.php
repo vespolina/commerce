@@ -16,28 +16,28 @@ use Vespolina\ProductBundle\Model\Node\ProductNodeInterface;
 interface ProductOptionsInterface extends ProductNodeInterface
 {
     /**
-     * Add a product to this product products node.
+     * Add a option to this product options node.
      *
-     * @param Vespolina\ProductBundle\Model\Node\ProductNodeInterface $product
+     * @param Vespolina\ProductBundle\Model\Node\OptionNodeInterface $option
      */
-    public function addProduct(ProductNodeInterface $product);
+    public function addOption(OptionNodeInterface $option);
 
     /**
-     * Clear all products from this product products
+     * Clear all options from this product options
      */
-    public function clearProducts();
+    public function clearOptions();
 
     /**
-     * Add a collection of products
+     * Add a collection of options
      *
-     * @param array $products
+     * @param array $options
      */
-    public function setProduct($products);
+    public function setOptions($options);
 
     /**
-     * Remove a product from this product products set
+     * Remove a option from this product options set
      *
-     * @param ProductNodeInterface $product
+     * @param OptionNodeInterface $option
      */
-    public function removeProduct(ProductNodeInterface $product);
+    public function removeOption(OptionNodeInterface $option);
 }
