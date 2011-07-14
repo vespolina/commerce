@@ -27,6 +27,15 @@ interface OptionTypeNodeInterface extends ProductNodeInterface
     public function clearOptions();
 
     /**
+     * Get a specific option by value
+     *
+     * @param string $value
+     *
+     * @return Vespolina\ProductBundle\Model\Node\OptionNodeInterface
+     */
+    public function getOption($value);
+
+    /**
      * Add a collection of options
      *
      * @param array $options
