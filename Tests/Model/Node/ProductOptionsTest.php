@@ -11,6 +11,7 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Node\ProductOptions;
+use Vespolina\ProductBundle\Model\Node\OptionNode;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -32,7 +33,7 @@ class ProductOptionsTest extends WebTestCase
                 'colorBlue' => 'blue',
             ),
         );
-        
+
         $po = new ProductOptions();
 
         foreach ($options as $type => $data) {

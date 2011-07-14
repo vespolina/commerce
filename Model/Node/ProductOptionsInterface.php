@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductNodeInterface;
+use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
