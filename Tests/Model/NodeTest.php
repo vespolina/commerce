@@ -53,6 +53,18 @@ class NodeTest extends WebTestCase
         $node1->removeChild('node 2');
         $this->assertNull($node2->getParent(), 'removing a child should remove the parent in the child');
 
+        $node1->addChild($node2, 'differentName');
+        $this->assertSame(
+            $node2,
+            $node1->getChild('differentName'),
+            'the associative name of the node can be overridden'
+        );
+        $this->assertSame(
+            $node2,
+            $node1->getChildByName('node 2'),
+            'find a child node by the actual name of the node'
+        );
+
         $node1->addChild($node2);
         $node1->addChild($node3);
         $node1->clearChildren();
