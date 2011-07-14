@@ -15,5 +15,25 @@ use Vesoplina\ProductBundle\Model\Node\IdentifierNodeInterface;
  */
 class IdentifierNode extends ProductNode
 {
+    protected $code;
 
+    /**
+     * Set the code for this identifier
+     *
+     * @param $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * Return the code for this identifier
+     *
+     * @return code
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 }
