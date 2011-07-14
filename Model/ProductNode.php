@@ -22,9 +22,10 @@ abstract class ProductNode implements ProductNodeInterface
     /**
      * @inheritdoc
      */
-    public function addChild(ProductNodeInterface $node)
+    public function addChild(ProductNodeInterface $node, $nodeName = null)
     {
-        if (!$nodeName = $node->getName() ) {
+        $nodeName = $nodeName ? $nodeName : $node->getName();
+        if (!$nodeName) {
             throw new \InvalidArgumentException('The child node must have a name set');
         }
         $this->children[$nodeName] = $node;
@@ -61,7 +62,7 @@ abstract class ProductNode implements ProductNodeInterface
             $rm = new \ReflectionProperty('Vespolina\ProductBundle\Model\ProductNode', 'parent');
             $rm->setAccessible(true);
             $rm->setValue($node, null);
-            
+
             unset($this->children[$name]);
         }
     }
