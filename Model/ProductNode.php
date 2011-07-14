@@ -22,9 +22,10 @@ abstract class ProductNode implements ProductNodeInterface
     /**
      * @inheritdoc
      */
-    public function addChild(ProductNodeInterface $node)
+    public function addChild(ProductNodeInterface $node, $nodeName = null)
     {
-        if (!$nodeName = $node->getName() ) {
+        $nodeName = $nodeName ? $nodeName : $node->getName();
+        if (!$nodeName) {
             throw new \InvalidArgumentException('The child node must have a name set');
         }
         $this->children[$nodeName] = $node;
@@ -43,6 +44,17 @@ abstract class ProductNode implements ProductNodeInterface
     /**
      * @inheritdoc
      */
+    public function clearChildren()
+    {
+        foreach (array_keys($this->children) as $childName) {
+            $this->removeChild($childName);
+        }
+        $this->children = null;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function removeChild($name)
     {
         if ($node = $this->getChild($name)) {
@@ -50,8 +62,19 @@ abstract class ProductNode implements ProductNodeInterface
             $rm = new \ReflectionProperty('Vespolina\ProductBundle\Model\ProductNode', 'parent');
             $rm->setAccessible(true);
             $rm->setValue($node, null);
-            
+
             unset($this->children[$name]);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setChildren($children)
+    {
+        $this->clearChildren();
+        foreach ($children as $child) {
+            $this->addChild($child);
         }
     }
 
@@ -62,6 +85,19 @@ abstract class ProductNode implements ProductNodeInterface
     {
         if (isset($this->children[$name])) {
             return $this->children[$name];
+        }
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getChildByName($name)
+    {
+        foreach ($this->getChildren() as $child) {
+            if ((string)$name === $child->getName()) {
+                return $child;
+            }
         }
         return null;
     }

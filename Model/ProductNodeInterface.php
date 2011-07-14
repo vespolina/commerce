@@ -14,18 +14,39 @@ namespace Vespolina\ProductBundle\Model;
 interface ProductNodeInterface
 {
     /**
-     * Add a child node to this node
+     * Add a child node to this node. By default the associative name of the node is the node name.
      *
      * @param Vespolina\ProductBundle\Model\ProductNodeInterface $node
+     * @param optional $name override associate name of the node
      */
-    public function addChild(ProductNodeInterface $node);
+    public function addChild(ProductNodeInterface $node, $name = null);
+
+    /**
+     * Clear all children from this node
+     */
+    public function clearChildren();
 
     /**
      * Remove a child node
-     * 
+     *
      * @param $name name of node
      */
     public function removeChild($name);
+
+    /**
+     * Set a collection of children
+     *
+     * @param array $children
+     */
+    public function setChildren($children);
+
+    /**
+     * Get a specific child node by the associative name
+     *
+     * @param $name associative name of the node
+     * @return Vespolina\ProductBundle\Model\ProductNodeInterface or null
+     */
+    public function getChild($name);
 
     /**
      * Get a specific child node
@@ -33,7 +54,7 @@ interface ProductNodeInterface
      * @param $name name of the node
      * @return Vespolina\ProductBundle\Model\ProductNodeInterface or null
      */
-    public function getChild($name);
+    public function getChildByName($name);
 
     /**
      * Get all of the children nodes
@@ -44,7 +65,7 @@ interface ProductNodeInterface
 
     /**
      * Get the parent node, if this node is a child node
-     * 
+     *
      * @return Vespolina\ProductBundle\Model\ProductNodeInterface or null
      */
     public function getParent();
