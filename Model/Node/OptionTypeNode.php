@@ -23,6 +23,9 @@ class OptionTypeNode extends ProductNode implements OptionTypeNodeInterface
         if (!$this->name) {
             $this->name = $option->getType();
         }
+        if ($this->name != $option->getType()) {
+            throw new \UnexpectedValueException(sprintf('All OptionsNodes in this type must be %s', $this->name));
+        }
         $this->addChild($option, $option->getValue());
     }
 
