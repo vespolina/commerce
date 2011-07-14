@@ -51,11 +51,24 @@ class ProductOptionsTest extends WebTestCase
             $po->getType('color'),
             'options should be grouped in an optionTypeNode'
         );
-        $this->assertEquals(
-            'color',
-            count($po->getType('color')->getName()),
-            'the name should be set to type of the option'
+
+        $childrenProperty = new \ReflectionProperty(
+          'Vespolina\ProductBundle\Model\Node\ProductOptions', 'children'
         );
+        $childrenProperty->setAccessible(true);
+
+        $this->assertArrayHasKey(
+            'color',
+            $childrenProperty->getValue($po),
+            'the associative name should be set to type of the option'
+        );
+
+        $this->assertArrayHasKey(
+            'size',
+            $childrenProperty->getValue($po),
+            'the associative name should be set to type of the option'
+        );
+
         $this->assertEquals(3, count($po->getType('color')->getOptions()), 'there should be 3 color options');
         $this->assertEquals(4, count($po->getType('size')->getOptions()), 'there should be 4 size options');
         $this->assertEquals(
