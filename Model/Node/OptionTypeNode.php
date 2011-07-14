@@ -20,7 +20,10 @@ class OptionTypeNode extends ProductNode implements OptionTypeNodeInterface
      */
     public function addOption(OptionNodeInterface $option)
     {
-        $this->addChild($option);
+        if (!$this->name) {
+            $this->name = $option->getType();
+        }
+        $this->addChild($option, $option->getValue());
     }
 
     /**
