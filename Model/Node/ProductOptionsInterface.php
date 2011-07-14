@@ -40,4 +40,13 @@ interface ProductOptionsInterface extends ProductNodeInterface
      * @param OptionNodeInterface $option
      */
     public function removeOption(OptionNodeInterface $option);
+
+    /**
+     * Get the option set for a specific type
+     *
+     * @param string $type
+     *
+     * @return Vespolina\ProductBundle\Model\Node\OptionTypeNodeInterface
+     */
+    public function getType($type);
 }

@@ -46,4 +46,12 @@ class ProductOptions extends ProductNode implements ProductOptionsInterface
     {
         $this->removeChild($option->getName());
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getType($type)
+    {
+        return $this->getChild($type);
+    }
 }
