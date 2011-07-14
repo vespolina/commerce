@@ -41,12 +41,20 @@ interface ProductNodeInterface
     public function setChildren($children);
 
     /**
+     * Get a specific child node by the associative name
+     *
+     * @param $name associative name of the node
+     * @return Vespolina\ProductBundle\Model\ProductNodeInterface or null
+     */
+    public function getChild($name);
+
+    /**
      * Get a specific child node
      *
      * @param $name name of the node
      * @return Vespolina\ProductBundle\Model\ProductNodeInterface or null
      */
-    public function getChild($name);
+    public function getChildByName($name);
 
     /**
      * Get all of the children nodes

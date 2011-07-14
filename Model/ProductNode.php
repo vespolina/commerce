@@ -92,6 +92,19 @@ abstract class ProductNode implements ProductNodeInterface
     /**
      * @inheritdoc
      */
+    public function getChildByName($name)
+    {
+        foreach ($this->getChildren() as $child) {
+            if ((string)$name === $child->getName()) {
+                return $child;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getChildren()
     {
         return $this->children;
