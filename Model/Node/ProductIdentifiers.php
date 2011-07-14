@@ -16,6 +16,32 @@ use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
  */
 class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterface
 {
+    protected $attributes;
+
+    /*
+     * @inheritdoc
+     */
+    public function setOptions(ProductOptionsInterface $options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeOptions()
+    {
+        $this->options = null;
+    }
+
     /*
      * @inheritdoc
      */
