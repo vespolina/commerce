@@ -81,6 +81,13 @@ class ProductOptionsTest extends WebTestCase
             $po->getOption('CoLoRr', 'bLuE')->getName(),
             'getOption parameters for type and value are case insensitive'
         );
+        $this->assertNull($po->getOption('bull', 'shit'), "return null when the type doesn't exists");
+        
+        $this->assertEquals(
+            'colorBlue',
+            $po->getOptionByName('colorBlue')->getName(),
+            'getOption can also find an option by its name'
+        );
         $this->assertEquals('sizeXl', $po->getOption('sizeXl')->getName(), 'an option can be returned by name');
     }
 }
