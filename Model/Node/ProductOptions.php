@@ -8,6 +8,7 @@
 namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNode;
+use Vespolina\ProductBundle\Model\Node\OptionTypeNode;
 use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
 
 /**
@@ -20,7 +21,11 @@ class ProductOptions extends ProductNode implements ProductOptionsInterface
      */
     public function addOption(OptionNodeInterface $option)
     {
-        $this->addChild($option);
+        $typeName = $option->getType();
+        if (!isset($this->children[$typeName])) {
+            $this->children[$typeName] = new OptionTypeNode();
+        }
+        $this->children[$typeName]->addOption($option);
     }
 
     /**
