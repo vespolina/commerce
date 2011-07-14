@@ -48,6 +48,14 @@ class OptionTypeNode extends ProductNode implements OptionTypeNodeInterface
     /**
      * @inheritdoc
      */
+    public function getOptions()
+    {
+        return $this->getChildren();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setOptions($options)
     {
         $this->setChildren($options);
