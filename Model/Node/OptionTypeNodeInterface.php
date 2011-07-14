@@ -36,6 +36,15 @@ interface OptionTypeNodeInterface extends ProductNodeInterface
     public function getOption($value);
 
     /**
+     * Return a specific option by the name
+     *
+     * @param string $name
+     *
+     * @return Vespolina\ProductBundle\Model\Node\OptionNodeInterface or null
+     */
+    public function getOptionByName($name);
+
+    /**
      * Return all the options for this type
      *
      * @return array of Vespolina\ProductBundle\Model\Node\OptionNodeInterface

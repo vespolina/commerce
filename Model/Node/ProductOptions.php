@@ -47,6 +47,19 @@ class ProductOptions extends ProductNode implements ProductOptionsInterface
     /**
      * @inheritdoc
      */
+    public function getOptionByName($name)
+    {
+        foreach ($this->children as $child) {
+            if ($option = $child->getOptionByName($name)) {
+                return $option;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setOptions($options)
     {
         $this->setChildren($options);
