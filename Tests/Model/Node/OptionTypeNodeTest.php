@@ -16,24 +16,10 @@ use Vespolina\ProductBundle\Model\Node\OptionTypeNode;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class OptionTypeTest extends WebTestCase
+class OptionTypeNodeTest extends WebTestCase
 {
     public function testProductOptions()
     {
-        $options = array(
-            'size' => array(
-                'sizeSm' => 'small',
-                'sizeMed' => 'medium',
-                'sizeLg' => 'large',
-                'sizeXl' => 'extra-large',
-            ),
-            'color' => array(
-                'colorRed' => 'red',
-                'colorGreen' => 'green',
-                'colorBlue' => 'blue',
-            ),
-        );
-
         $colorRed = new OptionNode();
         $colorRed->setName('colorRed');
         $colorRed->setType('color');
@@ -45,7 +31,7 @@ class OptionTypeTest extends WebTestCase
         $sizeXl->setValue('extra large');
 
         $otn = new OptionTypeNode();
-
+        // DO NOT SET THE NAME!
         $otn->addOption($colorRed);
 
         $this->assertEquals(
