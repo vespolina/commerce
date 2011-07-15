@@ -31,8 +31,12 @@ class ProductTest extends WebTestCase
             $product->getOptions(),
             'an empty class with ProductOptionsInterface should be set');
 
-        $product->setPrimaryIdentifier('TestNode');
-        $this->assertSame('TestNode', $product->getPrimaryIdentifier(), 'the identifier node can be set by string');
+        $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Node\IdentifierNode');
+        $this->assertSame(
+            'Vespolina\ProductBundle\Model\Node\IdentifierNode',
+            $product->getPrimaryIdentifier(),
+            'the identifier node can be set by string'
+        );
 
         $product->setPrimaryIdentifier(new IdentifierNode());
         $this->assertSame(
@@ -41,7 +45,7 @@ class ProductTest extends WebTestCase
             'the identifier node can be set by instance'
         );
 
-        $testSKU = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNodeId', array('getCode'));
+        $testSKU = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode'));
         $testSKU->expects($this->any())
                  ->method('getCode')
                  ->will($this->returnValue('AB-CD-EF-GH'));
