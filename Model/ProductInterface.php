@@ -64,23 +64,31 @@ interface ProductInterface
     public function getFeatures();
 
     /**
-     * Set the identifiers of the product to an identifiers set
+     * Set the ProductIdentifiers of the product to a collection of ProductIdentifiers
      *
-     * @param Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
+     * @param identifiers
      */
-    public function setIdentifiers(ProductIdentifiersInterface $identifiers);
+    public function setIdentifiers($identifiers);
 
     /**
-     * Add an identifier to the product
+     * Add a ProductIdentifiers to the product
      *
-     * @param IdentifierNodeInterface $identifier
+     * @param espolina\ProductBundle\Node\ProductIdentifiersInterface $identifier
      */
-    public function addIdentifier(IdentifierNodeInterface $identifier);
+    public function addIdentifier(ProductIdentifiersInterface $identifier);
+
+    /**
+     * Return a ProductIdentifiers of the product
+     *
+     * @return Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
+     */
+    public function getIdentifier($index);
+
 
     /**
      * Return the identifiers of the product
      *
-     * @return Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
+     * @return identifiers
      */
     public function getIdentifiers();
 

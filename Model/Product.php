@@ -90,15 +90,25 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addIdentifier(IdentifierNodeInterface $identifier)
+    public function addIdentifier(ProductIdentifiersInterface $identifier)
     {
-
+        foreach ($identifier->getIdentifiers() as $node) {
+            if ($node instanceof $this->primaryIdentifier) {
+                $index = $node->getCode();
+            }
+        }
+        if (!$index) {
+            throw new UnexpectedValueException(
+                'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifiers instance'
+            );
+        }
+        $this->identifiers[$index] = $identifier;
     }
 
     /**
      * @inheritdoc
      */
-    public function setIdentifiers(ProductIdentifiersInterface $identifiers)
+    public function setIdentifiers($identifiers)
     {
         $this->identifiers = $identifiers;
     }
@@ -109,6 +119,14 @@ class Product implements ProductInterface
     public function getIdentifiers()
     {
         return $this->identifiers;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentifier($index)
+    {
+        return $this->identifiers[$index];
     }
 
     /**
@@ -157,7 +175,7 @@ class Product implements ProductInterface
     public function setPrimaryIdentifier($primaryIdentifier)
     {
         if ($primaryIdentifier instanceof IdentifierNodeInterface) {
-            $this->primaryIdentifier = get_class($primaryIdentifier);
+            $this->primaryIdentifier = "\\" . get_class($primaryIdentifier);
             return;
         }
         if (!is_string($primaryIdentifier)) {
@@ -170,7 +188,7 @@ class Product implements ProductInterface
                 'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
             );
         }
-        $this->primaryIdentifier = $primaryIdentifier;
+        $this->primaryIdentifier = "\\" . ltrim($primaryIdentifier, "\\");
     }
 
     /**
