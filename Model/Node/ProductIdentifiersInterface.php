@@ -47,6 +47,13 @@ interface ProductIdentifiersInterface extends ProductNodeInterface
     public function clearIdentifiers();
 
     /**
+     * Return a collection of product identifiers
+     *
+     * @param array identifiers
+     */
+    public function getIdentifiers();
+
+    /**
      * Add a collection of identifiers
      *
      * @param array $identifiers
