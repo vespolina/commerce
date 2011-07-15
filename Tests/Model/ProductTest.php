@@ -31,18 +31,25 @@ class ProductTest extends WebTestCase
             $product->getOptions(),
             'an empty class with ProductOptionsInterface should be set');
 
+        $product->setPrimaryIdentifier('\Vespolina\ProductBundle\Model\Node\IdentifierNode');
+        $this->assertSame(
+            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
+            $product->getPrimaryIdentifier(),
+            'the primary identifier node can be set by string'
+        );
+
         $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Node\IdentifierNode');
         $this->assertSame(
-            'Vespolina\ProductBundle\Model\Node\IdentifierNode',
+            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
             $product->getPrimaryIdentifier(),
-            'the identifier node can be set by string'
+            "the primary identifier class name must have a leading \\"
         );
 
         $product->setPrimaryIdentifier(new IdentifierNode());
         $this->assertSame(
-            'Vespolina\ProductBundle\Model\Node\IdentifierNode',
+            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
             $product->getPrimaryIdentifier(),
-            'the identifier node can be set by instance'
+            'the primary identifier node can be set by instance'
         );
 
         $testSKU = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
