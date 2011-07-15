@@ -30,6 +30,7 @@ class Product implements ProductInterface
     protected $identifiers;
     protected $name;
     protected $options;
+    protected $primaryIdentifier;
     protected $type;
 
     public function __construct()
@@ -148,6 +149,36 @@ class Product implements ProductInterface
     public function getOptions()
     {
         return $this->options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPrimaryIdentifier($primaryIdentifier)
+    {
+        if ($primaryIdentifier instanceof IdentifierNodeInterface) {
+            $this->primaryIdentifier = get_class($primaryIdentifier);
+            return;
+        }
+        if (!is_string($primaryIdentifier)) {
+            throw new \InvalidArgumentException(
+                'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
+            );
+        }
+        if (!(new $primaryIdentifier instanceof IdentifierNodeInterface)) {
+            throw new \InvalidArgumentException(
+                'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
+            );
+        }
+        $this->primaryIdentifier = $primaryIdentifier;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPrimaryIdentifier()
+    {
+        return $this->primaryIdentifier;
     }
 
     /**
