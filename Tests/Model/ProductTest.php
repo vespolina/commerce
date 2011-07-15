@@ -31,13 +31,13 @@ class ProductTest extends WebTestCase
             $product->getOptions(),
             'an empty class with ProductOptionsInterface should be set');
 
-        $product->setPrimaryIdentifer('TestNode');
-        $this->assertSame('TestNode', $product->getPrimaryIdentifer(), 'the identifier node can be set by string');
+        $product->setPrimaryIdentifier('TestNode');
+        $this->assertSame('TestNode', $product->getPrimaryIdentifier(), 'the identifier node can be set by string');
 
         $product->setPrimaryIdentifier(new IdentifierNode());
         $this->assertSame(
             'Vespolina\ProductBundle\Model\Node\IdentifierNode',
-            $product->getPrimaryIdentifer(),
+            $product->getPrimaryIdentifier(),
             'the identifier node can be set by instance'
         );
 
