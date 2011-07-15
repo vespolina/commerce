@@ -53,10 +53,15 @@ class ProductTest extends WebTestCase
         $productIdentifiers = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
         $productIdentifiers->setAccessible(true);
 
+        $product->addIdentifier($pi);
         $this->assertArrayHasKey(
             'AB-CD-EF-GH',
             $productIdentifiers->getValue($product),
             'ProductIdentifiers should be indexed by the principle identifier type value'
         );
+
+        $product = new Product();
+        $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
+        $product->addIdentifier($pi);
     }
 }
