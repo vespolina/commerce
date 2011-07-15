@@ -50,7 +50,7 @@ class ProductTest extends WebTestCase
         $pi = new ProductIdentifiers();
         $pi->addIdentifier($testSKU);
 
-        $productIdentifiers = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'productIdentifiers');
+        $productIdentifiers = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
         $productIdentifiers->setAccessible(true);
 
         $this->assertArrayHasKey(
