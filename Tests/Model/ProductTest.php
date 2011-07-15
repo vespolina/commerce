@@ -63,5 +63,18 @@ class ProductTest extends WebTestCase
         $product = new Product();
         $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
         $product->addIdentifier($pi);
+
+        $this->setExpectedException(
+            'InvalidArgumentException',
+            'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
+        );
+        $product->setPrimaryIdentifier(new Product());
+
+
+        $this->setExpectedException(
+            'InvalidArgumentException',
+            'The primary identifier must be an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
+        );
+        $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Product');
     }
 }
