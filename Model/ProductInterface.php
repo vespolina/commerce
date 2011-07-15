@@ -9,9 +9,9 @@
 namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Node\FeatureInterface;
-use Vespolina\ProductBundle\Model\Node\IdentifierInterface;
-use Vespolina\ProductBundle\Model\Node\OptionInterface;
+use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
+use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
+use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
 use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
@@ -47,7 +47,7 @@ interface ProductInterface
      *
      * @param ProductNodeInterface $feature
      */
-    public function addFeature(FeatureInterface $feature);
+    public function addFeature(FeatureNodeInterface $feature);
 
     /**
      * Set the features of the product to a feature set
@@ -109,7 +109,7 @@ interface ProductInterface
      * Add an option to the product
      */
     public function addOption(OptionNodeInterface $option);
-    
+
     /**
      * Return the options of the product
      *
