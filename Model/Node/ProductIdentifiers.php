@@ -61,6 +61,14 @@ class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterf
     /**
      * @inheritdoc
      */
+    public function getIdentifiers()
+    {
+        return $this->getChildren();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setIdentifier($identifiers)
     {
         $this->setChildren($identifiers);
