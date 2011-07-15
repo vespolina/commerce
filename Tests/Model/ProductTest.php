@@ -45,17 +45,21 @@ class ProductTest extends WebTestCase
             'the identifier node can be set by instance'
         );
 
-        $testSKU = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode'));
+        $testSKU = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
         $testSKU->expects($this->any())
                  ->method('getCode')
                  ->will($this->returnValue('AB-CD-EF-GH'));
+        $testSKU->expects($this->any())
+                 ->method('getName')
+                 ->will($this->returnValue('AB-CD-EF-GH'));
 
         $product->setPrimaryIdentifier($testSKU);
-        $pi = new ProductIdentifiers();
-        $pi->addIdentifier($testSKU);
 
         $productIdentifiers = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
         $productIdentifiers->setAccessible(true);
+
+        $pi = new ProductIdentifiers();
+        $pi->addIdentifier($testSKU);
 
         $product->addIdentifier($pi);
         $this->assertArrayHasKey(
@@ -80,5 +84,12 @@ class ProductTest extends WebTestCase
             'The primary identifier must be an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
         );
         $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Product');
+
+        $product->setPrimaryIdentifier($testSKU);
+        $this->setExpectedException(
+            'UnexpectedValueException',
+            'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifiers instance'
+        );
+        $product->addIdentifier(new ProductIndentifiers());
     }
 }
