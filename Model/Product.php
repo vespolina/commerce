@@ -35,7 +35,6 @@ class Product implements ProductInterface
     public function __construct()
     {
         $this->features = new ProductFeatures();
-        $this->identifiers = new ProductIdentifiers();
         $this->options = new ProductOptions();
     }
 
@@ -94,7 +93,7 @@ class Product implements ProductInterface
     {
 
     }
-    
+
     /**
      * @inheritdoc
      */
