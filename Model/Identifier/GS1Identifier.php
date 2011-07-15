@@ -15,12 +15,67 @@ use Vesoplina\ProductBundle\Model\Node\IdentifierNode;
 abstract class GS1Identifier extends IdentifierNode
 {
     /**
-     * Performs a redundancy check on the identifier code
+     * Performs a redundancy check on the identifier code, needs to be overridden
      *
      * @return boolean
      */
     public function checkDigit()
     {
         return false;
+    }
+
+    /**
+     * Performs a redundancy check on GTIN-8 codes
+     *
+     * @param $code
+     * @return boolean
+     */
+    protected function checkDigitGTIN8($code)
+    {
+
+    }
+
+    /**
+     * Performs a redundancy check on GTIN-12 codes
+     *
+     * @param $code
+     * @return boolean
+     */
+    protected function checkDigitGTIN12($code)
+    {
+
+    }
+
+    /**
+     * Performs a redundancy check on GTIN-13 codes
+     *
+     * @param $code
+     * @return boolean
+     */
+    protected function checkDigitGTIN13($code)
+    {
+
+    }
+
+    /**
+     * Performs a redundancy check on GTIN-14 codes
+     *
+     * @param $code
+     * @return boolean
+     */
+    protected function checkDigitGTIN14($code)
+    {
+
+    }
+
+    /**
+     * Performs a redundancy check on GTIN-8 codes
+     *
+     * @param $code
+     * @return boolean
+     */
+    protected function checkDigitSSCC($code)
+    {
+
     }
 }
