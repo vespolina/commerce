@@ -14,5 +14,17 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
  */
 interface IdentifierNodeInterface extends ProductNodeInterface
 {
+    /**
+     * Set the code for this identifier
+     *
+     * @param $code
+     */
+    public function setCode($code);
 
+    /**
+     * Return the code for this identifier
+     *
+     * @return code
+     */
+    public function getCode();
 }
