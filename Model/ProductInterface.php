@@ -9,9 +9,9 @@
 namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Node\FeatureInterface;
-use Vespolina\ProductBundle\Model\Node\IdentifierInterface;
-use Vespolina\ProductBundle\Model\Node\OptionInterface;
+use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
+use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
+use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
 use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
@@ -47,7 +47,7 @@ interface ProductInterface
      *
      * @param ProductNodeInterface $feature
      */
-    public function addFeature(FeatureInterface $feature);
+    public function addFeature(FeatureNodeInterface $feature);
 
     /**
      * Set the features of the product to a feature set
@@ -64,23 +64,31 @@ interface ProductInterface
     public function getFeatures();
 
     /**
-     * Set the identifiers of the product to an identifiers set
+     * Set the ProductIdentifiers of the product to a collection of ProductIdentifiers
      *
-     * @param Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
+     * @param identifiers
      */
-    public function setIdentifiers(ProductIdentifiersInterface $identifiers);
+    public function setIdentifiers($identifiers);
 
     /**
-     * Add an identifier to the product
+     * Add a ProductIdentifiers to the product
      *
-     * @param IdentifierNodeInterface $identifier
+     * @param espolina\ProductBundle\Node\ProductIdentifiersInterface $identifier
      */
-    public function addIdentifier(IdentifierNodeInterface $identifier);
+    public function addIdentifier(ProductIdentifiersInterface $identifier);
+
+    /**
+     * Return a ProductIdentifiers of the product
+     *
+     * @return Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
+     */
+    public function getIdentifier($index);
+
 
     /**
      * Return the identifiers of the product
      *
-     * @return Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
+     * @return identifiers
      */
     public function getIdentifiers();
 
@@ -109,13 +117,27 @@ interface ProductInterface
      * Add an option to the product
      */
     public function addOption(OptionNodeInterface $option);
-    
+
     /**
      * Return the options of the product
      *
      * @return Vespolina\ProductBundle\Node\ProductOptionsInterface $options
      */
     public function getOptions();
+
+    /**
+     * Set the primary identifier class by name or instance
+     *
+     * @param string or instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface
+     */
+    public function setPrimaryIdentifier($primaryIdentifier);
+
+    /**
+     * Return the name of the primary identifier node class
+     *
+     * @return string
+     */
+    public function getPrimaryIdentifier();
 
     /**
      * Set the product type. The product types can be ORed together
