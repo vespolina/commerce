@@ -14,5 +14,17 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
  */
 interface FeatureNodeInterface extends ProductNodeInterface
 {
+    /**
+     * Set the search term for this feature
+     *
+     * @param $term
+     */
+    public function setSearchTerm($term);
 
+    /**
+     * Return the search term for this feature
+     *
+     * @return string term
+     */
+    public function getSearchTerm();
 }

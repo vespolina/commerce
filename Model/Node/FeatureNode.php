@@ -17,9 +17,7 @@ class FeatureNode extends ProductNode implements FeatureNodeInterface
     protected $term;
 
     /**
-     * Set the search term for this feature
-     *
-     * @param $term
+     * @inheritdoc
      */
     public function setSearchTerm($term)
     {
@@ -27,9 +25,7 @@ class FeatureNode extends ProductNode implements FeatureNodeInterface
     }
 
     /**
-     * Return the search term for this feature
-     *
-     * @return string term
+     * @inheritdoc
      */
     public function getSearchTerm()
     {
