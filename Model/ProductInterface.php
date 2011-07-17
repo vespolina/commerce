@@ -18,6 +18,7 @@ use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
+ * @author Daniel Kucharski <daniel@xerias.be>
  */
 interface ProductInterface
 {
