@@ -12,8 +12,6 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductFeatures;
-use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifiers;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
 use Vespolina\ProductBundle\Model\Node\ProductOptions;
@@ -35,7 +33,6 @@ class Product implements ProductInterface
 
     public function __construct()
     {
-        $this->features = new ProductFeatures();
         $this->options = new ProductOptions();
     }
 
@@ -68,7 +65,9 @@ class Product implements ProductInterface
      */
     public function addFeature(FeatureNodeInterface $feature)
     {
-
+        $type = strtolower($feature->getType());
+        $searchTerm = strtolower($feature->getSearchTerm());
+        $this->features[$type][$searchTerm] = $feature;
     }
 
     /**
@@ -161,7 +160,7 @@ class Product implements ProductInterface
      */
     public function addOption(OptionNodeInterface $option)
     {
-
+        $this->options->addOption($option);
     }
 
     /**
