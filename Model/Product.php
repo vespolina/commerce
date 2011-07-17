@@ -160,7 +160,7 @@ class Product implements ProductInterface
      */
     public function addOption(OptionNodeInterface $option)
     {
-
+        $this->options->addOption($option);
     }
 
     /**
