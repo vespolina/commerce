@@ -14,5 +14,25 @@ use Vespolina\ProductBundle\Model\ProductNode;
  */
 class FeatureNode extends ProductNode implements FeatureNodeInterface
 {
+    protected $term;
 
+    /**
+     * Set the search term for this feature
+     *
+     * @param $term
+     */
+    public function setSearchTerm($term)
+    {
+        $this->term = $term;
+    }
+
+    /**
+     * Return the search term for this feature
+     *
+     * @return string term
+     */
+    public function getSearchTerm()
+    {
+        return $this->term;
+    }
 }
