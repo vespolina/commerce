@@ -92,6 +92,9 @@ class Product implements ProductInterface
      */
     public function addIdentifier(ProductIdentifiersInterface $identifier)
     {
+        if (!$this->primaryIdentifier) {
+            throw new \UnexpectedValueException('The primary identifier type has not been set');
+        }
         foreach ($identifier->getIdentifiers() as $node) {
             if ($node instanceof $this->primaryIdentifier) {
                 $index = $node->getCode();

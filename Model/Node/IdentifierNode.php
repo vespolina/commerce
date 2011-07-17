@@ -18,9 +18,7 @@ class IdentifierNode extends ProductNode implements IdentifierNodeInterface
     protected $code;
 
     /**
-     * Set the code for this identifier
-     *
-     * @param $code
+     * @inheritdoc
      */
     public function setCode($code)
     {
@@ -28,9 +26,7 @@ class IdentifierNode extends ProductNode implements IdentifierNodeInterface
     }
 
     /**
-     * Return the code for this identifier
-     *
-     * @return code
+     * @inheritdoc
      */
     public function getCode()
     {
