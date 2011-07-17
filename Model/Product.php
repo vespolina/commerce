@@ -65,7 +65,9 @@ class Product implements ProductInterface
      */
     public function addFeature(FeatureNodeInterface $feature)
     {
-
+        $type = strtolower($feature->getType());
+        $searchTerm = strtolower($feature->getSearchTerm());
+        $this->features[$type][$searchTerm] = $feature;
     }
 
     /**
