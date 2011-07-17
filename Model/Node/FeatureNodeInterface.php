@@ -27,4 +27,18 @@ interface FeatureNodeInterface extends ProductNodeInterface
      * @return string term
      */
     public function getSearchTerm();
+
+    /**
+     * Set the type of feature of this node. ie: name, title, brand
+     *
+     * @param $type
+     */
+    public function setType($type);
+
+    /**
+     * Return the type of feature of this node
+     *
+     * @return string type
+     */
+    public function getType();
 }

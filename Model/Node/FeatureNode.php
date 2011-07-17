@@ -15,6 +15,7 @@ use Vespolina\ProductBundle\Model\ProductNode;
 class FeatureNode extends ProductNode implements FeatureNodeInterface
 {
     protected $term;
+    protected $type;
 
     /**
      * @inheritdoc
@@ -30,5 +31,21 @@ class FeatureNode extends ProductNode implements FeatureNodeInterface
     public function getSearchTerm()
     {
         return $this->term;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }
