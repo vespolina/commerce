@@ -32,11 +32,11 @@ class FeatureNodeTest extends WebTestCase
         $titleNode->setSearchTerm('different search term');
         $this->assertEquals(
             'different search term',
-            $titleNode->setSearchTerm,
+            $titleNode->getSearchTerm(),
             'setting search term overrides previous set term'
         );
 
-        $titleNode->setName('eigh53');
+        $titleNode->setName('eight53');
         $this->assertEquals(
             'different search term',
             $titleNode->getSearchTerm(),
