@@ -42,5 +42,8 @@ class FeatureNodeTest extends WebTestCase
             $titleNode->getSearchTerm(),
             'if a term is already set, it should not be overwritten by setting the name'
         );
+
+        $titleNode->setSearchTerm(21);
+        $this->assertInternalType('string', $titleNode->getSearchTerm(), 'make sure the search is type cast as a string')
     }
 }
