@@ -21,7 +21,7 @@ class FeatureNodeTest extends WebTestCase
     {
         $titleNode = new FeatureNode();
         $titleNode->setType('title');
-        $titleNode->setName('EIGHT53')
+        $titleNode->setName('EIGHT53');
 
         $this->assertEquals(
             'eight53',
@@ -44,6 +44,6 @@ class FeatureNodeTest extends WebTestCase
         );
 
         $titleNode->setSearchTerm(21);
-        $this->assertInternalType('string', $titleNode->getSearchTerm(), 'make sure the search is type cast as a string')
+        $this->assertInternalType('string', $titleNode->getSearchTerm(), 'make sure the search is type cast as a string');
     }
 }
