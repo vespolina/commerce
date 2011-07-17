@@ -14,15 +14,15 @@ use Vespolina\ProductBundle\Model\ProductNode;
  */
 class FeatureNode extends ProductNode implements FeatureNodeInterface
 {
-    protected $term;
+    protected $searchTerm;
     protected $type;
 
     /**
      * @inheritdoc
      */
-    public function setSearchTerm($term)
+    public function setSearchTerm($searchTerm)
     {
-        $this->term = $term;
+        $this->searchTerm = strtolower($searchTerm);
     }
 
     /**
