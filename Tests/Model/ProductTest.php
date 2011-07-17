@@ -22,10 +22,26 @@ class ProductTest extends WebTestCase
     public function testProduct()
     {
         $product = new Product();
+
+        /* options */
         $this->assertInstanceOf(
             'Vespolina\ProductBundle\Model\Node\ProductOptionsInterface',
             $product->getOptions(),
             'an empty class with ProductOptionsInterface should be set');
+
+        $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Node\OptionNode', array('getType', 'getValue'));
+        $sizeLgOption->expects($this->any())
+                 ->method('getType')
+                 ->will($this->returnValue('size'));
+        $sizeLgOption->expects($this->any())
+                 ->method('getValue')
+                 ->will($this->returnValue('large'));
+        $product->addOption($sizeLgOption);
+        $this->assertSame(
+            $sizeLgOption,
+            $product->getOptions()->getOption('size', 'large'),
+            'addOption hands option off to ProductOptions'
+        );
 
         /* product identifiers */
         $product->setPrimaryIdentifier('\Vespolina\ProductBundle\Model\Node\IdentifierNode');
