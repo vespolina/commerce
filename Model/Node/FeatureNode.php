@@ -30,7 +30,18 @@ class FeatureNode extends ProductNode implements FeatureNodeInterface
      */
     public function getSearchTerm()
     {
-        return $this->term;
+        return $this->searchTerm;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        if (!$this->searchTerm) {
+            $this->setSearchTerm($name);
+        }
     }
 
     /**
