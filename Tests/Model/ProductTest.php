@@ -22,15 +22,28 @@ class ProductTest extends WebTestCase
     public function testProduct()
     {
         $product = new Product();
-        $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface',
-            $product->getFeatures(),
-            'an empty class with ProductFeaturesInterface should be set');
+
+        /* options */
         $this->assertInstanceOf(
             'Vespolina\ProductBundle\Model\Node\ProductOptionsInterface',
             $product->getOptions(),
             'an empty class with ProductOptionsInterface should be set');
 
+        $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Node\OptionNode', array('getType', 'getValue'));
+        $sizeLgOption->expects($this->any())
+                 ->method('getType')
+                 ->will($this->returnValue('size'));
+        $sizeLgOption->expects($this->any())
+                 ->method('getValue')
+                 ->will($this->returnValue('large'));
+        $product->addOption($sizeLgOption);
+        $this->assertSame(
+            $sizeLgOption,
+            $product->getOptions()->getOption('size', 'large'),
+            'addOption hands option off to ProductOptions'
+        );
+
+        /* product identifiers */
         $product->setPrimaryIdentifier('\Vespolina\ProductBundle\Model\Node\IdentifierNode');
         $this->assertSame(
             '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
@@ -75,6 +88,24 @@ class ProductTest extends WebTestCase
             'ProductIdentifiers should be indexed by the principle identifier type value'
         );
 
+        /* product features */
+        $productFeatures = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'features');
+        $productFeatures->setAccessible(true);
+
+        $labelFeature = $this->getMock('Vespolina\ProductBundle\Model\Node\FeatureNode', array('getType', 'getSearchTerm'));
+        $labelFeature->expects($this->any())
+                 ->method('getType')
+                 ->will($this->returnValue('LABEL'));
+        $labelFeature->expects($this->any())
+                 ->method('getSearchTerm')
+                 ->will($this->returnValue('Joat Music'));
+
+        $product->addFeature($labelFeature);
+        $features = $productFeatures->getValue($product);
+        $this->assertArrayHasKey('label', $features, 'top level key is the type in lower case');
+        $this->assertArrayHasKey('joat music', $features['label'], 'top level key is the search term in lower case');
+
+        /* exceptions */
         $product = new Product();
         $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
         $product->addIdentifier($pi);
@@ -84,7 +115,6 @@ class ProductTest extends WebTestCase
             'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
         );
         $product->setPrimaryIdentifier(new Product());
-
 
         $this->setExpectedException(
             'InvalidArgumentException',

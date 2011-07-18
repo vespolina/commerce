@@ -12,6 +12,7 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
+ * @author Daniel Kucharski <daniel@xerias.be>
  */
 abstract class ProductNode implements ProductNodeInterface
 {
