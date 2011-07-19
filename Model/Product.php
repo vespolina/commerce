@@ -23,6 +23,12 @@ use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
  */
 class Product implements ProductInterface
 {
+    const PHYSICAL      = 1;
+    const UNIQUE        = 2;
+    const DOWNLOAD      = 4;
+    const TIME          = 8;
+    const SERVICE       = 16;
+
     protected $features;
     protected $description;
     protected $id;

@@ -147,6 +147,8 @@ interface ProductInterface
      * Product::PHYSICAL
      * Product::UNIQUE
      * Product::DOWNLOAD
+     * Product::TIME
+     * Product::SERVICE
      *
      * @param $type
      */
