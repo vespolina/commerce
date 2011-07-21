@@ -23,14 +23,22 @@ use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
  */
 class Product implements ProductInterface
 {
-    protected $features;
+    const PHYSICAL      = 1;
+    const UNIQUE        = 2;
+    const DOWNLOAD      = 4;
+    const TIME          = 8;
+    const SERVICE       = 16;
+
+    protected $createdAt;
     protected $description;
+    protected $features;
     protected $id;
     protected $identifiers;
     protected $name;
     protected $options;
     protected $primaryIdentifier;
     protected $type;
+    protected $updateAt;
 
     public function __construct()
     {
@@ -216,5 +224,34 @@ class Product implements ProductInterface
     public function getType()
     {
         return $this->type;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    public function incrementCreatedAt()
+    {
+        if (null === $this->createdAt) {
+            $this->createdAt = new \DateTime();
+        }
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function incrementUpdatedAt()
+    {
+        $this->updatedAt = new \DateTime();
     }
 }

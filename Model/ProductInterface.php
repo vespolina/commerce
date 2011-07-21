@@ -147,6 +147,8 @@ interface ProductInterface
      * Product::PHYSICAL
      * Product::UNIQUE
      * Product::DOWNLOAD
+     * Product::TIME
+     * Product::SERVICE
      *
      * @param $type
      */
@@ -158,8 +160,17 @@ interface ProductInterface
      */
     public function getType();
 
-#    public function addNode(ProductNodeInterface $node);
-#    public function setNodes($nodes);
-#    public function getNode($name);
-#    public function getNodes();
+    /*
+     * Get the date and time the product was created
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt();
+
+    /*
+     * Get the date and time the product was last updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt();
 }
