@@ -5,20 +5,19 @@
 * This source file is subject to the MIT license that is bundled
 * with this source code in the file LICENSE.
 */
-
-/**
-* ProductBundle
-*
-* @author Joris de Wit <joris.w.dewit@gmail.com>
-*/
-
 namespace Vespolina\ProductBundle\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use Vespolina\ProductBundle\Model\Product;
+use Vespolina\ProductBundle\Model\ProductInterface;
+
+/**
+* ProductBundle
+*
+* @author Joris de Wit <joris.w.dewit@gmail.com>
+*/
 
 class ProductController extends ContainerAware
 {
@@ -27,7 +26,7 @@ class ProductController extends ContainerAware
      */
     public function listAction()
     {
-        $products = $this->container->get('vespolina_product.product_manager')->findProducts();
+        $products = $this->container->get('vespolina.product_manager')->findProducts();
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:list.html.'.$this->getEngine(), array('products' => $products));
     }
@@ -47,7 +46,7 @@ class ProductController extends ContainerAware
     public function editAction($sku)
     {
         $product = $this->findProductBy('sku', $sku);
-        $form = $this->container->get('vespolina_product.form.product');
+        $form = $this->container->get('vespolina.form.product');
         $form->setData($product);
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
@@ -62,12 +61,12 @@ class ProductController extends ContainerAware
     public function updateAction($sku)
     {
         $product = $this->findProductBy('sku', $sku);
-        $form = $this->container->get('vespolina_product.form.product');
+        $form = $this->container->get('vespolina.form.product');
         $form->bind($this->container->get('request'), $product);
 
         if ($form->isValid()) {
-            $this->container->get('vespolina_product.product_manager')->updateProduct($product);
-            $this->setFlash('vespolina_product_product_update', 'success');
+            $this->container->get('vespolina.product_manager')->updateProduct($product);
+            $this->setFlash('vespolina_product_update', 'success');
             $productUrl = $this->generateUrl('vespolina_product_product_show', array('sku' => $product->getSKU()));
             return new RedirectResponse($productUrl);
         }
@@ -83,8 +82,8 @@ class ProductController extends ContainerAware
      */
     public function newAction()
     {
-        $product = $this->container->get('vespolina_product.product_manager')->createProduct();
-        $form = $this->container->get('vespolina_product.form.product');
+        $product = $this->container->get('vespolina.product_manager')->createProduct();
+        $form = $this->container->get('vespolina.form.product');
         $form->setData($product);
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
@@ -97,9 +96,9 @@ class ProductController extends ContainerAware
      */
     public function createAction()
     {
-        $manager = $this->container->get('vespolina_product.product_manager');
+        $manager = $this->container->get('vespolina.product_manager');
         $product = $manager->createProduct();
-        $form = $this->container->get('vespolina_product.form.product');
+        $form = $this->container->get('vespolina.form.product');
         $form->setData($product);
 
         $request = $this->container->get('request');
@@ -115,9 +114,9 @@ class ProductController extends ContainerAware
 
         if ($form->isValid()) {
             $manager->updateProduct($product);
-            $url = $this->generateUrl('vespolina_product_product_created');
+            $url = $this->generateUrl('vespolina_product_created');
 
-            $this->setFlash('vespolina_product_product_create', 'success');
+            $this->setFlash('vespolina_product_create', 'success');
             return new RedirectResponse($url);
         }
 
