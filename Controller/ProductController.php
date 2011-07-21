@@ -32,35 +32,35 @@ class ProductController extends ContainerAware
     }
 
     /**
-     * Show one product by sku
+     * Show one product by object id
      */
-    public function showAction($sku)
+    public function showAction($id)
     {
-        $product = $this->findProductBy('sku', $sku);
+        $product = $this->container->get('vespolina.product_manager')->findProductById($id);
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:show.html.'.$this->getEngine(), array('product' => $product));
     }
 
     /**
      * Edit one product, show the edit form
      */
-    public function editAction($sku)
+    public function editAction($id)
     {
-        $product = $this->findProductBy('sku', $sku);
+        $product = $this->container->get('vespolina.product_manager')->findProductById($id);
         $form = $this->container->get('vespolina.form.product');
         $form->setData($product);
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
             'form'      => $form,
-            'sku'       => $product->getSKU()
+            'id'       => $product->getId()
         ));
     }
 
     /**
      * Update a product
      */
-    public function updateAction($sku)
+    public function updateAction($id)
     {
-        $product = $this->findProductBy('sku', $sku);
+        $product = $this->container->get('vespolina.product_manager')->findProductById($id);
         $form = $this->container->get('vespolina.form.product');
         $form->bind($this->container->get('request'), $product);
 
