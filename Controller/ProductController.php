@@ -125,4 +125,9 @@ class ProductController extends ContainerAware
         ));
     }
 
+    protected function getEngine()
+    {
+        return 'twig'; // HACK ALERT!
+//        return $this->container->getParameter('vespolina.template.engine');
+    }
 }
