@@ -20,7 +20,7 @@
 
         <field name="primaryIdentifier" fieldName="primaryIdentifier" type="string" />
 
-        <field name="type" fieldName="type" type="integer" />
+        <field name="type" fieldName="type" type="int" />
 
         <field name="createdAt" fieldName="createdAt" type="date" />
 
