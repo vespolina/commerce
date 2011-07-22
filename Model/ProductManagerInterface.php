@@ -14,7 +14,40 @@ use Vespolina\ProductBundle\Model\ProductInterface;
  */
 interface ProductManagerInterface
 {
+    /**
+     * Create a Product instance
+     * 
+     * @return Vespolina\ProductBundle\Model\ProductInterface
+     */
     public function createProduct();
+
+    /**
+     * Find a collection of products by the criteria
+     *
+     * @param array $criteria
+     * @param mixed $orderBy
+     * @param mixed $limit
+     * @param mixed $offset
+     *
+     * @return array
+     */
+    public function findBy(array $criteria, $orderBy, $limit, $offset);
+
+    /**
+     * Find a Product by its object identifier
+     *
+     * @param $id
+     * @return Vespolina\ProductBundle\Model\ProductInterface
+     */
     public function findProductById($id);
+
+    /**
+     * Find a Product by an identifier node
+     *
+     * @param $name
+     * @param $code
+     * 
+     * @return Vespolina\ProductBundle\Model\ProductInterface
+     */
     public function findProductByIdentifier($name, $code);
 }

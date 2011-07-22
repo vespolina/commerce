@@ -7,6 +7,7 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
+use Vespolina\ProductBundle\Document\Product;
 use Vespolina\ProductBundle\Model\ProductManager as BaseProductManager;
 
 /**
@@ -14,5 +15,46 @@ use Vespolina\ProductBundle\Model\ProductManager as BaseProductManager;
  */
 class ProductManager extends BaseProductManager
 {
+    protected $dm;
+    protected $productRepo;
+    
+    public function __construct($dm)
+    {
+        $this->dm = $dm;
+        $this->productRepo = $this->dm->getRepository('Vespolina\ProductBundle\Document\Product');
 
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createProduct()
+    {
+        // TODO: this will be using factories to allow for a number of different types of product classes
+        return new Product();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findBy(array $criteria, $orderBy, $limit, $offset)
+    {
+        return $this->productRepo->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findProductById($id)
+    {
+        return $this->productRepo->find($id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findProductByIdentifier($name, $code)
+    {
+
+    }
 }
