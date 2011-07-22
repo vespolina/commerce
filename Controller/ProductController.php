@@ -26,7 +26,7 @@ class ProductController extends ContainerAware
      */
     public function listAction()
     {
-        $products = $this->container->get('vespolina.product_manager')->findProducts();
+        $products = $this->container->get('vespolina.product_manager')->findBy(array());
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:list.html.'.$this->getEngine(), array('products' => $products));
     }
@@ -125,4 +125,9 @@ class ProductController extends ContainerAware
         ));
     }
 
+    protected function getEngine()
+    {
+        return 'twig'; // HACK ALERT!
+//        return $this->container->getParameter('vespolina.template.engine');
+    }
 }
