@@ -31,7 +31,7 @@ interface ProductManagerInterface
      *
      * @return array
      */
-    public function findBy(array $criteria, $orderBy, $limit, $offset);
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
     /**
      * Find a Product by its object identifier

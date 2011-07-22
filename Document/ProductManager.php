@@ -37,7 +37,7 @@ class ProductManager extends BaseProductManager
     /**
      * @inheritdoc
      */
-    public function findBy(array $criteria, $orderBy, $limit, $offset)
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return $this->productRepo->findBy($criteria, $orderBy, $limit, $offset);
     }
