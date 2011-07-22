@@ -14,5 +14,7 @@ use Vespolina\ProductBundle\Model\ProductInterface;
  */
 interface ProductManagerInterface
 {
-
+    public function createProduct();
+    public function findProductById($id);
+    public function findProductByIdentifier($name, $code);
 }

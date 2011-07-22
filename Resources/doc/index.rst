@@ -27,3 +27,13 @@ These are valid types of products
 *Product::TIME*
 
 *Product::SERVICE*
+
+
+Configuration reference
+=======================
+
+All available configuration options are listed below with their default values::
+
+    # app/config/vespolina.yml
+    vespolina_product:
+        db_driver:      ~ # Required
