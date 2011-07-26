@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="vespolina.product.form.name">vespolina_product_form</parameter>
+        <parameter key="vespolina.product.form.handler.class">Vespolina\ProductBundle\Form\ProductFormHandler</parameter>
+        <parameter key="vespolina.product.form.type.class">Vespolina\ProductBundle\Form\ProductFormType</parameter>
+        <parameter key="vespolina.product.form.validation_groups">Product</parameter>
+    </parameters>
+    <services>
+        <service id="vespolina.product.form" factory-method="getForm" factory-service="vespolina.product.form.builder" class="Symfony\Component\Form\Form" />
+
+        <service id="vespolina.product.form.builder" factory-method="createNamedBuilder" factory-service="form.factory" class="Symfony\Component\Form\FormBuilder">
+            <argument type="service" id="vespolina.product.form.type" />
+            <argument>%vespolina.product.form.name%</argument>
+            <argument />
+            <argument type="collection">
+                <argument key="data_class">%vespolina.model.product.class%</argument>
+                <argument key="validation_groups">%vespolina.product.form.validation_groups%</argument>
+            </argument>
+        </service>
+
+        <service id="vespolina.product.form.type" class="%vespolina.product.form.type.class%">
+            <tag name="form.type" />
+        </service>
+
+        <service id="vespolina.product.form.handler" class="%vespolina.product.form.handler.class%" scope="request">
+            <argument type="service" id="vespolina.product.form" />
+            <argument type="service" id="request" />
+            <argument type="service" id="vespolina.product_manager" />
+        </service>
+    </services>
+</container>
