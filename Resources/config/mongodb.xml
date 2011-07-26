@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="vespolina.product_manager.class">Vespolina\ProductBundle\Document\ProductManager</parameter>
+        <parameter key="vespolina.model.product.class">Vespolina\ProductBundle\Document\Product</parameter>
     </parameters>
 
     <services>
