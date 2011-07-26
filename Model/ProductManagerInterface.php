@@ -50,4 +50,12 @@ interface ProductManagerInterface
      * @return Vespolina\ProductBundle\Model\ProductInterface
      */
     public function findProductByIdentifier($name, $code);
+
+    /**
+     * Update and persist the product
+     *
+     * @param Vespolina\ProductBundle\Model\ProductInterface $product
+     * @param Boolean $andFlush Whether to flush the changes (default true)
+     */
+    public function updateProduct(ProductInterface $product, $andFlush = true);
 }
