@@ -96,32 +96,21 @@ class ProductController extends ContainerAware
      */
     public function createAction()
     {
-        $manager = $this->container->get('vespolina.product_manager');
-        $product = $manager->createProduct();
         $form = $this->container->get('vespolina.product.form');
-        $form->setData($product);
+        $formHandler = $this->container->get('vespolina.product.form.handler');
 
-        $request = $this->container->get('request');
+        $process = $formHandler->process();
+        if ($process) {
+            $user = $form->getData();
 
-        if ('POST' == $request->getMethod()) {
-            $values = $request->request->get($form->getName(), array());
-            $files = $request->files->get($form->getName(), array());
+            $this->setFlash('vespolina_product_created', 'success');
+            $url = $this->container->get('router')->generate('vespolina_product_list');
 
-            $form->submit(array_replace_recursive($values, $files));
-
-            $form->validate();
-        }
-
-        if ($form->isValid()) {
-            $manager->updateProduct($product);
-            $url = $this->generateUrl('vespolina_product_created');
-
-            $this->setFlash('vespolina_product_create', 'success');
             return new RedirectResponse($url);
         }
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
-            'form' => $form
+            'form' => $form->createView(),
         ));
     }
 

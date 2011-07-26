@@ -26,23 +26,16 @@ class ProductFormHandler
         $this->productManager = $productManager;
     }
 
-    public function process($confirmation = null)
+    public function process()
     {
-        $user = $this->productManager->createProduct();
-        $this->form->setData($user);
+        $product = $this->productManager->createProduct();
+        $this->form->setData($product);
 
         if ('POST' == $this->request->getMethod()) {
             $this->form->bindRequest($this->request);
 
             if ($this->form->isValid()) {
-                if (true === $confirmation) {
-                    $user->setEnabled(false);
-                } else if (false === $confirmation) {
-                    $user->setConfirmationToken(null);
-                    $user->setEnabled(true);
-                }
-
-                $this->productManager->updateProduct($user);
+                $this->productManager->updateProduct($product);
 
                 return true;
             }
