@@ -7,17 +7,10 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Document\BaseProduct;
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Vespolina\ProductBundle\Model\Product as AbstractProduct;
 /**
- * @MongoDB\Document
- *
  * @author Richard Shank <develop@zestic.com>
  */
-class Product extends BaseProduct
+abstract class BaseProduct extends AbstractProduct
 {
-    /**
-     * @MongoDB\Id(strategy="auto")
-     */
-    protected $id;
 }
