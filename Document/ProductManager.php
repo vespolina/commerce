@@ -8,6 +8,7 @@
 namespace Vespolina\ProductBundle\Document;
 
 use Vespolina\ProductBundle\Document\Product;
+use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManager as BaseProductManager;
 
 /**
