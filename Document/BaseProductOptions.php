@@ -7,11 +7,10 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Model\Product as AbstractProduct;
+use Vespolina\ProductBundle\Model\Node\ProductOptions as AbstractProductOptions;
 /**
- * @author Richard Shank <develop@zestic.com>
+ * @author Richard D Shank <develop@zestic.com>
  */
-abstract class BaseProduct extends AbstractProduct
+class BaseProductOptions extends AbstractProductOptions
 {
-    protected $id;
 }

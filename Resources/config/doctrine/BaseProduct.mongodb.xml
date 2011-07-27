@@ -14,8 +14,6 @@
 
         <field name="name" fieldName="name" type="string" />
 
-        <embed-one target-document="Vespolina\ProductBundle\Model\ProductOptions" field="options" />
-
         <field name="primaryIdentifier" fieldName="primaryIdentifier" type="string" />
 
         <field name="type" fieldName="type" type="int" />

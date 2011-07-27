@@ -8,16 +8,14 @@
 namespace Vespolina\ProductBundle\Document;
 
 use Vespolina\ProductBundle\Document\BaseProduct;
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Vespolina\ProductBundle\Document\ProductOptions;
 /**
- * @MongoDB\Document
- *
  * @author Richard Shank <develop@zestic.com>
  */
 class Product extends BaseProduct
 {
-    /**
-     * @MongoDB\Id(strategy="auto")
-     */
-    protected $id;
+    public function __construct()
+    {
+        $this->options = new ProductOptions();
+    }
 }
