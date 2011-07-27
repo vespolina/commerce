@@ -7,15 +7,11 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Document\BaseProduct;
-use Vespolina\ProductBundle\Document\ProductOptions;
+use Vespolina\ProductBundle\Model\Product as AbstractProduct;
 /**
  * @author Richard Shank <develop@zestic.com>
  */
-class Product extends BaseProduct
+abstract class BaseProduct extends AbstractProduct
 {
-    public function __construct()
-    {
-        $this->options = new ProductOptions();
-    }
+    protected $id;
 }

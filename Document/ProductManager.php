@@ -8,6 +8,7 @@
 namespace Vespolina\ProductBundle\Document;
 
 use Vespolina\ProductBundle\Document\Product;
+use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManager as BaseProductManager;
 
 /**
@@ -22,7 +23,6 @@ class ProductManager extends BaseProductManager
     {
         $this->dm = $dm;
         $this->productRepo = $this->dm->getRepository('Vespolina\ProductBundle\Document\Product');
-
     }
 
     /**
@@ -56,5 +56,16 @@ class ProductManager extends BaseProductManager
     public function findProductByIdentifier($name, $code)
     {
 
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function updateProduct(ProductInterface $product, $andFlush = true)
+    {
+        $this->dm->persist($product);
+        if ($andFlush) {
+            $this->dm->flush();
+        }
     }
 }

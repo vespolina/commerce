@@ -46,7 +46,7 @@ class ProductController extends ContainerAware
     public function editAction($id)
     {
         $product = $this->container->get('vespolina.product_manager')->findProductById($id);
-        $form = $this->container->get('vespolina.form.product');
+        $form = $this->container->get('vespolina.product.form');
         $form->setData($product);
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
@@ -61,13 +61,13 @@ class ProductController extends ContainerAware
     public function updateAction($id)
     {
         $product = $this->container->get('vespolina.product_manager')->findProductById($id);
-        $form = $this->container->get('vespolina.form.product');
+        $form = $this->container->get('vespolina.product.form');
         $form->bind($this->container->get('request'), $product);
 
         if ($form->isValid()) {
             $this->container->get('vespolina.product_manager')->updateProduct($product);
             $this->setFlash('vespolina_product_update', 'success');
-            $productUrl = $this->generateUrl('vespolina_product_product_show', array('sku' => $product->getSKU()));
+            $productUrl = $this->generateUrl('vespolina_product_show', array('sku' => $product->getSKU()));
             return new RedirectResponse($productUrl);
         }
 
@@ -83,11 +83,11 @@ class ProductController extends ContainerAware
     public function newAction()
     {
         $product = $this->container->get('vespolina.product_manager')->createProduct();
-        $form = $this->container->get('vespolina.form.product');
+        $form = $this->container->get('vespolina.product.form');
         $form->setData($product);
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
-            'form' => $form
+            'form' => $form->createView()
         ));
     }
 
@@ -96,33 +96,27 @@ class ProductController extends ContainerAware
      */
     public function createAction()
     {
-        $manager = $this->container->get('vespolina.product_manager');
-        $product = $manager->createProduct();
-        $form = $this->container->get('vespolina.form.product');
-        $form->setData($product);
+        $form = $this->container->get('vespolina.product.form');
+        $formHandler = $this->container->get('vespolina.product.form.handler');
 
-        $request = $this->container->get('request');
+        $process = $formHandler->process();
+        if ($process) {
+            $user = $form->getData();
 
-        if ('POST' == $request->getMethod()) {
-            $values = $request->request->get($form->getName(), array());
-            $files = $request->files->get($form->getName(), array());
+            $this->setFlash('vespolina_product_created', 'success');
+            $url = $this->container->get('router')->generate('vespolina_product_list');
 
-            $form->submit(array_replace_recursive($values, $files));
-
-            $form->validate();
-        }
-
-        if ($form->isValid()) {
-            $manager->updateProduct($product);
-            $url = $this->generateUrl('vespolina_product_created');
-
-            $this->setFlash('vespolina_product_create', 'success');
             return new RedirectResponse($url);
         }
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
-            'form' => $form
+            'form' => $form->createView(),
         ));
+    }
+
+    protected function setFlash($action, $value)
+    {
+        $this->container->get('session')->setFlash($action, $value);
     }
 
     protected function getEngine()
