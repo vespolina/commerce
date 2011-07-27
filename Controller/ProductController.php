@@ -114,6 +114,11 @@ class ProductController extends ContainerAware
         ));
     }
 
+    protected function setFlash($action, $value)
+    {
+        $this->container->get('session')->setFlash($action, $value);
+    }
+
     protected function getEngine()
     {
         return 'twig'; // HACK ALERT!
