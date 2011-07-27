@@ -31,6 +31,8 @@ These are valid types of products
 Extending a Product
 ===================
 
+::
+
     # Application\MyBundle\Document\MyProduct.php
     
     use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
