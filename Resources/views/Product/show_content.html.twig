@@ -1,4 +1,5 @@
 <div class="vespolina_product_product_show">
-    <p>{% trans "SKU" from 'VespolinaProductBundle' %}: {{ product.getSKU() }}</p>
-    <p>{% trans "Name" from 'VespolinaProductBundle' %}: {{ product.getName() }}</p>
+    <p>Product: {{ product.name }}</p>
+    <p>Description: {{ product.description }}</p>
 </div>
+<a href="{{ path('vespolina_product_list') }}">Back to Products</a>
