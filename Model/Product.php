@@ -8,6 +8,8 @@
 
 namespace Vespolina\ProductBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
@@ -36,7 +38,6 @@ class Product implements ProductInterface
     protected $identifiers;
     protected $name;
     protected $options;
-    protected $primaryIdentifier;
     protected $type;
     protected $updateAt;
 
@@ -98,22 +99,12 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addIdentifier(ProductIdentifiersInterface $identifier)
+    public function addIdentifier($index, ProductIdentifiersInterface $identifier)
     {
-        if (!$this->primaryIdentifier) {
-            throw new \UnexpectedValueException('The primary identifier type has not been set');
+        if (!$this->identifiers) {
+            $this->identifiers = new ArrayCollection();
         }
-        foreach ($identifier->getIdentifiers() as $node) {
-            if ($node instanceof $this->primaryIdentifier) {
-                $index = $node->getCode();
-            }
-        }
-        if (!$index) {
-            throw new UnexpectedValueException(
-                'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifiers instance'
-            );
-        }
-        $this->identifiers[$index] = $identifier;
+        $this->identifiers->set($index, $identifier);
     }
 
     /**
@@ -137,7 +128,7 @@ class Product implements ProductInterface
      */
     public function getIdentifier($index)
     {
-        return $this->identifiers[$index];
+        return $this->$this->identifiers->get($index);
     }
 
     /**

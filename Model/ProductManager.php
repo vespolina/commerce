@@ -16,9 +16,24 @@ use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
  */
 abstract class ProductManager implements ProductManagerInterface
 {
+    protected $primaryIdentifier;
+    
     public function addIdentifiersToProduct(ProductIdentifiersInterface $identifiers, ProductInterface $product)
     {
-        
+        if (!$this->primaryIdentifier) {
+            throw new \UnexpectedValueException('The primary identifier type has not been set');
+        }
+        foreach ($identifiers->getIdentifiers() as $node) {
+            if ($node instanceof $this->primaryIdentifier) {
+                $index = $node->getCode();
+            }
+        }
+        if (!$index) {
+            throw new UnexpectedValueException(
+                'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifiers instance'
+            );
+        }
+        $this->product->addIdentifiers($index, $identifiers);
     }
 
     public function removeIdentifiersFromProduct($identifiers, ProductInterface $product)
