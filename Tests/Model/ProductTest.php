@@ -43,51 +43,6 @@ class ProductTest extends WebTestCase
             'addOption hands option off to ProductOptions'
         );
 
-        /* product identifiers */
-        $product->setPrimaryIdentifier('\Vespolina\ProductBundle\Model\Node\IdentifierNode');
-        $this->assertSame(
-            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
-            $product->getPrimaryIdentifier(),
-            'the primary identifier node can be set by string'
-        );
-
-        $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Node\IdentifierNode');
-        $this->assertSame(
-            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
-            $product->getPrimaryIdentifier(),
-            "the primary identifier class name must have a leading \\"
-        );
-
-        $product->setPrimaryIdentifier(new IdentifierNode());
-        $this->assertSame(
-            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
-            $product->getPrimaryIdentifier(),
-            'the primary identifier node can be set by instance'
-        );
-
-        $testSKU = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
-        $testSKU->expects($this->any())
-                 ->method('getCode')
-                 ->will($this->returnValue('AB-CD-EF-GH'));
-        $testSKU->expects($this->any())
-                 ->method('getName')
-                 ->will($this->returnValue('AB-CD-EF-GH'));
-
-        $product->setPrimaryIdentifier($testSKU);
-
-        $productIdentifiers = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
-        $productIdentifiers->setAccessible(true);
-
-        $pi = new ProductIdentifiers();
-        $pi->addIdentifier($testSKU);
-
-        $product->addIdentifier($pi);
-        $this->assertArrayHasKey(
-            'AB-CD-EF-GH',
-            $productIdentifiers->getValue($product),
-            'ProductIdentifiers should be indexed by the principle identifier type value'
-        );
-
         /* product features */
         $productFeatures = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'features');
         $productFeatures->setAccessible(true);
