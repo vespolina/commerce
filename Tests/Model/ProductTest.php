@@ -105,28 +105,6 @@ class ProductTest extends WebTestCase
         $this->assertArrayHasKey('label', $features, 'top level key is the type in lower case');
         $this->assertArrayHasKey('joat music', $features['label'], 'top level key is the search term in lower case');
 
-        /* exceptions */
-        $product = new Product();
-        $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
-        $product->addIdentifier($pi);
 
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
-        );
-        $product->setPrimaryIdentifier(new Product());
-
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            'The primary identifier must be an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
-        );
-        $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Product');
-
-        $product->setPrimaryIdentifier($testSKU);
-        $this->setExpectedException(
-            'UnexpectedValueException',
-            'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifiers instance'
-        );
-        $product->addIdentifier(new ProductIndentifiers());
     }
 }
