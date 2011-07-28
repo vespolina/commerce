@@ -61,6 +61,13 @@ interface ProductManagerInterface
     public function updateProduct(ProductInterface $product, $andFlush = true);
 
     /**
+     * Return the primary identifier
+     * 
+     * @return string primary identifier
+     */
+    public function getPrimaryIdentifier();
+
+    /**
      * Add a ProductIdentifer object to the product
      * 
      * @param Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface $identifiers

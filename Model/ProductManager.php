@@ -17,7 +17,18 @@ use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
 abstract class ProductManager implements ProductManagerInterface
 {
     protected $primaryIdentifier;
-    
+
+    /**
+     * @inheritdoc
+     */
+    public function getPrimaryIdentifier()
+    {
+        return $this->primaryIdentifier;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function addIdentifiersToProduct(ProductIdentifiersInterface $identifiers, ProductInterface $product)
     {
         if (!$this->primaryIdentifier) {
@@ -36,6 +47,9 @@ abstract class ProductManager implements ProductManagerInterface
         $this->product->addIdentifiers($index, $identifiers);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function removeIdentifiersFromProduct($identifiers, ProductInterface $product)
     {
 
