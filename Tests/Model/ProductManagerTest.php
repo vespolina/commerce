@@ -27,9 +27,25 @@ class ProductManagerTest extends WebTestCase
         $this->product = new Product();
     }
 
-    protected function createProductManager()
+    public function testPrimaryIdentifier()
     {
-        return $this->getMockforAbstractClass('Vespolina\ProductBundle\Model\ProductManager');
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+
+        $this->assertSame(
+            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
+            $this->mgr->getPrimaryIdentifier(),
+            "the primary identifier class name must have a leading \\"
+        );
+
+        /* exceptions */
+
+        $this->setExpectedException(
+            'InvalidArgumentException',
+            'The primary identifier must be an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
+        );
+        $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Product');
     }
 
     public function testIdentifiersToProduct()
@@ -61,36 +77,46 @@ class ProductManagerTest extends WebTestCase
 
         $this->mgr->removeIdentifiersFromProduct('sku1234', $this->product);
         $this->assertEquals(0, $this->product->getIdentifiers()->count(), 'remove identifiers by primary identifier code should work also');
-        
+
         /* exceptions */
         $mgr = $this->createProductManager();
+        $pi = $this->createProductIdentifiers('abcdefg');
         $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
         $mgr->addIdentifiersToProduct($pi, $this->product);
 
         $this->setExpectedException(
-            'InvalidArgumentException',
-            'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
-        );
-        $product->setPrimaryIdentifier(new Product());
-
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            'The primary identifier must be an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
-        );
-        $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Product');
-
-        $product->setPrimaryIdentifier($testSKU);
-        $this->setExpectedException(
             'UnexpectedValueException',
             'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifiers instance'
         );
-        $product->addIdentifier(new ProductIndentifiers());
-
+        $mgr->addIdentifiersToProduct($pi, $this->product);
     }
 
     public function testSearchForProductByIdentifier()
     {
         // search by identifier should return a product set up with the specific information for that identifier
         // full results flag returns the full data set for the product
+    }
+
+    protected function createProductManager()
+    {
+        $mgr = $this->getMockforAbstractClass('Vespolina\ProductBundle\Model\ProductManager');
+
+        $primaryIdentifier = new \ReflectionProperty('Vespolina\ProductBundle\Model\ProductManager', 'primaryIdentifier');
+        $primaryIdentifier->setAccessible(true);
+        $primaryIdentifier->setValue($mgr, 'Vespolina\ProductBundle\Model\Node\IdentifierNode');
+        return $mgr;
+    }
+
+    protected function createProductIdentifiers($code)
+    {
+        $pi = new ProductIdentifiers();
+        $pi = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
+        $pi->expects($this->any())
+             ->method('getCode')
+             ->will($this->returnValue($code));
+        $pi->expects($this->any())
+             ->method('getName')
+             ->will($this->returnValue($code));
+        return $pi;
     }
 }
