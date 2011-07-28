@@ -99,12 +99,12 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addIdentifier($index, ProductIdentifiersInterface $identifier)
+    public function addIdentifier($key, ProductIdentifiersInterface $identifier)
     {
         if (!$this->identifiers) {
             $this->identifiers = new ArrayCollection();
         }
-        $this->identifiers->set($index, $identifier);
+        $this->identifiers->set($key, $identifier);
     }
 
     /**
@@ -126,9 +126,9 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getIdentifier($index)
+    public function getIdentifier($key)
     {
-        return $this->$this->identifiers->get($index);
+        return $this->$this->identifiers->get($key);
     }
 
     /**

@@ -72,18 +72,22 @@ interface ProductInterface
     public function setIdentifiers($identifiers);
 
     /**
-     * Add a ProductIdentifiers to the product
+     * Add a ProductIdentifiers to the ArrayCollection. The key is the primary identifier used in a
+     * search to find the ProductIdentifiers
      *
-     * @param espolina\ProductBundle\Node\ProductIdentifiersInterface $identifier
+     * @param string $key
+     * @param Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifier
      */
-    public function addIdentifier(ProductIdentifiersInterface $identifier);
+    public function addIdentifier($key, ProductIdentifiersInterface $identifier);
 
     /**
-     * Return a ProductIdentifiers of the product
+     * Return a ProductIdentifiers of the product by the key
+     *
+     * @param string $key
      *
      * @return Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
      */
-    public function getIdentifier($index);
+    public function getIdentifier($key);
 
 
     /**
