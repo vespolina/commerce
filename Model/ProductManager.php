@@ -7,12 +7,22 @@
  */
 namespace Vespolina\ProductBundle\Model;
 
+use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
  */
 abstract class ProductManager implements ProductManagerInterface
 {
+    public function addIdentifiersToProduct(ProductIdentifiersInterface $identifiers, ProductInterface $product)
+    {
+        
+    }
 
+    public function removeIdentifiersFromProduct($identifiers, ProductInterface $product)
+    {
+
+    }
 }

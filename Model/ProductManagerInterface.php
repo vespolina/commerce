@@ -8,7 +8,8 @@
 namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductInterface;
-
+use Vespolina\ProductBundle\Model\ProductManagerInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
  */
@@ -58,4 +59,21 @@ interface ProductManagerInterface
      * @param Boolean $andFlush Whether to flush the changes (default true)
      */
     public function updateProduct(ProductInterface $product, $andFlush = true);
+
+    /**
+     * Add a ProductIdentifer object to the product
+     * 
+     * @param Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface $identifiers
+     * @param Vespolina\ProductBundle\Model\ProductInterface $product
+     */
+    public function addIdentifiersToProduct(ProductIdentifiersInterface $identifiers, ProductInterface $product);
+
+    /**
+     * Remove a ProductIdentifier from a project. The ProductIdentifier can be based in as an object
+     * or as the primary identifier code
+     *
+     * @param mixed $identifiers
+     * @param Vespolina\ProductBundle\Model\ProductInterface $product
+     */
+    public function removeIdentifiersFromProduct($identifiers, ProductInterface $product);
 }
