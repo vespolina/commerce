@@ -30,7 +30,7 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function addIdentifiersToProduct(ProductIdentifierSetInterface $identifiers, ProductInterface &$product)
+    public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifiers, ProductInterface &$product)
     {
         $primaryIdentifier = $this->getPrimaryIdentifier();
         foreach ($identifiers->getIdentifiers() as $node) {
@@ -49,7 +49,7 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function removeIdentifiersFromProduct($identifiers, ProductInterface $product)
+    public function removeIdentifierSetFromProduct($identifiers, ProductInterface $product)
     {
 
     }

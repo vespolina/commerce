@@ -52,7 +52,7 @@ class ProductManagerTest extends WebTestCase
     {
         $identifiers = $this->createProductIdentifiers('sku1234');
 
-        $this->mgr->addIdentifiersToProduct($identifiers, $this->product);
+        $this->mgr->addIdentifierSetToProduct($identifiers, $this->product);
 
         $this->assertInstanceOf(
             'Doctrine\Common\Collections\ArrayCollection',
@@ -67,28 +67,28 @@ class ProductManagerTest extends WebTestCase
             'the index for the identifier set should be the code for the primary identifier, sku'
         );
         
-        $identifiers2 = new ProductIdentifierSet();
+        $identifiers2 = $this->createProductIdentifiers('id2');
 
-        $this->mgr->addIdentifiersToProduct($identifiers2, $this->product);
+        $this->mgr->addIdentifierSetToProduct($identifiers2, $this->product);
         $this->assertEquals(2, $this->product->getIdentifiers()->count(), 'a second identifier set should put in the product');
 
-        $this->mgr->removeIdentifiersFromProduct($identifiers2, $this->product);
+        $this->mgr->removeIdentifierSetFromProduct($identifiers2, $this->product);
         $this->assertEquals(1, $this->product->getIdentifiers()->count(), 'remove identifiers should leave product with one less');
 
-        $this->mgr->removeIdentifiersFromProduct('sku1234', $this->product);
+        $this->mgr->removeIdentifierSetFromProduct('sku1234', $this->product);
         $this->assertEquals(0, $this->product->getIdentifiers()->count(), 'remove identifiers by primary identifier code should work also');
 
         /* exceptions */
         $mgr = $this->createProductManager();
         $pi = $this->createProductIdentifiers('abcdefg');
         $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
-        $mgr->addIdentifiersToProduct($pi, $this->product);
+        $mgr->addIdentifierSetToProduct($pi, $this->product);
 
         $this->setExpectedException(
             'UnexpectedValueException',
             'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifiers instance'
         );
-        $mgr->addIdentifiersToProduct($pi, $this->product);
+        $mgr->addIdentifierSetToProduct($pi, $this->product);
     }
 
     public function testSearchForProductByIdentifier()
