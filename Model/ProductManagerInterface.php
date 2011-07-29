@@ -70,17 +70,17 @@ interface ProductManagerInterface
     /**
      * Add a ProductIdentifer object to the product
      * 
-     * @param Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface $identifiers
+     * @param Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface $identifierSet
      * @param Vespolina\ProductBundle\Model\ProductInterface $product
      */
-    public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifiers, ProductInterface &$product);
+    public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifierSet, ProductInterface &$product);
 
     /**
      * Remove a ProductIdentifier from a project. The ProductIdentifier can be based in as an object
      * or as the primary identifier code
      *
-     * @param mixed $identifiers
+     * @param mixed $identifierSet
      * @param Vespolina\ProductBundle\Model\ProductInterface $product
      */
-    public function removeIdentifierSetFromProduct($identifiers, ProductInterface $product);
+    public function removeIdentifierSetFromProduct($identifierSet, ProductInterface $product);
 }

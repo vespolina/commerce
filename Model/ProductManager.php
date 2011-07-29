@@ -30,10 +30,10 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifiers, ProductInterface &$product)
+    public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifierSet, ProductInterface &$product)
     {
         $primaryIdentifier = $this->getPrimaryIdentifier();
-        foreach ($identifiers->getIdentifiers() as $node) {
+        foreach ($identifierSet->getIdentifiers() as $node) {
             if ($node instanceof $primaryIdentifier) {
                 $index = $node->getCode();
             }
@@ -43,14 +43,15 @@ abstract class ProductManager implements ProductManagerInterface
                 'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifierSet'
             );
         }
-        $product->addIdentifierSet($index, $identifiers);
+        $product->addIdentifierSet($index, $identifierSet);
     }
 
     /**
      * @inheritdoc
      */
-    public function removeIdentifierSetFromProduct($identifiers, ProductInterface $product)
+    public function removeIdentifierSetFromProduct($identifierSet, ProductInterface $product)
     {
 
     }
+
 }
