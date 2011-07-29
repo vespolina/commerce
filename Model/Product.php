@@ -146,6 +146,10 @@ class Product implements ProductInterface
      */
     public function setIdentifiers($identifiers)
     {
+        if (!$identifiers instanceof ArrayCollection) {
+            $this->identifiers = new ArrayCollection($identifiers);
+            return;
+        }
         $this->identifiers = $identifiers;
     }
 
