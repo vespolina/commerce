@@ -13,7 +13,7 @@ use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
 
 /**
@@ -76,9 +76,9 @@ interface ProductInterface
      * search to find the ProductIdentifiers
      *
      * @param string $key
-     * @param Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifier
+     * @param Vespolina\ProductBundle\Node\ProductIdentifierSetInterface $identifier
      */
-    public function addIdentifier($key, ProductIdentifiersInterface $identifier);
+    public function addIdentifierSet($key, ProductIdentifierSetInterface $identifier);
 
     /**
      * Return a ProductIdentifiers of the product by the key
@@ -87,7 +87,7 @@ interface ProductInterface
      *
      * @return Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
      */
-    public function getIdentifier($key);
+    public function getIdentifierSet($key);
 
 
     /**

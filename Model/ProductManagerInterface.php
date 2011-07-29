@@ -9,7 +9,7 @@ namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
  */
@@ -70,10 +70,10 @@ interface ProductManagerInterface
     /**
      * Add a ProductIdentifer object to the product
      * 
-     * @param Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface $identifiers
+     * @param Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface $identifiers
      * @param Vespolina\ProductBundle\Model\ProductInterface $product
      */
-    public function addIdentifiersToProduct(ProductIdentifiersInterface $identifiers, ProductInterface $product);
+    public function addIdentifiersToProduct(ProductIdentifierSetInterface $identifiers, ProductInterface &$product);
 
     /**
      * Remove a ProductIdentifier from a project. The ProductIdentifier can be based in as an object

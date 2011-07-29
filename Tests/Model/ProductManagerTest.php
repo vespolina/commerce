@@ -11,7 +11,7 @@ namespace Vespolina\ProductBundle\Tests\Model;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiers;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -67,7 +67,7 @@ class ProductManagerTest extends WebTestCase
             'the index for the identifier set should be the code for the primary identifier, sku'
         );
         
-        $identifiers2 = new ProductIdentifiers();
+        $identifiers2 = new ProductIdentifierSet();
 
         $this->mgr->addIdentifiersToProduct($identifiers2, $this->product);
         $this->assertEquals(2, $this->product->getIdentifiers()->count(), 'a second identifier set should put in the product');
@@ -117,7 +117,7 @@ class ProductManagerTest extends WebTestCase
 
     protected function createProductIdentifiers($code)
     {
-        $pi = new ProductIdentifiers();
+        $pi = new ProductIdentifierSet();
         $identifier = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
         $identifier->expects($this->any())
              ->method('getCode')

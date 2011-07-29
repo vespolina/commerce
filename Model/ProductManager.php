@@ -9,7 +9,7 @@ namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -30,19 +30,20 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function addIdentifiersToProduct(ProductIdentifiersInterface $identifiers, ProductInterface &$product)
+    public function addIdentifiersToProduct(ProductIdentifierSetInterface $identifiers, ProductInterface &$product)
     {
+        $primaryIdentifier = $this->getPrimaryIdentifier();
         foreach ($identifiers->getIdentifiers() as $node) {
-            if ($node instanceof $this->getPrimaryIdentifier()) {
+            if ($node instanceof $primaryIdentifier) {
                 $index = $node->getCode();
             }
         }
         if (!$index) {
             throw new UnexpectedValueException(
-                'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifiers instance'
+                'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifierSet'
             );
         }
-        $product->addIdentifiers($index, $identifiers);
+        $product->addIdentifierSet($index, $identifiers);
     }
 
     /**

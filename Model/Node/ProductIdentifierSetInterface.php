@@ -8,12 +8,12 @@
 namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface ProductIdentifiersInterface extends ProductNodeInterface
+interface ProductIdentifierSetInterface extends ProductNodeInterface
 {
     /**
      * Set options when there are different identifiers with different option sets

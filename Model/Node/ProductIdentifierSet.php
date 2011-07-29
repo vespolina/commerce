@@ -9,12 +9,12 @@ namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNode;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterface
+class ProductIdentifierSet extends ProductNode implements ProductIdentifierSetInterface
 {
     protected $attributes;
 

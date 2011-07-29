@@ -14,8 +14,8 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiers;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Node\ProductOptions;
 use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
 
@@ -99,7 +99,7 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addIdentifier($key, ProductIdentifiersInterface $identifier)
+    public function addIdentifierSet($key, ProductIdentifierSetInterface $identifier)
     {
         if (!$this->identifiers) {
             $this->identifiers = new ArrayCollection();
@@ -126,7 +126,7 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getIdentifier($key)
+    public function getIdentifierSet($key)
     {
         return $this->$this->identifiers->get($key);
     }
