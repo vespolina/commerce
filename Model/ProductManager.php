@@ -32,17 +32,7 @@ abstract class ProductManager implements ProductManagerInterface
      */
     public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifierSet, ProductInterface &$product)
     {
-        $primaryIdentifier = $this->getPrimaryIdentifier();
-        foreach ($identifierSet->getIdentifiers() as $node) {
-            if ($node instanceof $primaryIdentifier) {
-                $index = $node->getCode();
-            }
-        }
-        if (!$index) {
-            throw new UnexpectedValueException(
-                'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifierSet'
-            );
-        }
+        $index = $this->getIdentifierSetIndex($identifierSet);
         $product->addIdentifierSet($index, $identifierSet);
     }
 
@@ -54,4 +44,19 @@ abstract class ProductManager implements ProductManagerInterface
 
     }
 
+    protected function getIdentifierSetIndex($identifierSet)
+    {
+        $primaryIdentifier = $this->getPrimaryIdentifier();
+        foreach ($identifierSet->getIdentifiers() as $node) {
+            if ($node instanceof $primaryIdentifier) {
+                $index = $node->getCode();
+            }
+        }
+        if (!$index) {
+            throw new UnexpectedValueException(
+                'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifierSet'
+            );
+        }
+        return $index;
+    }
 }
