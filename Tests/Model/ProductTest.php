@@ -11,7 +11,7 @@ namespace Vespolina\ProductBundle\Tests\Model;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiers;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Node\IdentifierNode;
 
 /**
@@ -80,7 +80,7 @@ class ProductTest extends WebTestCase
 
         $this->assertSame(
             $identifierSet,
-            $product->getIdentifier('test123'),
+            $product->getIdentifierSet('test123'),
             'the identifier should be returned by the key'
         );
 
@@ -97,7 +97,7 @@ class ProductTest extends WebTestCase
         
         $product->setIdentifiers($identifiers);
         $this->assertInstanceOf(
-            'Doctrine\Common\Collection\ArrayCollection',
+            'Doctrine\Common\Collections\ArrayCollection',
             $product->getIdentifiers(),
             'an array of IdentifierSets should be put into an ArrayCollection'
         );
