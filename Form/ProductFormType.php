@@ -20,4 +20,16 @@ class ProductFormType extends AbstractType
             ->add('name')
             ->add('description');
     }
+
+    /**
+     * Returns the name of this type.
+     *
+     * @return string The name of this type
+     */
+    function getName()
+    {
+        return 'vespolina_product';
+    }
+
+
 }
