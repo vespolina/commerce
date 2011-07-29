@@ -50,7 +50,7 @@ class ProductManagerTest extends WebTestCase
 
     public function testIdentifiersToProduct()
     {
-        $identifiers = new ProductIdentifiers();
+        $identifiers = $this->createProductIdentifiers('sku1234');
 
         $this->mgr->addIdentifiersToProduct($identifiers, $this->product);
 
@@ -110,13 +110,14 @@ class ProductManagerTest extends WebTestCase
     protected function createProductIdentifiers($code)
     {
         $pi = new ProductIdentifiers();
-        $pi = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
-        $pi->expects($this->any())
+        $identifier = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
+        $identifier->expects($this->any())
              ->method('getCode')
              ->will($this->returnValue($code));
-        $pi->expects($this->any())
+        $identifier->expects($this->any())
              ->method('getName')
              ->will($this->returnValue($code));
+        $pi->addIdentifier($identifier);
         return $pi;
     }
 }
