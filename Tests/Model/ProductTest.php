@@ -92,8 +92,8 @@ class ProductTest extends WebTestCase
 
         $identifiers = array();
 
-        $identifier['abc'] = $this->createProductIdentifierSet('abc');
-        $identifier['123'] = $this->createProductIdentifierSet('123');
+        $identifiers['abc'] = $this->createProductIdentifierSet('abc');
+        $identifiers['123'] = $this->createProductIdentifierSet('123');
         
         $product->setIdentifiers($identifiers);
         $this->assertInstanceOf(
@@ -101,6 +101,7 @@ class ProductTest extends WebTestCase
             $product->getIdentifiers(),
             'an array of IdentifierSets should be put into an ArrayCollection'
         );
+        
         $this->assertEquals(
             2,
             $product->getIdentifiers()->count(),
