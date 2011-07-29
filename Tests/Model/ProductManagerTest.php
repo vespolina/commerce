@@ -99,7 +99,16 @@ class ProductManagerTest extends WebTestCase
 
     protected function createProductManager()
     {
-        $mgr = $this->getMockforAbstractClass('Vespolina\ProductBundle\Model\ProductManager');
+        $mgr = $this->getMock('Vespolina\ProductBundle\Model\ProductManager',
+            array(
+                'getPrimaryIdentifier',
+                'createProduct',
+                'findBy',
+                'findProductById',
+                'findProductByIdentifier',
+                'updateProduct'
+            )
+        );
         $mgr->expects($this->any())
              ->method('getPrimaryIdentifier')
              ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\IdentifierNode'));
