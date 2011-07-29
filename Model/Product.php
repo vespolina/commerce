@@ -174,36 +174,6 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setPrimaryIdentifier($primaryIdentifier)
-    {
-        if ($primaryIdentifier instanceof IdentifierNodeInterface) {
-            $this->primaryIdentifier = "\\" . get_class($primaryIdentifier);
-            return;
-        }
-        if (!is_string($primaryIdentifier)) {
-            throw new \InvalidArgumentException(
-                'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
-            );
-        }
-        if (!(new $primaryIdentifier instanceof IdentifierNodeInterface)) {
-            throw new \InvalidArgumentException(
-                'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
-            );
-        }
-        $this->primaryIdentifier = "\\" . ltrim($primaryIdentifier, "\\");
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPrimaryIdentifier()
-    {
-        return $this->primaryIdentifier;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function setType($type)
     {
         $this->type = $type;

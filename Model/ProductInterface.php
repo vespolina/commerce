@@ -131,20 +131,6 @@ interface ProductInterface
     public function getOptions();
 
     /**
-     * Set the primary identifier class by name or instance
-     *
-     * @param string or instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface
-     */
-    public function setPrimaryIdentifier($primaryIdentifier);
-
-    /**
-     * Return the name of the primary identifier node class
-     *
-     * @return string
-     */
-    public function getPrimaryIdentifier();
-
-    /**
      * Set the product type. The product types can be ORed together
      *
      * These are valid types of products
