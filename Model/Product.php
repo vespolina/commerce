@@ -110,9 +110,9 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setIdentifiers($identifiers)
+    public function clearIdentifiers()
     {
-        $this->identifiers = $identifiers;
+        $this->identifiers = new ArrayCollection();
     }
 
     /**
@@ -128,7 +128,25 @@ class Product implements ProductInterface
      */
     public function getIdentifierSet($key)
     {
-        return $this->$this->identifiers->get($key);
+        return $this->identifiers->get($key);
+    }
+
+    /**
+     * Remove an identifier set by key from this product
+     * 
+     * @param $key
+     */
+    public function removeIdentifierSet($key)
+    {
+        $this->identifiers->remove($key);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIdentifiers($identifiers)
+    {
+        $this->identifiers = $identifiers;
     }
 
     /**

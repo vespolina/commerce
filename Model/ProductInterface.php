@@ -65,14 +65,7 @@ interface ProductInterface
     public function getFeatures();
 
     /**
-     * Set the ProductIdentifiers of the product to a collection of ProductIdentifiers
-     *
-     * @param identifiers
-     */
-    public function setIdentifiers($identifiers);
-
-    /**
-     * Add a ProductIdentifiers to the ArrayCollection. The key is the primary identifier used in a
+     * Add a ProductIdentifierSet to the ArrayCollection. The key is the primary identifier used in a
      * search to find the ProductIdentifiers
      *
      * @param string $key
@@ -89,13 +82,26 @@ interface ProductInterface
      */
     public function getIdentifierSet($key);
 
-
     /**
      * Return the identifiers of the product
      *
      * @return identifiers
      */
     public function getIdentifiers();
+
+    /**
+     * Remove an identifier set by key from this product
+     *
+     * @param $key
+     */
+    public function removeIdentifierSet($key);
+
+    /**
+     * Set a collection of ProductIdentifierSet for this product
+     *
+     * @param identifiers
+     */
+    public function setIdentifiers($identifiers);
 
     /**
      * Set the name of the product
