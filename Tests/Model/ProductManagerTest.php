@@ -100,10 +100,9 @@ class ProductManagerTest extends WebTestCase
     protected function createProductManager()
     {
         $mgr = $this->getMockforAbstractClass('Vespolina\ProductBundle\Model\ProductManager');
-
-        $primaryIdentifier = new \ReflectionProperty('Vespolina\ProductBundle\Model\ProductManager', 'primaryIdentifier');
-        $primaryIdentifier->setAccessible(true);
-        $primaryIdentifier->setValue($mgr, 'Vespolina\ProductBundle\Model\Node\IdentifierNode');
+        $mgr->expects($this->any())
+             ->method('getPrimaryIdentifier')
+             ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\IdentifierNode'));
         return $mgr;
     }
 
