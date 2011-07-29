@@ -39,9 +39,10 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function removeIdentifierSetFromProduct($identifierSet, ProductInterface $product)
+    public function removeIdentifierSetFromProduct($identifierSet, ProductInterface &$product)
     {
-
+        $index = $this->getIdentifierSetIndex($identifierSet);
+        $product->removeIdentifierSet($index);
     }
 
     protected function getIdentifierSetIndex($identifierSet)

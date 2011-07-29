@@ -82,5 +82,5 @@ interface ProductManagerInterface
      * @param mixed $identifierSet
      * @param Vespolina\ProductBundle\Model\ProductInterface $product
      */
-    public function removeIdentifierSetFromProduct($identifierSet, ProductInterface $product);
+    public function removeIdentifierSetFromProduct($identifierSet, ProductInterface &$product);
 }
