@@ -137,7 +137,7 @@ interface ProductInterface
     public function getOptions();
 
     /**
-     * Set the product type. The product types can be ORed together
+     * Use a different name or different technique
      *
      * These are valid types of products
      * Product::PHYSICAL
@@ -146,6 +146,12 @@ interface ProductInterface
      * Product::TIME
      * Product::SERVICE
      *
+     * @param $type
+     */
+
+    /**
+     * Set the product type, ie shirt, cd, tickets
+     * 
      * @param $type
      */
     public function setType($type);
