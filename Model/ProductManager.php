@@ -49,6 +49,7 @@ abstract class ProductManager implements ProductManagerInterface
 
     protected function getIdentifierSetIndex($identifierSet)
     {
+        $index = null;
         $primaryIdentifier = $this->getPrimaryIdentifier();
         foreach ($identifierSet->getIdentifiers() as $node) {
             if ($node instanceof $primaryIdentifier) {
@@ -56,7 +57,7 @@ abstract class ProductManager implements ProductManagerInterface
             }
         }
         if (!$index) {
-            throw new UnexpectedValueException(
+            throw new \UnexpectedValueException(
                 'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifierSet'
             );
         }
