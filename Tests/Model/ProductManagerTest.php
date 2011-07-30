@@ -23,7 +23,7 @@ class ProductManagerTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->mgr = $this->createProductManager();
+        $this->mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Node\IdentifierNode');
         $this->product = new Product();
     }
 
@@ -97,7 +97,7 @@ class ProductManagerTest extends WebTestCase
         // full results flag returns the full data set for the product
     }
 
-    protected function createProductManager()
+    protected function createProductManager($primaryIdentifier)
     {
         $mgr = $this->getMock('Vespolina\ProductBundle\Model\ProductManager',
             array(
@@ -111,7 +111,7 @@ class ProductManagerTest extends WebTestCase
         );
         $mgr->expects($this->any())
              ->method('getPrimaryIdentifier')
-             ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\IdentifierNode'));
+             ->will($this->returnValue($primaryIdentifier));
         return $mgr;
     }
 
