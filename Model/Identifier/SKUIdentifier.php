@@ -15,4 +15,8 @@ use Vesoplina\ProductBundle\Model\Node\IdentifierNode;
 class SKUIdentifier extends IdentifierNode
 {
 
+    public function getName()
+    {
+        return 'SKU';
+    }
 }
