@@ -20,7 +20,7 @@ class ProductFormType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('identifier', new IdentiferFormType());
+            ->add('identifier', new IdentifierFormType());
     }
 
     public function getName()
