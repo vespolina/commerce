@@ -18,11 +18,13 @@ use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
  */
 abstract class ProductManager implements ProductManagerInterface
 {
+    protected $container;
     protected $identifiers;
     protected $primaryIdentifier;
     
     public function __construct(Container $container)
     {
+        $this->container = $container;
         $this->identifiers = $container->getParameter('vespolina_product.product_manager.identifiers');
         $primaryIdentifierKey = $container->getParameter('vespolina_product.product_manager.primary_identifier');
         if (!$primaryIdentifierKey || !isset($this->identifiers[$primaryIdentifierKey])) {
@@ -36,10 +38,7 @@ abstract class ProductManager implements ProductManagerInterface
      */
     public function getPrimaryIdentifier()
     {
-        if (!$primaryIdentifier = $this->container->getParameter('vespolina_product.primary_identifier.class')) {
-            throw new \UnexpectedValueException('The primary identifier type has not been set');
-        }
-        return $primaryIdentifier;
+        return $this->primaryIdentifier;
     }
 
     /**
@@ -85,7 +84,7 @@ abstract class ProductManager implements ProductManagerInterface
         }
         if (!$index) {
             throw new \UnexpectedValueException(
-                'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifierSet'
+                'The primary identifier is not in this product identifier set'
             );
         }
         return $index;
