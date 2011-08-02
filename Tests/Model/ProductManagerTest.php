@@ -90,7 +90,7 @@ class ProductManagerTest extends WebTestCase
 
         $this->setExpectedException(
             'UnexpectedValueException',
-            'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifierSet'
+            'The primary identifier is not in this product identifier set'
         );
         $mgr->addIdentifierSetToProduct($pi, $this->product);
     }
