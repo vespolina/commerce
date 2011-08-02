@@ -7,22 +7,26 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
+use Symfony\Component\DependencyInjection\Container;
+
 use Vespolina\ProductBundle\Document\Product;
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManager as BaseProductManager;
-
 /**
  * @author Richard Shank <develop@zestic.com>
  */
 class ProductManager extends BaseProductManager
 {
     protected $dm;
+    protected $primaryIdentifier;
     protected $productRepo;
     
-    public function __construct($dm)
+    public function __construct(Container $container)
     {
-        $this->dm = $dm;
-        $this->productRepo = $this->dm->getRepository('Vespolina\ProductBundle\Document\Product');
+        $this->dm = $container->get('doctrine.odm.mongodb.default_document_manager');
+        $this->productRepo = $this->dm->getRepository('Vespolina\ProductBundle\Document\Product'); // TODO make configurable
+
+        parent::__construct($container);
     }
 
     /**
@@ -31,7 +35,7 @@ class ProductManager extends BaseProductManager
     public function createProduct()
     {
         // TODO: this will be using factories to allow for a number of different types of product classes
-        return new Product();
+        $product = new Product();
     }
 
     /**

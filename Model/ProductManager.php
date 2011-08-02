@@ -7,6 +7,8 @@
  */
 namespace Vespolina\ProductBundle\Model;
 
+use Symfony\Component\DependencyInjection\Container;
+
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
@@ -16,6 +18,19 @@ use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
  */
 abstract class ProductManager implements ProductManagerInterface
 {
+    protected $identifiers;
+    protected $primaryIdentifier;
+    
+    public function __construct(Container $container)
+    {
+        $this->identifiers = $container->getParameter('vespolina_product.product_manager.identifiers');
+        $primaryIdentifierKey = $container->getParameter('vespolina_product.product_manager.primary_identifier');
+        if (!$primaryIdentifierKey || !isset($this->identifiers[$primaryIdentifierKey])) {
+            throw new \InvalidConfigurationException('vespolina_product.product_manager.primary_identifier must be set to one of the configured identifiers');
+        }
+        $this->primaryIdentifier = $this->identifiers[$primaryIdentifierKey];
+    }
+    
     /**
      * @inheritdoc
      */
@@ -25,6 +40,18 @@ abstract class ProductManager implements ProductManagerInterface
             throw new \UnexpectedValueException('The primary identifier type has not been set');
         }
         return $primaryIdentifier;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPrimaryIdentifierLabel()
+    {
+        if (!$label = $this->container->getParameter('vespolina_project.primary_identifier.label')) {
+            $identifier = new $this->getPrimaryIdentifier();
+            $label = $identifier->getName();
+        }
+        return $label;
     }
 
     /**
