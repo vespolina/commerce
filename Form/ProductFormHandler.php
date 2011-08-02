@@ -9,6 +9,7 @@ namespace Vespolina\ProductBundle\Form;
 
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Vespolina\ProductBundle\Form\Model\CheckProduct;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -28,15 +29,23 @@ class ProductFormHandler
 
     public function process()
     {
-        $product = $this->productManager->createProduct();
-        $this->form->setData($product);
+        $this->form->setData(new CheckProduct);
 
         if ('POST' == $this->request->getMethod()) {
-            $this->form->bindRequest($this->request);
+            $data = $this->request->request->get($this->form->getName());
+            $this->form->bind($data);
 
             if ($this->form->isValid()) {
-                $this->productManager->updateProduct($product);
+                $product = $this->productManager->createProduct();
+                $product->setName($data['name']);
+                $product->setDescription($data['name']);
 
+                $primaryIdentifier = $this->productManager->getPrimaryIdentifier();
+                $identifier = new $primaryIdentifier;
+                $identifier->setCode($data['identifier']);
+                
+                $this->productManager->addIdentifierSetToProduct($identifier, $product);
+                $this->productManager->updateProduct($product);
                 return true;
             }
         }

@@ -83,9 +83,7 @@ class ProductController extends ContainerAware
      */
     public function newAction()
     {
-        $product = $this->container->get('vespolina.product_manager')->createProduct();
         $form = $this->container->get('vespolina.product.form');
-        $form->setData($product);
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
             'form' => $form->createView()
