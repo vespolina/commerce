@@ -11,6 +11,8 @@ use Symfony\Component\DependencyInjection\Container;
 
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
+use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 
 /**
@@ -33,6 +35,17 @@ abstract class ProductManager implements ProductManagerInterface
         $this->primaryIdentifier = $this->identifiers[$primaryIdentifierKey];
     }
     
+    /**
+     * @inheritdoc
+     */
+    public function createIdentifierSet(IdentifierNodeInterface $identifier)
+    {
+        // TODO: ProductIdentifierSet should be configurable
+        $identifierSet = new ProductIdentifierSet();
+        $identifierSet->addIdentifier($identifier);
+        return $identifierSet;
+    }
+
     /**
      * @inheritdoc
      */

@@ -9,6 +9,7 @@ namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
+use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -21,6 +22,15 @@ interface ProductManagerInterface
      * @return Vespolina\ProductBundle\Model\ProductInterface
      */
     public function createProduct();
+
+    /**
+     * Create a ProductIdentifierSet from a PrimaryIdentifier
+     * 
+     * @param Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface $identifier
+     *
+     * @return Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface
+     */
+    public function createIdentifierSet(IdentifierNodeInterface $identifier);
 
     /**
      * Find a collection of products by the criteria
