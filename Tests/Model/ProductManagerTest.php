@@ -8,6 +8,7 @@
 
 namespace Vespolina\ProductBundle\Tests\Model;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
@@ -100,18 +101,21 @@ class ProductManagerTest extends WebTestCase
         // full results flag returns the full data set for the product
     }
 
+
     protected function createProductManager($primaryIdentifier)
     {
-        $mgr = $this->getMock('Vespolina\ProductBundle\Model\ProductManager',
-            array(
+        $mgr = $this->getMockBuilder('Vespolina\ProductBundle\Model\ProductManager')
+            ->setMethods(array(
+                '__construct',
                 'getPrimaryIdentifier',
                 'createProduct',
                 'findBy',
                 'findProductById',
                 'findProductByIdentifier',
                 'updateProduct'
-            )
-        );
+            ))
+             ->disableOriginalConstructor()
+             ->getMock();
         $mgr->expects($this->any())
              ->method('getPrimaryIdentifier')
              ->will($this->returnValue($primaryIdentifier));
@@ -130,5 +134,19 @@ class ProductManagerTest extends WebTestCase
              ->will($this->returnValue($code));
         $pi->addIdentifier($identifier);
         return $pi;
+    }
+
+    protected function createFeatureNode($type, $name)
+    {
+        $feature = $this->getMock('Vespolina\ProductBundle\Model\Node\FeatureNode', array('getType', 'getName', 'getSearchTerm'));
+        $feature->expects($this->any())
+             ->method('getType')
+             ->will($this->returnValue($type));
+        $feature->expects($this->any())
+             ->method('getName')
+             ->will($this->returnValue($name));
+        $feature->expects($this->any())
+             ->method('getSearchTerm')
+             ->will($this->returnValue(strtolower($name)));
     }
 }
