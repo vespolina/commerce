@@ -10,8 +10,6 @@
 
         <field name="description" fieldName="description" type="string" />
 
-        <field name="identifiers" fieldName="identifiers" type="string" />
-
         <field name="name" fieldName="name" type="string" />
 
         <field name="primaryIdentifier" fieldName="primaryIdentifier" type="string" />

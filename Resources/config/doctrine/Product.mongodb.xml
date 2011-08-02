@@ -8,5 +8,6 @@
         <field name="id" id="true" />
 
         <embed-one target-document="Vespolina\ProductBundle\Document\ProductOptions" field="options" />
+        <embed-many target-document="Vespolina\ProductBundle\Document\ProductIdentifiers" field="identifiers" />
     </document>
 </doctrine-mongo-mapping>
