@@ -14,10 +14,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Vespolina\ProductBundle\Model\ProductInterface;
 
 /**
-* ProductBundle
-*
-* @author Joris de Wit <joris.w.dewit@gmail.com>
-*/
+ * ProductBundle
+ *
+ * @author Joris de Wit <joris.w.dewit@gmail.com>
+ * @author Richard Shank <develop@zestic.com>
+ */
 
 class ProductController extends ContainerAware
 {
@@ -123,5 +124,12 @@ class ProductController extends ContainerAware
     {
         return 'twig'; // HACK ALERT!
 //        return $this->container->getParameter('vespolina.template.engine');
+    }
+
+    protected function getProductFormOptions()
+    {
+        $pm = $this->container->get('vespolina.product_manager');
+        $options['features']['code']['label'] = $pm->getPrimaryIdentifierLabel();
+        return $options;
     }
 }
