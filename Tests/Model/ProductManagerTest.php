@@ -101,7 +101,35 @@ class ProductManagerTest extends WebTestCase
         // full results flag returns the full data set for the product
     }
 
+    public function testCreateIdentifierSet()
+    {
+        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Node\IdentifierNode');
+        $this->assertInstanceOf(
+            'Vespolina\ProductBundle\Model\Node\ProductIdentifierSet',
+            $mgr->createIdentifierSet($this->createIdentifierNode('noset')),
+            'using an instance of the primary identifier as a parameter should create a new PrimaryIdentifierSet'
+        );
+    }
 
+    public function testAddFeatureToProduct()
+    {
+        $label = $this->createFeatureNode('label', 'Joat Music');
+
+        $this->mgr->addFeatureToProduct($label, $this->product);
+        $this->assertEquals(1, $this->product->getFeatures()->count(), 'make sure the feature has been added');
+    }
+
+    public function testSearchForProductByFeature()
+    {
+        // search by identifier should return a product set up with the specific information for that identifier
+        // full results flag returns the full data set for the product
+    }
+
+    public function testSearchForProductByFeatureType()
+    {
+        // search by identifier should return a product set up with the specific information for that identifier
+        // full results flag returns the full data set for the product
+    }
     protected function createProductManager($primaryIdentifier)
     {
         $mgr = $this->getMockBuilder('Vespolina\ProductBundle\Model\ProductManager')
@@ -125,6 +153,13 @@ class ProductManagerTest extends WebTestCase
     protected function createProductIdentifiers($code)
     {
         $pi = new ProductIdentifierSet();
+
+        $pi->addIdentifier($this->createIdentifierNode($code));
+        return $pi;
+    }
+
+    protected function createIdentifierNode($code)
+    {
         $identifier = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
         $identifier->expects($this->any())
              ->method('getCode')
@@ -132,8 +167,7 @@ class ProductManagerTest extends WebTestCase
         $identifier->expects($this->any())
              ->method('getName')
              ->will($this->returnValue($code));
-        $pi->addIdentifier($identifier);
-        return $pi;
+        return $identifier;
     }
 
     protected function createFeatureNode($type, $name)
