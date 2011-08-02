@@ -36,6 +36,7 @@ class ProductManager extends BaseProductManager
     {
         // TODO: this will be using factories to allow for a number of different types of product classes
         $product = new Product();
+        return $product;
     }
 
     /**
