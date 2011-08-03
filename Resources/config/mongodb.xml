@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="vespolina_product.product_manager.class">Vespolina\ProductBundle\Document\ProductManager</parameter>
         <parameter key="vespolina_product.model.product.class">Vespolina\ProductBundle\Document\Product</parameter>
+        <parameter key="vespolina_product.model.product_identifier_set.class">Vespolina\ProductBundle\Document\ProductIdentifierSet</parameter>
     </parameters>
 
     <services>

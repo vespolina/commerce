@@ -40,8 +40,8 @@ abstract class ProductManager implements ProductManagerInterface
      */
     public function createIdentifierSet(IdentifierNodeInterface $identifier)
     {
-        // TODO: ProductIdentifierSet should be configurable
-        $identifierSet = new ProductIdentifierSet();
+        $productIdentifierSet = $this->container->getParameter('vespolina_product.model.product_identifier_set.class');
+        $identifierSet = new $productIdentifierSet;
         $identifierSet->addIdentifier($identifier);
         return $identifierSet;
     }

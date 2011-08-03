@@ -81,4 +81,9 @@ class ProductIdentifierSet extends ProductNode implements ProductIdentifierSetIn
     {
         $this->removeChild($identifier->getName());
     }
+
+    public function __toString()
+    {
+        return 'ProductIdentifierSet';
+    }
 }
