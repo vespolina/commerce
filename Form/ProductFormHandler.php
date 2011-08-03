@@ -44,9 +44,10 @@ class ProductFormHandler
                 $identifier = new $primaryIdentifier;
                 $identifier->setCode($data['identifier']);
                 $identifierSet = $this->productManager->createIdentifierSet($identifier);
-                
+
                 $this->productManager->addIdentifierSetToProduct($identifierSet, $product);
                 $this->productManager->updateProduct($product);
+
                 return true;
             }
         }
