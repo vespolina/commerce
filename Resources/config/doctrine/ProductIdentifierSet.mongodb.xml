@@ -8,7 +8,7 @@
 
         <field name="name" fieldName="name" type="string" />
 
-        <embed-many name="identifiers" fieldName="identifiers" />
+<!--        <embed-many name="identifiers" fieldName="identifiers" /> -->
         
     </embedded-document>
 
