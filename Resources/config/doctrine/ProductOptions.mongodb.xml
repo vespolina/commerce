@@ -4,8 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Vespolina\ProductBundle\Document\ProductOptions">
-        <field name="id" id="true" />
+    <embedded-document name="Vespolina\ProductBundle\Document\ProductOptions">
         <embed-many target-document="Vespolina\ProductBundle\Document\OptionNode" field="children" />
-    </document>
+    </embedded-document>
 </doctrine-mongo-mapping>

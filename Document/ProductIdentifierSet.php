@@ -13,5 +13,4 @@ use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet as AbstractProductId
  */
 class ProductIdentifierSet extends AbstractProductIdentifierSet
 {
-    protected $id;
 }

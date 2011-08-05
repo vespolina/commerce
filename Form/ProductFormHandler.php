@@ -38,7 +38,7 @@ class ProductFormHandler
             if ($this->form->isValid()) {
                 $product = $this->productManager->createProduct();
                 $product->setName($data['name']);
-                $product->setDescription($data['name']);
+                $product->setDescription($data['description']);
 
                 $primaryIdentifier = $this->productManager->getPrimaryIdentifier();
                 $identifier = new $primaryIdentifier;
