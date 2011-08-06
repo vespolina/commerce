@@ -30,7 +30,7 @@ class OptionGroupTest extends WebTestCase
         $sizeXl->setType('size');
         $sizeXl->setValue('extra large');
 
-        $otn = new OptionGroup();
+        $otn = $this->createOptionGroup();
         // DO NOT SET THE NAME!
         $otn->addOption($colorRed);
 
@@ -48,5 +48,11 @@ class OptionGroupTest extends WebTestCase
 
         $this->setExpectedException('UnexpectedValueException', 'All OptionsNodes in this type must be color');
         $otn->addOption($sizeXl);
+    }
+
+    protected function createOptionGroup()
+    {
+        $og = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionGroup');
+        return $og;
     }
 }
