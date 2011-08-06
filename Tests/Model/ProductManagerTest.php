@@ -121,7 +121,7 @@ class ProductManagerTest extends WebTestCase
         $option = $mgr->createOption('CoLoR', 'BlAcK');
 
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\OptionNodeInstance',
+            'Vespolina\ProductBundle\Model\Node\OptionNodeInterface',
             $option,
             'an OptionNode instance should be created'
         );
