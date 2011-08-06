@@ -14,8 +14,15 @@ use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class OptionSet extends ProductNode implements OptionSetInterface
+abstract class OptionSet extends ProductNode implements OptionSetInterface
 {
+    protected $optionGroupClass;
+
+    public function __construct($optionGroupClass)
+    {
+        $this->optionGroupClass = $optionGroupClass;
+    }
+    
     /*
      * @inheritdoc
      */
@@ -23,7 +30,7 @@ class OptionSet extends ProductNode implements OptionSetInterface
     {
         $typeName = $option->getType();
         if (!isset($this->children[$typeName])) {
-            $this->children[$typeName] = new OptionGroup();
+            $this->children[$typeName] = $this->createOptionGroup();
         }
         $this->children[$typeName]->addOption($option);
     }
@@ -78,6 +85,11 @@ class OptionSet extends ProductNode implements OptionSetInterface
      */
     public function getType($type)
     {
-        return $this->getChild($type);
+        return $this->getChild($type)->getOptions();
+    }
+
+    protected function createOptionGroup()
+    {
+        return new $this->optionGroupClass;
     }
 }

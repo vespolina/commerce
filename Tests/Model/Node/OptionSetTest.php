@@ -73,20 +73,20 @@ class OptionsSetTest extends WebTestCase
         $this->assertNull($os->getOption('bull', 'shit'), "return null when the type doesn't exists");
 
         $this->assertEquals('sizeXl', $os->getOptionByName('sizeXl')->getName(), 'an option can be returned by name');
-
-
-        $this->assertEquals(7, $os->count(), 'count should return the total number of options stored');
-
-        $this->assertInstanceOf(
-            'Doctrine\Common\Collections\ArrayCollection',
-            $os->getOptions(),
-            'the identifiers should be stored in an ArrayCollection'
-        );
     }
 
     protected function createOptionSet()
     {
-        $os = $this->getMock('Vespolina\ProductBundle\Model\Node\OptionSet');
+        $os = $this->getMock('Vespolina\ProductBundle\Model\Node\OptionSet', array('createOptionGroup'), array(), '', false);
+        $os->expects($this->at(0))
+             ->method('createOptionGroup')
+             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionGroup')));
+        $os->expects($this->at(1))
+             ->method('createOptionGroup')
+             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionGroup')));
+        $os->expects($this->at(2))
+             ->method('createOptionGroup')
+             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionGroup')));
         return $os;
     }
 }
