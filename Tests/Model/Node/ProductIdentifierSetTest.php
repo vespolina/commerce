@@ -24,9 +24,9 @@ class ProductIdentifierSetTest extends WebTestCase
         $idSet = $this->createProductIdentifierSet();
 
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\OptionsSetInterface',
-            $idSet->getOptions(),
-            'an OptionsSet object should be set'
+            'Vespolina\ProductBundle\Model\Node\OptionSetInterface',
+            $idSet->getOptionSet(),
+            'an OptionSet object should be set'
         );
 
         $option = $this->createOptionNode('color', 'blue');
