@@ -5,6 +5,8 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <embedded-document name="Vespolina\ProductBundle\Document\OptionNode">
-
+        <field name="name" fieldName="name" type="string" />
+        <field name="type" fieldName="type" type="string" />
+        <field name="value" fieldName="value" type="string" />
     </embedded-document>
 </doctrine-mongo-mapping>

@@ -7,14 +7,10 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Model\Node\OptionSet as AbstractOptionSet;
+use Vespolina\ProductBundle\Model\Node\OptionGroup as AbstractOptionGroup;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class OptionSet extends AbstractOptionSet
+class OptionGroup extends AbstractOptionGroup
 {
-    public  function __construct()
-    {
-        parent::__construct('Vespolina\ProductBundle\Document\OptionGroup');
-    }
 }
