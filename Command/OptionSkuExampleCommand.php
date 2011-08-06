@@ -67,7 +67,6 @@ EOT
         }
 
         $this->productManager->updateProduct($product);
-        $this->productManager->flush();
 
         $output->writeln('Example t-shirt created');
     }
