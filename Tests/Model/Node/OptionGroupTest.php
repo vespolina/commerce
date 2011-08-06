@@ -11,12 +11,12 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Node\OptionNode;
-use Vespolina\ProductBundle\Model\Node\OptionTypeNode;
+use Vespolina\ProductBundle\Model\Node\OptionGroup;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class OptionTypeNodeTest extends WebTestCase
+class OptionGroupTest extends WebTestCase
 {
     public function testProductOptions()
     {
@@ -30,7 +30,7 @@ class OptionTypeNodeTest extends WebTestCase
         $sizeXl->setType('size');
         $sizeXl->setValue('extra large');
 
-        $otn = new OptionTypeNode();
+        $otn = new OptionGroup();
         // DO NOT SET THE NAME!
         $otn->addOption($colorRed);
 
