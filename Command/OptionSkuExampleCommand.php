@@ -20,7 +20,7 @@ class OptionSkuExampleCommand extends ContainerAwareCommand
 {
     protected $productManager;
 
-        /**
+    /**
      * @see Command
      */
     protected function configure()
@@ -41,6 +41,8 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->productManager = $this->getContainer()->get('vespolina.product_manager');
+        
         $product = $this->productManager->createProduct();
         $product->setName('Vespolina T-Shirt');
         $product->setDescription('This stylish t-shirt sports the not yet designed Vespolina Project logo');
@@ -66,5 +68,7 @@ EOT
 
         $this->productManager->updateProduct($product);
         $this->productManager->flush();
+
+        $output->writeln('Example t-shirt created');
     }
 }
