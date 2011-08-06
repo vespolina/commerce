@@ -55,8 +55,8 @@ abstract class ProductManager implements ProductManagerInterface
      */
     public function createOption($type, $value)
     {
-        // TODO: make configurable
-        $option = $this->getOptionNodeClass();
+        $optionClass = $this->getOptionNodeClass();
+        $option = new $optionClass;
         $option->setType($type);
         $option->setValue($value);
         return $option;
