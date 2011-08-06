@@ -76,7 +76,7 @@ abstract class ProductManager implements ProductManagerInterface
     public function getOptionNodeClass()
     {
         // TODO: make configurable
-        return new OptionNode();
+        return '\Vespolina\ProductBundle\Document\OptionNode';
     }
 
     /**
