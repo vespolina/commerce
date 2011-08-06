@@ -15,9 +15,16 @@ use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductIdentifierSet extends ProductNode implements ProductIdentifierSetInterface
+abstract class ProductIdentifierSet extends ProductNode implements ProductIdentifierSetInterface
 {
     protected $options;
+    protected $optionClass;
+
+    public function __construct($optionClass)
+    {
+        $this->optionClass = $optionClass;
+        $this->options = new $optionClass;
+    }
 
     /*
      * @inheritdoc
