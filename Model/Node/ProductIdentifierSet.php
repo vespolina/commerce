@@ -29,6 +29,22 @@ abstract class ProductIdentifierSet extends ProductNode implements ProductIdenti
     /*
      * @inheritdoc
      */
+    public function addOption(OptionNodeInterface $option)
+    {
+        $this->options->addOption($option);
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function removeOption(OptionNodeInterface $option)
+    {
+        $this->options->removeOption($option);
+    }
+
+    /*
+     * @inheritdoc
+     */
     public function setOptions(OptionSetInterface $options)
     {
         $this->options = $options;
@@ -39,6 +55,14 @@ abstract class ProductIdentifierSet extends ProductNode implements ProductIdenti
      */
     public function getOptions()
     {
+        return $this->options->getOptions();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOptionSet()
+    {
         return $this->options;
     }
 
@@ -47,7 +71,7 @@ abstract class ProductIdentifierSet extends ProductNode implements ProductIdenti
      */
     public function removeOptions()
     {
-        $this->options = null;
+        $this->options = new $this->optionClass;
     }
 
     /*

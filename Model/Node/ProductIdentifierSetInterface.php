@@ -16,6 +16,20 @@ use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 interface ProductIdentifierSetInterface extends ProductNodeInterface
 {
     /**
+     * A convenience method to add an option to the option set
+     * 
+     * @param OptionNodeInterface $option
+     */
+    public function addOption(OptionNodeInterface $option);
+
+    /**
+     * A convenience method to remove an option to the option set
+     *
+     * @param OptionNodeInterface $option
+     */
+    public function removeOption(OptionNodeInterface $option);
+
+    /**
      * Set options when there are different identifiers with different option sets
      *
      * @param OptionSetInterface $options
@@ -25,9 +39,16 @@ interface ProductIdentifierSetInterface extends ProductNodeInterface
     /**
      * Return the options for this identifier
      *
-     * @return OptionSetInterface $options
+     * @return Doctrine\Common\Collections\ArrayCollection $options
      */
     public function getOptions();
+
+    /**
+     * Return the OptionSet for this identifier
+     *
+     * @return OptionSetInterface $options
+     */
+    public function getOptionSet();
 
     /**
      * Remove the options for this identifier
