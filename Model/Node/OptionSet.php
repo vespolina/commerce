@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNode;
-use Vespolina\ProductBundle\Model\Node\OptionTypeNode;
+use Vespolina\ProductBundle\Model\Node\OptionGroup;
 use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 
 /**
@@ -23,7 +23,7 @@ class OptionSet extends ProductNode implements OptionSetInterface
     {
         $typeName = $option->getType();
         if (!isset($this->children[$typeName])) {
-            $this->children[$typeName] = new OptionTypeNode();
+            $this->children[$typeName] = new OptionGroup();
         }
         $this->children[$typeName]->addOption($option);
     }

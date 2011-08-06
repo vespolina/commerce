@@ -65,7 +65,7 @@ interface OptionSetInterface extends ProductNodeInterface
      *
      * @param string $type
      *
-     * @return Vespolina\ProductBundle\Model\Node\OptionTypeNodeInterface
+     * @return Vespolina\ProductBundle\Model\Node\OptionGroupInterface
      */
     public function getType($type);
 }

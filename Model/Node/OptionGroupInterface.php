@@ -12,7 +12,7 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface OptionTypeNodeInterface extends ProductNodeInterface
+interface OptionGroupInterface extends ProductNodeInterface
 {
     /**
      * Add a option to this product options node.
