@@ -10,7 +10,7 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-use Vespolina\ProductBundle\Model\Node\OptionsSet;
+use Vespolina\ProductBundle\Model\Node\OptionSet;
 use Vespolina\ProductBundle\Model\Node\OptionNode;
 
 /**
@@ -34,7 +34,7 @@ class OptionsSetTest extends WebTestCase
             ),
         );
 
-        $po = new OptionsSet();
+        $os = $this->createOptionSet();
 
         foreach ($options as $type => $data) {
             foreach ($data as $name => $value) {
@@ -42,42 +42,51 @@ class OptionsSetTest extends WebTestCase
                 $node->setName($name);
                 $node->setType($type);
                 $node->setValue($value);
-                $po->addOption($node);
+                $os->addOption($node);
             }
         }
 
-        $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\OptionTypeNodeInterface',
-            $po->getType('color'),
-            'options should be grouped in an optionTypeNode'
-        );
-
         $childrenProperty = new \ReflectionProperty(
-          'Vespolina\ProductBundle\Model\Node\OptionsSet', 'children'
+          'Vespolina\ProductBundle\Model\Node\OptionSet', 'children'
         );
         $childrenProperty->setAccessible(true);
 
         $this->assertArrayHasKey(
             'color',
-            $childrenProperty->getValue($po),
+            $childrenProperty->getValue($os),
             'the associative name should be set to type of the option'
         );
 
         $this->assertArrayHasKey(
             'size',
-            $childrenProperty->getValue($po),
+            $childrenProperty->getValue($os),
             'the associative name should be set to type of the option'
         );
 
-        $this->assertEquals(3, count($po->getType('color')->getOptions()), 'there should be 3 color options');
-        $this->assertEquals(4, count($po->getType('size')->getOptions()), 'there should be 4 size options');
+        $this->assertEquals(3, count($os->getType('color')), 'there should be 3 color options');
+        $this->assertEquals(4, count($os->getType('size')), 'there should be 4 size options');
         $this->assertEquals(
             'colorRed',
-            $po->getOption('color', 'red')->getName(),
+            $os->getOption('color', 'red')->getName(),
             'an option can be returned by type and value'
         );
-        $this->assertNull($po->getOption('bull', 'shit'), "return null when the type doesn't exists");
+        $this->assertNull($os->getOption('bull', 'shit'), "return null when the type doesn't exists");
 
-        $this->assertEquals('sizeXl', $po->getOptionByName('sizeXl')->getName(), 'an option can be returned by name');
+        $this->assertEquals('sizeXl', $os->getOptionByName('sizeXl')->getName(), 'an option can be returned by name');
+
+
+        $this->assertEquals(7, $os->count(), 'count should return the total number of options stored');
+
+        $this->assertInstanceOf(
+            'Doctrine\Common\Collections\ArrayCollection',
+            $os->getOptions(),
+            'the identifiers should be stored in an ArrayCollection'
+        );
+    }
+
+    protected function createOptionSet()
+    {
+        $os = $this->getMock('Vespolina\ProductBundle\Model\Node\OptionSet');
+        return $os;
     }
 }
