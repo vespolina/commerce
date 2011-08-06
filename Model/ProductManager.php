@@ -22,12 +22,14 @@ abstract class ProductManager implements ProductManagerInterface
 {
     protected $container;
     protected $identifiers;
+    protected $identifierSetClass;
     protected $primaryIdentifier;
     
     public function __construct(Container $container)
     {
         $this->container = $container;
         $this->identifiers = $container->getParameter('vespolina_product.product_manager.identifiers');
+        $this->identifierSetClass = $this->container->getParameter('vespolina_product.model.product_identifier_set.class');
         $primaryIdentifierKey = $container->getParameter('vespolina_product.product_manager.primary_identifier');
         if (!$primaryIdentifierKey || !isset($this->identifiers[$primaryIdentifierKey])) {
             throw new \InvalidConfigurationException('vespolina_product.product_manager.primary_identifier must be set to one of the configured identifiers');
@@ -40,10 +42,41 @@ abstract class ProductManager implements ProductManagerInterface
      */
     public function createIdentifierSet(IdentifierNodeInterface $identifier)
     {
-        $productIdentifierSet = $this->container->getParameter('vespolina_product.model.product_identifier_set.class');
+        $productIdentifierSet = $this->getIdentifierSetClass();
         $identifierSet = new $productIdentifierSet;
         $identifierSet->addIdentifier($identifier);
+        
         return $identifierSet;
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function createOption($type, $value)
+    {
+        // TODO: make configurable
+        $option = $this->getOptionNodeClass();
+        $option->setType($type);
+        $option->setValue($value);
+        return $option;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentifierSetClass()
+    {
+        return $this->identifierSetClass;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOptionNodeClass()
+    {
+        // TODO: make configurable
+        return new OptionNode();
     }
 
     /**

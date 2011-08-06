@@ -16,8 +16,8 @@ use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
-use Vespolina\ProductBundle\Model\Node\ProductOptions;
-use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
+use Vespolina\ProductBundle\Model\Node\OptionSet;
+use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -41,9 +41,9 @@ class Product implements ProductInterface
     protected $type;
     protected $updateAt;
 
-    public function __construct()
+    public function __construct($optionSet)
     {
-        $this->options = new ProductOptions();
+        $this->options = $optionSet;
     }
 
     /**
@@ -172,7 +172,7 @@ class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setOptions(ProductOptionsInterface $options)
+    public function setOptions(OptionSetInterface $options)
     {
         $this->options = $options;
     }

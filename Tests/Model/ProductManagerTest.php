@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
+use Vespolina\ProductBundle\Model\Node\OptionSet;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 
 /**
@@ -25,7 +26,7 @@ class ProductManagerTest extends WebTestCase
     protected function setUp()
     {
         $this->mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Node\IdentifierNode');
-        $this->product = new Product();
+        $this->product = new Product(new OptionSet());
     }
 
     public function testPrimaryIdentifier()
@@ -83,6 +84,8 @@ class ProductManagerTest extends WebTestCase
         $this->mgr->removeIdentifierSetFromProduct('sku1234', $this->product);
         $this->assertEquals(0, $this->product->getIdentifiers()->count(), 'remove identifiers by primary identifier code should work also');
 
+        // any options in the identifier set should also be in the master option set in the product
+        
         /* exceptions */
         $mgr = $this->createProductManager('NotIdentifierNode');
 
@@ -130,16 +133,18 @@ class ProductManagerTest extends WebTestCase
         // search by identifier should return a product set up with the specific information for that identifier
         // full results flag returns the full data set for the product
     }
+
     protected function createProductManager($primaryIdentifier)
     {
         $mgr = $this->getMockBuilder('Vespolina\ProductBundle\Model\ProductManager')
             ->setMethods(array(
                 '__construct',
-                'getPrimaryIdentifier',
                 'createProduct',
                 'findBy',
                 'findProductById',
                 'findProductByIdentifier',
+                'getPrimaryIdentifier',
+                'getIdentifierSetClass',
                 'updateProduct'
             ))
              ->disableOriginalConstructor()
@@ -147,6 +152,9 @@ class ProductManagerTest extends WebTestCase
         $mgr->expects($this->any())
              ->method('getPrimaryIdentifier')
              ->will($this->returnValue($primaryIdentifier));
+        $mgr->expects($this->any())
+             ->method('getIdentifierSetClass')
+             ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet'));
         return $mgr;
     }
 

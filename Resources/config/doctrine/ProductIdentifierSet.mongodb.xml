@@ -9,7 +9,7 @@
         <field name="name" fieldName="name" type="string" />
 
         <embed-many field="children" strategy="set" />
-        <embed-one target-document="Vespolina\ProductBundle\Document\ProductOptions" field="options" />
+        <embed-one target-document="Vespolina\ProductBundle\Document\OptionSet" field="options" />
 
     </embedded-document>
 

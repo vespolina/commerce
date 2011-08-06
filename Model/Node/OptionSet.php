@@ -9,12 +9,12 @@ namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNode;
 use Vespolina\ProductBundle\Model\Node\OptionTypeNode;
-use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
+use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductOptions extends ProductNode implements ProductOptionsInterface
+class OptionSet extends ProductNode implements OptionSetInterface
 {
     /*
      * @inheritdoc

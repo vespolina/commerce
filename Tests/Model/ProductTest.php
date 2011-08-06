@@ -13,20 +13,21 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Vespolina\ProductBundle\Model\Product;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Node\IdentifierNode;
+use Vespolina\ProductBundle\Model\Node\OptionSet;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
 class ProductTest extends WebTestCase
 {
-    public function testProductOptions()
+    public function testOptionSet()
     {
-        $product = new Product();
+        $product = new Product(new OptionSet());
 
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\ProductOptionsInterface',
+            'Vespolina\ProductBundle\Model\Node\OptionSetInterface',
             $product->getOptions(),
-            'an empty class with ProductOptionsInterface should be set');
+            'an empty class with OptionSetInterface should be set');
 
         $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Node\OptionNode', array('getType', 'getValue'));
         $sizeLgOption->expects($this->any())
@@ -39,13 +40,13 @@ class ProductTest extends WebTestCase
         $this->assertSame(
             $sizeLgOption,
             $product->getOptions()->getOption('size', 'large'),
-            'addOption hands option off to ProductOptions'
+            'addOption hands option off to OptionsSet'
         );
     }
 
     public function testProductFeatures()
     {
-        $product = new Product();
+        $product = new Product(new OptionSet());
 
         $productFeatures = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'features');
         $productFeatures->setAccessible(true);
@@ -67,7 +68,7 @@ class ProductTest extends WebTestCase
 
     public function testProductIdentities()
     {
-        $product = new Product();
+        $product = new Product(new OptionSet());
 
         $identifierSet = $this->createProductIdentifierSet('test123');
 
@@ -84,7 +85,7 @@ class ProductTest extends WebTestCase
             'the identifier should be returned by the key'
         );
 
-        $product = new Product();
+        $product = new Product(new OptionSet());
 
         $identifierSet = $this->createProductIdentifierSet('test123');
 

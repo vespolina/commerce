@@ -10,15 +10,15 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-use Vespolina\ProductBundle\Model\Node\ProductOptions;
+use Vespolina\ProductBundle\Model\Node\OptionsSet;
 use Vespolina\ProductBundle\Model\Node\OptionNode;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductOptionsTest extends WebTestCase
+class OptionsSetTest extends WebTestCase
 {
-    public function testProductOptions()
+    public function testOptionsSet()
     {
         $options = array(
             'size' => array(
@@ -34,7 +34,7 @@ class ProductOptionsTest extends WebTestCase
             ),
         );
 
-        $po = new ProductOptions();
+        $po = new OptionsSet();
 
         foreach ($options as $type => $data) {
             foreach ($data as $name => $value) {
@@ -53,7 +53,7 @@ class ProductOptionsTest extends WebTestCase
         );
 
         $childrenProperty = new \ReflectionProperty(
-          'Vespolina\ProductBundle\Model\Node\ProductOptions', 'children'
+          'Vespolina\ProductBundle\Model\Node\OptionsSet', 'children'
         );
         $childrenProperty->setAccessible(true);
 

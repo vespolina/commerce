@@ -7,10 +7,10 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Model\Node\ProductOptions as AbstractProductOptions;
+use Vespolina\ProductBundle\Model\Node\OptionSet as AbstractOptionSet;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class BaseProductOptions extends AbstractProductOptions
+class OptionSet extends AbstractOptionSet
 {
 }

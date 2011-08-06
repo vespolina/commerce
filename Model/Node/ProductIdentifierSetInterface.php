@@ -18,14 +18,14 @@ interface ProductIdentifierSetInterface extends ProductNodeInterface
     /**
      * Set options when there are different identifiers with different option sets
      *
-     * @param ProductOptionsInterface $options
+     * @param OptionSetInterface $options
      */
-    public function setOptions(ProductOptionsInterface $options);
+    public function setOptions(OptionSetInterface $options);
 
     /**
      * Return the options for this identifier
      *
-     * @return ProductOptionsInterface $options
+     * @return OptionSetInterface $options
      */
     public function getOptions();
 

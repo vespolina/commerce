@@ -7,7 +7,7 @@
     <document name="Vespolina\ProductBundle\Document\Product">
         <field name="id" id="true" />
 
-        <embed-one target-document="Vespolina\ProductBundle\Document\ProductOptions" field="options" />
+        <embed-one target-document="Vespolina\ProductBundle\Document\OptionSet" field="options" />
         <embed-many target-document="Vespolina\ProductBundle\Document\ProductIdentifierSet" field="identifiers" strategy="set" />
     </document>
 </doctrine-mongo-mapping>

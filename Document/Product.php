@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Document;
 
 use Vespolina\ProductBundle\Document\BaseProduct;
-use Vespolina\ProductBundle\Document\ProductOptions;
+use Vespolina\ProductBundle\Document\OptionSet;
 /**
  * @author Richard Shank <develop@zestic.com>
  */
@@ -16,6 +16,6 @@ class Product extends BaseProduct
 {
     public function __construct()
     {
-        $this->options = new ProductOptions();
+        parent::__construct(new OptionSet());
     }
 }

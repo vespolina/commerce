@@ -10,18 +10,19 @@ namespace Vespolina\ProductBundle\Model\Node;
 use Vespolina\ProductBundle\Model\ProductNode;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
 class ProductIdentifierSet extends ProductNode implements ProductIdentifierSetInterface
 {
-    protected $attributes;
+    protected $options;
 
     /*
      * @inheritdoc
      */
-    public function setOptions(ProductOptionsInterface $options)
+    public function setOptions(OptionSetInterface $options)
     {
         $this->options = $options;
     }

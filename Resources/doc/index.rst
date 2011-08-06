@@ -46,7 +46,7 @@ Extending a Product
         protected $id;
 
         /**
-         * @MongoDb/ReferenceOne(document="Vespolina\ProductBundle\Document\ProductOptions")
+         * @MongoDb/ReferenceOne(document="Vespolina\ProductBundle\Document\OptionSet")
          */
         protected $options;
 

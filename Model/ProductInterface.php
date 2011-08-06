@@ -14,7 +14,7 @@ use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
-use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
+use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -120,9 +120,9 @@ interface ProductInterface
     /**
      * Set the options of the product to an option set
      *
-     * @param Vespolina\ProductBundle\Node\ProductOptionsInterface $options
+     * @param Vespolina\ProductBundle\Node\OptionSetInterface $options
      */
-    public function setOptions(ProductOptionsInterface $options);
+    public function setOptions(OptionSetInterface $options);
 
     /**
      * Add an option to the product
@@ -132,7 +132,7 @@ interface ProductInterface
     /**
      * Return the options of the product
      *
-     * @return Vespolina\ProductBundle\Node\ProductOptionsInterface $options
+     * @return Vespolina\ProductBundle\Node\OptionSetInterface $options
      */
     public function getOptions();
 
