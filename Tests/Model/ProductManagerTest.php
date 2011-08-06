@@ -114,8 +114,37 @@ class ProductManagerTest extends WebTestCase
         );
     }
 
+    public function testCreateOption()
+    {
+        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Node\IdentifierNode');
+
+        $option = $mgr->createOption('CoLoR', 'BlAcK');
+
+        $this->assertInstanceOf(
+            'Vespolina\ProductBundle\Model\Node\OptionNodeInstance',
+            $option,
+            'an OptionNode instance should be created'
+        );
+
+        $this->assertEquals(
+            'CoLoR',
+            $option->getType(),
+            'make sure the type of the option is stored correctly'
+        );
+
+        $this->assertEquals(
+            'BlAcK',
+            $option->getValue(),
+            'make sure the value of the option is stored correctly'
+        );
+    }
+
     public function testAddFeatureToProduct()
     {
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+
         $label = $this->createFeatureNode('label', 'Joat Music');
 
         $this->mgr->addFeatureToProduct($label, $this->product);
@@ -145,6 +174,7 @@ class ProductManagerTest extends WebTestCase
                 'findProductByIdentifier',
                 'getPrimaryIdentifier',
                 'getIdentifierSetClass',
+                'getOptionNodeClass',
                 'updateProduct'
             ))
              ->disableOriginalConstructor()
@@ -155,6 +185,9 @@ class ProductManagerTest extends WebTestCase
         $mgr->expects($this->any())
              ->method('getIdentifierSetClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet'));
+        $mgr->expects($this->any())
+             ->method('getOptionNodeClass')
+             ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\OptionNode'));
         return $mgr;
     }
 
