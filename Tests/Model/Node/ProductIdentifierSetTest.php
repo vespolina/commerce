@@ -41,7 +41,16 @@ class ProductIdentifierSetTest extends WebTestCase
 
     protected function createProductIdentifierSet()
     {
-        $idSet = $this->getMock('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet');
+        $idSet = $this->getMock('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet', null, array(),'',false);
+
+        $optionSet = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionSet');
+        
+        $optionsProperty = new \ReflectionProperty(
+          'Vespolina\ProductBundle\Model\Node\ProductIdentifierSet', 'options'
+        );
+        $optionsProperty->setAccessible(true);
+
+        $optionsProperty->setValue($idSet, $optionSet);
 
         return $idSet;
     }
