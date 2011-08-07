@@ -5,17 +5,12 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Vespolina\ProductBundle\Model\Identifier;
+namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Model\Node\IdentifierNode;
-
+use Vespolina\ProductBundle\Model\Identifier\SKUIdentifier as BaseSKUIdentifier;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class SKUIdentifier extends IdentifierNode
+class SKUIdentifier extends BaseSKUIdentifier
 {
-    public function getName()
-    {
-        return 'SKU';
-    }
 }

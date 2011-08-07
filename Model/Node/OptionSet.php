@@ -8,14 +8,21 @@
 namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNode;
-use Vespolina\ProductBundle\Model\Node\OptionTypeNode;
-use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
+use Vespolina\ProductBundle\Model\Node\OptionGroup;
+use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductOptions extends ProductNode implements ProductOptionsInterface
+abstract class OptionSet extends ProductNode implements OptionSetInterface
 {
+    protected $optionGroupClass;
+
+    public function __construct($optionGroupClass)
+    {
+        $this->optionGroupClass = $optionGroupClass;
+    }
+    
     /*
      * @inheritdoc
      */
@@ -23,7 +30,7 @@ class ProductOptions extends ProductNode implements ProductOptionsInterface
     {
         $typeName = $option->getType();
         if (!isset($this->children[$typeName])) {
-            $this->children[$typeName] = new OptionTypeNode();
+            $this->children[$typeName] = $this->createOptionGroup();
         }
         $this->children[$typeName]->addOption($option);
     }
@@ -78,6 +85,11 @@ class ProductOptions extends ProductNode implements ProductOptionsInterface
      */
     public function getType($type)
     {
-        return $this->getChild($type);
+        return $this->getChild($type)->getOptions();
+    }
+
+    protected function createOptionGroup()
+    {
+        return new $this->optionGroupClass;
     }
 }

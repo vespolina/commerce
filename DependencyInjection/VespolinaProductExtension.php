@@ -33,8 +33,21 @@ class VespolinaProductExtension extends Extension
             throw new \InvalidArgumentException(sprintf('Invalid db driver "%s".', $config['db_driver']));
         }
         $loader->load(sprintf('%s.xml', $config['db_driver']));
-                
-        // TODO: make configurable
         $loader->load('product.xml');
+
+        if (isset($config['product_manager'])) {
+            $this->configureProductManager($config['product_manager'], $container);
+        }
+    }
+
+    protected function configureProductManager(array $config, ContainerBuilder $container)
+    {
+        if (isset($config['identifiers'])) {
+            $container->setParameter('vespolina_product.product_manager.identifiers', $config['identifiers']);
+        }
+        
+        if (isset($config['primary_identifier'])) {
+            $container->setParameter('vespolina_product.product_manager.primary_identifier', $config['primary_identifier']);
+        }
     }
 }

@@ -4,17 +4,13 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <mapped-superclass name="Vespolina\ProductBundle\Document\BaseProduct" collection="vespolina_product">
+    <mapped-superclass name="Vespolina\ProductBundle\Document\BaseProduct" collection="vespolina_products">
 
         <field name="features" fieldName="features" type="hash" />
 
         <field name="description" fieldName="description" type="string" />
 
-        <field name="identifiers" fieldName="identifiers" type="string" />
-
         <field name="name" fieldName="name" type="string" />
-
-        <field name="primaryIdentifier" fieldName="primaryIdentifier" type="string" />
 
         <field name="type" fieldName="type" type="int" />
 

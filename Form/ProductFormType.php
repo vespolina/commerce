@@ -9,6 +9,7 @@ namespace Vespolina\ProductBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Vespolina\ProductBundle\Form\IdentifierFormType;
 /**
  * @author Richard Shank <develop@zestic.com>
  */
@@ -18,6 +19,12 @@ class ProductFormType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('description');
+            ->add('description')
+            ->add('identifier');
+    }
+
+    public function getName()
+    {
+        return 'product';
     }
 }

@@ -13,8 +13,8 @@ use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
-use Vespolina\ProductBundle\Model\Node\ProductOptionsInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -65,26 +65,22 @@ interface ProductInterface
     public function getFeatures();
 
     /**
-     * Set the ProductIdentifiers of the product to a collection of ProductIdentifiers
+     * Add a ProductIdentifierSet to the ArrayCollection. The key is the primary identifier used in a
+     * search to find the ProductIdentifiers
      *
-     * @param identifiers
+     * @param string $key
+     * @param Vespolina\ProductBundle\Node\ProductIdentifierSetInterface $identifier
      */
-    public function setIdentifiers($identifiers);
+    public function addIdentifierSet($key, ProductIdentifierSetInterface $identifier);
 
     /**
-     * Add a ProductIdentifiers to the product
+     * Return a ProductIdentifiers of the product by the key
      *
-     * @param espolina\ProductBundle\Node\ProductIdentifiersInterface $identifier
-     */
-    public function addIdentifier(ProductIdentifiersInterface $identifier);
-
-    /**
-     * Return a ProductIdentifiers of the product
+     * @param string $key
      *
      * @return Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
      */
-    public function getIdentifier($index);
-
+    public function getIdentifierSet($key);
 
     /**
      * Return the identifiers of the product
@@ -92,6 +88,20 @@ interface ProductInterface
      * @return identifiers
      */
     public function getIdentifiers();
+
+    /**
+     * Remove an identifier set by key from this product
+     *
+     * @param $key
+     */
+    public function removeIdentifierSet($key);
+
+    /**
+     * Set a collection of ProductIdentifierSet for this product
+     *
+     * @param identifiers
+     */
+    public function setIdentifiers($identifiers);
 
     /**
      * Set the name of the product
@@ -110,9 +120,9 @@ interface ProductInterface
     /**
      * Set the options of the product to an option set
      *
-     * @param Vespolina\ProductBundle\Node\ProductOptionsInterface $options
+     * @param Vespolina\ProductBundle\Node\OptionSetInterface $options
      */
-    public function setOptions(ProductOptionsInterface $options);
+    public function setOptions(OptionSetInterface $options);
 
     /**
      * Add an option to the product
@@ -122,26 +132,12 @@ interface ProductInterface
     /**
      * Return the options of the product
      *
-     * @return Vespolina\ProductBundle\Node\ProductOptionsInterface $options
+     * @return Vespolina\ProductBundle\Node\OptionSetInterface $options
      */
     public function getOptions();
 
     /**
-     * Set the primary identifier class by name or instance
-     *
-     * @param string or instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface
-     */
-    public function setPrimaryIdentifier($primaryIdentifier);
-
-    /**
-     * Return the name of the primary identifier node class
-     *
-     * @return string
-     */
-    public function getPrimaryIdentifier();
-
-    /**
-     * Set the product type. The product types can be ORed together
+     * Use a different name or different technique
      *
      * These are valid types of products
      * Product::PHYSICAL
@@ -150,6 +146,12 @@ interface ProductInterface
      * Product::TIME
      * Product::SERVICE
      *
+     * @param $type
+     */
+
+    /**
+     * Set the product type, ie shirt, cd, tickets
+     * 
      * @param $type
      */
     public function setType($type);

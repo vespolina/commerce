@@ -8,12 +8,12 @@
 namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNode;
-use Vespolina\ProductBundle\Model\Node\OptionTypeNodeInterface;
+use Vespolina\ProductBundle\Model\Node\OptionGroupInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class OptionTypeNode extends ProductNode implements OptionTypeNodeInterface
+abstract class OptionGroup extends ProductNode implements OptionGroupInterface
 {
     /*
      * @inheritdoc

@@ -9,19 +9,43 @@ namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNode;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterface
+abstract class ProductIdentifierSet extends ProductNode implements ProductIdentifierSetInterface
 {
-    protected $attributes;
+    protected $options;
+    protected $optionClass;
+
+    public function __construct($optionClass)
+    {
+        $this->optionClass = $optionClass;
+        $this->options = new $optionClass;
+    }
 
     /*
      * @inheritdoc
      */
-    public function setOptions(ProductOptionsInterface $options)
+    public function addOption(OptionNodeInterface $option)
+    {
+        $this->options->addOption($option);
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function removeOption(OptionNodeInterface $option)
+    {
+        $this->options->removeOption($option);
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function setOptions(OptionSetInterface $options)
     {
         $this->options = $options;
     }
@@ -31,6 +55,14 @@ class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterf
      */
     public function getOptions()
     {
+        return $this->options->getOptions();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOptionSet()
+    {
         return $this->options;
     }
 
@@ -39,7 +71,7 @@ class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterf
      */
     public function removeOptions()
     {
-        $this->options = null;
+        $this->options = new $this->optionClass;
     }
 
     /*
@@ -80,5 +112,10 @@ class ProductIdentifiers extends ProductNode implements ProductIdentifiersInterf
     public function removeIdentifier(IdentifierNodeInterface $identifier)
     {
         $this->removeChild($identifier->getName());
+    }
+
+    public function __toString()
+    {
+        return 'ProductIdentifierSet';
     }
 }

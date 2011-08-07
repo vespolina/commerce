@@ -11,23 +11,23 @@ namespace Vespolina\ProductBundle\Tests\Model;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiers;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Node\IdentifierNode;
+use Vespolina\ProductBundle\Model\Node\OptionSet;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
 class ProductTest extends WebTestCase
 {
-    public function testProduct()
+    public function testOptionSet()
     {
-        $product = new Product();
+        $product = new Product(new OptionSet());
 
-        /* options */
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\ProductOptionsInterface',
+            'Vespolina\ProductBundle\Model\Node\OptionSetInterface',
             $product->getOptions(),
-            'an empty class with ProductOptionsInterface should be set');
+            'an empty class with OptionSetInterface should be set');
 
         $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Node\OptionNode', array('getType', 'getValue'));
         $sizeLgOption->expects($this->any())
@@ -40,55 +40,14 @@ class ProductTest extends WebTestCase
         $this->assertSame(
             $sizeLgOption,
             $product->getOptions()->getOption('size', 'large'),
-            'addOption hands option off to ProductOptions'
+            'addOption hands option off to OptionsSet'
         );
+    }
 
-        /* product identifiers */
-        $product->setPrimaryIdentifier('\Vespolina\ProductBundle\Model\Node\IdentifierNode');
-        $this->assertSame(
-            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
-            $product->getPrimaryIdentifier(),
-            'the primary identifier node can be set by string'
-        );
+    public function testProductFeatures()
+    {
+        $product = new Product(new OptionSet());
 
-        $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Node\IdentifierNode');
-        $this->assertSame(
-            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
-            $product->getPrimaryIdentifier(),
-            "the primary identifier class name must have a leading \\"
-        );
-
-        $product->setPrimaryIdentifier(new IdentifierNode());
-        $this->assertSame(
-            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
-            $product->getPrimaryIdentifier(),
-            'the primary identifier node can be set by instance'
-        );
-
-        $testSKU = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
-        $testSKU->expects($this->any())
-                 ->method('getCode')
-                 ->will($this->returnValue('AB-CD-EF-GH'));
-        $testSKU->expects($this->any())
-                 ->method('getName')
-                 ->will($this->returnValue('AB-CD-EF-GH'));
-
-        $product->setPrimaryIdentifier($testSKU);
-
-        $productIdentifiers = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
-        $productIdentifiers->setAccessible(true);
-
-        $pi = new ProductIdentifiers();
-        $pi->addIdentifier($testSKU);
-
-        $product->addIdentifier($pi);
-        $this->assertArrayHasKey(
-            'AB-CD-EF-GH',
-            $productIdentifiers->getValue($product),
-            'ProductIdentifiers should be indexed by the principle identifier type value'
-        );
-
-        /* product features */
         $productFeatures = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'features');
         $productFeatures->setAccessible(true);
 
@@ -105,28 +64,63 @@ class ProductTest extends WebTestCase
         $this->assertArrayHasKey('label', $features, 'top level key is the type in lower case');
         $this->assertArrayHasKey('joat music', $features['label'], 'top level key is the search term in lower case');
 
-        /* exceptions */
-        $product = new Product();
-        $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
-        $product->addIdentifier($pi);
+    }
 
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            'The primary identifier must be a string or an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
-        );
-        $product->setPrimaryIdentifier(new Product());
+    public function testProductIdentities()
+    {
+        $product = new Product(new OptionSet());
 
-        $this->setExpectedException(
-            'InvalidArgumentException',
-            'The primary identifier must be an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
-        );
-        $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Product');
+        $identifierSet = $this->createProductIdentifierSet('test123');
 
-        $product->setPrimaryIdentifier($testSKU);
-        $this->setExpectedException(
-            'UnexpectedValueException',
-            'The primary identifier is not in this Vespolina\ProductBundle\Node\ProductIdentifiers instance'
+        $product->addIdentifierSet('test123', $identifierSet);
+        $this->assertInstanceOf(
+            'Doctrine\Common\Collections\ArrayCollection',
+            $product->getIdentifiers(),
+            'the identifiers should be stored in an ArrayCollection'
         );
-        $product->addIdentifier(new ProductIndentifiers());
+
+        $this->assertSame(
+            $identifierSet,
+            $product->getIdentifierSet('test123'),
+            'the identifier should be returned by the key'
+        );
+
+        $product = new Product(new OptionSet());
+
+        $identifierSet = $this->createProductIdentifierSet('test123');
+
+        $product->addIdentifierSet('test123', $identifierSet);
+
+        $identifiers = array();
+
+        $identifiers['abc'] = $this->createProductIdentifierSet('abc');
+        $identifiers['123'] = $this->createProductIdentifierSet('123');
+        
+        $product->setIdentifiers($identifiers);
+        $this->assertInstanceOf(
+            'Doctrine\Common\Collections\ArrayCollection',
+            $product->getIdentifiers(),
+            'an array of IdentifierSets should be put into an ArrayCollection'
+        );
+        
+        $this->assertEquals(
+            2,
+            $product->getIdentifiers()->count(),
+            'any identifier sets already in product are removed when setIdentifiers is called'
+        );
+    }
+
+    protected function createProductIdentifierSet($code)
+    {
+        $pi = new ProductIdentifierSet();
+        $identifier = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
+        $identifier->expects($this->any())
+             ->method('getCode')
+             ->will($this->returnValue($code));
+        $identifier->expects($this->any())
+             ->method('getName')
+             ->will($this->returnValue($code));
+        $pi->addIdentifier($identifier);
+        return $pi;
     }
 }

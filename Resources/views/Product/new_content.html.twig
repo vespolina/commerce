@@ -1,7 +1,15 @@
 {# % form_theme form theme % #}
 
 <form action="{{ path('vespolina_product_create') }}" {{ form_enctype(form) }} method="POST" class="vespolina_product_product">
-    {{ form_widget(form) }}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_label(form.identifier) }}
+    {{ form_widget(form.identifier) }}
+    {{ form_errors(form.identifier) }}
+    {{ form_rest(form) }}
+
     <div>
         <input type="submit" value="{{ 'product.submit'|trans({}, 'VespolinaProductBundle') }}" />
     </div>

@@ -8,26 +8,47 @@
 namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifiersInterface;
+use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface ProductIdentifiersInterface extends ProductNodeInterface
+interface ProductIdentifierSetInterface extends ProductNodeInterface
 {
+    /**
+     * A convenience method to add an option to the option set
+     * 
+     * @param OptionNodeInterface $option
+     */
+    public function addOption(OptionNodeInterface $option);
+
+    /**
+     * A convenience method to remove an option to the option set
+     *
+     * @param OptionNodeInterface $option
+     */
+    public function removeOption(OptionNodeInterface $option);
+
     /**
      * Set options when there are different identifiers with different option sets
      *
-     * @param ProductOptionsInterface $options
+     * @param OptionSetInterface $options
      */
-    public function setOptions(ProductOptionsInterface $options);
+    public function setOptions(OptionSetInterface $options);
 
     /**
      * Return the options for this identifier
      *
-     * @return ProductOptionsInterface $options
+     * @return Doctrine\Common\Collections\ArrayCollection $options
      */
     public function getOptions();
+
+    /**
+     * Return the OptionSet for this identifier
+     *
+     * @return OptionSetInterface $options
+     */
+    public function getOptionSet();
 
     /**
      * Remove the options for this identifier

@@ -4,9 +4,13 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Vespolina\ProductBundle\Document\OptionNode">
+    <embedded-document name="Vespolina\ProductBundle\Document\ProductIdentifierSet">
+
         <field name="name" fieldName="name" type="string" />
-        <field name="type" fieldName="type" type="string" />
-        <field name="value" fieldName="value" type="string" />
+
+        <embed-many field="children" strategy="set" />
+        <embed-one target-document="Vespolina\ProductBundle\Document\OptionSet" field="options" />
+
     </embedded-document>
+
 </doctrine-mongo-mapping>

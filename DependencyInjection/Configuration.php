@@ -24,12 +24,34 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('vespolina');
+        $rootNode = $treeBuilder->root('vespolina_product');
         $rootNode
             ->children()
                 ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
             ->end();
+        
+        $this->addProductManagerSection($rootNode);
 
         return $treeBuilder;
     }
+
+    private function addProductManagerSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('product_manager')
+                    ->children()
+                    ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
+        
+                    ->arrayNode('identifiers')
+                        ->useAttributeAsKey('name')
+                        ->prototype('scalar')
+                        ->end()
+                    ->end()
+        
+                ->end()
+            ->end()
+        ;
+    }
+
 }
