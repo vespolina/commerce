@@ -23,7 +23,7 @@ use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
  * @author Richard D Shank <develop@zestic.com>
  * @author Daniel Kucharski <daniel@xerias.be>
  */
-class Product implements ProductInterface
+abstract class Product implements ProductInterface
 {
     const PHYSICAL      = 1;
     const UNIQUE        = 2;

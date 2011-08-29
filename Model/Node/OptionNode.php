@@ -13,7 +13,7 @@ use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class OptionNode extends ProductNode implements OptionNodeInterface
+abstract class OptionNode extends ProductNode implements OptionNodeInterface
 {
     protected $value;
     protected $type;
