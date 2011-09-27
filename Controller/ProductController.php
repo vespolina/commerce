@@ -51,7 +51,7 @@ class ProductController extends ContainerAware
         $form->setData($product);
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
-            'form'      => $form,
+            'form'      => $form->createView(),
             'id'       => $product->getId()
         ));
     }
