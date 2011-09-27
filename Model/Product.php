@@ -41,11 +41,6 @@ abstract class Product implements ProductInterface
     protected $type;
     protected $updateAt;
 
-    public function __construct($optionSet)
-    {
-        $this->options = $optionSet;
-    }
-
     /**
      * @inheritdoc
      */
@@ -190,6 +185,10 @@ abstract class Product implements ProductInterface
      */
     public function getOptions()
     {
+        if (!$this->options) {
+            // todo: make this work with configuration
+            $this->options = new OptionSet(new optionGroupClass());
+        }
         return $this->options;
     }
 
