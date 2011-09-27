@@ -23,7 +23,7 @@ use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
  * @author Richard D Shank <develop@zestic.com>
  * @author Daniel Kucharski <daniel@xerias.be>
  */
-class Product implements ProductInterface
+abstract class Product implements ProductInterface
 {
     const PHYSICAL      = 1;
     const UNIQUE        = 2;
@@ -40,11 +40,6 @@ class Product implements ProductInterface
     protected $options;
     protected $type;
     protected $updateAt;
-
-    public function __construct($optionSet)
-    {
-        $this->options = $optionSet;
-    }
 
     /**
      * @inheritdoc
@@ -190,6 +185,10 @@ class Product implements ProductInterface
      */
     public function getOptions()
     {
+        if (!$this->options) {
+            // todo: make this work with configuration
+            $this->options = new OptionSet(new optionGroupClass());
+        }
         return $this->options;
     }
 

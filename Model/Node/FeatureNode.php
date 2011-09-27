@@ -12,7 +12,7 @@ use Vespolina\ProductBundle\Model\ProductNode;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class FeatureNode extends ProductNode implements FeatureNodeInterface
+abstract class FeatureNode extends ProductNode implements FeatureNodeInterface
 {
     protected $searchTerm;
     protected $type;

@@ -5,24 +5,22 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-
 namespace Vespolina\ProductBundle\Tests\Model;
-
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Node\IdentifierNode;
 use Vespolina\ProductBundle\Model\Node\OptionSet;
+use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductTest extends WebTestCase
+class ProductTest extends ProductTestCommon
 {
     public function testOptionSet()
     {
-        $product = new Product(new OptionSet());
+        $product = $this->createProduct();
 
         $this->assertInstanceOf(
             'Vespolina\ProductBundle\Model\Node\OptionSetInterface',
@@ -46,7 +44,7 @@ class ProductTest extends WebTestCase
 
     public function testProductFeatures()
     {
-        $product = new Product(new OptionSet());
+        $product = $this->createProduct();
 
         $productFeatures = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'features');
         $productFeatures->setAccessible(true);
@@ -68,7 +66,7 @@ class ProductTest extends WebTestCase
 
     public function testProductIdentities()
     {
-        $product = new Product(new OptionSet());
+        $product = $this->createProduct();
 
         $identifierSet = $this->createProductIdentifierSet('test123');
 
@@ -85,7 +83,7 @@ class ProductTest extends WebTestCase
             'the identifier should be returned by the key'
         );
 
-        $product = new Product(new OptionSet());
+        $product = $this->createProduct();
 
         $identifierSet = $this->createProductIdentifierSet('test123');
 
@@ -108,19 +106,5 @@ class ProductTest extends WebTestCase
             $product->getIdentifiers()->count(),
             'any identifier sets already in product are removed when setIdentifiers is called'
         );
-    }
-
-    protected function createProductIdentifierSet($code)
-    {
-        $pi = new ProductIdentifierSet();
-        $identifier = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
-        $identifier->expects($this->any())
-             ->method('getCode')
-             ->will($this->returnValue($code));
-        $identifier->expects($this->any())
-             ->method('getName')
-             ->will($this->returnValue($code));
-        $pi->addIdentifier($identifier);
-        return $pi;
     }
 }

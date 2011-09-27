@@ -13,7 +13,7 @@ use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class IdentifierNode extends ProductNode implements IdentifierNodeInterface
+abstract class IdentifierNode extends ProductNode implements IdentifierNodeInterface
 {
     protected $code;
 
