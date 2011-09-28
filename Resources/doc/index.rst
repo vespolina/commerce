@@ -31,26 +31,12 @@ These are valid types of products
 Extending a Product
 ===================
 
-::
+The simpliest way to extend the ProductBundle is to use SonataEazyExtendsBundle. When you have it installed then
+the following command will build out the Documents for you.
 
-    # Application\MyBundle\Document\MyProduct.php
-    
-    use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-    use Vespolina\ProductBundle\Document\BaseProduct;
+    ``app/console sonata:easy-extends:generate -d src VespolinaProductBundle``
 
-    class MyProduct extends BaseProduct
-    {
-        /**
-         * @MongoDb/Id(strategy="auto")
-         */
-        protected $id;
-
-        /**
-         * @MongoDb/ReferenceOne(document="Vespolina\ProductBundle\Document\OptionSet")
-         */
-        protected $options;
-
-    }   
+ 
 
 TODO: configuring product
 
