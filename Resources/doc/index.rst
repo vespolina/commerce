@@ -50,7 +50,11 @@ Extending a Product
          */
         protected $options;
 
-    }   
+    }
+
+or use SonataEazyExtendsBundle
+
+```app/console sonata:easy-extends:generate -d src VespolinaProductBundle```
 
 TODO: configuring product
 
