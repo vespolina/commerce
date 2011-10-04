@@ -27,4 +27,9 @@ class CheckProduct
      * @var string
      */
     public $identifier;
+
+    /**
+     * @var string
+     */
+    public $features;
 }

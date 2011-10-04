@@ -10,7 +10,25 @@
     {{ form_errors(form.identifier) }}
     {{ form_rest(form) }}
 
+    <a href="#" class="jslink">
+                Add a tag
+    </a>
     <div>
         <input type="submit" value="{{ 'product.submit'|trans({}, 'VespolinaProductBundle') }}" />
     </div>
 </form>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+<script>
+    function add() {
+        var collectionHolder = $('#vespolina_product_form_features');
+        var prototype = collectionHolder.attr('data-prototype');
+        form = prototype.replace(/\$\$name\$\$/g, collectionHolder.children().length);
+        collectionHolder.append(form);
+    }
+
+    $('a.jslink').live('click', function(event){
+        event.preventDefault();
+        add();
+    });
+</script>
