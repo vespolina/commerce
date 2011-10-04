@@ -14,6 +14,9 @@
         <service id="vespolina.product.product_manager" class="%vespolina.product.product_manager.class%">
             <argument type="service" id="doctrine.odm.mongodb.default_document_manager" />
             <argument>%vespolina.product.model.product.class%</argument>
+            <argument>%vespolina.product.product_manager.identifiers%</argument>
+            <argument>%vespolina.product.model.product_identifier_set.class%</argument>
+            <argument>%vespolina.product.product_manager.primary_identifier%</argument>
         </service>
         <service id="vespolina.product_manager" alias="vespolina.product.product_manager" />
     </services>
