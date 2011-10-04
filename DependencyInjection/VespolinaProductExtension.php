@@ -50,4 +50,22 @@ class VespolinaProductExtension extends Extension
             $container->setParameter('vespolina_product.product_manager.primary_identifier', $config['primary_identifier']);
         }
     }
+
+    protected function configureProduct(array $config, ContainerBuilder $container)
+    {
+        if (isset($config['form'])) {
+            if (isset($config['type'])) {
+                $container->setParameter('vespolina.product.form.type', $config['form']['type']);
+            }
+            if (isset($config['handler'])) {
+                $container->setParameter('vespolina.product.form.handler', $config['form']['handler']);
+            }
+            if (isset($config['name'])) {
+                $container->setParameter('vespolina_product_form', $config['form']['name']);
+            }
+            if (isset($config['data_class'])) {
+                $container->setParameter('vespolina.product.form.model.check_product.class', $config['form']['data_class']);
+            }
+        }
+    }
 }

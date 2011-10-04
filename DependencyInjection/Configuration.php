@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
             ->end();
         
         $this->addProductManagerSection($rootNode);
+        $this->addProductSection($rootNode);
 
         return $treeBuilder;
     }
@@ -39,6 +40,7 @@ class Configuration implements ConfigurationInterface
     {
         $node
             ->children()
+        
                 ->arrayNode('product_manager')
                     ->children()
                     ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
@@ -48,10 +50,30 @@ class Configuration implements ConfigurationInterface
                         ->prototype('scalar')
                         ->end()
                     ->end()
-        
                 ->end()
+        
             ->end()
         ;
     }
 
+    private function addProductSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+
+                ->arrayNode('product')
+                    ->arrayNode('form')
+                        ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('type')->defaultValue('vespolina.product.form.type')->end()
+                            ->scalarNode('handler')->defaultValue('vespolina.product.form.handler')->end()
+                            ->scalarNode('name')->defaultValue('vespolina_product_form')->cannotBeEmpty()->end()
+                            ->scalarNode('data_class')->defaultValue('vespolina.product.form.model.check_product.class')->end()
+                        ->end()
+                    ->end()
+                ->end()
+        
+            ->end()
+        ;
+    }
 }
