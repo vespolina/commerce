@@ -63,6 +63,9 @@ class VespolinaProductExtension extends Extension
             if (isset($config['name'])) {
                 $container->setParameter('vespolina_product_form', $config['form']['name']);
             }
+            if (isset($config['data_class'])) {
+                $container->setParameter('vespolina.product.form.model.check_product.class', $config['form']['data_class']);
+            }
         }
     }
 }
