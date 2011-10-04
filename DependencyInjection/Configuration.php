@@ -60,19 +60,19 @@ class Configuration implements ConfigurationInterface
     {
         $node
             ->children()
-
                 ->arrayNode('product')
-                    ->arrayNode('form')
-                        ->addDefaultsIfNotSet()
-                        ->children()
-                            ->scalarNode('type')->defaultValue('vespolina.product.form.type')->end()
-                            ->scalarNode('handler')->defaultValue('vespolina.product.form.handler')->end()
-                            ->scalarNode('name')->defaultValue('vespolina_product_form')->cannotBeEmpty()->end()
-                            ->scalarNode('data_class')->defaultValue('vespolina.product.form.model.check_product.class')->end()
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->defaultValue('vespolina.product.form.type')->end()
+                                ->scalarNode('handler')->defaultValue('vespolina.product.form.handler')->end()
+                                ->scalarNode('name')->defaultValue('vespolina_product_form')->cannotBeEmpty()->end()
+                                ->scalarNode('data_class')->defaultValue('vespolina.product.form.model.check_product.class')->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
-        
             ->end()
         ;
     }
