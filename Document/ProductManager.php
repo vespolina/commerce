@@ -19,15 +19,15 @@ use Vespolina\ProductBundle\Model\ProductManager as BaseProductManager;
 class ProductManager extends BaseProductManager
 {
     protected $dm;
-    protected $primaryIdentifier;
     protected $productClass;
     protected $productRepo;
     
-    public function __construct(DocumentManager $dm, $productClass)
+    public function __construct(DocumentManager $dm, $productClass, $identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null)
     {
         $this->dm = $dm;
         $this->productClass = $productClass;
-        $this->productRepo = $this->dm->getRepository($productClass); // TODO make configurable
+        $this->productRepo = $this->dm->getRepository($productClass);
+        parent::__construct($identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel);
     }
 
     /**

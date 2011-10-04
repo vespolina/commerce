@@ -7,8 +7,6 @@
  */
 namespace Vespolina\ProductBundle\Model;
 
-use Symfony\Component\DependencyInjection\Container;
-
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
@@ -20,21 +18,28 @@ use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
  */
 abstract class ProductManager implements ProductManagerInterface
 {
-    protected $container;
     protected $identifiers;
     protected $identifierSetClass;
     protected $primaryIdentifier;
-    
-    public function __construct(Container $container)
+    protected $primaryIdentifierLabel;
+
+    public function __construct($identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null)
     {
-        $this->container = $container;
-        $this->identifiers = $container->getParameter('vespolina_product.product_manager.identifiers');
-        $this->identifierSetClass = $this->container->getParameter('vespolina_product.model.product_identifier_set.class');
-        $primaryIdentifierKey = $container->getParameter('vespolina_product.product_manager.primary_identifier');
-        if (!$primaryIdentifierKey || !isset($this->identifiers[$primaryIdentifierKey])) {
-            throw new \InvalidConfigurationException('vespolina_product.product_manager.primary_identifier must be set to one of the configured identifiers');
+//  $primaryIdentifierLabel = $this->container->getParameter('vespolina_project.primary_identifier.label'))
+        $this->identifiers = $identifiers;
+        $this->identifierSetClass = $identifierSetClass;
+
+        if (!isset($this->identifiers[$primaryIdentifier])) {
+            throw new \InvalidConfigurationException(
+                sprintf('The product identifier %s has not been set in the vespolina_product configuration', $primaryIdentifier)
+            );
         }
-        $this->primaryIdentifier = $this->identifiers[$primaryIdentifierKey];
+        $this->primaryIdentifier = $this->identifiers[$primaryIdentifier];
+        if (!$primaryIdentifierLabel) {
+            $identifier = new $this->primaryIdentifier;
+            $primaryIdentifierLabel = $identifier->getName();
+        }
+        $this->primaryIdentifierLabel = $primaryIdentifierLabel;
     }
     
     /**
@@ -92,11 +97,7 @@ abstract class ProductManager implements ProductManagerInterface
      */
     public function getPrimaryIdentifierLabel()
     {
-        if (!$label = $this->container->getParameter('vespolina_project.primary_identifier.label')) {
-            $identifier = new $this->getPrimaryIdentifier();
-            $label = $identifier->getName();
-        }
-        return $label;
+        return $this->primaryIdentifierLabel;
     }
 
     /**

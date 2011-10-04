@@ -43,11 +43,11 @@ class VespolinaProductExtension extends Extension
     protected function configureProductManager(array $config, ContainerBuilder $container)
     {
         if (isset($config['identifiers'])) {
-            $container->setParameter('vespolina_product.product_manager.identifiers', $config['identifiers']);
+            $container->setParameter('vespolina.product.product_manager.identifiers', $config['identifiers']);
         }
         
         if (isset($config['primary_identifier'])) {
-            $container->setParameter('vespolina_product.product_manager.primary_identifier', $config['primary_identifier']);
+            $container->setParameter('vespolina.product.product_manager.primary_identifier', $config['primary_identifier']);
         }
     }
 
