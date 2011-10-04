@@ -34,20 +34,11 @@ abstract class Product implements ProductInterface
     protected $createdAt;
     protected $description;
     protected $features;
-    protected $id;
     protected $identifiers;
     protected $name;
     protected $options;
     protected $type;
     protected $updateAt;
-
-    /**
-     * @inheritdoc
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * @inheritdoc

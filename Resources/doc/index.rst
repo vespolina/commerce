@@ -36,7 +36,28 @@ the following command will build out the Documents for you.
 
     ``app/console sonata:easy-extends:generate -d src VespolinaProductBundle``
 
- 
+
+You can build the class manually also
+
+    # Application\MyBundle\Document\MyProduct.php
+    
+    use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+    use Vespolina\ProductBundle\Document\BaseProduct;
+
+    class MyProduct extends BaseProduct
+    {
+        /**
+         * @MongoDb/Id(strategy="auto")
+         */
+        protected $id;
+
+        /**
+         * @MongoDb/ReferenceOne(document="Vespolina\ProductBundle\Document\OptionSet")
+         */
+        protected $options;
+
+    }
+
 
 TODO: configuring product
 
