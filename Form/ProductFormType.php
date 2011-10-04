@@ -23,11 +23,6 @@ class ProductFormType extends AbstractType
             ->add('identifier');
     }
 
-    public function getName()
-    {
-        return 'product';
-    }
-
     /**
      * Returns the name of this type.
      *
@@ -37,6 +32,4 @@ class ProductFormType extends AbstractType
     {
         return 'vespolina_product';
     }
-
-
 }
