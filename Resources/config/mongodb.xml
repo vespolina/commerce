@@ -6,13 +6,14 @@
 
     <parameters>
         <parameter key="vespolina_product.product_manager.class">Vespolina\ProductBundle\Document\ProductManager</parameter>
-        <parameter key="vespolina_product.model.product.class">Vespolina\ProductBundle\Document\Product</parameter>
+        <parameter key="vespolina_product.model.product.class">Application\Vespolina\ProductBundle\Document\Product</parameter>
         <parameter key="vespolina_product.model.product_identifier_set.class">Vespolina\ProductBundle\Document\ProductIdentifierSet</parameter>
     </parameters>
 
     <services>
         <service id="vespolina_product.product_manager" class="%vespolina_product.product_manager.class%">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="doctrine.odm.mongodb.default_document_manager" />
+            <argument>%vespolina_product.model.product.class%</argument>
         </service>
         <service id="vespolina.product_manager" alias="vespolina_product.product_manager" />
     </services>
