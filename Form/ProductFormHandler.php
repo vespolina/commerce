@@ -29,23 +29,13 @@ class ProductFormHandler
 
     public function process()
     {
-        $this->form->setData(new CheckProduct);
+        $product = $this->productManager->createProduct();
+        $this->form->setData($product);
 
         if ('POST' == $this->request->getMethod()) {
-            $data = $this->request->request->get($this->form->getName());
-            $this->form->bind($data);
+            $this->form->bindRequest($this->request);
 
             if ($this->form->isValid()) {
-                $product = $this->productManager->createProduct();
-                $product->setName($data['name']);
-                $product->setDescription($data['description']);
-
-                $primaryIdentifier = $this->productManager->getPrimaryIdentifier();
-                $identifier = new $primaryIdentifier;
-                $identifier->setCode($data['identifier']);
-                $identifierSet = $this->productManager->createIdentifierSet($identifier);
-
-                $this->productManager->addIdentifierSetToProduct($identifierSet, $product);
                 $this->productManager->updateProduct($product);
 
                 return true;
