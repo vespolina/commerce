@@ -7,6 +7,6 @@
     <embedded-document name="Vespolina\ProductBundle\Document\OptionSet">
         <field name="name" fieldName="name" type="string" />
 
-        <embed-many target-document="Vespolina\ProductBundle\Document\OptionGroup" field="children" strategy="set" />
+        <embed-many target-document="Vespolina\ProductBundle\Document\OptionGroup" field="children" fieldName="children" strategy="set" />
     </embedded-document>
 </doctrine-mongo-mapping>
