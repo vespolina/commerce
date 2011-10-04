@@ -12,8 +12,8 @@
         <parameter key="vespolina.product.form.model.check_product.class">Vespolina\ProductBundle\Form\Model\CheckProduct</parameter>
 
         <!-- Identifiers -->
-        <parameter key="vespolina_product.product_manager.primary_identifier">id</parameter>
-        <parameter type="collection" key="vespolina_product.product_manager.identifiers">
+        <parameter key="vespolina.product.product_manager.primary_identifier">id</parameter>
+        <parameter type="collection" key="vespolina.product.product_manager.identifiers">
             <parameter key="id">Vespolina\ProductBundle\Model\Identifier\IdIdentifier</parameter>
         </parameter>
         

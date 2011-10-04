@@ -28,9 +28,9 @@ abstract class ProductManager implements ProductManagerInterface
     public function __construct(Container $container)
     {
         $this->container = $container;
-        $this->identifiers = $container->getParameter('vespolina_product.product_manager.identifiers');
-        $this->identifierSetClass = $this->container->getParameter('vespolina_product.model.product_identifier_set.class');
-        $primaryIdentifierKey = $container->getParameter('vespolina_product.product_manager.primary_identifier');
+        $this->identifiers = $container->getParameter('vespolina.product.product_manager.identifiers');
+        $this->identifierSetClass = $this->container->getParameter('vespolina.product.model.product_identifier_set.class');
+        $primaryIdentifierKey = $container->getParameter('vespolina.product.product_manager.primary_identifier');
         if (!$primaryIdentifierKey || !isset($this->identifiers[$primaryIdentifierKey])) {
             throw new \InvalidConfigurationException('vespolina_product.product_manager.primary_identifier must be set to one of the configured identifiers');
         }
