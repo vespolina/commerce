@@ -67,6 +67,14 @@ abstract class OptionSet extends ProductNode implements OptionSetInterface
     /**
      * @inheritdoc
      */
+    public function getOptions()
+    {
+        return $this->getChildren();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setOptions($options)
     {
         $this->setChildren($options);

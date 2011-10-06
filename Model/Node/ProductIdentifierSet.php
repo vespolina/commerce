@@ -101,7 +101,7 @@ abstract class ProductIdentifierSet extends ProductNode implements ProductIdenti
     /**
      * @inheritdoc
      */
-    public function setIdentifier($identifiers)
+    public function setIdentifiers($identifiers)
     {
         $this->setChildren($identifiers);
     }
