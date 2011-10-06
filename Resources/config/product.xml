@@ -19,9 +19,7 @@
         
     </parameters>
     <services>
-        <service id="vespolina.product.form" factory-method="getForm" factory-service="vespolina.product.form.builder" class="Symfony\Component\Form\Form" />
-
-        <service id="vespolina.product.form.builder" factory-method="createNamedBuilder" factory-service="form.factory" class="Symfony\Component\Form\FormBuilder">
+        <service id="vespolina.product.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
             <argument type="service" id="vespolina.product.form.type" />
             <argument>%vespolina.product.form.name%</argument>
             <argument />
