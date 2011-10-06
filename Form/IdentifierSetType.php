@@ -30,7 +30,7 @@ class IdentifierSetType extends AbstractType
             'data_class' => 'Vespolina\ProductBundle\Document\ProductIdentifierSet',
         );
     }
-    
+
     function getName()
     {
         return 'vespolina_product_identifier_set';

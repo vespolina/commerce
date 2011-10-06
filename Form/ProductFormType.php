@@ -26,6 +26,7 @@ class ProductFormType extends AbstractType
                 'by_reference' => false,
             ))
             ->add('features', 'collection', array(
+                'required' => false,
                 'type' => new FeatureType(),
                 'allow_add' => true,
                 'by_reference' => false,
