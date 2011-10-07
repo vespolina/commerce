@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
-use Vespolina\ProductBundle\Model\Node\OptionSet;
+use Vespolina\ProductBundle\Model\Option\OptionSet;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 
 /**
@@ -121,7 +121,7 @@ class ProductManagerTest extends WebTestCase
         $option = $mgr->createOption('CoLoR', 'BlAcK');
 
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\OptionNodeInterface',
+            'Vespolina\ProductBundle\Model\Option\OptionNodeInterface',
             $option,
             'an OptionNode instance should be created'
         );
@@ -187,7 +187,7 @@ class ProductManagerTest extends WebTestCase
              ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet'));
         $mgr->expects($this->any())
              ->method('getOptionNodeClass')
-             ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\OptionNode'));
+             ->will($this->returnValue('Vespolina\ProductBundle\Model\Option\OptionNode'));
         return $mgr;
     }
 

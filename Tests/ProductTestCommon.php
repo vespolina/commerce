@@ -16,7 +16,7 @@ abstract class ProductTestCommon extends WebTestCase
 {
     protected function createProduct($options = null)
     {
-        $optionSet = $options ? $options : $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionSet');
+        $optionSet = $options ? $options : $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionSet');
         $product = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Product', array($optionSet));
         return $product;
     }

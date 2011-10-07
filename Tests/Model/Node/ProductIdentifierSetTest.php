@@ -11,8 +11,8 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
-use Vespolina\ProductBundle\Model\Node\OptionsSet;
-use Vespolina\ProductBundle\Model\Node\OptionNode;
+use Vespolina\ProductBundle\Model\Option\OptionsSet;
+use Vespolina\ProductBundle\Model\Option\OptionNode;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -24,7 +24,7 @@ class ProductIdentifierSetTest extends WebTestCase
         $idSet = $this->createProductIdentifierSet();
 
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\OptionSetInterface',
+            'Vespolina\ProductBundle\Model\Option\OptionSetInterface',
             $idSet->getOptionSet(),
             'an OptionSet object should be set'
         );
@@ -43,7 +43,7 @@ class ProductIdentifierSetTest extends WebTestCase
     {
         $idSet = $this->getMock('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet', null, array(),'',false);
 
-        $optionSet = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionSet');
+        $optionSet = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionSet');
         
         $optionsProperty = new \ReflectionProperty(
           'Vespolina\ProductBundle\Model\Node\ProductIdentifierSet', 'options'
@@ -58,9 +58,9 @@ class ProductIdentifierSetTest extends WebTestCase
     protected function createOptionNode($type, $value)
     {
         $option = $this->getMock(
-            'Vespolina\ProductBundle\Model\Node\OptionNode',
+            'Vespolina\ProductBundle\Model\Option\OptionNode',
             array('getType', 'getValue'),
-            array('Vespolina\ProductBundle\Model\Node\OptionsSet')
+            array('Vespolina\ProductBundle\Model\Option\OptionsSet')
         );
         $option->expects($this->any())
              ->method('getType')

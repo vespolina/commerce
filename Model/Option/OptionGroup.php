@@ -5,10 +5,10 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Vespolina\ProductBundle\Model\Node;
+namespace Vespolina\ProductBundle\Model\Option;
 
 use Vespolina\ProductBundle\Model\ProductNode;
-use Vespolina\ProductBundle\Model\Node\OptionGroupInterface;
+use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>

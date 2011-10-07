@@ -5,20 +5,19 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Vespolina\ProductBundle\Model\Node;
+namespace Vespolina\ProductBundle\Model\Option;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface OptionSetInterface extends ProductNodeInterface
+interface OptionGroupInterface extends ProductNodeInterface
 {
     /**
      * Add a option to this product options node.
      *
-     * @param Vespolina\ProductBundle\Model\Node\OptionNodeInterface $option
+     * @param Vespolina\ProductBundle\Model\Option\OptionNodeInterface $option
      */
     public function addOption(OptionNodeInterface $option);
 
@@ -28,23 +27,29 @@ interface OptionSetInterface extends ProductNodeInterface
     public function clearOptions();
 
     /**
-     * Return an option in this product
+     * Return a specific option by value
      *
-     * @param $type
-     * @param $value
+     * @param string $value
      *
-     * @return Vespolina\ProductBundle\Model\Node\OptionNodeInterface or null
+     * @return Vespolina\ProductBundle\Model\Option\OptionNodeInterface
      */
-    public function getOption($type, $value);
+    public function getOption($value);
 
     /**
      * Return a specific option by the name
      *
      * @param string $name
      *
-     * @return Vespolina\ProductBundle\Model\Node\OptionNodeInterface or null
+     * @return Vespolina\ProductBundle\Model\Option\OptionNodeInterface or null
      */
     public function getOptionByName($name);
+
+    /**
+     * Return all the options for this type
+     *
+     * @return array of Vespolina\ProductBundle\Model\Option\OptionNodeInterface
+     */
+    public function getOptions();
 
     /**
      * Add a collection of options
@@ -59,13 +64,4 @@ interface OptionSetInterface extends ProductNodeInterface
      * @param OptionNodeInterface $option
      */
     public function removeOption(OptionNodeInterface $option);
-
-    /**
-     * Get the option set for a specific type
-     *
-     * @param string $type
-     *
-     * @return Vespolina\ProductBundle\Model\Node\OptionGroupInterface
-     */
-    public function getType($type);
 }

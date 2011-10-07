@@ -16,7 +16,7 @@ class OptionSetType extends AbstractType
     {
         $builder
             ->add('options', 'collection', array(
-                'type' => new IdentifierType(),
+                'type' => new OptionGroupType(),
                 'allow_add' => true,
                 'by_reference' => false,
             ))

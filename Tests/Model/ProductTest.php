@@ -10,7 +10,7 @@ namespace Vespolina\ProductBundle\Tests\Model;
 use Vespolina\ProductBundle\Model\Product;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Node\IdentifierNode;
-use Vespolina\ProductBundle\Model\Node\OptionSet;
+use Vespolina\ProductBundle\Model\Option\OptionSet;
 use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 /**
@@ -23,11 +23,11 @@ class ProductTest extends ProductTestCommon
         $product = $this->createProduct();
 
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\OptionSetInterface',
+            'Vespolina\ProductBundle\Model\Option\OptionSetInterface',
             $product->getOptions(),
             'an empty class with OptionSetInterface should be set');
 
-        $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Node\OptionNode', array('getType', 'getValue'));
+        $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Option\OptionNode', array('getType', 'getValue'));
         $sizeLgOption->expects($this->any())
                  ->method('getType')
                  ->will($this->returnValue('size'));

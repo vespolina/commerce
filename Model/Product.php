@@ -13,11 +13,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
-use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
+use Vespolina\ProductBundle\Model\Option\OptionNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
-use Vespolina\ProductBundle\Model\Node\OptionSet;
-use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
+use Vespolina\ProductBundle\Model\Option\OptionSet;
+use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>

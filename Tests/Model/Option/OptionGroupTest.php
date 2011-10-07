@@ -10,8 +10,8 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-use Vespolina\ProductBundle\Model\Node\OptionNode;
-use Vespolina\ProductBundle\Model\Node\OptionGroup;
+use Vespolina\ProductBundle\Model\Option\OptionNode;
+use Vespolina\ProductBundle\Model\Option\OptionGroup;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -52,7 +52,7 @@ class OptionGroupTest extends WebTestCase
 
     protected function createOptionGroup()
     {
-        $og = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionGroup');
+        $og = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup');
         return $og;
     }
 }

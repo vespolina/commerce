@@ -10,8 +10,8 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-use Vespolina\ProductBundle\Model\Node\OptionSet;
-use Vespolina\ProductBundle\Model\Node\OptionNode;
+use Vespolina\ProductBundle\Model\Option\OptionSet;
+use Vespolina\ProductBundle\Model\Option\OptionNode;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -47,7 +47,7 @@ class OptionsSetTest extends WebTestCase
         }
 
         $childrenProperty = new \ReflectionProperty(
-          'Vespolina\ProductBundle\Model\Node\OptionSet', 'children'
+          'Vespolina\ProductBundle\Model\Option\OptionSet', 'children'
         );
         $childrenProperty->setAccessible(true);
 
@@ -77,16 +77,16 @@ class OptionsSetTest extends WebTestCase
 
     protected function createOptionSet()
     {
-        $os = $this->getMock('Vespolina\ProductBundle\Model\Node\OptionSet', array('createOptionGroup'), array(), '', false);
+        $os = $this->getMock('Vespolina\ProductBundle\Model\Option\OptionSet', array('createOptionGroup'), array(), '', false);
         $os->expects($this->at(0))
              ->method('createOptionGroup')
-             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionGroup')));
+             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup')));
         $os->expects($this->at(1))
              ->method('createOptionGroup')
-             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionGroup')));
+             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup')));
         $os->expects($this->at(2))
              ->method('createOptionGroup')
-             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Node\OptionGroup')));
+             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup')));
         return $os;
     }
 }

@@ -10,7 +10,7 @@ namespace Vespolina\ProductBundle\Model\Node;
 use Vespolina\ProductBundle\Model\ProductNode;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
-use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
+use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
