@@ -15,8 +15,12 @@ class FeatureType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('type')
-            ->add('name')
+            ->add('type', 'text', array(
+                'required' => false,
+            ))
+            ->add('name', 'text', array(
+                'required' => false,
+            ))
         ;
     }
 

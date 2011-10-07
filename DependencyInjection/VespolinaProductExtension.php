@@ -38,6 +38,9 @@ class VespolinaProductExtension extends Extension
         if (isset($config['product_manager'])) {
             $this->configureProductManager($config['product_manager'], $container);
         }
+        if (isset($config['product'])) {
+            $this->configureProduct($config['product'], $container);
+        }
     }
 
     protected function configureProductManager(array $config, ContainerBuilder $container)
@@ -54,17 +57,18 @@ class VespolinaProductExtension extends Extension
     protected function configureProduct(array $config, ContainerBuilder $container)
     {
         if (isset($config['form'])) {
-            if (isset($config['type'])) {
-                $container->setParameter('vespolina.product.form.type', $config['form']['type']);
+            $formConfig = $config['form'];
+            if (isset($formConfig['type'])) {
+                $container->setParameter('vespolina.product.form.type.class', $formConfig['type']);
             }
-            if (isset($config['handler'])) {
-                $container->setParameter('vespolina.product.form.handler', $config['form']['handler']);
+            if (isset($formConfig['handler'])) {
+                $container->setParameter('vespolina.product.form.handler.class', $formConfig['handler']);
             }
-            if (isset($config['name'])) {
-                $container->setParameter('vespolina_product_form', $config['form']['name']);
+            if (isset($formConfig['name'])) {
+                $container->setParameter('vespolina_product_form', $formConfig['name']);
             }
-            if (isset($config['data_class'])) {
-                $container->setParameter('vespolina.product.form.model.check_product.class', $config['form']['data_class']);
+            if (isset($formConfig['data_class'])) {
+                $container->setParameter('vespolina.product.form.model.check_product.class', $formConfig['data_class']);
             }
         }
     }

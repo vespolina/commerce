@@ -47,8 +47,10 @@ abstract class ProductNode implements ProductNodeInterface
      */
     public function clearChildren()
     {
-        foreach (array_keys($this->children) as $childName) {
-            $this->removeChild($childName);
+        if (is_array($this->children)) {
+            foreach (array_keys($this->children) as $childName) {
+                $this->removeChild($childName);
+            }
         }
         $this->children = null;
     }

@@ -23,6 +23,13 @@ class OptionSetType extends AbstractType
         ;
     }
 
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'data_class' => 'Vespolina\ProductBundle\Document\OptionSet',
+        );
+    }
+
     function getName()
     {
         return 'vespolina_product_option_set';

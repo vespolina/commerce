@@ -79,7 +79,7 @@ interface ProductIdentifierSetInterface extends ProductNodeInterface
      *
      * @param array $identifiers
      */
-    public function setIdentifier($identifiers);
+    public function setIdentifiers($identifiers);
 
     /**
      * Remove a identifier from this product identifiers set
