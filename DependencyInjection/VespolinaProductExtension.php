@@ -61,8 +61,11 @@ class VespolinaProductExtension extends Extension
             if (isset($formConfig['type'])) {
                 $container->setParameter('vespolina.product.form.type.class', $formConfig['type']);
             }
-            if (isset($formConfig['handler'])) {
-                $container->setParameter('vespolina.product.form.handler.class', $formConfig['handler']);
+            if (isset($formConfig['handler_class'])) {
+                $container->setParameter('vespolina.product.form.handler.class', $formConfig['handler_class']);
+            }
+            if (isset($formConfig['handler_service'])) {
+                $container->setAlias('vespolina.product.form.handler', $formConfig['handler_service']);
             }
             if (isset($formConfig['name'])) {
                 $container->setParameter('vespolina_product_form', $formConfig['name']);

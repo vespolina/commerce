@@ -33,6 +33,12 @@
             <tag name="form.type" />
         </service>
 
+        <service id="vespolina.product.form.fucking.handler" class="Application\Vespolina\ProductBundle\Form\Handler\ProductFormHandler" scope="request">
+            <argument type="service" id="vespolina.product.form" />
+            <argument type="service" id="request" />
+            <argument type="service" id="vespolina.product_manager" />
+        </service>
+
         <service id="vespolina.product.form.handler" class="%vespolina.product.form.handler.class%" scope="request">
             <argument type="service" id="vespolina.product.form" />
             <argument type="service" id="request" />
