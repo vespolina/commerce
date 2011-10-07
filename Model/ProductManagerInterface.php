@@ -33,6 +33,22 @@ interface ProductManagerInterface
     public function createIdentifierSet(IdentifierNodeInterface $identifier);
 
     /**
+     * Create a primary identifier
+     *
+     * @return IdentifierInterface
+     */
+    public function createPrimaryIdentifier();
+
+    /**
+     * Create a product identifier
+     *
+     * @param $name the name of the specific Product identifier
+     *
+     * @return IdentifierInterface
+     */
+    public function createIdentifier($name);
+    
+    /**
      * Find a collection of products by the criteria
      *
      * @param array $criteria
