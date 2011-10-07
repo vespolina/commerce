@@ -23,4 +23,9 @@ class UPCIdentifier extends GS1Identifier
     {
         return false;
     }
+
+    public function getName()
+    {
+        return 'UPC';
+    }
 }
