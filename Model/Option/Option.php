@@ -48,6 +48,22 @@ abstract class Option implements OptionInterface
         return $this->display;
     }
 
+    /*
+     * @inheritdoc
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+    
     public function __toString()
     {
         return $this->display;

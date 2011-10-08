@@ -17,7 +17,7 @@ interface OptionInterface extends ProductNodeInterface
     /**
      * Set the assigned value for this option. ie, RD, LG
      *
-     * @param $value
+     * @param string $value
      */
     public function setValue($value);
 
@@ -31,7 +31,7 @@ interface OptionInterface extends ProductNodeInterface
     /**
      * Set the displayed name for this option. ie, red, large
      *
-     * @param $type
+     * @param string $display
      */
     public function setDisplay($display);
 
@@ -41,4 +41,18 @@ interface OptionInterface extends ProductNodeInterface
      * @return string
      */
     public function getDisplay();
+
+    /**
+     * Set the group type of option. ie color, size
+     *
+     * @param string $type
+     */
+    public function setType($type);
+
+    /**
+     * Return the group type of option
+     *
+     * @return string
+     */
+    public function getType();
 }
