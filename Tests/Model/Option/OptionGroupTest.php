@@ -21,33 +21,39 @@ class OptionGroupTest extends WebTestCase
     public function testProductOptions()
     {
         $colorRed = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
-        $colorRed->setName('colorRed');
+        $colorRed->setValue('colorRed');
         $colorRed->setType('color');
-        $colorRed->setValue('red');
+        $colorRed->setDisplay('red');
 
         $sizeXl = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
-        $sizeXl->setName('sizeXl');
+        $sizeXl->setValue('sizeXl');
         $sizeXl->setType('size');
-        $sizeXl->setValue('extra large');
+        $sizeXl->setDisplay('extra large');
 
-        $otn = $this->createOptionGroup();
+        $og = $this->createOptionGroup();
         // DO NOT SET THE NAME!
-        $otn->addOption($colorRed);
+        $og->addOption($colorRed);
 
         $this->assertEquals(
             'color',
-            $otn->getName(),
+            $og->getName(),
             'if the name is not set, the name should be set to the type of the Option'
         );
 
         $this->assertSame(
             $colorRed,
-            $otn->getOption('red'),
+            $og->getOption('colorRed'),
+            'the option value should be found by its value'
+        );
+
+        $this->assertSame(
+            $colorRed,
+            $og->getOptionByDisplay('red'),
             'the name of the option node should be set to the value'
         );
 
         $this->setExpectedException('UnexpectedValueException', 'All OptionsNodes in this type must be color');
-        $otn->addOption($sizeXl);
+        $og->addOption($sizeXl);
     }
 
     protected function createOptionGroup()

@@ -7,14 +7,16 @@
  */
 namespace Vespolina\ProductBundle\Model\Option;
 
-use Vespolina\ProductBundle\Model\ProductNode;
 use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-abstract class OptionGroup extends ProductNode implements OptionGroupInterface
+abstract class OptionGroup implements OptionGroupInterface
 {
+    protected $options;
+    protected $name;
+
     /*
      * @inheritdoc
      */
@@ -26,7 +28,8 @@ abstract class OptionGroup extends ProductNode implements OptionGroupInterface
         if ($this->name != $option->getType()) {
             throw new \UnexpectedValueException(sprintf('All OptionsNodes in this type must be %s', $this->name));
         }
-        $this->addChild($option, $option->getValue());
+        $value = $option->getValue();
+        $this->options[$value] = $option;
     }
 
     /**
@@ -34,7 +37,7 @@ abstract class OptionGroup extends ProductNode implements OptionGroupInterface
      */
     public function clearOptions()
     {
-        $this->clearChildren();
+        $this->options = null;
     }
 
     /**
@@ -42,15 +45,20 @@ abstract class OptionGroup extends ProductNode implements OptionGroupInterface
      */
     public function getOption($value)
     {
-        return $this->getChild($value);
+        return isset($this->options[$value]) ? $this->options[$value] : null;
     }
 
     /**
      * @inheritdoc
      */
-    public function getOptionByName($name)
+    public function getOptionByDisplay($display)
     {
-        return $this->getChildByName($name);
+        foreach ($this->options as $option) {
+            if ($display == $option->getDisplay()) {
+                return $option;
+            }
+        }
+        return null;
     }
 
     /**
@@ -58,15 +66,15 @@ abstract class OptionGroup extends ProductNode implements OptionGroupInterface
      */
     public function getOptions()
     {
-        return $this->getChildren();
+        return $this->options;
     }
 
     /**
      * @inheritdoc
      */
-    public function setOptions($options)
+    public function setOptions(Array $options)
     {
-        $this->setChildren($options);
+        $this->options;
     }
 
     /**
@@ -74,6 +82,23 @@ abstract class OptionGroup extends ProductNode implements OptionGroupInterface
      */
     public function removeOption(OptionInterface $option)
     {
-        $this->removeChild($option->getName());
+        $value = $option->getValue();
+        unset($this->option[$value]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

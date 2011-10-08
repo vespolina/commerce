@@ -7,12 +7,10 @@
  */
 namespace Vespolina\ProductBundle\Model\Option;
 
-use Vespolina\ProductBundle\Model\ProductNodeInterface;
-
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface OptionGroupInterface extends ProductNodeInterface
+interface OptionGroupInterface
 {
     /**
      * Add a option to this product options node.
@@ -56,7 +54,7 @@ interface OptionGroupInterface extends ProductNodeInterface
      *
      * @param array $options
      */
-    public function setOptions($options);
+    public function setOptions(Array $options);
 
     /**
      * Remove a option from this product options set
@@ -64,4 +62,18 @@ interface OptionGroupInterface extends ProductNodeInterface
      * @param OptionInterface $option
      */
     public function removeOption(OptionInterface $option);
+
+    /**
+     * Set the name of the option group
+     *
+     * @param string $name
+     */
+    public function setName($name);
+
+    /**
+     * Return the name of the option group
+     * 
+     * @return string $name
+     */
+    public function getName();
 }
