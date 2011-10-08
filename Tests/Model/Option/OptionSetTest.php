@@ -46,33 +46,33 @@ class OptionsSetTest extends WebTestCase
             }
         }
 
-        $childrenProperty = new \ReflectionProperty(
-          'Vespolina\ProductBundle\Model\Option\OptionSet', 'children'
+        $groupsProperty = new \ReflectionProperty(
+          'Vespolina\ProductBundle\Model\Option\OptionSet', 'groups'
         );
-        $childrenProperty->setAccessible(true);
+        $groupsProperty->setAccessible(true);
 
         $this->assertArrayHasKey(
             'color',
-            $childrenProperty->getValue($os),
+            $groupsProperty->getValue($os),
             'the associative name should be set to type of the option'
         );
 
         $this->assertArrayHasKey(
             'size',
-            $childrenProperty->getValue($os),
+            $groupsProperty->getValue($os),
             'the associative name should be set to type of the option'
         );
 
-        $this->assertEquals(3, count($os->getType('color')), 'there should be 3 color options');
-        $this->assertEquals(4, count($os->getType('size')), 'there should be 4 size options');
+        $this->assertEquals(3, count($os->getOptionGroup('color')->getOptions()), 'there should be 3 color options');
+        $this->assertEquals(4, count($os->getOptionGroup('size')->getOptions()), 'there should be 4 size options');
         $this->assertEquals(
             'colorRed',
-            $os->getOption('color', 'red')->getValue(),
+            $os->getOption('color', 'colorRed')->getValue(),
             'an option can be returned by type and value'
         );
         $this->assertNull($os->getOption('bull', 'shit'), "return null when the type doesn't exists");
 
-        $this->assertEquals('sizeXl', $os->getOptionByName('sizeXl')->getValue(), 'an option can be returned by name');
+        $this->assertEquals('sizeXl', $os->getOptionByDisplay('size', 'extra-large')->getValue(), 'an option can be returned by display');
     }
 
     protected function createOptionSet()

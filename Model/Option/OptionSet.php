@@ -7,15 +7,15 @@
  */
 namespace Vespolina\ProductBundle\Model\Option;
 
-use Vespolina\ProductBundle\Model\ProductNode;
 use Vespolina\ProductBundle\Model\Option\OptionGroup;
 use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-abstract class OptionSet extends ProductNode implements OptionSetInterface
+abstract class OptionSet implements OptionSetInterface
 {
+    protected $groups;
     protected $optionGroupClass;
 
     public function __construct($optionGroupClass)
@@ -28,11 +28,11 @@ abstract class OptionSet extends ProductNode implements OptionSetInterface
      */
     public function addOption(OptionInterface $option)
     {
-        $typeName = $option->getType();
-        if (!isset($this->children[$typeName])) {
-            $this->children[$typeName] = $this->createOptionGroup();
+        $type = $option->getType();
+        if (!isset($this->groups[$type])) {
+            $this->groups[$type] = $this->createOptionGroup();
         }
-        $this->children[$typeName]->addOption($option);
+        $this->groups[$type]->addOption($option);
     }
 
     /**
@@ -40,7 +40,7 @@ abstract class OptionSet extends ProductNode implements OptionSetInterface
      */
     public function clearOptions()
     {
-        $this->clearChildren();
+        $this->groups = null;
     }
 
     /**
@@ -48,20 +48,15 @@ abstract class OptionSet extends ProductNode implements OptionSetInterface
      */
     public function getOption($type, $value)
     {
-        return isset($this->children[$type]) ? $this->children[$type]->getOption($value) : null;
+        return isset($this->groups[$type]) ? $this->groups[$type]->getOption($value) : null;
     }
 
     /**
      * @inheritdoc
      */
-    public function getOptionByName($name)
+    public function getOptionByDisplay($type, $display)
     {
-        foreach ($this->children as $child) {
-            if ($option = $child->getOptionByName($name)) {
-                return $option;
-            }
-        }
-        return null;
+        return isset($this->groups[$type]) ? $this->groups[$type]->getOptionByDisplay($display) : null;
     }
 
     /**
@@ -69,31 +64,80 @@ abstract class OptionSet extends ProductNode implements OptionSetInterface
      */
     public function getOptions()
     {
-        return $this->getChildren();
+        $options = array();
+        foreach ($this->groups as $group) {
+            array_merge($options, $group->getOptions());
+        }
+        return $options;
     }
 
     /**
      * @inheritdoc
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
-        $this->setChildren($options);
+        $this->groups = null;
+        foreach ($options as $option) {
+            $this->addOption($option);
+        }
     }
 
     /**
      * @inheritdoc
      */
-    public function removeOption(OptionInterface $option)
+    public function removeOption(OptionInterface $option, $removeGroup = true)
     {
-        $this->removeChild($option->getName());
+        $type = $option->getType();
+        if (isset($this->groups[$type])) {
+            $this->groups[$type]->removeOption($option);
+            if ($removeGroup && !sizeof($this->groups[$type]->getOptions())) {
+                unset($this->groups[$type]);
+            }
+        }
     }
 
     /**
      * @inheritdoc
      */
-    public function getType($type)
+    public function getOptionGroups()
     {
-        return $this->getChild($type)->getOptions();
+        return $this->groups;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOptionGroup($name)
+    {
+        return isset($this->groups[$name]) ? $this->groups[$name] : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setOptionGroups(array $groups)
+    {
+        $this->groups = $groups;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addOptionGroup(OptionGroupInterface $group)
+    {
+        $type = $group->getName();
+        $this->group[$type] = $group;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeOptionGroup($group)
+    {
+        if ($group instanceof OptionGroupInterface) {
+            $group = $group->getName();
+        }
+        unset($this->groups[$group]);
     }
 
     protected function createOptionGroup()

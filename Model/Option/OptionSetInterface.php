@@ -7,13 +7,12 @@
  */
 namespace Vespolina\ProductBundle\Model\Option;
 
-use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface OptionSetInterface extends ProductNodeInterface
+interface OptionSetInterface
 {
     /**
      * Add a option to this product options node.
@@ -40,32 +39,62 @@ interface OptionSetInterface extends ProductNodeInterface
     /**
      * Return a specific option by the name
      *
-     * @param string $name
+     * @param string $type - the group type
+     * @param string $display
      *
      * @return Vespolina\ProductBundle\Model\Option\OptionInterface or null
      */
-    public function getOptionByName($name);
+    public function getOptionByDisplay($type, $display);
 
     /**
-     * Add a collection of options
+     * Add a collection of all options in all groups
      *
      * @param array $options
      */
-    public function setOptions($options);
+    public function setOptions(array $options);
 
     /**
      * Remove a option from this product options set
      *
      * @param OptionInterface $option
+     * @param boolean $removeGroup - by default if there are no options left in the group, it is removed from the set
      */
-    public function removeOption(OptionInterface $option);
+    public function removeOption(OptionInterface $option, $removeGroup);
 
     /**
-     * Get the option set for a specific type
-     *
-     * @param string $type
-     *
-     * @return Vespolina\ProductBundle\Model\Option\OptionGroupInterface
+     * Return a collection of the OptionGroups in this set
+     * 
+     * @return array
      */
-    public function getType($type);
+    public function getOptionGroups();
+
+    /**
+     * Return an OptionGroup by name
+     * 
+     * @param string $name
+     *
+     * @return OptionGroupInterface
+     */
+    public function getOptionGroup($name);
+
+    /**
+     * Set a collection of OptionGroups in this set
+     *
+     * @param array $groups
+     */
+    public function setOptionGroups(array $groups);
+
+    /**
+     * Add a single OptionGroup to the collection
+     *
+     * @param OptionGroupInterface $group
+     */
+    public function addOptionGroup(OptionGroupInterface $group);
+
+    /**
+     * Remove an OptionGroup from the set
+     *
+     * @param OptionGroupInterface or string $group
+     */
+    public function removeOptionGroup($group);
 }

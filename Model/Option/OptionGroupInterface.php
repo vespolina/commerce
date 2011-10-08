@@ -36,11 +36,11 @@ interface OptionGroupInterface
     /**
      * Return a specific option by the name
      *
-     * @param string $name
+     * @param string $display
      *
      * @return Vespolina\ProductBundle\Model\Option\OptionInterface or null
      */
-    public function getOptionByName($name);
+    public function getOptionByDisplay($display);
 
     /**
      * Return all the options for this type
@@ -54,7 +54,7 @@ interface OptionGroupInterface
      *
      * @param array $options
      */
-    public function setOptions(Array $options);
+    public function setOptions(array $options);
 
     /**
      * Remove a option from this product options set
