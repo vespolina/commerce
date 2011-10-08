@@ -37,9 +37,9 @@ class OptionsSetTest extends WebTestCase
         $os = $this->createOptionSet();
 
         foreach ($options as $type => $data) {
-            foreach ($data as $name => $value) {
+            foreach ($data as $value => $display) {
                 $option = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
-                $option->setName($name);
+                $option->setDisplay($display);
                 $option->setType($type);
                 $option->setValue($value);
                 $os->addOption($option);
@@ -67,12 +67,12 @@ class OptionsSetTest extends WebTestCase
         $this->assertEquals(4, count($os->getType('size')), 'there should be 4 size options');
         $this->assertEquals(
             'colorRed',
-            $os->getOption('color', 'red')->getName(),
+            $os->getOption('color', 'red')->getValue(),
             'an option can be returned by type and value'
         );
         $this->assertNull($os->getOption('bull', 'shit'), "return null when the type doesn't exists");
 
-        $this->assertEquals('sizeXl', $os->getOptionByName('sizeXl')->getName(), 'an option can be returned by name');
+        $this->assertEquals('sizeXl', $os->getOptionByName('sizeXl')->getValue(), 'an option can be returned by name');
     }
 
     protected function createOptionSet()
