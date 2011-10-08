@@ -7,12 +7,10 @@
  */
 namespace Vespolina\ProductBundle\Model\Option;
 
-use Vespolina\ProductBundle\Model\ProductNodeInterface;
-
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface OptionInterface extends ProductNodeInterface
+interface OptionInterface
 {
     /**
      * Set the assigned value for this option. ie, RD, LG
