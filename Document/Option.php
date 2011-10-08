@@ -7,11 +7,10 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Document\BaseOption;
+use Vespolina\ProductBundle\Model\Option\Option as AbstractOption;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class Option extends BaseOption
+class Option extends AbstractOption
 {
-    protected $id;
 }
