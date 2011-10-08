@@ -15,7 +15,7 @@ use Vespolina\ProductBundle\Model\ProductNodeInterface;
 interface OptionInterface extends ProductNodeInterface
 {
     /**
-     * Set the value that is displayed for this option. ie, red, large
+     * Set the assigned value for this option. ie, RD, LG
      *
      * @param $value
      */
@@ -29,16 +29,16 @@ interface OptionInterface extends ProductNodeInterface
     public function getValue();
 
     /**
-     * Set the type of option. ie color, size
+     * Set the displayed name for this option. ie, red, large
      *
      * @param $type
      */
-    public function setType($type);
+    public function setDisplay($display);
 
     /**
-     * Return the type of option
+     * Return the display name of the option
      *
      * @return string
      */
-    public function getType();
+    public function getDisplay();
 }

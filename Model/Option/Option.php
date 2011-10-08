@@ -7,54 +7,49 @@
  */
 namespace Vespolina\ProductBundle\Model\Option;
 
-use Vespolina\ProductBundle\Model\ProductNode;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-abstract class Option extends ProductNode implements OptionInterface
+abstract class Option implements OptionInterface
 {
+    protected $display;
     protected $value;
-    protected $type;
 
-    /**
-     * Set the value that is displayed for this option. ie, red, large
-     *
-     * @param $value
+    /*
+     * @inheritdoc
      */
     public function setValue($value)
     {
         $this->value = $value;
     }
-
-    /**
-     * Return the option value
-     *
-     * @return string
+    /*
+     * @inheritdoc
      */
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * Set the type of option. ie color, size
-     *
-     * @param $type
+    /*
+     * @inheritdoc
      */
-    public function setType($type)
+    public function setDisplay($display)
     {
-        $this->type = $type;
+        $this->display = $display;
     }
 
-    /**
-     * Return the type of option
-     * 
-     * @return string
+    /*
+     * @inheritdoc
      */
-    public function getType()
+    public function getDisplay()
     {
-        return $this->type;
+        return $this->display;
+    }
+
+    public function __toString()
+    {
+        return $this->display;
     }
 }
