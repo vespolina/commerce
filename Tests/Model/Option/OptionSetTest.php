@@ -38,11 +38,11 @@ class OptionsSetTest extends WebTestCase
 
         foreach ($options as $type => $data) {
             foreach ($data as $name => $value) {
-                $node = new Option();
-                $node->setName($name);
-                $node->setType($type);
-                $node->setValue($value);
-                $os->addOption($node);
+                $option = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
+                $option->setName($name);
+                $option->setType($type);
+                $option->setValue($value);
+                $os->addOption($option);
             }
         }
 
@@ -82,9 +82,6 @@ class OptionsSetTest extends WebTestCase
              ->method('createOptionGroup')
              ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup')));
         $os->expects($this->at(1))
-             ->method('createOptionGroup')
-             ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup')));
-        $os->expects($this->at(2))
              ->method('createOptionGroup')
              ->will($this->returnValue($this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup')));
         return $os;
