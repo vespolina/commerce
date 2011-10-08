@@ -26,7 +26,7 @@ abstract class OptionSet extends ProductNode implements OptionSetInterface
     /*
      * @inheritdoc
      */
-    public function addOption(OptionNodeInterface $option)
+    public function addOption(OptionInterface $option)
     {
         $typeName = $option->getType();
         if (!isset($this->children[$typeName])) {
@@ -83,7 +83,7 @@ abstract class OptionSet extends ProductNode implements OptionSetInterface
     /**
      * @inheritdoc
      */
-    public function removeOption(OptionNodeInterface $option)
+    public function removeOption(OptionInterface $option)
     {
         $this->removeChild($option->getName());
     }

@@ -18,7 +18,7 @@ abstract class OptionGroup extends ProductNode implements OptionGroupInterface
     /*
      * @inheritdoc
      */
-    public function addOption(OptionNodeInterface $option)
+    public function addOption(OptionInterface $option)
     {
         if (!$this->name) {
             $this->name = $option->getType();
@@ -72,7 +72,7 @@ abstract class OptionGroup extends ProductNode implements OptionGroupInterface
     /**
      * @inheritdoc
      */
-    public function removeOption(OptionNodeInterface $option)
+    public function removeOption(OptionInterface $option)
     {
         $this->removeChild($option->getName());
     }

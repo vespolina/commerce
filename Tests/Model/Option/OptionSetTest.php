@@ -11,7 +11,7 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Option\OptionSet;
-use Vespolina\ProductBundle\Model\Option\OptionNode;
+use Vespolina\ProductBundle\Model\Option\Option;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -38,7 +38,7 @@ class OptionsSetTest extends WebTestCase
 
         foreach ($options as $type => $data) {
             foreach ($data as $name => $value) {
-                $node = new OptionNode();
+                $node = new Option();
                 $node->setName($name);
                 $node->setType($type);
                 $node->setValue($value);

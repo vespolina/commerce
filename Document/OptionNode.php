@@ -7,11 +7,11 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Document\BaseOptionNode;
+use Vespolina\ProductBundle\Document\BaseOption;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class OptionNode extends BaseOptionNode
+class Option extends BaseOption
 {
     protected $id;
 }

@@ -10,7 +10,7 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-use Vespolina\ProductBundle\Model\Option\OptionNode;
+use Vespolina\ProductBundle\Model\Option\Option;
 use Vespolina\ProductBundle\Model\Option\OptionGroup;
 
 /**
@@ -20,12 +20,12 @@ class OptionGroupTest extends WebTestCase
 {
     public function testProductOptions()
     {
-        $colorRed = new OptionNode();
+        $colorRed = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
         $colorRed->setName('colorRed');
         $colorRed->setType('color');
         $colorRed->setValue('red');
 
-        $sizeXl = new OptionNode();
+        $sizeXl = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
         $sizeXl->setName('sizeXl');
         $sizeXl->setType('size');
         $sizeXl->setValue('extra large');
@@ -37,7 +37,7 @@ class OptionGroupTest extends WebTestCase
         $this->assertEquals(
             'color',
             $otn->getName(),
-            'if the name is not set, the name should be set to the type of the OptionNode'
+            'if the name is not set, the name should be set to the type of the Option'
         );
 
         $this->assertSame(

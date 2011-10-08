@@ -27,7 +27,7 @@ class ProductTest extends ProductTestCommon
             $product->getOptions(),
             'an empty class with OptionSetInterface should be set');
 
-        $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Option\OptionNode', array('getType', 'getValue'));
+        $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Option\Option', array('getType', 'getValue'));
         $sizeLgOption->expects($this->any())
                  ->method('getType')
                  ->will($this->returnValue('size'));

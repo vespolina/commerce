@@ -121,9 +121,9 @@ class ProductManagerTest extends WebTestCase
         $option = $mgr->createOption('CoLoR', 'BlAcK');
 
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Option\OptionNodeInterface',
+            'Vespolina\ProductBundle\Model\Option\OptionInterface',
             $option,
-            'an OptionNode instance should be created'
+            'an Option instance should be created'
         );
 
         $this->assertEquals(
@@ -174,7 +174,7 @@ class ProductManagerTest extends WebTestCase
                 'findProductByIdentifier',
                 'getPrimaryIdentifier',
                 'getIdentifierSetClass',
-                'getOptionNodeClass',
+                'getOptionClass',
                 'updateProduct'
             ))
              ->disableOriginalConstructor()
@@ -186,8 +186,8 @@ class ProductManagerTest extends WebTestCase
              ->method('getIdentifierSetClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet'));
         $mgr->expects($this->any())
-             ->method('getOptionNodeClass')
-             ->will($this->returnValue('Vespolina\ProductBundle\Model\Option\OptionNode'));
+             ->method('getOptionClass')
+             ->will($this->returnValue('Vespolina\ProductBundle\Model\Option\Option'));
         return $mgr;
     }
 

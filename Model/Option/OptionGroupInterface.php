@@ -17,9 +17,9 @@ interface OptionGroupInterface extends ProductNodeInterface
     /**
      * Add a option to this product options node.
      *
-     * @param Vespolina\ProductBundle\Model\Option\OptionNodeInterface $option
+     * @param Vespolina\ProductBundle\Model\Option\OptionInterface $option
      */
-    public function addOption(OptionNodeInterface $option);
+    public function addOption(OptionInterface $option);
 
     /**
      * Clear all options from this product options
@@ -31,7 +31,7 @@ interface OptionGroupInterface extends ProductNodeInterface
      *
      * @param string $value
      *
-     * @return Vespolina\ProductBundle\Model\Option\OptionNodeInterface
+     * @return Vespolina\ProductBundle\Model\Option\OptionInterface
      */
     public function getOption($value);
 
@@ -40,14 +40,14 @@ interface OptionGroupInterface extends ProductNodeInterface
      *
      * @param string $name
      *
-     * @return Vespolina\ProductBundle\Model\Option\OptionNodeInterface or null
+     * @return Vespolina\ProductBundle\Model\Option\OptionInterface or null
      */
     public function getOptionByName($name);
 
     /**
      * Return all the options for this type
      *
-     * @return array of Vespolina\ProductBundle\Model\Option\OptionNodeInterface
+     * @return array of Vespolina\ProductBundle\Model\Option\OptionInterface
      */
     public function getOptions();
 
@@ -61,7 +61,7 @@ interface OptionGroupInterface extends ProductNodeInterface
     /**
      * Remove a option from this product options set
      *
-     * @param OptionNodeInterface $option
+     * @param OptionInterface $option
      */
-    public function removeOption(OptionNodeInterface $option);
+    public function removeOption(OptionInterface $option);
 }

@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Vespolina\ProductBundle\Document\OptionNode">
+    <embedded-document name="Vespolina\ProductBundle\Document\Option">
         <field name="name" fieldName="name" type="string" />
         <field name="type" fieldName="type" type="string" />
         <field name="value" fieldName="value" type="string" />

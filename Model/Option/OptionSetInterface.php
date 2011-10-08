@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Model\Option;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Option\OptionNodeInterface;
+use Vespolina\ProductBundle\Model\Option\OptionInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -18,9 +18,9 @@ interface OptionSetInterface extends ProductNodeInterface
     /**
      * Add a option to this product options node.
      *
-     * @param Vespolina\ProductBundle\Model\Option\OptionNodeInterface $option
+     * @param Vespolina\ProductBundle\Model\Option\OptionInterface $option
      */
-    public function addOption(OptionNodeInterface $option);
+    public function addOption(OptionInterface $option);
 
     /**
      * Clear all options from this product options
@@ -33,7 +33,7 @@ interface OptionSetInterface extends ProductNodeInterface
      * @param $type
      * @param $value
      *
-     * @return Vespolina\ProductBundle\Model\Option\OptionNodeInterface or null
+     * @return Vespolina\ProductBundle\Model\Option\OptionInterface or null
      */
     public function getOption($type, $value);
 
@@ -42,7 +42,7 @@ interface OptionSetInterface extends ProductNodeInterface
      *
      * @param string $name
      *
-     * @return Vespolina\ProductBundle\Model\Option\OptionNodeInterface or null
+     * @return Vespolina\ProductBundle\Model\Option\OptionInterface or null
      */
     public function getOptionByName($name);
 
@@ -56,9 +56,9 @@ interface OptionSetInterface extends ProductNodeInterface
     /**
      * Remove a option from this product options set
      *
-     * @param OptionNodeInterface $option
+     * @param OptionInterface $option
      */
-    public function removeOption(OptionNodeInterface $option);
+    public function removeOption(OptionInterface $option);
 
     /**
      * Get the option set for a specific type

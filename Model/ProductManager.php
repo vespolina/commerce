@@ -70,7 +70,7 @@ abstract class ProductManager implements ProductManagerInterface
      */
     public function createOption($type, $value)
     {
-        $optionClass = $this->getOptionNodeClass();
+        $optionClass = $this->getOptionClass();
         $option = new $optionClass;
         $option->setType($type);
         $option->setValue($value);
@@ -88,10 +88,10 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function getOptionNodeClass()
+    public function getOptionClass()
     {
         // TODO: make configurable
-        return '\Vespolina\ProductBundle\Document\OptionNode';
+        return '\Vespolina\ProductBundle\Document\Option';
     }
 
     /**

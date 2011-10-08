@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Option\OptionsSet;
-use Vespolina\ProductBundle\Model\Option\OptionNode;
+use Vespolina\ProductBundle\Model\Option\Option;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -29,7 +29,7 @@ class ProductIdentifierSetTest extends WebTestCase
             'an OptionSet object should be set'
         );
 
-        $option = $this->createOptionNode('color', 'blue');
+        $option = $this->createOption('color', 'blue');
         $idSet->addOption($option);
 
         $this->assertEquals(
@@ -55,10 +55,10 @@ class ProductIdentifierSetTest extends WebTestCase
         return $idSet;
     }
 
-    protected function createOptionNode($type, $value)
+    protected function createOption($type, $value)
     {
         $option = $this->getMock(
-            'Vespolina\ProductBundle\Model\Option\OptionNode',
+            'Vespolina\ProductBundle\Model\Option\Option',
             array('getType', 'getValue'),
             array('Vespolina\ProductBundle\Model\Option\OptionsSet')
         );

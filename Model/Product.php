@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
 use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
-use Vespolina\ProductBundle\Model\Option\OptionNodeInterface;
+use Vespolina\ProductBundle\Model\Option\OptionInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionSet;
@@ -166,7 +166,7 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addOption(OptionNodeInterface $option)
+    public function addOption(OptionInterface $option)
     {
         $this->options->addOption($option);
     }
