@@ -5,8 +5,7 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <embedded-document name="Vespolina\ProductBundle\Document\OptionSet">
-        <field name="name" fieldName="name" type="string" />
 
-        <embed-many target-document="Vespolina\ProductBundle\Document\OptionGroup" field="children" fieldName="children" strategy="set" />
+        <embed-many target-document="Vespolina\ProductBundle\Document\OptionGroup" field="groups" fieldName="groups" strategy="set" />
     </embedded-document>
 </doctrine-mongo-mapping>
