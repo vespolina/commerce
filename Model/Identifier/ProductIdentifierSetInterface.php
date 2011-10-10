@@ -8,8 +8,6 @@
 namespace Vespolina\ProductBundle\Model\Identifier;
 
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
-use Vespolina\ProductBundle\Model\Option\OptionInterface;
-use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -17,51 +15,11 @@ use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 interface ProductIdentifierSetInterface
 {
     /**
-     * A convenience method to add an option to the option set
-     * 
-     * @param OptionInterface $option
-     */
-    public function addOption(OptionInterface $option);
-
-    /**
-     * A convenience method to remove an option to the option set
-     *
-     * @param OptionInterface $option
-     */
-    public function removeOption(OptionInterface $option);
-
-    /**
-     * Set options when there are different identifiers with different option sets
-     *
-     * @param OptionSetInterface $options
-     */
-    public function setOptions(OptionSetInterface $options);
-
-    /**
-     * Return the options for this identifier
-     *
-     * @return Doctrine\Common\Collections\ArrayCollection $options
-     */
-    public function getOptions();
-
-    /**
-     * Return the OptionSet for this identifier
-     *
-     * @return OptionSetInterface $options
-     */
-    public function getOptionSet();
-
-    /**
-     * Remove the options for this identifier
-     */
-    public function removeOptions();
-
-    /**
      * Add a identifier to this product identifiers node.
      *
-     * @param Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface $identifier
+     * @param Vespolina\ProductBundle\Model\Identifier\IdentifierNodeInterface $identifier
      */
-    public function addIdentifier(IdentifierNodeInterface $identifier);
+    public function addIdentifier(IdentifierInterface $identifier);
 
     /**
      * Clear all identifiers from this product identifiers
@@ -87,5 +45,5 @@ interface ProductIdentifierSetInterface
      *
      * @param IdentifierNodeInterface $identifier
      */
-    public function removeIdentifier(IdentifierNodeInterface $identifier);
+    public function removeIdentifier(IdentifierInterface $identifier);
 }
