@@ -15,6 +15,7 @@ use Vespolina\ProductBundle\Model\Option\OptionInterface;
 abstract class Option implements OptionInterface
 {
     protected $display;
+    protected $type;
     protected $value;
 
     /*
