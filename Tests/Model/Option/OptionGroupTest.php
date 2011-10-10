@@ -55,6 +55,7 @@ class OptionGroupTest extends WebTestCase
         $noTypeGreen = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
         $noTypeGreen->setValue('colorGreen');
         $noTypeGreen->setDisplay('green');
+        $og->addOption($noTypeGreen);
 
         $this->assertSame(
             $noTypeGreen,
@@ -76,7 +77,7 @@ class OptionGroupTest extends WebTestCase
         $noTypeBlue->setDisplay('blue');
         $og = $this->createOptionGroup();
         // DO NOT SET THE NAME IN THE GROUP!
-        $this->setExpectedException('UnexpectedValueException', 'The OptionGroup must have th name set or the Option must have the group type set');
+        $this->setExpectedException('UnexpectedValueException', 'The OptionGroup must have the name set or the Option must have the group type set');
         $og->addOption($noTypeBlue);
     }
 
