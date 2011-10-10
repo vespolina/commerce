@@ -9,15 +9,16 @@ namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
-use Vespolina\ProductBundle\Form\Type\OptionGroupType;
+use Vespolina\ProductBundle\Form\Type\OptionType;
 
-class OptionSetType extends AbstractType
+class OptionGroupType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('groups', 'collection', array(
-                'type' => new OptionGroupType(),
+            ->add('name', 'text')
+            ->add('options', 'collection', array(
+                'type' => new OptionType(),
                 'allow_add' => true,
                 'by_reference' => false,
             ))
