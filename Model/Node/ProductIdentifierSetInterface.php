@@ -9,6 +9,8 @@ namespace Vespolina\ProductBundle\Model\Node;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Option\OptionInterface;
+use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
