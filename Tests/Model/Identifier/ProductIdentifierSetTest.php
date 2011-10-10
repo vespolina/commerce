@@ -10,7 +10,7 @@ namespace Vespolina\ProductBundle\Tests\Model\Node;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Option\OptionsSet;
 use Vespolina\ProductBundle\Model\Option\Option;
 
@@ -41,12 +41,12 @@ class ProductIdentifierSetTest extends WebTestCase
 
     protected function createProductIdentifierSet()
     {
-        $idSet = $this->getMock('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet', null, array(),'',false);
+        $idSet = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array(),'',false);
 
         $optionSet = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionSet');
         
         $optionsProperty = new \ReflectionProperty(
-          'Vespolina\ProductBundle\Model\Node\ProductIdentifierSet', 'options'
+          'Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', 'options'
         );
         $optionsProperty->setAccessible(true);
 

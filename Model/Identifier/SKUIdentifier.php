@@ -7,12 +7,12 @@
  */
 namespace Vespolina\ProductBundle\Model\Identifier;
 
-use Vespolina\ProductBundle\Model\Node\IdentifierNode;
+use Vespolina\ProductBundle\Model\Identifier\BaseIdentifier;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class SKUIdentifier extends IdentifierNode
+class SKUIdentifier extends BaseIdentifier
 {
     public function getName()
     {

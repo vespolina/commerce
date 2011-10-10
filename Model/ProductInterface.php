@@ -10,10 +10,9 @@ namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
-use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
+use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
-use Vespolina\ProductBundle\Model\Node\ProductFeaturesInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
 /**
@@ -69,7 +68,7 @@ interface ProductInterface
      * search to find the ProductIdentifiers
      *
      * @param string $key
-     * @param Vespolina\ProductBundle\Node\ProductIdentifierSetInterface $identifier
+     * @param Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface $identifier
      */
     public function addIdentifierSet($key, ProductIdentifierSetInterface $identifier);
 

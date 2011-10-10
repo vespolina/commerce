@@ -5,17 +5,16 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Vespolina\ProductBundle\Model\Node;
+namespace Vespolina\ProductBundle\Model\Identifier;
 
-use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
 use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface ProductIdentifierSetInterface extends ProductNodeInterface
+interface ProductIdentifierSetInterface
 {
     /**
      * A convenience method to add an option to the option set

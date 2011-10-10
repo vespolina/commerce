@@ -5,17 +5,16 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Vespolina\ProductBundle\Model\Node;
+namespace Vespolina\ProductBundle\Model\Identifier;
 
-use Vespolina\ProductBundle\Model\ProductNode;
-use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-abstract class ProductIdentifierSet extends ProductNode implements ProductIdentifierSetInterface
+abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
 {
     protected $options;
     protected $optionClass;

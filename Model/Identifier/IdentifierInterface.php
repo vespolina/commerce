@@ -5,14 +5,12 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Vespolina\ProductBundle\Model\Node;
-
-use Vespolina\ProductBundle\Model\ProductNodeInterface;
+namespace Vespolina\ProductBundle\Model\Identifier;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface IdentifierNodeInterface extends ProductNodeInterface
+interface IdentifierInterface
 {
     /**
      * Set the code for this identifier
@@ -27,4 +25,9 @@ interface IdentifierNodeInterface extends ProductNodeInterface
      * @return code
      */
     public function getCode();
+
+    /**
+     * Return the name of the identifier
+     */
+    public function getName();
 }

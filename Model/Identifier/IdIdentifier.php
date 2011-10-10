@@ -7,14 +7,13 @@
  */
 namespace Vesoplina\ProductBundle\Model\Identifier;
 
-use Vesoplina\ProductBundle\Model\Node\IdentifierNode;
+use Vesoplina\ProductBundle\Model\Identifier\BaseIdentifier;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class IdIdentifier extends IdentifierNode
+class IdIdentifier extends BaseIdentifier
 {
-
     public function getName()
     {
         return 'id';

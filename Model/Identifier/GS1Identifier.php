@@ -7,12 +7,12 @@
  */
 namespace Vespolina\ProductBundle\Model\Identifier;
 
-use Vespolina\ProductBundle\Model\Node\IdentifierNode;
+use Vespolina\ProductBundle\Model\Identifier\BaseIdentifier;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-abstract class GS1Identifier extends IdentifierNode
+abstract class GS1Identifier extends BaseIdentifier
 {
     /**
      * Performs a redundancy check on the identifier code, needs to be overridden

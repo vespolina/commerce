@@ -12,10 +12,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
-use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
+use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionSet;
 use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
