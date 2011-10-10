@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="vespolina.product.form.name">vespolina_product_form</parameter>
         <parameter key="vespolina.product.form.handler.class">Vespolina\ProductBundle\Form\ProductFormHandler</parameter>
-        <parameter key="vespolina.product.form.type.class">Vespolina\ProductBundle\Form\ProductFormType</parameter>
+        <parameter key="vespolina.product.form.type.class">Vespolina\ProductBundle\Form\Type\ProductFormType</parameter>
         <parameter key="vespolina.product.form.validation_groups">Product</parameter>
         <parameter key="vespolina.product.form.model.check_product.class">Application\Vespolina\ProductBundle\Document\Product</parameter>
 

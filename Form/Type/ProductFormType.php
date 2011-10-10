@@ -5,11 +5,13 @@
 * This source file is subject to the MIT license that is bundled
 * with this source code in the file LICENSE.
 */
-namespace Vespolina\ProductBundle\Form;
+namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
-use Vespolina\ProductBundle\Form\IdentifierFormType;
+use Vespolina\ProductBundle\Form\Type\FeatureType;
+use Vespolina\ProductBundle\Form\Type\IdentifierFormType;
+
 /**
  * @author Richard Shank <develop@zestic.com>
  */
