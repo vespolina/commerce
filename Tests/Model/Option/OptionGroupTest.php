@@ -31,7 +31,7 @@ class OptionGroupTest extends WebTestCase
         $sizeXl->setDisplay('extra large');
 
         $og = $this->createOptionGroup();
-        // DO NOT SET THE NAME!
+        // DO NOT SET THE NAME IN THE GROUP!
         $og->addOption($colorRed);
 
         $this->assertEquals(
@@ -52,8 +52,32 @@ class OptionGroupTest extends WebTestCase
             'the name of the option node should be set to the value'
         );
 
+        $noTypeGreen = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
+        $noTypeGreen->setValue('colorGreen');
+        $noTypeGreen->setDisplay('green');
+
+        $this->assertSame(
+            $noTypeGreen,
+            $og->getOption('colorGreen'),
+            'if the type is not set, the option should be added to the group'
+        );
+
+        $this->assertSame(
+            'color',
+            $noTypeGreen->getType(),
+            'if the type is not set, type option type should be set to the name of the group'
+        );
+
         $this->setExpectedException('UnexpectedValueException', 'All OptionsNodes in this type must be color');
         $og->addOption($sizeXl);
+
+        $noTypeBlue = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
+        $noTypeBlue->setValue('colorBlue');
+        $noTypeBlue->setDisplay('blue');
+        $og = $this->createOptionGroup();
+        // DO NOT SET THE NAME IN THE GROUP!
+        $this->setExpectedException('UnexpectedValueException', 'The OptionGroup must have th name set or the Option must have the group type set');
+        $og->addOption($noTypeBlue);
     }
 
     protected function createOptionGroup()

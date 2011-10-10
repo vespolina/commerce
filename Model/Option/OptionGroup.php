@@ -22,8 +22,14 @@ abstract class OptionGroup implements OptionGroupInterface
      */
     public function addOption(OptionInterface $option)
     {
-        if (!$this->name) {
-            $this->name = $option->getType();
+        $optionType = $option->getType();
+        if (!$this->name && $optionType) {
+            $this->name = $optionType;
+        } else {
+            throw new \UnexpectedValueException('The OptionGroup must have th name set or the Option must have the group type set');
+        }
+        if (!$optionType) {
+            $option->setType($this->name);
         }
         if ($this->name != $option->getType()) {
             throw new \UnexpectedValueException(sprintf('All OptionsNodes in this type must be %s', $this->name));
