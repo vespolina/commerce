@@ -7,7 +7,7 @@
  */
 namespace Vespolina\ProductBundle\Model\Identifier;
 
-use Vespolina\ProductBundle\Model\Node\IdentifierInterface;
+use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
