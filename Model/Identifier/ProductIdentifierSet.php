@@ -18,7 +18,7 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
     /*
      * @inheritdoc
      */
-    public function addIdentifier(IdentifierNodeInterface $identifier)
+    public function addIdentifier(IdentifierInterface $identifier)
     {
         $this->addChild($identifier);
     }
@@ -50,7 +50,7 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
     /**
      * @inheritdoc
      */
-    public function removeIdentifier(IdentifierNodeInterface $identifier)
+    public function removeIdentifier(IdentifierInterface $identifier)
     {
         $this->removeChild($identifier->getName());
     }
