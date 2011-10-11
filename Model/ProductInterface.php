@@ -64,43 +64,18 @@ interface ProductInterface
     public function getFeatures();
 
     /**
-     * Add a ProductIdentifierSet to the ArrayCollection. The key is the primary identifier used in a
-     * search to find the ProductIdentifiers
-     *
-     * @param string $key
-     * @param Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface $identifier
-     */
-    public function addIdentifierSet($key, ProductIdentifierSetInterface $identifier);
-
-    /**
-     * Return a ProductIdentifiers of the product by the key
-     *
-     * @param string $key
-     *
-     * @return Vespolina\ProductBundle\Node\ProductIdentifiersInterface $identifiers
-     */
-    public function getIdentifierSet($key);
-
-    /**
-     * Return the identifiers of the product
+     * Return the primary ProductIdentifierSet of the product
      *
      * @return identifiers
      */
-    public function getIdentifiers();
+    public function getPrimaryIdentifierSet();
 
     /**
-     * Remove an identifier set by key from this product
+     * Set the primary ProductIdentifierSet for this product
      *
-     * @param $key
+     * @param ProductIdentifierSet $primaryIdentifierSet
      */
-    public function removeIdentifierSet($key);
-
-    /**
-     * Set a collection of ProductIdentifierSet for this product
-     *
-     * @param identifiers
-     */
-    public function setIdentifiers($identifiers);
+    public function setPrimaryIdentifierSet($primaryIdentifierSet);
 
     /**
      * Set the name of the product
