@@ -7,6 +7,7 @@
  */
 namespace Vespolina\ProductBundle\Model\Option;
 
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionGroup;
 use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
@@ -17,12 +18,29 @@ abstract class OptionSet implements OptionSetInterface
 {
     protected $groups;
     protected $optionGroupClass;
+    protected $identifierSet;
 
     public function __construct($optionGroupClass)
     {
         $this->optionGroupClass = $optionGroupClass;
     }
-    
+
+    /*
+     * @inheritdoc
+     */
+    public function setIdentifierSet(ProductIdentifierSetInterface $identifierSet)
+    {
+        $this->identifierSet = $identifierSet;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function getIdentifierSet()
+    {
+        return $this->identifierSet;
+    }
+
     /*
      * @inheritdoc
      */

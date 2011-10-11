@@ -7,13 +7,24 @@
  */
 namespace Vespolina\ProductBundle\Model\Option;
 
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
+
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
 interface OptionSetInterface
 {
+    /**
+     * Set the product identifierset for this option set
+     * 
+     * @param ProductIdentifierSetInterface $identifierSet
+     */
+    public function setIdentifierSet(ProductIdentifierSetInterface $identifierSet);
+
+    public function getIdentifierSet();
+
     /**
      * Add a option to this product options node.
      *
