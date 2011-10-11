@@ -8,8 +8,7 @@
 
         <field name="name" fieldName="name" type="string" />
 
-        <embed-many field="children" strategy="set" fieldName="children" />
-        <embed-one target-document="Vespolina\ProductBundle\Document\OptionSet" field="options" fieldName="options" />
+        <embed-many field="identifiers" strategy="set" fieldName="identifiers" />
 
     </embedded-document>
 
