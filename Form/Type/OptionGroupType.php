@@ -28,7 +28,7 @@ class OptionGroupType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'Vespolina\ProductBundle\Document\OptionSet',
+            'data_class' => 'Vespolina\ProductBundle\Document\OptionGroup',
         );
     }
 

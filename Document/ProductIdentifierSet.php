@@ -7,7 +7,7 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet as AbstractProductIdentifierSet;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet as AbstractProductIdentifierSet;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */

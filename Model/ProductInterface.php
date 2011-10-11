@@ -96,17 +96,32 @@ interface ProductInterface
      *
      * @param Vespolina\ProductBundle\Node\OptionSetInterface $options
      */
-    public function setOptions(OptionSetInterface $options);
+    public function setOptions(array $options);
 
     /**
-     * Add an option to the product
+     * Add options to the product
      */
-    public function addOption(OptionInterface $option);
+    public function addOptions(array $option);
+
+    /**
+     * Add an option set to the product
+     * 
+     * @param Vespolina\ProductBundle\Option\OptionSetInterface $optionSet
+     *
+     */
+    public function addOptionSet(OptionSetInterface $optionSet);
+
+    /**
+     * Remove an options set from the product
+     *
+     * @param Vespolina\ProductBundle\Option\OptionSetInterface $optionSet
+     */
+    public function removeOptionSet(OptionSetInterface $optionSet);
 
     /**
      * Return the options of the product
      *
-     * @return Vespolina\ProductBundle\Node\OptionSetInterface $options
+     * @return array of Vespolina\ProductBundle\Option\OptionSetInterface
      */
     public function getOptions();
 
