@@ -34,6 +34,7 @@ class ProductFormType extends AbstractType
                 'required' => false,
                 'type' => new FeatureType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
         ;

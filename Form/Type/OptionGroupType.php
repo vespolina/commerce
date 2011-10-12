@@ -17,12 +17,12 @@ class OptionGroupType extends AbstractType
     {
         $builder
             ->add('name', 'text')
- /*           ->add('options', 'collection', array(
+            ->add('options', 'collection', array(
                 'type' => new OptionType(),
                 'allow_add' => true,
                 'by_reference' => false,
             ))
- */       ;
+        ;
     }
 
     public function getDefaultOptions(array $options)

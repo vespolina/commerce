@@ -25,12 +25,13 @@ class OptionSetType extends AbstractType
         );
 
         $builder
-/*            ->add('groups', 'collection', array(
+            ->add('groups', 'collection', array(
                 'type' => new OptionGroupType(),
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
-*/            ->add('identifierSet', new IdentifierSetType())
+            ->add('identifierSet', new IdentifierSetType())
 
 
             ->addEventSubscriber($listener)
