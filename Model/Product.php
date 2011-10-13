@@ -11,7 +11,7 @@ namespace Vespolina\ProductBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
+use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
@@ -58,7 +58,7 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addFeature(FeatureNodeInterface $feature)
+    public function addFeature(FeatureInterface $feature)
     {
         $type = strtolower($feature->getType());
         $searchTerm = strtolower($feature->getSearchTerm());
@@ -96,7 +96,7 @@ abstract class Product implements ProductInterface
     {
         return $this->primaryIdentifierSet;
     }
-    
+
     /**
      * @inheritdoc
      */

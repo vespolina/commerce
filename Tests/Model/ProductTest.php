@@ -49,7 +49,7 @@ class ProductTest extends ProductTestCommon
         $productFeatures = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'features');
         $productFeatures->setAccessible(true);
 
-        $labelFeature = $this->getMock('Vespolina\ProductBundle\Model\Node\FeatureNode', array('getType', 'getSearchTerm'));
+        $labelFeature = $this->getMock('Vespolina\ProductBundle\Model\Feature\Feature', array('getType', 'getSearchTerm'));
         $labelFeature->expects($this->any())
                  ->method('getType')
                  ->will($this->returnValue('LABEL'));

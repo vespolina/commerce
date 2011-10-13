@@ -145,7 +145,7 @@ class ProductManagerTest extends WebTestCase
           'This test has not been implemented yet.'
         );
 
-        $label = $this->createFeatureNode('label', 'Joat Music');
+        $label = $this->createFeature('label', 'Joat Music');
 
         $this->mgr->addFeatureToProduct($label, $this->product);
         $this->assertEquals(1, $this->product->getFeatures()->count(), 'make sure the feature has been added');
@@ -211,9 +211,9 @@ class ProductManagerTest extends WebTestCase
         return $identifier;
     }
 
-    protected function createFeatureNode($type, $name)
+    protected function createFeature($type, $name)
     {
-        $feature = $this->getMock('Vespolina\ProductBundle\Model\Node\FeatureNode', array('getType', 'getName', 'getSearchTerm'));
+        $feature = $this->getMock('Vespolina\ProductBundle\Model\Feature\Feature', array('getType', 'getName', 'getSearchTerm'));
         $feature->expects($this->any())
              ->method('getType')
              ->will($this->returnValue($type));
