@@ -22,6 +22,13 @@ interface ProductIdentifierSetInterface
     public function addIdentifier(IdentifierInterface $identifier);
 
     /**
+     * Add a collection of identifiers to this ProductIdentifierSet.
+     *
+     * @param Vespolina\ProductBundle\Model\Identifier\IdentifierNodeInterface $identifier
+     */
+    public function addIdentifiers(array $identifiers);
+
+    /**
      * Clear all identifiers from this product identifiers
      */
     public function clearIdentifiers();
@@ -38,7 +45,7 @@ interface ProductIdentifierSetInterface
      *
      * @param array $identifiers
      */
-    public function setIdentifiers($identifiers);
+    public function setIdentifiers(array $identifiers);
 
     /**
      * Remove a identifier from this product identifiers set

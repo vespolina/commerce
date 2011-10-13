@@ -46,7 +46,7 @@ class ProductManagerTest extends WebTestCase
         $pi = $this->createProductIdentifiers('abcdefg');
         $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
         $mgr->addIdentifierSetToProduct($pi, $this->product);
-        
+
         $this->setExpectedException(
             'InvalidArgumentException',
             'The primary identifier must be an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
@@ -72,7 +72,7 @@ class ProductManagerTest extends WebTestCase
             $this->product->getIdentifiers()->get('sku1234'),
             'the index for the identifier set should be the code for the primary identifier, sku'
         );
-        
+
         $identifiers2 = $this->createProductIdentifiers('id2');
 
         $this->mgr->addIdentifierSetToProduct($identifiers2, $this->product);
@@ -85,7 +85,7 @@ class ProductManagerTest extends WebTestCase
         $this->assertEquals(0, $this->product->getIdentifiers()->count(), 'remove identifiers by primary identifier code should work also');
 
         // any options in the identifier set should also be in the master option set in the product
-        
+
         /* exceptions */
         $mgr = $this->createProductManager('NotIdentifierNode');
 

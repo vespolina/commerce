@@ -140,7 +140,7 @@ interface ProductInterface
 
     /**
      * Set the product type, ie shirt, cd, tickets
-     * 
+     *
      * @param $type
      */
     public function setType($type);

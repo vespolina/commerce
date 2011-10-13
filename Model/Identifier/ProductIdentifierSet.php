@@ -15,12 +15,22 @@ use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
  */
 abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
 {
+    protected $identifiers;
+
     /*
      * @inheritdoc
      */
     public function addIdentifier(IdentifierInterface $identifier)
     {
-        $this->addChild($identifier);
+        $this->identifiers[] = $identifier;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function addIdentifiers(array $identifiers)
+    {
+        $this->identifiers = array_merge($this->identifiers, $identifiers);
     }
 
     /**
@@ -28,7 +38,7 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
      */
     public function clearIdentifiers()
     {
-        $this->clearChildren();
+        $this->identifiers = null;
     }
 
     /**
@@ -36,15 +46,15 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
      */
     public function getIdentifiers()
     {
-        return $this->getChildren();
+        return $this->identifiers;
     }
 
     /**
      * @inheritdoc
      */
-    public function setIdentifiers($identifiers)
+    public function setIdentifiers(array $identifiers)
     {
-        $this->setChildren($identifiers);
+        $this->identifiers = $identifiers;
     }
 
     /**
@@ -52,7 +62,11 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
      */
     public function removeIdentifier(IdentifierInterface $identifier)
     {
-        $this->removeChild($identifier->getName());
+        foreach ($this->identifiers as $key => $curIdentifier) {
+            if ($curIdentifier == $identifier) {
+                unset($this->identifiers[$key]);
+            }
+        }
     }
 
     public function __toString()
