@@ -20,11 +20,32 @@ class ProductIdentifierSetTest extends ProductTestCommon
 {
     public function testIdentifiers()
     {
+        $idSet = $this->createProductIdentifierSet();
+        $rc = new \ReflectionClass($idSet);
+        $identifiersProperty = $rc->getProperty('identifiers');
+        $identifiersProperty->setAccessible(true);
+        
+        $id1 = $this->createIdentifier('id1', 'abc123');
+        $idSet->addIdentifier($id1);
+        $identifiers = $identifiersProperty->getValue($idSet);
+        $this->assertSame($id1, $identifiers['id1'], 'the identifier should be stored using the type as the key');
 
     }
 
     public function testMagicIdentifiers()
     {
+        $idSet = $this->createProductIdentifierSet();
+        $rc = new \ReflectionClass($idSet);
+        $identifiersProperty = $rc->getProperty('identifiers');
+        $identifiersProperty->setAccessible(true);
 
+        $testId = $this->createIdentifier('test', 'abc123');
+        $this->assertFalse(
+            method_exists($idSet, 'setTestIdentifier'),
+            'ProductIdentifierSet::setTestIdentifier should not exist, if it is needed, change the Identifier type in the $testId in this test'
+        );
+        $idSet->setTestIdentifier($testId);
+        $identifiers = $identifiersProperty->getValue($idSet);
+        $this->assertSame($testId, $identifiers['test'], 'the identifier should be stored using the type as the key');
     }
 }
