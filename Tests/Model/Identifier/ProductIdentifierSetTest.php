@@ -30,6 +30,8 @@ class ProductIdentifierSetTest extends ProductTestCommon
         $identifiers = $identifiersProperty->getValue($idSet);
         $this->assertSame($id1, $identifiers['id1'], 'the identifier should be stored using the name as the key');
 
+        $this->assertNull($idSet->getIdentifier('notanid'), 'an identifier not in the set should return null');
+
     }
 
     public function testMagicIdentifiers()

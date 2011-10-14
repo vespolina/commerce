@@ -55,7 +55,8 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
      */
     public function getIdentifier($key)
     {
-        return $this->identifiers[strtolower($key)];
+        $key = strtolower($key);
+        return isset($this->identifiers[$key]) ? $this->identifiers[$key] : null;
     }
     
     /**
