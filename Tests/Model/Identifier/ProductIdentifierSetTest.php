@@ -8,68 +8,23 @@
 
 namespace Vespolina\ProductBundle\Tests\Model\Node;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Option\OptionsSet;
 use Vespolina\ProductBundle\Model\Option\Option;
+use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductIdentifierSetTest extends WebTestCase
+class ProductIdentifierSetTest extends ProductTestCommon
 {
-    public function testAddOption()
+    public function testIdentifiers()
     {
-        $idSet = $this->createProductIdentifierSet();
 
-        $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Option\OptionSetInterface',
-            $idSet->getOptionSet(),
-            'an OptionSet object should be set'
-        );
-
-        $option = $this->createOption('color', 'blue');
-        $idSet->addOption($option);
-
-        $this->assertEquals(
-            1,
-            $idSet->getOptions()->count(),
-            'there should be one option in the set'
-        );
     }
 
-    protected function createProductIdentifierSet()
+    public function testMagicIdentifiers()
     {
-        $idSet = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array(),'',false);
 
-        $optionSet = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionSet');
-        
-        $optionsProperty = new \ReflectionProperty(
-          'Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', 'options'
-        );
-        $optionsProperty->setAccessible(true);
-
-        $optionsProperty->setValue($idSet, $optionSet);
-
-        return $idSet;
     }
-
-    protected function createOption($type, $value)
-    {
-        $option = $this->getMock(
-            'Vespolina\ProductBundle\Model\Option\Option',
-            array('getType', 'getValue'),
-            array('Vespolina\ProductBundle\Model\Option\OptionsSet')
-        );
-        $option->expects($this->any())
-             ->method('getType')
-             ->will($this->returnValue($type));
-        $option->expects($this->any())
-             ->method('getValue')
-             ->will($this->returnValue($value));
-
-        return $option;
-    }
-
 }

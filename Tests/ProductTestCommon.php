@@ -14,29 +14,39 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 abstract class ProductTestCommon extends WebTestCase
 {
+    protected function createFeature()
+    {
+        return $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Feature\Feature');
+
+    }
+
     protected function createProduct()
     {
         $product = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Product');
         return $product;
     }
 
-    protected function createProductIdentifierSet($code)
+    protected function createProductIdentifierSet()
     {
-        $pi = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet');
-        $identifier = $this->getMock('Vespolina\ProductBundle\Model\Identifier\BaseIdentifier', array('getCode', 'getName'));
-        $identifier->expects($this->any())
-             ->method('getCode')
-             ->will($this->returnValue($code));
-        $identifier->expects($this->any())
-             ->method('getName')
-             ->will($this->returnValue($code));
-        $pi->addIdentifier($identifier);
-        return $pi;
+        $pis = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array(), '', false);
+
+        return $pis;
     }
 
-    protected function createFeature()
+    protected function createOption($type, $value)
     {
-        return $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Feature\Feature');
+        $option = $this->getMock(
+            'Vespolina\ProductBundle\Model\Option\Option',
+            array('getType', 'getValue'),
+            array('Vespolina\ProductBundle\Model\Option\OptionsSet')
+        );
+        $option->expects($this->any())
+             ->method('getType')
+             ->will($this->returnValue($type));
+        $option->expects($this->any())
+             ->method('getValue')
+             ->will($this->returnValue($value));
 
+        return $option;
     }
 }
