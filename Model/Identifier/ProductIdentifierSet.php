@@ -68,9 +68,32 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
             }
         }
     }
+    
+    public function __get($name)
+    {
+        if ($key = $this->getIdentifierKey($name)) {
+            return $this->getIdentifier($key);
+        }
+    }
+
+    public function __set($name, $value)
+    {
+        if ($this->getIdentifierKey($name)) {
+            $this->addIdentifier($value);
+        }
+    }
 
     public function __toString()
     {
         return 'ProductIdentifierSet';
+    }
+
+    protected function getIdentifierKey($name)
+    {
+        // get rid of Identifier or _identifier
+        if ($position = strpos($name, 'Identifier') . strpos($name, '_identifier') ) {
+            return substr($name, 0, $position);
+        }
+        return null;
     }
 }
