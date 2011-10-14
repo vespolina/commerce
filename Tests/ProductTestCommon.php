@@ -20,12 +20,29 @@ abstract class ProductTestCommon extends WebTestCase
 
     }
 
+    protected function createIdentifier($name, $code)
+    {
+        $identifier = $this->getMock(
+            'Vespolina\ProductBundle\Model\Identifier\BaseIdentifier',
+            array('getName', 'getCode')
+        );
+
+        $identifier->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue($name));
+        $identifier->expects($this->any())
+            ->method('getCode')
+            ->will($this->returnValue($code));
+
+        return $identifier;
+    }
+
     protected function createProduct()
     {
         $product = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Product');
         return $product;
     }
-
+    
     protected function createProductIdentifierSet()
     {
         $pis = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array(), '', false);
