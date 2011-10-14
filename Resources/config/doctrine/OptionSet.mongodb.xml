@@ -7,6 +7,6 @@
     <embedded-document name="Vespolina\ProductBundle\Document\OptionSet">
 
         <embed-many target-document="Vespolina\ProductBundle\Document\OptionGroup" field="groups" fieldName="groups" strategy="set" />
-        <embed-one target-document="Vesplina\ProductBundle\Document\ProductIdentifierSet" field="identifierSet" fieldName="identifierSet" />
+        <embed-one target-document="Vespolina\ProductBundle\Document\ProductIdentifierSet" field="identifierSet" fieldName="identifierSet" />
     </embedded-document>
 </doctrine-mongo-mapping>

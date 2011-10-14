@@ -14,8 +14,5 @@ use Vespolina\ProductBundle\Model\Identifier\BaseIdentifier;
  */
 class SKUIdentifier extends BaseIdentifier
 {
-    public function getName()
-    {
-        return 'SKU';
-    }
+    static protected $name = 'sku';
 }

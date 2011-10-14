@@ -31,4 +31,12 @@ abstract class BaseIdentifier implements IdentifierInterface
     {
         return $this->code;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return static::$name;
+    }
 }

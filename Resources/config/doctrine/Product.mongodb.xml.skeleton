@@ -8,6 +8,6 @@
         <field name="id" id="true" />
 
         <embed-many target-document="Vespolina\ProductBundle\Document\OptionSet" field="options" fieldName="options" strategy="set" />
-        <embed-one target-document="Vespolina\ProductBundle\Document\ProductIdentifierSet" field="identifiers" fieldName="identifiers" />
+        <embed-one target-document="Vespolina\ProductBundle\Document\ProductIdentifierSet" field="primaryIdentifierSet" fieldName="primaryIdentifierSet" />
     </document>
 </doctrine-mongo-mapping>
