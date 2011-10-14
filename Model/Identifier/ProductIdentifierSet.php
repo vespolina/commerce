@@ -22,7 +22,8 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
      */
     public function addIdentifier(IdentifierInterface $identifier)
     {
-        $this->identifiers[] = $identifier;
+        $key = strtolower($identifier->getName());
+        $this->identifiers[$key] = $identifier;
     }
 
     /*
@@ -49,6 +50,14 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
         return $this->identifiers;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getIdentifier($key)
+    {
+        return $this->identifiers[strtolower($key)];
+    }
+    
     /**
      * @inheritdoc
      */
@@ -79,7 +88,7 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
     public function __set($name, $value)
     {
         if ($this->getIdentifierKey($name)) {
-            $this->addIdentifier($value);
+            return $this->addIdentifier($value);
         }
     }
 
