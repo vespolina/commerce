@@ -9,9 +9,9 @@ namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
-use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -45,7 +45,7 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function createIdentifierSet(IdentifierNodeInterface $identifier)
+    public function createIdentifierSet(IdentifierInterface $identifier)
     {
         $productIdentifierSet = $this->getIdentifierSetClass();
         $identifierSet = new $productIdentifierSet;

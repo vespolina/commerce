@@ -22,7 +22,6 @@ class ProductFormType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-//            ->add('primaryIdentifier', new IdentifierSetType())
 
             ->add('options', 'collection', array(
                 'required' => false,

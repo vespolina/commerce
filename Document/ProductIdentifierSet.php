@@ -13,8 +13,5 @@ use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet as AbstractPro
  */
 class ProductIdentifierSet extends AbstractProductIdentifierSet
 {
-    public function __construct()
-    {
-        parent::__construct('Vespolina\ProductBundle\Document\OptionSet');
-    }
+
 }

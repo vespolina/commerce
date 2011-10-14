@@ -16,7 +16,7 @@ use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
  */
 abstract class OptionSet implements OptionSetInterface
 {
-    protected $groups;
+    protected $optionGroups;
     protected $optionGroupClass;
     protected $identifierSet;
 
@@ -47,10 +47,10 @@ abstract class OptionSet implements OptionSetInterface
     public function addOption(OptionInterface $option)
     {
         $type = $option->getType();
-        if (!isset($this->groups[$type])) {
-            $this->groups[$type] = $this->createOptionGroup();
+        if (!isset($this->optionGroups[$type])) {
+            $this->optionGroups[$type] = $this->createOptionGroup();
         }
-        $this->groups[$type]->addOption($option);
+        $this->optionGroups[$type]->addOption($option);
     }
 
     /**
@@ -58,7 +58,7 @@ abstract class OptionSet implements OptionSetInterface
      */
     public function clearOptions()
     {
-        $this->groups = null;
+        $this->optionGroups = null;
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class OptionSet implements OptionSetInterface
      */
     public function getOption($type, $value)
     {
-        return isset($this->groups[$type]) ? $this->groups[$type]->getOption($value) : null;
+        return isset($this->optionGroups[$type]) ? $this->optionGroups[$type]->getOption($value) : null;
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class OptionSet implements OptionSetInterface
      */
     public function getOptionByDisplay($type, $display)
     {
-        return isset($this->groups[$type]) ? $this->groups[$type]->getOptionByDisplay($display) : null;
+        return isset($this->optionGroups[$type]) ? $this->optionGroups[$type]->getOptionByDisplay($display) : null;
     }
 
     /**
@@ -83,7 +83,7 @@ abstract class OptionSet implements OptionSetInterface
     public function getOptions()
     {
         $options = array();
-        foreach ($this->groups as $group) {
+        foreach ($this->optionGroups as $group) {
             array_merge($options, $group->getOptions());
         }
         return $options;
@@ -94,7 +94,7 @@ abstract class OptionSet implements OptionSetInterface
      */
     public function setOptions(array $options)
     {
-        $this->groups = null;
+        $this->optionGroups = null;
         foreach ($options as $option) {
             $this->addOption($option);
         }
@@ -106,10 +106,10 @@ abstract class OptionSet implements OptionSetInterface
     public function removeOption(OptionInterface $option, $removeGroup = true)
     {
         $type = $option->getType();
-        if (isset($this->groups[$type])) {
-            $this->groups[$type]->removeOption($option);
-            if ($removeGroup && !sizeof($this->groups[$type]->getOptions())) {
-                unset($this->groups[$type]);
+        if (isset($this->optionGroups[$type])) {
+            $this->optionGroups[$type]->removeOption($option);
+            if ($removeGroup && !sizeof($this->optionGroups[$type]->getOptions())) {
+                unset($this->optionGroups[$type]);
             }
         }
     }
@@ -119,7 +119,7 @@ abstract class OptionSet implements OptionSetInterface
      */
     public function getOptionGroups()
     {
-        return $this->groups;
+        return $this->optionGroups;
     }
 
     /**
@@ -127,7 +127,7 @@ abstract class OptionSet implements OptionSetInterface
      */
     public function getOptionGroup($name)
     {
-        return isset($this->groups[$name]) ? $this->groups[$name] : null;
+        return isset($this->optionGroups[$name]) ? $this->optionGroups[$name] : null;
     }
 
     /**
@@ -135,7 +135,7 @@ abstract class OptionSet implements OptionSetInterface
      */
     public function setOptionGroups(array $groups)
     {
-        $this->groups = $groups;
+        $this->optionGroups = $groups;
     }
 
     /**
@@ -144,7 +144,7 @@ abstract class OptionSet implements OptionSetInterface
     public function addOptionGroup(OptionGroupInterface $group)
     {
         $type = $group->getName();
-        $this->group[$type] = $group;
+        $this->optionGroups[$type] = $group;
     }
 
     /**
@@ -155,7 +155,7 @@ abstract class OptionSet implements OptionSetInterface
         if ($group instanceof OptionGroupInterface) {
             $group = $group->getName();
         }
-        unset($this->groups[$group]);
+        unset($this->optionGroups[$group]);
     }
 
     protected function createOptionGroup()
