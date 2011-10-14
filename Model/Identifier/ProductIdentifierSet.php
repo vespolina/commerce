@@ -101,7 +101,7 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
     {
         // get rid of Identifier or _identifier
         if ($position = strpos($name, 'Identifier') . strpos($name, '_identifier') ) {
-            return substr($name, 0, $position);
+            return strtolower(substr($name, 0, $position));
         }
         return null;
     }
