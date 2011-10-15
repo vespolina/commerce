@@ -16,10 +16,13 @@ class OptionGroupType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('name', 'text')
+            ->add('name', 'text', array(
+                'required' => false,
+            ))
             ->add('options', 'collection', array(
                 'type' => new OptionType(),
                 'allow_add' => true,
+                'required' => false,
                 'by_reference' => false,
             ))
         ;

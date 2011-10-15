@@ -16,14 +16,6 @@ class OptionSetType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
-        $listener = new ResizeFormListener(
-            $builder->getFormFactory(),
-            $options['type'],
-            $options['options'],
-            $options['allow_add'],
-            $options['allow_delete']
-        );
-
         $builder
             ->add('option_groups', 'collection', array(
                 'type' => new OptionGroupType(),
@@ -32,19 +24,14 @@ class OptionSetType extends AbstractType
                 'by_reference' => false,
             ))
             ->add('identifierSet', new IdentifierSetType())
-
-
-            ->addEventSubscriber($listener)
-            ->setAttribute('allow_add', $options['allow_add'])
-            ->setAttribute('allow_delete', $options['allow_delete'])
         ;
     }
 
     public function getDefaultOptions(array $options)
     {
         return array(
-            'allow_add'     => false,
-            'allow_delete'  => false,
+            'allow_add'     => true,
+            'allow_delete'  => true,
             'data_class'    => 'Vespolina\ProductBundle\Document\OptionSet',
             'prototype'     => true,
             'type'          => 'text',

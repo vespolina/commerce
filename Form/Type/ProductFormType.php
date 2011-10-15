@@ -39,6 +39,13 @@ class ProductFormType extends AbstractType
         ;
     }
 
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'data_class' => 'Application\Vespolina\ProductBundle\Document\Product',
+        );
+    }
+
     /**
      * Returns the name of this type.
      *
