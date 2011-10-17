@@ -20,10 +20,12 @@ class OptionGroupType extends AbstractType
                 'required' => false,
             ))
             ->add('options', 'collection', array(
-                'type' => new OptionType(),
-                'allow_add' => true,
-                'required' => false,
-                'by_reference' => false,
+                'type'           => new OptionType(),
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'required'       => false,
+                'prototype_name' => 'option',
+                'by_reference'   => false,
             ))
         ;
     }

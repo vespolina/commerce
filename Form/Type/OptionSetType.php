@@ -18,10 +18,12 @@ class OptionSetType extends AbstractType
     {
         $builder
             ->add('option_groups', 'collection', array(
-                'type' => new OptionGroupType(),
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
+                'type'           => new OptionGroupType(),
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'required'       => false,
+                'by_reference'   => false,
+                'prototype_name' => 'group',
             ))
             ->add('identifierSet', new IdentifierSetType())
         ;
@@ -30,12 +32,7 @@ class OptionSetType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'allow_add'     => true,
-            'allow_delete'  => true,
-            'data_class'    => 'Vespolina\ProductBundle\Document\OptionSet',
-            'prototype'     => true,
-            'type'          => 'text',
-            'options'       => array(),
+            'data_class' => 'Vespolina\ProductBundle\Document\OptionSet',
         );
     }
 
