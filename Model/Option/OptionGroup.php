@@ -81,7 +81,7 @@ abstract class OptionGroup implements OptionGroupInterface
      */
     public function setOptions(array $options)
     {
-        $this->options;
+        $this->options = $options;
     }
 
     /**
