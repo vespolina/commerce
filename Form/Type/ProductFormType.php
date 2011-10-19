@@ -22,7 +22,6 @@ class ProductFormType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-
             ->add('options', 'collection', array(
                 'required' => false,
                 'type' => new OptionSetType(),
