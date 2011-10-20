@@ -16,6 +16,8 @@ abstract class OptionGroup implements OptionGroupInterface
 {
     protected $options;
     protected $name;
+    protected $display;
+    protected $required;
 
     /*
      * @inheritdoc
@@ -107,5 +109,25 @@ abstract class OptionGroup implements OptionGroupInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    public function setDisplay($display)
+    {
+        $this->display = $display;
+    }
+
+    public function getDisplay()
+    {
+        return $this->display;
+    }
+
+    public function setRequired($required)
+    {
+        $this->required = $required;
+    }
+
+    public function getRequired()
+    {
+        return $this->required;
     }
 }
