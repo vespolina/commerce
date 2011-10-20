@@ -20,7 +20,7 @@ class OptionGroupType extends AbstractType
                 'required' => false,
             ))
             ->add('options', 'collection', array(
-                'type'           => new OptionType(),
+                'type'           => 'vespolina_option',
                 'allow_add'      => true,
                 'allow_delete'   => true,
                 'required'       => false,

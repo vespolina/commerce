@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
         
         $this->addProductManagerSection($rootNode);
         $this->addProductSection($rootNode);
+        $this->addOptionSection($rootNode);
 
         return $treeBuilder;
     }
@@ -68,6 +69,26 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('type')->end()
                                 ->scalarNode('handler_class')->end()
                                 ->scalarNode('handler_service')->end()
+                                ->scalarNode('name')->end()
+                                ->scalarNode('data_class')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function addOptionSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('option')
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->end()
                                 ->scalarNode('name')->end()
                                 ->scalarNode('data_class')->end()
                             ->end()
