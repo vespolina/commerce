@@ -30,45 +30,24 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
             ->end();
         
+        $this->addOptionGroupSection($rootNode);
+        $this->addOptionSection($rootNode);
         $this->addProductManagerSection($rootNode);
         $this->addProductSection($rootNode);
-        $this->addOptionSection($rootNode);
 
         return $treeBuilder;
     }
 
-    private function addProductManagerSection(ArrayNodeDefinition $node)
+    private function addOptionGroupSection(ArrayNodeDefinition $node)
     {
         $node
             ->children()
-        
-                ->arrayNode('product_manager')
-                    ->children()
-                    ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
-        
-                    ->arrayNode('identifiers')
-                        ->useAttributeAsKey('name')
-                        ->prototype('scalar')
-                        ->end()
-                    ->end()
-                ->end()
-        
-            ->end()
-        ;
-    }
-
-    private function addProductSection(ArrayNodeDefinition $node)
-    {
-        $node
-            ->children()
-                ->arrayNode('product')
+                ->arrayNode('option_group')
                     ->children()
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('type')->end()
-                                ->scalarNode('handler_class')->end()
-                                ->scalarNode('handler_service')->end()
                                 ->scalarNode('name')->end()
                                 ->scalarNode('data_class')->end()
                             ->end()
@@ -95,6 +74,48 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+            ->end()
+        ;
+    }
+
+    private function addProductSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('product')
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->end()
+                                ->scalarNode('handler_class')->end()
+                                ->scalarNode('handler_service')->end()
+                                ->scalarNode('name')->end()
+                                ->scalarNode('data_class')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    private function addProductManagerSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+
+                ->arrayNode('product_manager')
+                    ->children()
+                    ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
+
+                    ->arrayNode('identifiers')
+                        ->useAttributeAsKey('name')
+                        ->prototype('scalar')
+                        ->end()
+                    ->end()
+                ->end()
+
             ->end()
         ;
     }

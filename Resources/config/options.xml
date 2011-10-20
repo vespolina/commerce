@@ -5,11 +5,19 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <parameter key="vespolina.option_group.form.name">vespolina_product_option_group</parameter>
+        <parameter key="vespolina.option_group.form.type.class">Vespolina\ProductBundle\Form\Type\OptionGroupFormType</parameter>
+        <parameter key="vespolina.option_group.form.model.data_class.class">Vespolina\ProductBundle\Document\OptionGroup</parameter>
+        
         <parameter key="vespolina.option.form.name">vespolina_product_option</parameter>
         <parameter key="vespolina.option.form.type.class">Vespolina\ProductBundle\Form\Type\OptionFormType</parameter>
         <parameter key="vespolina.option.form.model.data_class.class">Vespolina\ProductBundle\Document\Option</parameter>
     </parameters>
     <services>
+        <service id="vespolina.option_group.form.type" class="%vespolina.option_group.form.type.class%">
+            <tag name="form.type" alias="vespolina_option_group" />
+            <argument key="data_class">%vespolina.option_group.form.model.data_class.class%</argument>
+        </service>
         <service id="vespolina.option.form.type" class="%vespolina.option.form.type.class%">
             <tag name="form.type" alias="vespolina_option" />
             <argument key="data_class">%vespolina.option.form.model.data_class.class%</argument>

@@ -10,7 +10,6 @@ namespace Vespolina\ProductBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 use Symfony\Component\Form\FormBuilder;
-use Vespolina\ProductBundle\Form\Type\OptionGroupType;
 
 class OptionSetType extends AbstractType
 {
@@ -18,7 +17,7 @@ class OptionSetType extends AbstractType
     {
         $builder
             ->add('option_groups', 'collection', array(
-                'type'           => new OptionGroupType(),
+                'type'           => 'vespolina_option_group',
                 'allow_add'      => true,
                 'allow_delete'   => true,
                 'required'       => false,

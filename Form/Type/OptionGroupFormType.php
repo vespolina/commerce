@@ -9,10 +9,16 @@ namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
-use Vespolina\ProductBundle\Form\Type\OptionType;
 
-class OptionGroupType extends AbstractType
+class OptionGroupFormType extends AbstractType
 {
+    protected $dataClass;
+
+    public function __construct($dataClass)
+    {
+        $this->dataClass = $dataClass;
+    }
+    
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
@@ -33,7 +39,7 @@ class OptionGroupType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'Vespolina\ProductBundle\Document\OptionGroup',
+            'data_class' => $this->dataClass,
         );
     }
 
