@@ -25,6 +25,13 @@ class OptionGroupFormType extends AbstractType
             ->add('name', 'text', array(
                 'required' => false,
             ))
+            ->add('display', 'text', array(
+                'required' => false,
+            ))
+            ->add('required', 'checkbox', array(
+                'value'    => true,
+                'required' => false,
+            ))
             ->add('options', 'collection', array(
                 'type'           => 'vespolina_option',
                 'allow_add'      => true,
