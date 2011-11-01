@@ -22,8 +22,9 @@ abstract class ProductManager implements ProductManagerInterface
     protected $identifierSetClass;
     protected $primaryIdentifier;
     protected $primaryIdentifierLabel;
+    protected $mediaManager;
 
-    public function __construct($identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null)
+    public function __construct($identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null, $mediaManager = null)
     {
 //  $primaryIdentifierLabel = $this->container->getParameter('vespolina_project.primary_identifier.label'))
         $this->identifiers = $identifiers;
@@ -40,6 +41,7 @@ abstract class ProductManager implements ProductManagerInterface
             $primaryIdentifierLabel = $identifier->getName();
         }
         $this->primaryIdentifierLabel = $primaryIdentifierLabel;
+        $this->mediaManager = $mediaManager;
     }
     
     /**
@@ -83,6 +85,17 @@ abstract class ProductManager implements ProductManagerInterface
     public function getIdentifierSetClass()
     {
         return $this->identifierSetClass;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMediaManager()
+    {
+        if (!$this->mediaManager) {
+            throw new ConfigurationException('The MediaManager has not been configured for the Vespolina ProductBundle');
+        }
+        return $this->mediaManager;
     }
 
     /**

@@ -94,6 +94,13 @@ interface ProductManagerInterface
     public function getPrimaryIdentifier();
 
     /**
+     * Return the configured media manager for the ProductBundle
+     *
+     * @return service or null
+     */
+    public function getMediaManager();
+
+    /**
      * Add a ProductIdentifer object to the product
      * 
      * @param Vespolina\ProductBundle\Model\Indentifier\ProductIdentifierSetInterface $identifierSet

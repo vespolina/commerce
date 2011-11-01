@@ -151,6 +151,18 @@ class ProductManagerTest extends WebTestCase
         $this->assertEquals(1, $this->product->getFeatures()->count(), 'make sure the feature has been added');
     }
 
+    public function testGetImageManager()
+    {
+
+        $mgr = $this->createProductManager($imageManager);
+
+        $this->assertSame($imageManager, $mgr->getImageManager());
+
+        $this->setExpectedException('ConfigurationException');
+        $mgr = $this->createProductManager();
+        $mgr->getImageManager();
+    }
+
     public function testSearchForProductByFeature()
     {
         // search by identifier should return a product set up with the specific information for that identifier

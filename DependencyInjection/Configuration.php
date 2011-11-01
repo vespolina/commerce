@@ -114,6 +114,7 @@ class Configuration implements ConfigurationInterface
                         ->prototype('scalar')
                         ->end()
                     ->end()
+                    ->scalarNode('image_manager')->defaultNull()->end()
                 ->end()
 
             ->end()

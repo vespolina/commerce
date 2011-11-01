@@ -91,6 +91,9 @@ class VespolinaProductExtension extends Extension
         if (isset($config['primary_identifier'])) {
             $container->setParameter('vespolina.product.product_manager.primary_identifier', $config['primary_identifier']);
         }
+        
+        // nullable parameters
+        $container->setParameter('vespolina.product.product_manager.image_manager', $config['image_manager']);
     }
 
     protected function configureProduct(array $config, ContainerBuilder $container)
