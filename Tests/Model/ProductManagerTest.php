@@ -154,13 +154,13 @@ class ProductManagerTest extends WebTestCase
     public function testGetImageManager()
     {
 
-        $mgr = $this->createProductManager($imageManager);
+        $mgr = $this->createProductManager($mediaManager);
 
-        $this->assertSame($imageManager, $mgr->getImageManager());
+        $this->assertSame($mediaManager, $mgr->getMediaManager());
 
         $this->setExpectedException('ConfigurationException');
         $mgr = $this->createProductManager();
-        $mgr->getImageManager();
+        $mgr->getMediaManager();
     }
 
     public function testSearchForProductByFeature()
