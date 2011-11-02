@@ -93,7 +93,7 @@ abstract class ProductManager implements ProductManagerInterface
     public function getMediaManager()
     {
         if (!$this->mediaManager) {
-            throw new ConfigurationException('The MediaManager has not been configured for the Vespolina ProductBundle');
+            throw new \ConfigurationException('The MediaManager has not been configured for the Vespolina ProductBundle');
         }
         return $this->mediaManager;
     }
