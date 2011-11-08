@@ -36,6 +36,9 @@ class VespolinaProductExtension extends Extension
         $loader->load('product.xml');
         $loader->load('options.xml');
 
+        if (isset($config['identifier_set'])) {
+            $this->configureOption($config['identifier_set'], $container);
+        }
         if (isset($config['option_group'])) {
             $this->configureOptionGroup($config['option_group'], $container);
         }
@@ -50,6 +53,22 @@ class VespolinaProductExtension extends Extension
         }
         if (isset($config['product'])) {
             $this->configureProduct($config['product'], $container);
+        }
+    }
+
+    protected function configureIdentifierSet(array $config, ContainerBuilder $container)
+    {
+        if (isset($config['form'])) {
+            $formConfig = $config['form'];
+            if (isset($formConfig['type'])) {
+                $container->setParameter('vespolina.identifier_set.form.type.class', $formConfig['type']);
+            }
+            if (isset($formConfig['name'])) {
+                $container->setParameter('vespolina_identifier_set', $formConfig['name']);
+            }
+            if (isset($formConfig['data_class'])) {
+                $container->setParameter('vespolina.identifier_set.form.model.data_class.class', $formConfig['data_class']);
+            }
         }
     }
 

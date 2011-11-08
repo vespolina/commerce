@@ -31,7 +31,7 @@ class OptionSetType extends AbstractType
                 'by_reference'   => false,
                 'prototype_name' => 'group',
             ))
-            ->add('identifier_set', new IdentifierSetType())
+            ->add('identifier_set', 'vespolina_identifier_set')
         ;
     }
 

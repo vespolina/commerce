@@ -30,6 +30,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
             ->end();
         
+        $this->addIdentifierSetSection($rootNode);
         $this->addOptionGroupSection($rootNode);
         $this->addOptionSection($rootNode);
         $this->addOptionSetSection($rootNode);
@@ -37,6 +38,26 @@ class Configuration implements ConfigurationInterface
         $this->addProductSection($rootNode);
 
         return $treeBuilder;
+    }
+
+    private function addIdentifierSetSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('identifier_set')
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->end()
+                                ->scalarNode('name')->end()
+                                ->scalarNode('data_class')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
     }
 
     private function addOptionGroupSection(ArrayNodeDefinition $node)

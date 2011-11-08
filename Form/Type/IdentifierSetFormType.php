@@ -11,8 +11,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 use Vespolina\ProductBundle\Form\Type\IdentifierType;
 
-class IdentifierSetType extends AbstractType
+class IdentifierSetFormType extends AbstractType
 {
+    protected $dataClass;
+
+    public function __construct($dataClass)
+    {
+        $this->dataClass = $dataClass;
+    }
+
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
@@ -27,7 +34,7 @@ class IdentifierSetType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'Vespolina\ProductBundle\Document\ProductIdentifierSet',
+            'data_class' => $this->dataClass,
         );
     }
 
