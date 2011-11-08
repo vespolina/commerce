@@ -33,8 +33,9 @@ class VespolinaProductExtension extends Extension
             throw new \InvalidArgumentException(sprintf('Invalid db driver "%s".', $config['db_driver']));
         }
         $loader->load(sprintf('%s.xml', $config['db_driver']));
-        $loader->load('product.xml');
+        $loader->load('identifiers.xml');
         $loader->load('options.xml');
+        $loader->load('product.xml');
 
         if (isset($config['identifier_set'])) {
             $this->configureOption($config['identifier_set'], $container);
