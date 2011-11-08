@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
-use Vespolina\ProductBundle\Model\Node\OptionSet;
+use Vespolina\ProductBundle\Model\Option\OptionSet;
 use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
 
 /**
@@ -46,7 +46,7 @@ class ProductManagerTest extends WebTestCase
         $pi = $this->createProductIdentifiers('abcdefg');
         $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
         $mgr->addIdentifierSetToProduct($pi, $this->product);
-        
+
         $this->setExpectedException(
             'InvalidArgumentException',
             'The primary identifier must be an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
@@ -72,7 +72,7 @@ class ProductManagerTest extends WebTestCase
             $this->product->getIdentifiers()->get('sku1234'),
             'the index for the identifier set should be the code for the primary identifier, sku'
         );
-        
+
         $identifiers2 = $this->createProductIdentifiers('id2');
 
         $this->mgr->addIdentifierSetToProduct($identifiers2, $this->product);
@@ -85,7 +85,7 @@ class ProductManagerTest extends WebTestCase
         $this->assertEquals(0, $this->product->getIdentifiers()->count(), 'remove identifiers by primary identifier code should work also');
 
         // any options in the identifier set should also be in the master option set in the product
-        
+
         /* exceptions */
         $mgr = $this->createProductManager('NotIdentifierNode');
 
@@ -121,9 +121,9 @@ class ProductManagerTest extends WebTestCase
         $option = $mgr->createOption('CoLoR', 'BlAcK');
 
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\OptionNodeInterface',
+            'Vespolina\ProductBundle\Model\Option\OptionInterface',
             $option,
-            'an OptionNode instance should be created'
+            'an Option instance should be created'
         );
 
         $this->assertEquals(
@@ -145,10 +145,22 @@ class ProductManagerTest extends WebTestCase
           'This test has not been implemented yet.'
         );
 
-        $label = $this->createFeatureNode('label', 'Joat Music');
+        $label = $this->createFeature('label', 'Joat Music');
 
         $this->mgr->addFeatureToProduct($label, $this->product);
         $this->assertEquals(1, $this->product->getFeatures()->count(), 'make sure the feature has been added');
+    }
+
+    public function testGetImageManager()
+    {
+
+        $mgr = $this->createProductManager($mediaManager);
+
+        $this->assertSame($mediaManager, $mgr->getMediaManager());
+
+        $this->setExpectedException('ConfigurationException');
+        $mgr = $this->createProductManager();
+        $mgr->getMediaManager();
     }
 
     public function testSearchForProductByFeature()
@@ -174,7 +186,7 @@ class ProductManagerTest extends WebTestCase
                 'findProductByIdentifier',
                 'getPrimaryIdentifier',
                 'getIdentifierSetClass',
-                'getOptionNodeClass',
+                'getOptionClass',
                 'updateProduct'
             ))
              ->disableOriginalConstructor()
@@ -186,8 +198,8 @@ class ProductManagerTest extends WebTestCase
              ->method('getIdentifierSetClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet'));
         $mgr->expects($this->any())
-             ->method('getOptionNodeClass')
-             ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\OptionNode'));
+             ->method('getOptionClass')
+             ->will($this->returnValue('Vespolina\ProductBundle\Model\Option\Option'));
         return $mgr;
     }
 
@@ -211,9 +223,9 @@ class ProductManagerTest extends WebTestCase
         return $identifier;
     }
 
-    protected function createFeatureNode($type, $name)
+    protected function createFeature($type, $name)
     {
-        $feature = $this->getMock('Vespolina\ProductBundle\Model\Node\FeatureNode', array('getType', 'getName', 'getSearchTerm'));
+        $feature = $this->getMock('Vespolina\ProductBundle\Model\Feature\Feature', array('getType', 'getName', 'getSearchTerm'));
         $feature->expects($this->any())
              ->method('getType')
              ->will($this->returnValue($type));

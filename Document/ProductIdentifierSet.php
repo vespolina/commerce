@@ -7,14 +7,11 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet as AbstractProductIdentifierSet;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet as AbstractProductIdentifierSet;
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
 class ProductIdentifierSet extends AbstractProductIdentifierSet
 {
-    public function __construct()
-    {
-        parent::__construct('Vespolina\ProductBundle\Document\OptionSet');
-    }
+
 }

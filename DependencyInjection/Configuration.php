@@ -30,28 +30,50 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
             ->end();
         
+        $this->addOptionGroupSection($rootNode);
+        $this->addOptionSection($rootNode);
         $this->addProductManagerSection($rootNode);
         $this->addProductSection($rootNode);
 
         return $treeBuilder;
     }
 
-    private function addProductManagerSection(ArrayNodeDefinition $node)
+    private function addOptionGroupSection(ArrayNodeDefinition $node)
     {
         $node
             ->children()
-        
-                ->arrayNode('product_manager')
+                ->arrayNode('option_group')
                     ->children()
-                    ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
-        
-                    ->arrayNode('identifiers')
-                        ->useAttributeAsKey('name')
-                        ->prototype('scalar')
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->end()
+                                ->scalarNode('name')->end()
+                                ->scalarNode('data_class')->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
-        
+            ->end()
+        ;
+    }
+
+    private function addOptionSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('option')
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->end()
+                                ->scalarNode('name')->end()
+                                ->scalarNode('data_class')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
     }
@@ -74,6 +96,27 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+            ->end()
+        ;
+    }
+
+    private function addProductManagerSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+
+                ->arrayNode('product_manager')
+                    ->children()
+                    ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
+
+                    ->arrayNode('identifiers')
+                        ->useAttributeAsKey('name')
+                        ->prototype('scalar')
+                        ->end()
+                    ->end()
+                    ->scalarNode('image_manager')->defaultNull()->end()
+                ->end()
+
             ->end()
         ;
     }

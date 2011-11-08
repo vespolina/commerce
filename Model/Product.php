@@ -11,13 +11,12 @@ namespace Vespolina\ProductBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Vespolina\ProductBundle\Model\ProductNodeInterface;
-use Vespolina\ProductBundle\Model\Node\FeatureNodeInterface;
-use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
-use Vespolina\ProductBundle\Model\Node\OptionNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
-use Vespolina\ProductBundle\Model\Node\OptionSet;
-use Vespolina\ProductBundle\Model\Node\OptionSetInterface;
+use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
+use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Option\OptionInterface;
+use Vespolina\ProductBundle\Model\Option\OptionSet;
+use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -34,7 +33,7 @@ abstract class Product implements ProductInterface
     protected $createdAt;
     protected $description;
     protected $features;
-    protected $identifiers;
+    protected $primaryIdentifierSet;
     protected $name;
     protected $options;
     protected $type;
@@ -59,7 +58,7 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addFeature(FeatureNodeInterface $feature)
+    public function addFeature(FeatureInterface $feature)
     {
         $type = strtolower($feature->getType());
         $searchTerm = strtolower($feature->getSearchTerm());
@@ -85,58 +84,17 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addIdentifierSet($key, ProductIdentifierSetInterface $identifierSet)
+    public function setPrimaryIdentifierSet($identifiersSet)
     {
-        if (!$this->identifiers) {
-            $this->identifiers = new ArrayCollection();
-        }
-        $this->identifiers->set($key, $identifierSet);
+        $this->primaryIdentifierSet = $identifiersSet;
     }
 
     /**
      * @inheritdoc
      */
-    public function clearIdentifiers()
+    public function getPrimaryIdentifierSet()
     {
-        $this->identifiers = new ArrayCollection();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getIdentifiers()
-    {
-        return $this->identifiers;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getIdentifierSet($key)
-    {
-        return $this->identifiers->get($key);
-    }
-
-    /**
-     * Remove an identifier set by key from this product
-     * 
-     * @param $key
-     */
-    public function removeIdentifierSet($key)
-    {
-        $this->identifiers->remove($key);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setIdentifiers($identifiers)
-    {
-        if (!$identifiers instanceof ArrayCollection) {
-            $this->identifiers = new ArrayCollection($identifiers);
-            return;
-        }
-        $this->identifiers = $identifiers;
+        return $this->primaryIdentifierSet;
     }
 
     /**
@@ -158,7 +116,7 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setOptions(OptionSetInterface $options)
+    public function setOptions(array $options)
     {
         $this->options = $options;
     }
@@ -166,9 +124,30 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addOption(OptionNodeInterface $option)
+    public function addOptions(array $options)
     {
-        $this->options->addOption($option);
+        $this->options = array_merge($this->options, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addOptionSet(OptionSetInterface $optionSet)
+    {
+        $this->options[] = $optionSet;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeOptionSet(OptionSetInterface $optionSet)
+    {
+        foreach ($this->optionSet as $key => $options) {
+            if ($options == $optionSet) {
+                unset($this->options[$key]);
+                return;
+            }
+        }
     }
 
     /**
@@ -176,10 +155,6 @@ abstract class Product implements ProductInterface
      */
     public function getOptions()
     {
-        if (!$this->options) {
-            // todo: make this work with configuration
-            $this->options = new OptionSet(new optionGroupClass());
-        }
         return $this->options;
     }
 

@@ -14,6 +14,8 @@ use Vespolina\ProductBundle\Model\Identifier\GS1Identifier;
  */
 class UPCIdentifier extends GS1Identifier
 {
+    static protected $name = 'upc';
+
     /**
      * Performs a redundancy check on the identifier code
      *
@@ -22,10 +24,5 @@ class UPCIdentifier extends GS1Identifier
     public function checkDigit()
     {
         return false;
-    }
-
-    public function getName()
-    {
-        return 'UPC';
     }
 }

@@ -9,9 +9,9 @@ namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
-use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -22,8 +22,9 @@ abstract class ProductManager implements ProductManagerInterface
     protected $identifierSetClass;
     protected $primaryIdentifier;
     protected $primaryIdentifierLabel;
+    protected $mediaManager;
 
-    public function __construct($identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null)
+    public function __construct($identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null, $mediaManager = null)
     {
 //  $primaryIdentifierLabel = $this->container->getParameter('vespolina_project.primary_identifier.label'))
         $this->identifiers = $identifiers;
@@ -40,12 +41,13 @@ abstract class ProductManager implements ProductManagerInterface
             $primaryIdentifierLabel = $identifier->getName();
         }
         $this->primaryIdentifierLabel = $primaryIdentifierLabel;
+        $this->mediaManager = $mediaManager;
     }
     
     /**
      * @inheritdoc
      */
-    public function createIdentifierSet(IdentifierNodeInterface $identifier)
+    public function createIdentifierSet(IdentifierInterface $identifier)
     {
         $productIdentifierSet = $this->getIdentifierSetClass();
         $identifierSet = new $productIdentifierSet;
@@ -76,7 +78,7 @@ abstract class ProductManager implements ProductManagerInterface
      */
     public function createOption($type, $value)
     {
-        $optionClass = $this->getOptionNodeClass();
+        $optionClass = $this->getOptionClass();
         $option = new $optionClass;
         $option->setType($type);
         $option->setValue($value);
@@ -94,10 +96,21 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function getOptionNodeClass()
+    public function getMediaManager()
+    {
+        if (!$this->mediaManager) {
+            throw new \ConfigurationException('The MediaManager has not been configured for the Vespolina ProductBundle');
+        }
+        return $this->mediaManager;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOptionClass()
     {
         // TODO: make configurable
-        return '\Vespolina\ProductBundle\Document\OptionNode';
+        return '\Vespolina\ProductBundle\Document\Option';
     }
 
     /**

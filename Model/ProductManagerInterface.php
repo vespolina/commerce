@@ -9,8 +9,8 @@ namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
-use Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface;
+use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
  */
@@ -26,11 +26,27 @@ interface ProductManagerInterface
     /**
      * Create a ProductIdentifierSet from a PrimaryIdentifier
      * 
-     * @param Vespolina\ProductBundle\Model\Node\IdentifierNodeInterface $identifier
+     * @param Vespolina\ProductBundle\Model\Identifier\IdentifierInterface $identifier
      *
-     * @return Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface
+     * @return Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface
      */
-    public function createIdentifierSet(IdentifierNodeInterface $identifier);
+    public function createIdentifierSet(IdentifierInterface $identifier);
+
+    /**
+     * Create a primary identifier
+     *
+     * @return IdentifierInterface
+     */
+    public function createPrimaryIdentifier();
+
+    /**
+     * Create a product identifier
+     *
+     * @param $name the name of the specific Product identifier
+     *
+     * @return IdentifierInterface
+     */
+    public function createIdentifier($name);
 
     /**
      * Create a primary identifier
@@ -94,9 +110,16 @@ interface ProductManagerInterface
     public function getPrimaryIdentifier();
 
     /**
+     * Return the configured media manager for the ProductBundle
+     *
+     * @return service or null
+     */
+    public function getMediaManager();
+
+    /**
      * Add a ProductIdentifer object to the product
      * 
-     * @param Vespolina\ProductBundle\Model\Node\ProductIdentifierSetInterface $identifierSet
+     * @param Vespolina\ProductBundle\Model\Indentifier\ProductIdentifierSetInterface $identifierSet
      * @param Vespolina\ProductBundle\Model\ProductInterface $product
      */
     public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifierSet, ProductInterface &$product);
