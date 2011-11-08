@@ -13,6 +13,13 @@ use Symfony\Component\Form\FormBuilder;
 
 class OptionSetType extends AbstractType
 {
+    protected $dataClass;
+
+    public function __construct($dataClass)
+    {
+        $this->dataClass = $dataClass;
+    }
+
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
@@ -31,7 +38,7 @@ class OptionSetType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'Vespolina\ProductBundle\Document\OptionSet',
+            'data_class' => $this->dataClass,
         );
     }
 

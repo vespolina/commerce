@@ -42,6 +42,9 @@ class VespolinaProductExtension extends Extension
         if (isset($config['option'])) {
             $this->configureOption($config['option'], $container);
         }
+        if (isset($config['option_set'])) {
+            $this->configureOption($config['option_set'], $container);
+        }
         if (isset($config['product_manager'])) {
             $this->configureProductManager($config['product_manager'], $container);
         }
@@ -78,6 +81,22 @@ class VespolinaProductExtension extends Extension
             }
             if (isset($formConfig['data_class'])) {
                 $container->setParameter('vespolina.option.form.model.data_class.class', $formConfig['data_class']);
+            }
+        }
+    }
+
+    protected function configureOptionSet(array $config, ContainerBuilder $container)
+    {
+        if (isset($config['form'])) {
+            $formConfig = $config['form'];
+            if (isset($formConfig['type'])) {
+                $container->setParameter('vespolina.option_set.form.type.class', $formConfig['type']);
+            }
+            if (isset($formConfig['name'])) {
+                $container->setParameter('vespolina_option_set', $formConfig['name']);
+            }
+            if (isset($formConfig['data_class'])) {
+                $container->setParameter('vespolina.option_set.form.model.data_class.class', $formConfig['data_class']);
             }
         }
     }
