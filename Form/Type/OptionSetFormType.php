@@ -11,7 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 use Symfony\Component\Form\FormBuilder;
 
-class OptionSetType extends AbstractType
+class OptionSetFormType extends AbstractType
 {
     protected $dataClass;
 

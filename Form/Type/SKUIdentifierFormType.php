@@ -10,7 +10,7 @@ namespace Vespolina\ProductBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class UPCIdentifierType extends AbstractType
+class SKUIdentifierFormType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
@@ -22,12 +22,12 @@ class UPCIdentifierType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'Vespolina\ProductBundle\Document\UPCIdentifier',
+            'data_class' => 'Vespolina\ProductBundle\Document\SKUIdentifier',
         );
     }
 
     function getName()
     {
-        return 'vespolina_product_upc_identifier';
+        return 'vespolina_product_sku_identifier';
     }
 }

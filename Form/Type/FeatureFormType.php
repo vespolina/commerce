@@ -10,24 +10,22 @@ namespace Vespolina\ProductBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
-class SKUIdentifierType extends AbstractType
+class FeatureFormType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('code')
+            ->add('type', 'text', array(
+                'required' => false,
+            ))
+            ->add('name', 'text', array(
+                'required' => false,
+            ))
         ;
-    }
-
-    public function getDefaultOptions(array $options)
-    {
-        return array(
-            'data_class' => 'Vespolina\ProductBundle\Document\SKUIdentifier',
-        );
     }
 
     function getName()
     {
-        return 'vespolina_product_sku_identifier';
+        return 'vespolina_product_feature';
     }
 }
