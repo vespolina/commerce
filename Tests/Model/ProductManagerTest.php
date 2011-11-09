@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
 use Vespolina\ProductBundle\Model\Option\OptionSet;
-use Vespolina\ProductBundle\Model\Node\ProductIdentifierSet;
+use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -25,8 +25,9 @@ class ProductManagerTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Node\IdentifierNode');
-        $this->product = new Product(new OptionSet());
+        $this->mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');
+        $this->product = $this->getMockforAbstractClass('Vespolina\ProductBundle\Model\Product');
+        //Product(new OptionSet())
     }
 
     public function testPrimaryIdentifier()
@@ -36,20 +37,20 @@ class ProductManagerTest extends WebTestCase
         );
 
         $this->assertSame(
-            '\Vespolina\ProductBundle\Model\Node\IdentifierNode',
+            '\Vespolina\ProductBundle\Model\Identifier\IdIdentifier',
             $this->mgr->getPrimaryIdentifier(),
             "the primary identifier class name must have a leading \\"
         );
 
         /* exceptions */
-        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Node\IdentifierNode');
+        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');
         $pi = $this->createProductIdentifiers('abcdefg');
         $this->setExpectedException('UnexpectedValueException', 'The primary identifier type has not been set');
         $mgr->addIdentifierSetToProduct($pi, $this->product);
 
         $this->setExpectedException(
             'InvalidArgumentException',
-            'The primary identifier must be an instance of Vespolina\ProductBundle\Node\IdentifierNodeInterface'
+            'The primary identifier must be an instance of Vespolina\ProductBundle\Identifier\IdIdentifierInterface'
         );
         $product->setPrimaryIdentifier('Vespolina\ProductBundle\Model\Product');
     }
@@ -87,7 +88,7 @@ class ProductManagerTest extends WebTestCase
         // any options in the identifier set should also be in the master option set in the product
 
         /* exceptions */
-        $mgr = $this->createProductManager('NotIdentifierNode');
+        $mgr = $this->createProductManager('NotIdIdentifier');
 
         $pi = $this->createProductIdentifiers('itwillfail');
 
@@ -106,9 +107,9 @@ class ProductManagerTest extends WebTestCase
 
     public function testCreateIdentifierSet()
     {
-        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Node\IdentifierNode');
+        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');
         $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Node\ProductIdentifierSet',
+            'Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet',
             $mgr->createIdentifierSet($this->createIdentifierNode('noset')),
             'using an instance of the primary identifier as a parameter should create a new PrimaryIdentifierSet'
         );
@@ -116,7 +117,7 @@ class ProductManagerTest extends WebTestCase
 
     public function testCreateOption()
     {
-        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Node\IdentifierNode');
+        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\Identifier');
 
         $option = $mgr->createOption('CoLoR', 'BlAcK');
 
@@ -196,7 +197,7 @@ class ProductManagerTest extends WebTestCase
              ->will($this->returnValue($primaryIdentifier));
         $mgr->expects($this->any())
              ->method('getIdentifierSetClass')
-             ->will($this->returnValue('Vespolina\ProductBundle\Model\Node\ProductIdentifierSet'));
+             ->will($this->returnValue('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet'));
         $mgr->expects($this->any())
              ->method('getOptionClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Model\Option\Option'));
@@ -205,7 +206,7 @@ class ProductManagerTest extends WebTestCase
 
     protected function createProductIdentifiers($code)
     {
-        $pi = new ProductIdentifierSet();
+        $pi = $this->getMockforAbstractClass('ProductIdentifierSet');
 
         $pi->addIdentifier($this->createIdentifierNode($code));
         return $pi;
@@ -213,7 +214,7 @@ class ProductManagerTest extends WebTestCase
 
     protected function createIdentifierNode($code)
     {
-        $identifier = $this->getMock('Vespolina\ProductBundle\Model\Node\IdentifierNode', array('getCode', 'getName'));
+        $identifier = $this->getMock('Vespolina\ProductBundle\Model\Identifier\IdIdentifier', array('getCode', 'getName'));
         $identifier->expects($this->any())
              ->method('getCode')
              ->will($this->returnValue($code));
