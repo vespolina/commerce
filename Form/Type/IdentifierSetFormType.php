@@ -9,7 +9,7 @@ namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
-use Vespolina\ProductBundle\Form\Type\IdentifierType;
+use Vespolina\ProductBundle\Form\Type\IdentifierFormType;
 
 class IdentifierSetFormType extends AbstractType
 {
@@ -24,7 +24,7 @@ class IdentifierSetFormType extends AbstractType
     {
         $builder
             ->add('identifiers', 'collection', array(
-                'type' => new IdentifierType(),
+                'type' => new IdentifierFormType(),
                 'allow_add' => true,
                 'by_reference' => false,
             ))

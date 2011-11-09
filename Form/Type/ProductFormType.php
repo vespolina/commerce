@@ -9,8 +9,7 @@ namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
-use Vespolina\ProductBundle\Form\Type\FeatureType;
-use Vespolina\ProductBundle\Form\Type\IdentifierFormType;
+use Vespolina\ProductBundle\Form\Type\FeatureFormType;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -24,13 +23,13 @@ class ProductFormType extends AbstractType
             ->add('description')
             ->add('options', 'collection', array(
                 'required' => false,
-                'type' => new OptionSetType(),
+                'type' => 'vespolina_option_set',
                 'allow_add' => true,
                 'by_reference' => false,
             ))
             ->add('features', 'collection', array(
                 'required' => false,
-                'type' => new FeatureType(),
+                'type' => new FeatureFormType(),
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,

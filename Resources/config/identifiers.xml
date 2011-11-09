@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="vespolina.identifier_set.form.name">vespolina_product_identifier_set</parameter>
         <parameter key="vespolina.identifier_set.form.type.class">Vespolina\ProductBundle\Form\Type\IdentifierSetFormType</parameter>
-        <parameter key="vespolina.identifier_set.form.model.data_class.class">Vespolina\ProductBundle\Document\IdentifierSet</parameter>
+        <parameter key="vespolina.identifier_set.form.model.data_class.class">Vespolina\ProductBundle\Document\ProductIdentifierSet</parameter>
     </parameters>
     <services>
         <service id="vespolina.identifier_set.form.type" class="%vespolina.identifier_set.form.type.class%">

@@ -47,7 +47,7 @@ class VespolinaProductExtension extends Extension
             $this->configureOption($config['option'], $container);
         }
         if (isset($config['option_set'])) {
-            $this->configureOption($config['option_set'], $container);
+            $this->configureOptionSet($config['option_set'], $container);
         }
         if (isset($config['product_manager'])) {
             $this->configureProductManager($config['product_manager'], $container);

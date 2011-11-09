@@ -13,8 +13,8 @@ use Vespolina\ProductBundle\Model\Option\OptionSet as AbstractOptionSet;
  */
 class OptionSet extends AbstractOptionSet
 {
-    public function __construct()
+    public function __construct($optionGroupClass)
     {
-        parent::__construct('Vespolina\ProductBundle\Document\OptionGroup');
+        parent::__construct($optionGroupClass);
     }
 }
