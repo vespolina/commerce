@@ -38,7 +38,7 @@ class VespolinaProductExtension extends Extension
         $loader->load('product.xml');
 
         if (isset($config['identifier_set'])) {
-            $this->configureOption($config['identifier_set'], $container);
+            $this->configureIdentifierSet($config['identifier_set'], $container);
         }
         if (isset($config['option_group'])) {
             $this->configureOptionGroup($config['option_group'], $container);
