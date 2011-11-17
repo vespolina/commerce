@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
         $this->addOptionSetSection($rootNode);
         $this->addProductManagerSection($rootNode);
         $this->addProductSection($rootNode);
+        $this->addFeatureSection($rootNode);
 
         return $treeBuilder;
     }
@@ -149,6 +150,27 @@ class Configuration implements ConfigurationInterface
             ->children()
 
                 ->arrayNode('product_manager')
+                    ->children()
+                    ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
+
+                    ->arrayNode('identifiers')
+                        ->useAttributeAsKey('name')
+                        ->prototype('scalar')
+                        ->end()
+                    ->end()
+                    ->scalarNode('image_manager')->defaultNull()->end()
+                ->end()
+
+            ->end()
+        ;
+    }
+
+    private function addFeatureSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+
+                ->arrayNode('product_feature')
                     ->children()
                     ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
 
