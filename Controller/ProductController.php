@@ -47,12 +47,23 @@ class ProductController extends ContainerAware
     public function editAction($id)
     {
         $product = $this->container->get('vespolina.product_manager')->findProductById($id);
+        $formHandler = $this->container->get('vespolina.product.form.handler');
+
+        $process = $formHandler->process($product);
+        if ($process) {
+            $this->setFlash('vespolina_product_updated', 'success');
+            $url = $this->container->get('router')->generate('vespolina_product_list');
+
+            return new RedirectResponse($url);
+        }
+
         $form = $this->container->get('vespolina.product.form');
         $form->setData($product);
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
-            'form'      => $form->createView(),
-            'id'       => $product->getId()
+            'form'     => $form->createView(),
+            'id'       => $id,
+            'medium'   => $product->getMedia(),
         ));
     }
 
