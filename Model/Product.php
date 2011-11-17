@@ -10,7 +10,6 @@ namespace Vespolina\ProductBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
@@ -116,7 +115,7 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setOptions(array $options)
+    public function setOptions($options)
     {
         $this->options = $options;
     }
@@ -124,7 +123,7 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addOptions(array $options)
+    public function addOptions($options)
     {
         $this->options = array_merge($this->options, $options);
     }

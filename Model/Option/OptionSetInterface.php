@@ -62,7 +62,7 @@ interface OptionSetInterface
      *
      * @param array $options
      */
-    public function setOptions(array $options);
+    public function setOptions($options);
 
     /**
      * Remove a option from this product options set
@@ -93,7 +93,7 @@ interface OptionSetInterface
      *
      * @param array $groups
      */
-    public function setOptionGroups(array $groups);
+    public function setOptionGroups($groups);
 
     /**
      * Add a single OptionGroup to the collection

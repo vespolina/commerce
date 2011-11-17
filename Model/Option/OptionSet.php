@@ -92,7 +92,7 @@ abstract class OptionSet implements OptionSetInterface
     /**
      * @inheritdoc
      */
-    public function setOptions(array $options)
+    public function setOptions($options)
     {
         $this->optionGroups = null;
         foreach ($options as $option) {
@@ -133,7 +133,7 @@ abstract class OptionSet implements OptionSetInterface
     /**
      * @inheritdoc
      */
-    public function setOptionGroups(array $groups)
+    public function setOptionGroups($groups)
     {
         $this->optionGroups = $groups;
     }

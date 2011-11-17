@@ -54,7 +54,7 @@ interface OptionGroupInterface
      *
      * @param array $options
      */
-    public function setOptions(array $options);
+    public function setOptions($options);
 
     /**
      * Remove a option from this product options set

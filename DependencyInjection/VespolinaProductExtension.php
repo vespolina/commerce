@@ -33,20 +33,43 @@ class VespolinaProductExtension extends Extension
             throw new \InvalidArgumentException(sprintf('Invalid db driver "%s".', $config['db_driver']));
         }
         $loader->load(sprintf('%s.xml', $config['db_driver']));
-        $loader->load('product.xml');
+        $loader->load('identifiers.xml');
         $loader->load('options.xml');
+        $loader->load('product.xml');
 
+        if (isset($config['identifier_set'])) {
+            $this->configureIdentifierSet($config['identifier_set'], $container);
+        }
         if (isset($config['option_group'])) {
             $this->configureOptionGroup($config['option_group'], $container);
         }
         if (isset($config['option'])) {
             $this->configureOption($config['option'], $container);
         }
+        if (isset($config['option_set'])) {
+            $this->configureOptionSet($config['option_set'], $container);
+        }
         if (isset($config['product_manager'])) {
             $this->configureProductManager($config['product_manager'], $container);
         }
         if (isset($config['product'])) {
             $this->configureProduct($config['product'], $container);
+        }
+    }
+
+    protected function configureIdentifierSet(array $config, ContainerBuilder $container)
+    {
+        if (isset($config['form'])) {
+            $formConfig = $config['form'];
+            if (isset($formConfig['type'])) {
+                $container->setParameter('vespolina.identifier_set.form.type.class', $formConfig['type']);
+            }
+            if (isset($formConfig['name'])) {
+                $container->setParameter('vespolina_identifier_set', $formConfig['name']);
+            }
+            if (isset($formConfig['data_class'])) {
+                $container->setParameter('vespolina.identifier_set.form.model.data_class.class', $formConfig['data_class']);
+            }
         }
     }
 
@@ -78,6 +101,22 @@ class VespolinaProductExtension extends Extension
             }
             if (isset($formConfig['data_class'])) {
                 $container->setParameter('vespolina.option.form.model.data_class.class', $formConfig['data_class']);
+            }
+        }
+    }
+
+    protected function configureOptionSet(array $config, ContainerBuilder $container)
+    {
+        if (isset($config['form'])) {
+            $formConfig = $config['form'];
+            if (isset($formConfig['type'])) {
+                $container->setParameter('vespolina.option_set.form.type.class', $formConfig['type']);
+            }
+            if (isset($formConfig['name'])) {
+                $container->setParameter('vespolina_option_set', $formConfig['name']);
+            }
+            if (isset($formConfig['data_class'])) {
+                $container->setParameter('vespolina.option_set.form.model.data_class.class', $formConfig['data_class']);
             }
         }
     }

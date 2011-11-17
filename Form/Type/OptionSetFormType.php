@@ -11,8 +11,15 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 use Symfony\Component\Form\FormBuilder;
 
-class OptionSetType extends AbstractType
+class OptionSetFormType extends AbstractType
 {
+    protected $dataClass;
+
+    public function __construct($dataClass)
+    {
+        $this->dataClass = $dataClass;
+    }
+
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
@@ -24,14 +31,14 @@ class OptionSetType extends AbstractType
                 'by_reference'   => false,
                 'prototype_name' => 'group',
             ))
-            ->add('identifier_set', new IdentifierSetType())
+            ->add('identifier_set', 'vespolina_identifier_set')
         ;
     }
 
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'Vespolina\ProductBundle\Document\OptionSet',
+            'data_class' => $this->dataClass,
         );
     }
 
