@@ -4,9 +4,37 @@ General Concepts
 ================
 
 The Product class is a container for basic product information. This includes product features, product options and
-identifiers, such as SKUs, UPC, EAN or ASIN.
+identifiers.
 
-The minimal data needed for a Product is a name and product type.
+The minimal data needed for a Product is a name.
+
+Identifiers
+-----------
+
+Identifiers are any type of system used to identify a product or variations of the product. Examples of identifiers are
+SKUs, ISBN, UPC, EAN or ASIN. It is possible for a single product to have more than one identifier assigned to it. For
+example, Test Driven Development by Kent Beck, has the ISBN-10 0321146530, ISBN-13 978-0321146533 and ASIN 0785342146530.
+These 3 identifiers would be part of the product's primary IdentifierSet.
+
+Features
+--------
+
+Features are attributes of a product, using the same example, the following are features of Kent Beck's Test Driven
+Development
+
+   Features
+   
+   +-----------+-----------------------------+
+   |  type     | name                        |
+   +-----------+-----------------------------+
+   | Binding   | Paperback                   |
+   | Pages     | 240                         |
+   | Publisher | Addison-Wesley Professional |
+   | Language  | English                     |
+   +-----------+-----------------------------+
+
+   
+
 
 Product Types
 -------------
@@ -30,8 +58,12 @@ These are valid types of products
 
 *Product::SERVICE*
 
+
+Using the VespolinaProductBundle
+================================
+
 Extending a Product
-===================
+-------------------
 
 The simplest way to extend the ProductBundle is to use SonataEasyExtendsBundle. When you have it installed then
 the following command will build out the Documents for you.
