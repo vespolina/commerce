@@ -7,13 +7,14 @@
  */
 namespace Vespolina\ProductBundle\Model\Feature;
 
-use Vespolina\ProductBundle\Model\ProductNode;
+use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-abstract class Feature extends ProductNode implements FeatureInterface
+abstract class Feature implements FeatureInterface
 {
+    protected $name;
     protected $searchTerm;
     protected $type;
 
@@ -42,6 +43,14 @@ abstract class Feature extends ProductNode implements FeatureInterface
         if (!$this->searchTerm) {
             $this->setSearchTerm($name);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**

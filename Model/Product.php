@@ -10,7 +10,6 @@ namespace Vespolina\ProductBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Vespolina\ProductBundle\Model\ProductNodeInterface;
 use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;

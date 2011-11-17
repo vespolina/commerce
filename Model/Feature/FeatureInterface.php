@@ -7,12 +7,10 @@
  */
 namespace Vespolina\ProductBundle\Model\Feature;
 
-use Vespolina\ProductBundle\Model\ProductNodeInterface;
-
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-interface FeatureInterface extends ProductNodeInterface
+interface FeatureInterface
 {
     /**
      * Set the search term for this feature
@@ -29,16 +27,30 @@ interface FeatureInterface extends ProductNodeInterface
     public function getSearchTerm();
 
     /**
-     * Set the type of feature of this node. ie: name, title, brand
+     * Set the type of feature. ie: title, brand
      *
      * @param $type
      */
     public function setType($type);
 
     /**
-     * Return the type of feature of this node
+     * Return the type of feature
      *
      * @return string type
      */
     public function getType();
+
+    /**
+     * Set the name of this feature. ie: Sling Blade, Miramax
+     *
+     * @param $name
+     */
+    public function setName($name);
+
+    /**
+     * Get the name of this feature
+     *
+     * @return string name of node
+     */
+    public function getName();
 }
