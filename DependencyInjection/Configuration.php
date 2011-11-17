@@ -169,19 +169,18 @@ class Configuration implements ConfigurationInterface
     {
         $node
             ->children()
-
-                ->arrayNode('product_feature')
+                ->arrayNode('feature')
                     ->children()
-                    ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
-
-                    ->arrayNode('identifiers')
-                        ->useAttributeAsKey('name')
-                        ->prototype('scalar')
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->end()
+                                ->scalarNode('name')->end()
+                                ->scalarNode('data_class')->end()
+                            ->end()
                         ->end()
                     ->end()
-                    ->scalarNode('image_manager')->defaultNull()->end()
                 ->end()
-
             ->end()
         ;
     }
