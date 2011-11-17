@@ -38,6 +38,11 @@ class ProductController extends ContainerAware
     public function showAction($id)
     {
         $product = $this->container->get('vespolina.product_manager')->findProductById($id);
+
+        if (!$product) {
+            throw new NotFoundHttpException('The product does not exist!');
+        }
+        
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:show.html.'.$this->getEngine(), array('product' => $product));
     }
 
@@ -47,6 +52,11 @@ class ProductController extends ContainerAware
     public function editAction($id)
     {
         $product = $this->container->get('vespolina.product_manager')->findProductById($id);
+
+        if (!$product) {
+            throw new NotFoundHttpException('The product does not exist!');
+        }
+
         $formHandler = $this->container->get('vespolina.product.form.handler');
 
         $process = $formHandler->process($product);
