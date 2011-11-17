@@ -21,6 +21,7 @@ class ProductFormType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
+            ->add('primaryIdentifierSet', 'vespolina_identifier_set')
             ->add('options', 'collection', array(
                 'required' => false,
                 'type' => 'vespolina_option_set',
