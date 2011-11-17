@@ -56,11 +56,17 @@ abstract class ProductManager implements ProductManagerInterface
         return $identifierSet;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function createPrimaryIdentifier()
     {
         return new $this->primaryIdentifier;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function createIdentifier($name)
     {
         $name = strtolower($name);
