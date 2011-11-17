@@ -95,12 +95,12 @@ interface ProductInterface
      *
      * @param Vespolina\ProductBundle\Node\OptionSetInterface $options
      */
-    public function setOptions(array $options);
+    public function setOptions($options);
 
     /**
      * Add options to the product
      */
-    public function addOptions(array $option);
+    public function addOptions($option);
 
     /**
      * Add an option set to the product

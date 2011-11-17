@@ -115,7 +115,7 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setOptions(array $options)
+    public function setOptions($options)
     {
         $this->options = $options;
     }
@@ -123,7 +123,7 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addOptions(array $options)
+    public function addOptions($options)
     {
         $this->options = array_merge($this->options, $options);
     }
