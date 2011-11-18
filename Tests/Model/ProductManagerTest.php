@@ -197,7 +197,7 @@ class ProductManagerTest extends WebTestCase
              ->will($this->returnValue($primaryIdentifier));
         $mgr->expects($this->any())
              ->method('getIdentifierSetClass')
-             ->will($this->returnValue('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet'));
+             ->will($this->returnValue('Vespolina\ProductBundle\Document\ProductIdentifierSet'));
         $mgr->expects($this->any())
              ->method('getOptionClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Model\Option\Option'));
