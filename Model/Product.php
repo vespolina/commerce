@@ -33,6 +33,7 @@ abstract class Product implements ProductInterface
     protected $description;
     protected $features;
     protected $primaryIdentifierSet;
+    protected $identifierSets;
     protected $name;
     protected $options;
     protected $type;
@@ -94,6 +95,20 @@ abstract class Product implements ProductInterface
     public function getPrimaryIdentifierSet()
     {
         return $this->primaryIdentifierSet;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addIdentifierSet($index, $identifierSet) {
+        $this->identifierSets[$index] = $identifierSet;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentifiers() {
+        return $this->identifierSets;
     }
 
     /**
