@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
         $this->addOptionSetSection($rootNode);
         $this->addProductManagerSection($rootNode);
         $this->addProductSection($rootNode);
+        $this->addFeatureSection($rootNode);
 
         return $treeBuilder;
     }
@@ -160,6 +161,26 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('image_manager')->defaultNull()->end()
                 ->end()
 
+            ->end()
+        ;
+    }
+
+    private function addFeatureSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('feature')
+                    ->children()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->end()
+                                ->scalarNode('name')->end()
+                                ->scalarNode('data_class')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
     }

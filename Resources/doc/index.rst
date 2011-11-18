@@ -154,5 +154,5 @@ All available configuration options are listed below with their default values::
         product:
             form:
                 type:               vespolina.product.form.type
-                handler:            vespolina.product.form.handler
+                handler_service:    vespolina.product.form.handler
                 name:               vespolina_product_form
