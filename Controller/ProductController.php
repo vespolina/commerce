@@ -17,7 +17,8 @@ use Vespolina\ProductBundle\Model\ProductInterface;
  * ProductBundle
  *
  * @author Joris de Wit <joris.w.dewit@gmail.com>
- * @author Richard Shank <develop@zestic.com>
+ * @author Richard D Shank <develop@zestic.com>
+ * @author Luis E Cordova <cordoval@gmail.com>
  */
 
 class ProductController extends ContainerAware
@@ -68,25 +69,23 @@ class ProductController extends ContainerAware
     }
 
     /**
-     * Update a product
+     * Delete one product, then show list
      */
-    public function updateAction($id)
+    public function deleteAction($id)
     {
         $product = $this->container->get('vespolina.product_manager')->findProductById($id);
-        $form = $this->container->get('vespolina.product.form');
-        $form->bind($this->container->get('request'), $product);
 
-        if ($form->isValid()) {
-            $this->container->get('vespolina.product_manager')->updateProduct($product);
-            $this->setFlash('vespolina_product_update', 'success');
-            $productUrl = $this->generateUrl('vespolina_product_show', array('sku' => $product->getSKU()));
-            return new RedirectResponse($productUrl);
+        if (!$product) {
+            throw new NotFoundHttpException('The product does not exist!');
         }
 
-        return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
-            'form'      => $form,
-            'sku'       => $product->getSKU()
-        ));
+        $dm = $this->container->get('doctrine.odm.mongodb.document_manager');
+        $dm->remove($product);
+        $dm->flush();
+
+        $this->setFlash('vespolina_product_deleted', 'success');
+        $url = $this->container->get('router')->generate('vespolina_product_list');
+        return new RedirectResponse($url);
     }
 
     /**
