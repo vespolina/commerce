@@ -1,0 +1,37 @@
+{
+    "name": "vespolina/product-bundle",
+    "type": "symfony-bundle",
+    "description": "Vespolina product bundle. Product management and more.",
+    "keywords": ["shop", "ecommerce", "product", "item"],
+    "homepage": "http://vespolina-project.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Richard Shank",
+            "email": "develop@zestic.com"
+        },
+        {
+            "name": "Luis Cordova",
+            "email": "cordoval@gmail.com"
+        },
+        {
+            "name": "Vespolina Community",
+            "homepage": "https://github.com/vespolina/VespolinaProductBundle/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": "2.*",
+        "symfony/security-bundle": "2.*"
+    },
+    "suggest": {
+        "symfony/doctrine-bundle": "*",
+        "symfony/mongodb-odm-bundle": "*",
+        "doctrine/couchdb-odm-bundle": "*"
+    },
+    "autoload": {
+        "psr-0": { "Vespolina\\ProductBundle": "" }
+    },
+    "target-dir": "Vespolina/ProductBundle"
+}
+
