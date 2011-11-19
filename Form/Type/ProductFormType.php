@@ -26,6 +26,7 @@ class ProductFormType extends AbstractType
                 'required' => false,
                 'type' => 'vespolina_option_set',
                 'allow_add' => true,
+                'allow_delete' => true,
                 'by_reference' => false,
             ))
             ->add('features', 'collection', array(
