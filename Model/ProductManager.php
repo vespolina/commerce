@@ -12,6 +12,7 @@ use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -99,7 +100,7 @@ abstract class ProductManager implements ProductManagerInterface
     public function getMediaManager()
     {
         if (!$this->mediaManager) {
-            throw new \ConfigurationException('The MediaManager has not been configured for the Vespolina ProductBundle');
+            throw new InvalidConfigurationException('The MediaManager has not been configured for the Vespolina ProductBundle');
         }
         return $this->mediaManager;
     }
@@ -135,6 +136,7 @@ abstract class ProductManager implements ProductManagerInterface
     public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifierSet, ProductInterface &$product)
     {
         $index = $this->getIdentifierSetIndex($identifierSet);
+
         $product->addIdentifierSet($index, $identifierSet);
     }
 
