@@ -47,7 +47,7 @@ class OptionsSetTest extends WebTestCase
         }
 
         $groupsProperty = new \ReflectionProperty(
-          'Vespolina\ProductBundle\Model\Option\OptionSet', 'groups'
+          'Vespolina\ProductBundle\Model\Option\OptionSet', 'optionGroups'
         );
         $groupsProperty->setAccessible(true);
 
