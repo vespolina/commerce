@@ -26,24 +26,11 @@ abstract class ProductManager implements ProductManagerInterface
 
     public function __construct($identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null, $mediaManager = null)
     {
-//  $primaryIdentifierLabel = $this->container->getParameter('vespolina_project.primary_identifier.label'))
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
-
-        if (!isset($this->identifiers[$primaryIdentifier])) {
-            throw new \InvalidConfigurationException(
-                sprintf('The product identifier %s has not been set in the vespolina_product configuration', $primaryIdentifier)
-            );
-        }
-        $this->primaryIdentifier = $this->identifiers[$primaryIdentifier];
-        if (!$primaryIdentifierLabel) {
-            $identifier = new $this->primaryIdentifier;
-            $primaryIdentifierLabel = $identifier->getName();
-        }
-        $this->primaryIdentifierLabel = $primaryIdentifierLabel;
         $this->mediaManager = $mediaManager;
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -52,16 +39,8 @@ abstract class ProductManager implements ProductManagerInterface
         $productIdentifierSet = $this->getIdentifierSetClass();
         $identifierSet = new $productIdentifierSet;
         $identifierSet->addIdentifier($identifier);
-        
-        return $identifierSet;
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function createPrimaryIdentifier()
-    {
-        return new $this->primaryIdentifier;
+        return $identifierSet;
     }
 
     /**
@@ -111,58 +90,5 @@ abstract class ProductManager implements ProductManagerInterface
     {
         // TODO: make configurable
         return '\Vespolina\ProductBundle\Document\Option';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPrimaryIdentifier()
-    {
-        return $this->primaryIdentifier;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPrimaryIdentifierLabel()
-    {
-        return $this->primaryIdentifierLabel;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifierSet, ProductInterface &$product)
-    {
-        $index = $this->getIdentifierSetIndex($identifierSet);
-        $product->addIdentifierSet($index, $identifierSet);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function removeIdentifierSetFromProduct($identifierSet, ProductInterface &$product)
-    {
-        if (!is_string($identifierSet)) {
-            $identifierSet = $this->getIdentifierSetIndex($identifierSet);
-        }
-        $product->removeIdentifierSet($identifierSet);
-    }
-
-    protected function getIdentifierSetIndex($identifierSet)
-    {
-        $index = null;
-        $primaryIdentifier = $this->getPrimaryIdentifier();
-        foreach ($identifierSet->getIdentifiers() as $node) {
-            if ($node instanceof $primaryIdentifier) {
-                $index = $node->getCode();
-            }
-        }
-        if (!$index) {
-            throw new \UnexpectedValueException(
-                'The primary identifier is not in this product identifier set'
-            );
-        }
-        return $index;
     }
 }
