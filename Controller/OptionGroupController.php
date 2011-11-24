@@ -21,23 +21,23 @@ class OptionGroupController extends ContainerAware
 {
     public function listAction()
     {
-        $groups = $this->container->get('vespolina.product.admin_manager')->findOptionGroupBy(array());
+        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionGroupBy(array());
 
         return $this->renderResponse('VespolinaProductBundle:OptionGroup:list.html', array(
-            'groups' => $groups
+            'optionGroups' => $optionGroups,
         ));
     }
 
     public function showAction($id)
     {
-        $group = $this->container->get('vespolina.product.admin_manager')->findOptionGroupById($id);
+        $optionGroup = $this->container->get('vespolina.product.admin_manager')->findOptionGroupById($id);
 
-        if (!$group) {
+        if (!$optionGroup) {
             throw new NotFoundHttpException('The option group does not exist!');
         }
 
         return $this->renderResponse('VespolinaProductBundle:OptionGroup:show.html', array(
-            'group' => $group
+            'optionGroup' => $optionGroup,
         ));
     }
 
@@ -49,7 +49,7 @@ class OptionGroupController extends ContainerAware
             throw new NotFoundHttpException('The group does not exist!');
         }
 
-        $formHandler = $this->container->get('vespolina.product.form.handler');
+        $formHandler = $this->container->get('vespolina.product_admin.form.handler');
 
         $process = $formHandler->process($group);
         if ($process) {
@@ -59,53 +59,38 @@ class OptionGroupController extends ContainerAware
             return new RedirectResponse($url);
         }
 
-        $form = $this->container->get('vespolina.group.form');
+        $form = $this->container->get('vespolina.option_group.form');
         $form->setData($group);
 
         return $this->renderResponse('VespolinaProductBundle:OptionGroup:edit.html', array(
             'form'     => $form->createView(),
             'id'       => $id,
-            'medium'   => $group->getMedia(),
         ));
     }
 
     public function deleteAction($id)
     {
-        $group = $this->container->get('vespolina.product.admin_manager')->findProductById($id);
+        $this->container->get('vespolina.product.admin_manager')->deleteOptionGroupById($id);
 
-        if (!$group) {
-            throw new NotFoundHttpException('The group does not exist!');
-        }
+        $this->setFlash('vespolina_option_group_deleted', 'success');
+        $url = $this->container->get('router')->generate('vespolina_option_group_list');
 
-        $dm = $this->container->get('doctrine.odm.mongodb.document_manager');
-        $dm->remove($group);
-        $dm->flush();
-
-        $this->setFlash('vespolina_group_deleted', 'success');
-        $url = $this->container->get('router')->generate('vespolina_group_list');
         return new RedirectResponse($url);
     }
 
     public function newAction()
     {
-        $form = $this->container->get('vespolina.group.form');
-
-        return $this->renderResponse('VespolinaProductBundle:OptionGroup:new.html', array(
-            'form' => $form->createView()
-        ));
-    }
-
-    public function createAction()
-    {
         $form = $this->container->get('vespolina.option_group.form');
-        $formHandler = $this->container->get('vespolina.option_group.form.handler');
+        $formHandler = $this->container->get('vespolina.product_admin.form.handler');
 
-        $process = $formHandler->process();
-        if ($process) {
-            $this->setFlash('vespolina_option_group_created', 'success');
-            $url = $this->container->get('router')->generate('vespolina_group_list');
+        if (!$this->container->request->getMethod() == 'POST') {
+            $process = $formHandler->process();
+            if ($process) {
+                $this->setFlash('vespolina_option_group_created', 'success');
+                $url = $this->container->get('router')->generate('vespolina_option_group_list');
 
-            return new RedirectResponse($url);
+                return new RedirectResponse($url);
+            }
         }
 
         return $this->renderResponse('VespolinaProductBundle:OptionGroup:new.html', array(
