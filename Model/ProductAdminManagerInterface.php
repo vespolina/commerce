@@ -7,7 +7,7 @@
  */
 namespace Vespolina\ProductBundle\Model;
 
-use Vespolina\ProductBundle\Model\Option\OptionGrouptInterface;
+use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
  */

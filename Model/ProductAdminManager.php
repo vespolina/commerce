@@ -7,11 +7,11 @@
  */
 namespace Vespolina\ProductBundle\Model;
 
-use Vespolina\ProductBundle\Model\ProductAdminMangerInterface;
+use Vespolina\ProductBundle\Model\ProductAdminManagerInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
  */
-abstract class ProductAdminManager implements ProductAdminMangerInterface
+abstract class ProductAdminManager implements ProductAdminManagerInterface
 {
 
 }

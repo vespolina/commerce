@@ -21,7 +21,7 @@ class OptionGroupController extends ContainerAware
 {
     public function listAction()
     {
-        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionGroupBy(array());
+        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionGroupsBy(array());
 
         return $this->renderResponse('VespolinaProductBundle:OptionGroup:list.html', array(
             'optionGroups' => $optionGroups,
