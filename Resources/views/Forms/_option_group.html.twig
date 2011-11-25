@@ -1,0 +1,6 @@
+{% block content %}
+<form action="{{ formAction }}" {{ form_enctype(form) }} method="POST" class="vespolina_form">
+     {{ form_rest(form) }}
+        <button type="submit" class="btn primary">Save changes</button>&nbsp;<button type="reset" class="btn">Cancel</button>
+</form>
+{% endblock %}

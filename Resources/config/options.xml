@@ -8,7 +8,8 @@
         <parameter key="vespolina.option_group.form.name">vespolina_product_option_group</parameter>
         <parameter key="vespolina.option_group.form.type.class">Vespolina\ProductBundle\Form\Type\OptionGroupFormType</parameter>
         <parameter key="vespolina.option_group.form.model.data_class.class">Vespolina\ProductBundle\Document\OptionGroup</parameter>
-        
+        <parameter key="vespolina.option_group.form.handler.class">Vespolina\ProductBundle\Form\Handler\OptionGroupFormHandler</parameter>
+
         <parameter key="vespolina.option.form.name">vespolina_product_option</parameter>
         <parameter key="vespolina.option.form.type.class">Vespolina\ProductBundle\Form\Type\OptionFormType</parameter>
         <parameter key="vespolina.option.form.model.data_class.class">Vespolina\ProductBundle\Document\Option</parameter>
@@ -29,6 +30,19 @@
         <service id="vespolina.option_set.form.type" class="%vespolina.option_set.form.type.class%">
             <tag name="form.type" alias="vespolina_option_set" />
             <argument key="data_class">%vespolina.option_set.form.model.data_class.class%</argument>
+        </service>
+        <service id="vespolina.option_group.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument type="service" id="vespolina.option_group.form.type" />
+            <argument>%vespolina.option_group.form.name%</argument>
+            <argument />
+            <argument type="collection">
+                <argument key="validation_groups">%vespolina.product.form.validation_groups%</argument>
+            </argument>
+        </service>
+        <service id="vespolina.option_group.form.handler" class="%vespolina.option_group.form.handler.class%" scope="request">
+            <argument type="service" id="vespolina.option_group.form" />
+            <argument type="service" id="request" />
+            <argument type="service" id="vespolina.product.admin_manager" />
         </service>
     </services>
 </container>

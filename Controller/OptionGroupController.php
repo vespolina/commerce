@@ -81,9 +81,9 @@ class OptionGroupController extends ContainerAware
     public function newAction()
     {
         $form = $this->container->get('vespolina.option_group.form');
-        $formHandler = $this->container->get('vespolina.product_admin.form.handler');
+        $formHandler = $this->container->get('vespolina.option_group.form.handler');
 
-        if (!$this->container->request->getMethod() == 'POST') {
+        if (!$this->container->get('request')->getMethod() == 'POST') {
             $process = $formHandler->process();
             if ($process) {
                 $this->setFlash('vespolina_option_group_created', 'success');
