@@ -17,14 +17,13 @@ use Vespolina\ProductBundle\Model\ProductAdminManager as BaseProductAdminManager
 class ProductAdminManager extends BaseProductAdminManager
 {
     protected $dm;
-    protected $optionGroupClass;
     protected $optionGroupRepo;
 
     public function __construct(DocumentManager $dm, $optionGroupClass)
     {
         $this->dm = $dm;
-        $this->optionGroupClass = $optionGroupClass;
         $this->optionGroupRepo = $this->dm->getRepository($optionGroupClass);
+        parent::__construct($optionGroupClass);
     }
 
     /**

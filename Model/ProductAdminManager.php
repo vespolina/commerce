@@ -13,5 +13,15 @@ use Vespolina\ProductBundle\Model\ProductAdminManagerInterface;
  */
 abstract class ProductAdminManager implements ProductAdminManagerInterface
 {
+    protected $objectGroupClass;
 
+    public function __construct($objectGroupClass)
+    {
+        $this->optionGroupClass = $objectGroupClass;
+    }
+
+    public function createOptionGroup()
+    {
+        return new $this->optionGroupClass;
+    }
 }

@@ -59,7 +59,7 @@ class OptionGroupController extends ContainerAware
             return new RedirectResponse($url);
         }
 
-        $form = $this->container->get('vespolina.option_group.form');
+        $form = $this->container->get('vespolina.configured_option_group.form');
         $form->setData($group);
 
         return $this->renderResponse('VespolinaProductBundle:OptionGroup:edit.html', array(
@@ -80,11 +80,14 @@ class OptionGroupController extends ContainerAware
 
     public function newAction()
     {
-        $form = $this->container->get('vespolina.option_group.form');
+        $form = $this->container->get('vespolina.configured_option_group.form');
         $formHandler = $this->container->get('vespolina.option_group.form.handler');
 
-        if (!$this->container->get('request')->getMethod() == 'POST') {
-            $process = $formHandler->process();
+        $optionGroup = $this->container->get('vespolina.product.admin_manager')->createOptionGroup();
+        $form->setData($optionGroup);
+
+        if ($this->container->get('request')->getMethod() === 'POST') {
+            $process = $formHandler->process($optionGroup);
             if ($process) {
                 $this->setFlash('vespolina_option_group_created', 'success');
                 $url = $this->container->get('router')->generate('vespolina_option_group_list');

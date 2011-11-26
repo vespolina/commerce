@@ -27,19 +27,14 @@ class OptionGroupFormHandler
         $this->productAdminManager = $productAdminManager;
     }
 
-    public function process()
+    public function process($optionGroup)
     {
-    //    $product = $this->productManager->createProduct();
-    //    $this->form->setData($product);
+        $this->form->bindRequest($this->request);
 
-        if ('POST' == $this->request->getMethod()) {
-            $this->form->bindRequest($this->request);
+        if ($this->form->isValid()) {
+            $this->productAdminManager->update($optionGroup);
 
-            if ($this->form->isValid()) {
-                $this->productManager->updateProduct($product);
-
-                return true;
-            }
+            return true;
         }
 
         return false;

@@ -8,7 +8,7 @@
         <parameter key="vespolina.product.product_manager.class">Vespolina\ProductBundle\Document\ProductManager</parameter>
         <parameter key="vespolina.product.admin_manager.class">Vespolina\ProductBundle\Document\ProductAdminManager</parameter>
         <parameter key="vespolina.product.model.product.class">Application\Vespolina\ProductBundle\Document\Product</parameter>
-        <parameter key="vespolina.product.model.option_group.class">Application\Vespolina\ProductBundle\Document\ConfiguredOptionGroup</parameter>
+        <parameter key="vespolina.product.model.configured_option_group.class">Application\Vespolina\ProductBundle\Document\ConfiguredOptionGroup</parameter>
         <parameter key="vespolina.product.model.product_identifier_set.class">Vespolina\ProductBundle\Document\ProductIdentifierSet</parameter>
     </parameters>
 
@@ -25,7 +25,7 @@
         <service id="vespolina.product_manager" alias="vespolina.product.product_manager" />
         <service id="vespolina.product.admin_manager" class="%vespolina.product.admin_manager.class%">
             <argument type="service" id="doctrine.odm.mongodb.default_document_manager" />
-            <argument>%vespolina.product.model.option_group.class%</argument>
+            <argument>%vespolina.product.model.configured_option_group.class%</argument>
         </service>
     </services>
 </container>
