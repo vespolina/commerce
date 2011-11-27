@@ -18,26 +18,19 @@ interface ProductManagerInterface
 {
     /**
      * Create a Product instance
-     * 
+     *
      * @return Vespolina\ProductBundle\Model\ProductInterface
      */
-    public function createProduct();
+    function createProduct();
 
     /**
      * Create a ProductIdentifierSet from a PrimaryIdentifier
-     * 
+     *
      * @param Vespolina\ProductBundle\Model\Identifier\IdentifierInterface $identifier
      *
      * @return Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface
      */
-    public function createIdentifierSet(IdentifierInterface $identifier);
-
-    /**
-     * Create a primary identifier
-     *
-     * @return IdentifierInterface
-     */
-    public function createPrimaryIdentifier();
+    function createIdentifierSet(IdentifierInterface $identifier);
 
     /**
      * Create a product identifier
@@ -46,7 +39,7 @@ interface ProductManagerInterface
      *
      * @return IdentifierInterface
      */
-    public function createIdentifier($name);
+    function createIdentifier($name);
 
     /**
      * Find a collection of products by the criteria
@@ -58,7 +51,7 @@ interface ProductManagerInterface
      *
      * @return array
      */
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
+    function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
     /**
      * Find a Product by its object identifier
@@ -66,17 +59,17 @@ interface ProductManagerInterface
      * @param $id
      * @return Vespolina\ProductBundle\Model\ProductInterface
      */
-    public function findProductById($id);
+    function findProductById($id);
 
     /**
      * Find a Product by an identifier node
      *
      * @param $name
      * @param $code
-     * 
+     *
      * @return Vespolina\ProductBundle\Model\ProductInterface
      */
-    public function findProductByIdentifier($name, $code);
+    function findProductByIdentifier($name, $code);
 
     /**
      * Update and persist the product
@@ -84,36 +77,12 @@ interface ProductManagerInterface
      * @param Vespolina\ProductBundle\Model\ProductInterface $product
      * @param Boolean $andFlush Whether to flush the changes (default true)
      */
-    public function updateProduct(ProductInterface $product, $andFlush = true);
-
-    /**
-     * Return the primary identifier
-     * 
-     * @return string primary identifier
-     */
-    public function getPrimaryIdentifier();
+    function updateProduct(ProductInterface $product, $andFlush = true);
 
     /**
      * Return the configured media manager for the ProductBundle
      *
      * @return service or null
      */
-    public function getMediaManager();
-
-    /**
-     * Add a ProductIdentifer object to the product
-     * 
-     * @param Vespolina\ProductBundle\Model\Indentifier\ProductIdentifierSetInterface $identifierSet
-     * @param Vespolina\ProductBundle\Model\ProductInterface $product
-     */
-    public function addIdentifierSetToProduct(ProductIdentifierSetInterface $identifierSet, ProductInterface &$product);
-
-    /**
-     * Remove a ProductIdentifier from a project. The ProductIdentifier can be based in as an object
-     * or as the primary identifier code
-     *
-     * @param mixed $identifierSet
-     * @param Vespolina\ProductBundle\Model\ProductInterface $product
-     */
-    public function removeIdentifierSetFromProduct($identifierSet, ProductInterface &$product);
+    function getMediaManager();
 }

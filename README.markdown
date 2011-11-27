@@ -11,7 +11,7 @@ Features include:
 
 **Caution:** This bundle is developed in sync with [vespolina's sandbox repository](https://github.com/vespolina/vespolina_sandbox)
 
-[![Build Status](https://secure.travis-ci.org/cordoval/VespolinaProductBundle.png)](http://travis-ci.org/cordoval/VespolinaProductBundle)
+[![Build Status](https://secure.travis-ci.org/vespolina/VespolinaProductBundle.png)](http://travis-ci.org/vespolina/VespolinaProductBundle)
 
 Documentation
 -------------
