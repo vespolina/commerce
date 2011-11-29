@@ -29,7 +29,7 @@ class ProductAdminManager extends BaseProductAdminManager
     /**
      * @inheritdoc
      */
-    public function findOptionGroupsBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    public function findOptionGroupsBy(array $criteria = array(), array $orderBy = null, $limit = null, $offset = null)
     {
         return $this->optionGroupRepo->findBy($criteria, $orderBy, $limit, $offset);
     }
