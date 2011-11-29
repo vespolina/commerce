@@ -29,14 +29,17 @@ class OptionGroupFormHandler
 
     public function process($optionGroup)
     {
-        $this->form->bindRequest($this->request);
+        $this->form->setData($optionGroup);
 
-        if ($this->form->isValid()) {
-            $this->productAdminManager->update($optionGroup);
+        if ('POST' == $this->request->getMethod()) {
+            $this->form->bindRequest($this->request);
 
-            return true;
+            if ($this->form->isValid()) {
+                $this->productAdminManager->update($optionGroup);
+
+                return true;
+            }
         }
-
         return false;
     }
 }
