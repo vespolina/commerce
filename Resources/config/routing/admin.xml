@@ -20,6 +20,10 @@
         <default key="_controller">VespolinaProductBundle:OptionGroup:edit</default>
         <requirement key="_method">GET|POST</requirement>
     </route>
+    <route id="vespolina_option_group_clone" pattern="/option-group/{id}/clone">
+        <default key="_controller">VespolinaProductBundle:OptionGroup:clone</default>
+        <requirement key="_method">GET</requirement>
+    </route>
     <route id="vespolina_option_group_delete" pattern="/option-group/{id}/delete">
         <default key="_controller">VespolinaProductBundle:OptionGroup:delete</default>
         <requirement key="_method">GET</requirement>

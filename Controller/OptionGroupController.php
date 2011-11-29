@@ -68,6 +68,29 @@ class OptionGroupController extends ContainerAware
         ));
     }
 
+    public function cloneAction($id)
+    {
+        $adminMgr = $this->container->get('vespolina.product.admin_manager');
+        $original = $adminMgr->findOptionGroupById($id);
+
+        if (!$original) {
+            throw new NotFoundHttpException('The option group does not exist!');
+        }
+
+        $optionGroup = clone $original;
+        $ro = new \ReflectionObject($optionGroup);
+        $id = $ro->getProperty('id');
+        $id->setAccessible(true);
+        $id->setValue($optionGroup, null);
+
+        $optionGroup->setName($original->getName() . ' (copy)');
+        $adminMgr->update($optionGroup);
+
+        $url = $this->container->get('router')->generate('vespolina_option_group_edit', array('id' => $optionGroup->getId()));
+
+        return new RedirectResponse($url);
+    }
+
     public function deleteAction($id)
     {
         $this->container->get('vespolina.product.admin_manager')->deleteOptionGroupById($id);
