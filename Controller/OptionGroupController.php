@@ -43,15 +43,15 @@ class OptionGroupController extends ContainerAware
 
     public function editAction($id)
     {
-        $group = $this->container->get('vespolina.product.admin_manager')->findOptionGroupById($id);
+        $optionGroup = $this->container->get('vespolina.product.admin_manager')->findOptionGroupById($id);
 
-        if (!$group) {
-            throw new NotFoundHttpException('The group does not exist!');
+        if (!$optionGroup) {
+            throw new NotFoundHttpException('The option group does not exist!');
         }
 
-        $formHandler = $this->container->get('vespolina.product_admin.form.handler');
+        $formHandler = $this->container->get('vespolina.option_group.form.handler');
 
-        $process = $formHandler->process($group);
+        $process = $formHandler->process($optionGroup);
         if ($process) {
             $this->setFlash('vespolina_option_group_updated', 'success');
             $url = $this->container->get('router')->generate('vespolina_option_group_list');
@@ -60,11 +60,11 @@ class OptionGroupController extends ContainerAware
         }
 
         $form = $this->container->get('vespolina.configured_option_group.form');
-        $form->setData($group);
+        $form->setData($optionGroup);
 
         return $this->renderResponse('VespolinaProductBundle:OptionGroup:edit.html', array(
-            'form'     => $form->createView(),
-            'id'       => $id,
+            'form'        => $form->createView(),
+            'optionGroup' => $optionGroup,
         ));
     }
 
