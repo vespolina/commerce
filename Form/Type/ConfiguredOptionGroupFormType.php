@@ -29,7 +29,7 @@ class ConfiguredOptionGroupFormType extends AbstractType
                 'required' => false,
             ))
             ->add('options', 'collection', array(
-                'type'           => 'vespolina_option',
+                'type'           => 'vespolina_configured_option',
                 'allow_add'      => true,
                 'allow_delete'   => true,
                 'required'       => false,
@@ -48,6 +48,6 @@ class ConfiguredOptionGroupFormType extends AbstractType
 
     function getName()
     {
-        return 'configured_vespolina_product_option_group';
+        return 'vespolina_product_configured_option_group';
     }
 }

@@ -19,6 +19,10 @@
         <parameter key="vespolina.option.form.type.class">Vespolina\ProductBundle\Form\Type\OptionFormType</parameter>
         <parameter key="vespolina.option.form.model.data_class.class">Vespolina\ProductBundle\Document\Option</parameter>
 
+        <parameter key="vespolina.configured_option.form.name">vespolina_product_option</parameter>
+        <parameter key="vespolina.configured_option.form.type.class">Vespolina\ProductBundle\Form\Type\OptionFormType</parameter>
+        <parameter key="vespolina.configured_option.form.model.data_class.class">Vespolina\ProductBundle\Document\Option</parameter>
+
         <parameter key="vespolina.option_set.form.name">vespolina_product_option_set</parameter>
         <parameter key="vespolina.option_set.form.type.class">Vespolina\ProductBundle\Form\Type\OptionSetFormType</parameter>
         <parameter key="vespolina.option_set.form.model.data_class.class">Vespolina\ProductBundle\Document\OptionSet</parameter>
@@ -35,6 +39,7 @@
         <service id="vespolina.option.form.type" class="%vespolina.option.form.type.class%">
             <tag name="form.type" alias="vespolina_option" />
             <argument key="data_class">%vespolina.option.form.model.data_class.class%</argument>
+            <argument key="name">%vespolina.option.form.name%</argument>
         </service>
         <service id="vespolina.option_set.form.type" class="%vespolina.option_set.form.type.class%">
             <tag name="form.type" alias="vespolina_option_set" />
@@ -47,6 +52,11 @@
             <argument type="collection">
                 <argument key="validation_groups">%vespolina.product.form.validation_groups%</argument>
             </argument>
+        </service>
+        <service id="vespolina.configured_option.form.type" class="%vespolina.configured_option.form.type.class%">
+            <tag name="form.type" alias="vespolina_configured_option" />
+            <argument key="data_class">%vespolina.configured_option.form.model.data_class.class%</argument>
+            <argument key="name">%vespolina.configured_option.form.name%</argument>
         </service>
         <service id="vespolina.option_group.form.handler" class="%vespolina.option_group.form.handler.class%" scope="request">
             <argument type="service" id="vespolina.configured_option_group.form" />
