@@ -71,7 +71,7 @@ class ProductController extends ContainerAware
         $form = $this->container->get('vespolina.product.form');
         $form->setData($product);
 
-        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionsGroup();
+        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionsGroupBy();
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
             'form'          => $form->createView(),
@@ -108,7 +108,7 @@ class ProductController extends ContainerAware
     {
         $form = $this->container->get('vespolina.product.form');
 
-        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionsGroup();
+        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionsGroupBy();
         $a = 0;
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
             'form'          => $form->createView(),
