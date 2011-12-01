@@ -71,7 +71,7 @@ class ProductController extends ContainerAware
         $form = $this->container->get('vespolina.product.form');
         $form->setData($product);
 
-        $optionGroups = $this->container->get('vespolina.product_admin.manager')->findOptionsGroup();
+        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionsGroup();
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
             'form'          => $form->createView(),
@@ -108,8 +108,8 @@ class ProductController extends ContainerAware
     {
         $form = $this->container->get('vespolina.product.form');
 
-        $optionGroups = $this->container->get('vespolina.product_admin.manager')->findOptionsGroup();
-
+        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionsGroup();
+        $a = 0;
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
             'form'          => $form->createView(),
             'optionsGroups' => $optionGroups,
@@ -147,7 +147,7 @@ class ProductController extends ContainerAware
     protected function getEngine()
     {
         return 'twig'; // HACK ALERT!
-//        return $this->container->getParameter('vespolina.template.engine');
+// todo:        return $this->container->getParameter('vespolina.template.engine');
     }
 
     protected function getProductFormOptions()
