@@ -43,7 +43,7 @@ class ProductController extends ContainerAware
         if (!$product) {
             throw new NotFoundHttpException('The product does not exist!');
         }
-        
+
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:show.html.'.$this->getEngine(), array('product' => $product));
     }
 
@@ -71,10 +71,13 @@ class ProductController extends ContainerAware
         $form = $this->container->get('vespolina.product.form');
         $form->setData($product);
 
+        $optionGroups = $this->container->get('vespolina.product_admin.manager')->findOptionsGroup();
+
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
-            'form'     => $form->createView(),
-            'id'       => $id,
-            'medium'   => $product->getMedia(),
+            'form'          => $form->createView(),
+            'id'            => $id,
+            'medium'        => $product->getMedia(),
+            'optionsGroups' => $optionGroups,
         ));
     }
 
@@ -105,9 +108,12 @@ class ProductController extends ContainerAware
     {
         $form = $this->container->get('vespolina.product.form');
 
+        $optionGroups = $this->container->get('vespolina.product_admin.manager')->findOptionsGroup();
+
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
-            'form' => $form->createView()
-        ));
+            'form'          => $form->createView(),
+            'optionsGroups' => $optionGroups,
+       ));
     }
 
     /**
