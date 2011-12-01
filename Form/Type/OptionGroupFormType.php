@@ -26,12 +26,20 @@ class OptionGroupFormType extends ConfiguredOptionGroupFormType
                 'value'    => true,
                 'required' => false,
             ))
+            ->add('options', 'collection', array(
+                'type'           => 'vespolina_option',
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'required'       => false,
+                'prototype_name' => 'option',
+                'by_reference'   => false,
+            ))
         ;
     }
 
-    function getParent()
+    function getParent(array $options)
     {
-        return 'configured_vespolina_product_option_group';
+        return 'vespolina_product_configured_option_group';
     }
 
     function getName()
