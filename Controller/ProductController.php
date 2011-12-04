@@ -71,13 +71,13 @@ class ProductController extends ContainerAware
         $form = $this->container->get('vespolina.product.form');
         $form->setData($product);
 
-        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionGroupsBy();
-
+        $configuredOptionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionGroupsBy();
+$a  = 0;
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
-            'form'          => $form->createView(),
-            'id'            => $id,
-            'medium'        => $product->getMedia(),
-            'optionsGroups' => $optionGroups,
+            'form'                   => $form->createView(),
+            'id'                     => $id,
+            'medium'                 => $product->getMedia(),
+            'configuredOptionGroups' => $configuredOptionGroups,
         ));
     }
 
@@ -108,11 +108,11 @@ class ProductController extends ContainerAware
     {
         $form = $this->container->get('vespolina.product.form');
 
-        $optionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionGroupsBy();
+        $configuredOptionGroups = json_encode($this->container->get('vespolina.product.admin_manager')->findOptionGroupsData());
         $a = 0;
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
-            'form'          => $form->createView(),
-            'optionsGroups' => $optionGroups,
+            'form'                   => $form->createView(),
+            'configuredOptionGroups' => $configuredOptionGroups,
        ));
     }
 
