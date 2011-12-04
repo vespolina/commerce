@@ -17,6 +17,16 @@ use Vespolina\ProductBundle\Tests\ProductTestCommon;
  */
 class ProductTest extends ProductTestCommon
 {
+    public function testOptionGroups()
+    {
+        $product = $this->createProduct();
+
+        $product->addOptionGroup();
+        $product->setOptionGroups($options);
+        $product->removeGroupSet();
+        $product->getOptions();
+    }
+
     public function testProductFeatures()
     {
         $product = $this->createProduct();

@@ -93,14 +93,9 @@ interface ProductInterface
     /**
      * Set the options of the product to an option set
      *
-     * @param Vespolina\ProductBundle\Node\OptionGroupInterface $options
+     * @param array of Vespolina\ProductBundle\Node\OptionGroupInterface $optionGroup
      */
-    public function setOptions($options);
-
-    /**
-     * Add options to the product
-     */
-    public function addOptions($option);
+    public function setOptionGroups($optionGroups);
 
     /**
      * Add an option set to the product
