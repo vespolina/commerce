@@ -50,9 +50,6 @@ class VespolinaProductExtension extends Extension
         if (isset($config['option'])) {
             $this->configureOption($config['option'], $container);
         }
-        if (isset($config['option_set'])) {
-            $this->configureOptionSet($config['option_set'], $container);
-        }
         if (isset($config['product_manager'])) {
             $this->configureProductManager($config['product_manager'], $container);
         }
@@ -125,32 +122,16 @@ class VespolinaProductExtension extends Extension
         }
     }
 
-    protected function configureOptionSet(array $config, ContainerBuilder $container)
-    {
-        if (isset($config['form'])) {
-            $formConfig = $config['form'];
-            if (isset($formConfig['type'])) {
-                $container->setParameter('vespolina.option_set.form.type.class', $formConfig['type']);
-            }
-            if (isset($formConfig['name'])) {
-                $container->setParameter('vespolina_option_set', $formConfig['name']);
-            }
-            if (isset($formConfig['data_class'])) {
-                $container->setParameter('vespolina.option_set.form.model.data_class.class', $formConfig['data_class']);
-            }
-        }
-    }
-
     protected function configureProductManager(array $config, ContainerBuilder $container)
     {
         if (isset($config['identifiers'])) {
             $container->setParameter('vespolina.product.product_manager.identifiers', $config['identifiers']);
         }
-        
+
         if (isset($config['primary_identifier'])) {
             $container->setParameter('vespolina.product.product_manager.primary_identifier', $config['primary_identifier']);
         }
-        
+
         if (isset($config['image_manager'])) {
             $container->setAlias('vespolina.product.image_manager', $config['image_manager']);
         }

@@ -10,7 +10,6 @@ namespace Vespolina\ProductBundle\Tests\Model;
 use Vespolina\ProductBundle\Model\Product;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Identifier\Identifier;
-use Vespolina\ProductBundle\Model\Option\OptionSet;
 use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 /**
@@ -18,26 +17,6 @@ use Vespolina\ProductBundle\Tests\ProductTestCommon;
  */
 class ProductTest extends ProductTestCommon
 {
-    public function testOptionSet()
-    {
-        $this->markTestSkipped('Option behavior has changed');
-        $product = $this->createProduct();
-
-        $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Option\Option', array('getType', 'getValue'));
-        $sizeLgOption->expects($this->any())
-                 ->method('getType')
-                 ->will($this->returnValue('size'));
-        $sizeLgOption->expects($this->any())
-                 ->method('getValue')
-                 ->will($this->returnValue('large'));
-        $product->addOption($sizeLgOption);
-        $this->assertSame(
-            $sizeLgOption,
-            $product->getOptions()->getOption('size', 'large'),
-            'addOption hands option off to OptionsSet'
-        );
-    }
-
     public function testProductFeatures()
     {
         $product = $this->createProduct();

@@ -139,7 +139,7 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function removeOptionSet(OptionGroupInterface $optionGroup)
+    public function removeOptionGroup(OptionGroupInterface $optionGroup)
     {
         foreach ($this->$optionGroup as $key => $options) {
             if ($options == $optionGroup) {

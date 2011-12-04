@@ -12,7 +12,7 @@ use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
-use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
+use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
