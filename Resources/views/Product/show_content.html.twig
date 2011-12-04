@@ -7,6 +7,10 @@
         {% endfor %}
         {% endfor %}
     </p>
+    <p>Option Groups: {% for optionGroup in product.options %}
+        {{ optionGroup.name }}<br />
+        {% endfor %}
+    </p>
     <p>Features: {% for feature in product.features %}
          {{ feature.type }} - {{ feature.name }}<br />
         {% endfor %}
