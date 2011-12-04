@@ -42,7 +42,7 @@ abstract class ProductTestCommon extends WebTestCase
         $product = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Product');
         return $product;
     }
-    
+
     protected function createProductIdentifierSet()
     {
         $pis = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array(), '', false);
@@ -50,20 +50,20 @@ abstract class ProductTestCommon extends WebTestCase
         return $pis;
     }
 
-    protected function createOption($type, $value)
+    protected function createOption($display, $type, $value)
     {
-        $option = $this->getMock(
-            'Vespolina\ProductBundle\Model\Option\Option',
-            array('getType', 'getValue'),
-            array('Vespolina\ProductBundle\Model\Option\OptionsSet')
-        );
-        $option->expects($this->any())
-             ->method('getType')
-             ->will($this->returnValue($type));
-        $option->expects($this->any())
-             ->method('getValue')
-             ->will($this->returnValue($value));
+        $option = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
+
+        $option->setType($type);
+        $option->setDisplay($display);
+        $option->setValue($value);
 
         return $option;
+    }
+
+    protected function createOptionGroup()
+    {
+        $og = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup');
+        return $og;
     }
 }
