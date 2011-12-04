@@ -14,8 +14,8 @@ use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
-use Vespolina\ProductBundle\Model\Option\OptionSet;
-use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
+use Vespolina\ProductBundle\Model\Option\OptionGroup;
+use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -131,18 +131,18 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function addOptionSet(OptionSetInterface $optionSet)
+    public function addOptionGroups(OptionGroupInterface $optionGroup)
     {
-        $this->options[] = $optionSet;
+        $this->options[] = $optionGroup;
     }
 
     /**
      * @inheritdoc
      */
-    public function removeOptionSet(OptionSetInterface $optionSet)
+    public function removeOptionSet(OptionGroupInterface $optionGroup)
     {
-        foreach ($this->optionSet as $key => $options) {
-            if ($options == $optionSet) {
+        foreach ($this->$optionGroup as $key => $options) {
+            if ($options == $optionGroup) {
                 unset($this->options[$key]);
                 return;
             }
