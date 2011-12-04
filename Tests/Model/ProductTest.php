@@ -21,10 +21,35 @@ class ProductTest extends ProductTestCommon
     {
         $product = $this->createProduct();
 
-        $product->addOptionGroup();
+        $productOptions = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'options');
+        $productOptions->setAccessible(true);
+
+        $ogSize = $this->createOptionGroup();
+        $ogSize->setName('size');
+        $product->addOptionGroup($ogSize);
+
+        $options = $productOptions->getValue($product);
+        $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');
+        $this->assertSame($ogSize, $options['size']);
+
+        $product->removeOptionGroup('size');
+        $options = $productOptions->getValue($product);
+        $this->assertEmpty($options, 'nothing should be left');
+
+        $product->addOptionGroup($ogSize);
+        $ogColor = $this->createOptionGroup();
+        $ogColor->setName('color');
+        $product->addOptionGroup($ogColor);
+        $options = array($ogColor, $ogSize);
+
         $product->setOptionGroups($options);
-        $product->removeGroupSet();
-        $product->getOptions();
+        $options = $productOptions->getValue($product);
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');
+        $this->assertArrayHasKey('color', $options, 'the options should be stored with the type as the key');
+
+        $productOptions = $product->getOptions();
+        $this->assertSame($options, $productOptions);
     }
 
     public function testProductFeatures()
