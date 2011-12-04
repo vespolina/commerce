@@ -40,9 +40,19 @@ class ProductTest extends ProductTestCommon
         $ogColor = $this->createOptionGroup();
         $ogColor->setName('color');
         $product->addOptionGroup($ogColor);
-        $options = array($ogColor, $ogSize);
 
+        $options = $productOptions->getValue($product);
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');
+        $this->assertArrayHasKey('color', $options, 'the options should be stored with the type as the key');
+
+        $product->clearOptions();
+        $options = $productOptions->getValue($product);
+        $this->assertEmpty($options);
+
+        $options = array($ogColor, $ogSize);
         $product->setOptionGroups($options);
+
         $options = $productOptions->getValue($product);
         $this->assertCount(2, $options);
         $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');

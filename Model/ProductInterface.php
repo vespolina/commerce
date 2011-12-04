@@ -108,9 +108,15 @@ interface ProductInterface
     /**
      * Remove an options set from the product
      *
-     * @param Vespolina\ProductBundle\Option\OptionGroupInterface $optionGroup
+     * @param string name of group $name
      */
-    public function removeGroupSet(OptionGroupInterface $optionGroup);
+    public function removeOptionGroup($name);
+
+    /**
+     * Remove the option groups from the project
+     *
+     */
+    public function clearOptions();
 
     /**
      * Return the options of the product
