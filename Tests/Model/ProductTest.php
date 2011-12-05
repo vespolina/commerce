@@ -51,7 +51,7 @@ class ProductTest extends ProductTestCommon
         $this->assertEmpty($options);
 
         $options = array($ogColor, $ogSize);
-        $product->setOptionGroups($options);
+        $product->setOptions($options);
 
         $options = $productOptions->getValue($product);
         $this->assertCount(2, $options);

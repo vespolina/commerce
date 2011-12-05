@@ -91,13 +91,6 @@ interface ProductInterface
     public function getName();
 
     /**
-     * Set the options of the product to an option set
-     *
-     * @param array of Vespolina\ProductBundle\Node\OptionGroupInterface $optionGroup
-     */
-    public function setOptionGroups($optionGroups);
-
-    /**
      * Add an option set to the product
      *
      * @param Vespolina\ProductBundle\Option\OptionGroupInterface $optionGroup
@@ -111,6 +104,13 @@ interface ProductInterface
      * @param string name of group $name
      */
     public function removeOptionGroup($name);
+
+    /**
+     * Set the options of the product to an option set
+     *
+     * @param array of Vespolina\ProductBundle\Node\OptionGroupInterface $optionGroup
+     */
+    public function setOptions($options);
 
     /**
      * Remove the option groups from the project

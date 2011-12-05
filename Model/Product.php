@@ -114,16 +114,6 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setOptionGroups($optionGroups)
-    {
-        foreach ($optionGroups as $optionGroup) {
-            $this->addOptionGroup($optionGroup);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function addOptionGroup(OptionGroupInterface $optionGroup)
     {
         $this->options[$optionGroup->getName()] = $optionGroup;
@@ -135,6 +125,16 @@ abstract class Product implements ProductInterface
     public function removeOptionGroup($name)
     {
         unset($this->options[$name]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setOptions($optionGroups)
+    {
+        foreach ($optionGroups as $optionGroup) {
+            $this->addOptionGroup($optionGroup);
+        }
     }
 
     /**
