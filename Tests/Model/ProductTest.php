@@ -10,7 +10,6 @@ namespace Vespolina\ProductBundle\Tests\Model;
 use Vespolina\ProductBundle\Model\Product;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Identifier\Identifier;
-use Vespolina\ProductBundle\Model\Option\OptionSet;
 use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 /**
@@ -18,24 +17,49 @@ use Vespolina\ProductBundle\Tests\ProductTestCommon;
  */
 class ProductTest extends ProductTestCommon
 {
-    public function testOptionSet()
+    public function testOptionGroups()
     {
-        $this->markTestSkipped('Option behavior has changed');
         $product = $this->createProduct();
 
-        $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Option\Option', array('getType', 'getValue'));
-        $sizeLgOption->expects($this->any())
-                 ->method('getType')
-                 ->will($this->returnValue('size'));
-        $sizeLgOption->expects($this->any())
-                 ->method('getValue')
-                 ->will($this->returnValue('large'));
-        $product->addOption($sizeLgOption);
-        $this->assertSame(
-            $sizeLgOption,
-            $product->getOptions()->getOption('size', 'large'),
-            'addOption hands option off to OptionsSet'
-        );
+        $productOptions = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'options');
+        $productOptions->setAccessible(true);
+
+        $ogSize = $this->createOptionGroup();
+        $ogSize->setName('size');
+        $product->addOptionGroup($ogSize);
+
+        $options = $productOptions->getValue($product);
+        $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');
+        $this->assertSame($ogSize, $options['size']);
+
+        $product->removeOptionGroup('size');
+        $options = $productOptions->getValue($product);
+        $this->assertEmpty($options, 'nothing should be left');
+
+        $product->addOptionGroup($ogSize);
+        $ogColor = $this->createOptionGroup();
+        $ogColor->setName('color');
+        $product->addOptionGroup($ogColor);
+
+        $options = $productOptions->getValue($product);
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');
+        $this->assertArrayHasKey('color', $options, 'the options should be stored with the type as the key');
+
+        $product->clearOptions();
+        $options = $productOptions->getValue($product);
+        $this->assertEmpty($options);
+
+        $options = array($ogColor, $ogSize);
+        $product->setOptions($options);
+
+        $options = $productOptions->getValue($product);
+        $this->assertCount(2, $options);
+        $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');
+        $this->assertArrayHasKey('color', $options, 'the options should be stored with the type as the key');
+
+        $productOptions = $product->getOptions();
+        $this->assertSame($options, $productOptions);
     }
 
     public function testProductFeatures()

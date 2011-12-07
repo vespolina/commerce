@@ -12,7 +12,7 @@ use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
-use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
+use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -91,36 +91,37 @@ interface ProductInterface
     public function getName();
 
     /**
-     * Set the options of the product to an option set
-     *
-     * @param Vespolina\ProductBundle\Node\OptionSetInterface $options
-     */
-    public function setOptions($options);
-
-    /**
-     * Add options to the product
-     */
-    public function addOptions($option);
-
-    /**
      * Add an option set to the product
      *
-     * @param Vespolina\ProductBundle\Option\OptionSetInterface $optionSet
+     * @param Vespolina\ProductBundle\Option\OptionGroupInterface $optionGroup
      *
      */
-    public function addOptionSet(OptionSetInterface $optionSet);
+    public function addOptionGroup(OptionGroupInterface $optionGroup);
 
     /**
      * Remove an options set from the product
      *
-     * @param Vespolina\ProductBundle\Option\OptionSetInterface $optionSet
+     * @param string name of group $name
      */
-    public function removeOptionSet(OptionSetInterface $optionSet);
+    public function removeOptionGroup($name);
+
+    /**
+     * Set the options of the product to an option set
+     *
+     * @param array of Vespolina\ProductBundle\Node\OptionGroupInterface $optionGroup
+     */
+    public function setOptions($options);
+
+    /**
+     * Remove the option groups from the project
+     *
+     */
+    public function clearOptions();
 
     /**
      * Return the options of the product
      *
-     * @return array of Vespolina\ProductBundle\Option\OptionSetInterface
+     * @return array of Vespolina\ProductBundle\Option\OptionGroupInterface
      */
     public function getOptions();
 

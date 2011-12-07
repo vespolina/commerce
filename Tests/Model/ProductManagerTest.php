@@ -12,7 +12,6 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Vespolina\ProductBundle\Model\Product;
-use Vespolina\ProductBundle\Model\Option\OptionSet;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
 
 /**
@@ -27,7 +26,6 @@ class ProductManagerTest extends WebTestCase
     {
         $this->mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');
         $this->product = $this->getMockforAbstractClass('Vespolina\ProductBundle\Model\Product');
-        //Product(new OptionSet())
     }
 
     public function testSearchForProductByIdentifier()

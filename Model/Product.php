@@ -14,8 +14,7 @@ use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
-use Vespolina\ProductBundle\Model\Option\OptionSet;
-use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
+use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -115,38 +114,35 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setOptions($options)
+    public function addOptionGroup(OptionGroupInterface $optionGroup)
     {
-        $this->options = $options;
+        $this->options[$optionGroup->getName()] = $optionGroup;
     }
 
     /**
      * @inheritdoc
      */
-    public function addOptions($options)
+    public function removeOptionGroup($name)
     {
-        $this->options = array_merge($this->options, $options);
+        unset($this->options[$name]);
     }
 
     /**
      * @inheritdoc
      */
-    public function addOptionSet(OptionSetInterface $optionSet)
+    public function setOptions($optionGroups)
     {
-        $this->options[] = $optionSet;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function removeOptionSet(OptionSetInterface $optionSet)
-    {
-        foreach ($this->optionSet as $key => $options) {
-            if ($options == $optionSet) {
-                unset($this->options[$key]);
-                return;
-            }
+        foreach ($optionGroups as $optionGroup) {
+            $this->addOptionGroup($optionGroup);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function clearOptions()
+    {
+       $this->options = null;
     }
 
     /**

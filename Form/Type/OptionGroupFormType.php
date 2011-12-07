@@ -9,25 +9,19 @@ namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Vespolina\ProductBundle\Form\Type\ConfiguredOptionGroupFormType;
 
-class OptionGroupFormType extends AbstractType
+class OptionGroupFormType extends ConfiguredOptionGroupFormType
 {
-    protected $dataClass;
-
     public function __construct($dataClass)
     {
-        $this->dataClass = $dataClass;
+        parent::__construct($dataClass);
     }
-    
+
     public function buildForm(FormBuilder $builder, array $options)
     {
+        parent::buildForm($builder, $options);
         $builder
-            ->add('name', 'text', array(
-                'required' => false,
-            ))
-            ->add('display', 'text', array(
-                'required' => false,
-            ))
             ->add('required', 'checkbox', array(
                 'value'    => true,
                 'required' => false,
@@ -43,11 +37,9 @@ class OptionGroupFormType extends AbstractType
         ;
     }
 
-    public function getDefaultOptions(array $options)
+    function getParent(array $options)
     {
-        return array(
-            'data_class' => $this->dataClass,
-        );
+        return 'vespolina_product_configured_option_group';
     }
 
     function getName()

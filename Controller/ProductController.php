@@ -43,7 +43,7 @@ class ProductController extends ContainerAware
         if (!$product) {
             throw new NotFoundHttpException('The product does not exist!');
         }
-        
+
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:show.html.'.$this->getEngine(), array('product' => $product));
     }
 
@@ -72,9 +72,10 @@ class ProductController extends ContainerAware
         $form->setData($product);
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
-            'form'     => $form->createView(),
-            'id'       => $id,
-            'medium'   => $product->getMedia(),
+            'form'                   => $form->createView(),
+            'id'                     => $id,
+            'medium'                 => $product->getMedia(),
+            'configuredOptionGroups' => $this->getConfiguredOptionsGroups(),
         ));
     }
 
@@ -106,8 +107,9 @@ class ProductController extends ContainerAware
         $form = $this->container->get('vespolina.product.form');
 
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
-            'form' => $form->createView()
-        ));
+            'form'                   => $form->createView(),
+            'configuredOptionGroups' => $this->getConfiguredOptionsGroups(),
+       ));
     }
 
     /**
@@ -133,6 +135,17 @@ class ProductController extends ContainerAware
         ));
     }
 
+    protected function getConfiguredOptionsGroups()
+    {
+        $groupData = array();
+        foreach ($this->container->get('vespolina.product.admin_manager')->findOptionGroupsData() as $optionGroup) {
+            $id = (string)$optionGroup['_id'];
+            unset($optionGroup['_id']);
+            $groupData[$id] = $optionGroup;
+        }
+        return $groupData;
+    }
+
     protected function setFlash($action, $value)
     {
         $this->container->get('session')->setFlash($action, $value);
@@ -141,7 +154,7 @@ class ProductController extends ContainerAware
     protected function getEngine()
     {
         return 'twig'; // HACK ALERT!
-//        return $this->container->getParameter('vespolina.template.engine');
+// todo:        return $this->container->getParameter('vespolina_product.template.engine');
     }
 
     protected function getProductFormOptions()

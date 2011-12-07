@@ -8,10 +8,9 @@
 namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 use Symfony\Component\Form\FormBuilder;
 
-class OptionSetFormType extends AbstractType
+class ConfiguredOptionGroupFormType extends AbstractType
 {
     protected $dataClass;
 
@@ -23,15 +22,20 @@ class OptionSetFormType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('option_groups', 'collection', array(
-                'type'           => 'vespolina_option_group',
+            ->add('name', 'text', array(
+                'required' => false,
+            ))
+            ->add('display', 'text', array(
+                'required' => false,
+            ))
+            ->add('options', 'collection', array(
+                'type'           => 'vespolina_configured_option',
                 'allow_add'      => true,
                 'allow_delete'   => true,
                 'required'       => false,
+                'prototype_name' => 'option',
                 'by_reference'   => false,
-                'prototype_name' => 'group',
             ))
-            ->add('identifier_set', 'vespolina_identifier_set')
         ;
     }
 
@@ -44,6 +48,6 @@ class OptionSetFormType extends AbstractType
 
     function getName()
     {
-        return 'vespolina_product_option_set';
+        return 'vespolina_product_configured_option_group';
     }
 }

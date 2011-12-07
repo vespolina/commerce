@@ -4,10 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Application\Vespolina\ProductBundle\Document\Product" collection="vespolinaProduct">
+    <embedded-document name="Application\Vespolina\ProductBundle\Document\OptionGroup">
         <field name="id" id="true" />
-
-        <embed-many target-document="Vespolina\ProductBundle\Document\OptionGroup" field="options" fieldName="options" strategy="set" />
-        <embed-one target-document="Vespolina\ProductBundle\Document\ProductIdentifierSet" field="primaryIdentifierSet" fieldName="primaryIdentifierSet" />
-    </document>
+    </embedded-document>
 </doctrine-mongo-mapping>
