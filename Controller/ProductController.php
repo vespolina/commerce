@@ -74,7 +74,6 @@ class ProductController extends ContainerAware
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
             'form'                   => $form->createView(),
             'id'                     => $id,
-            'medium'                 => $product->getMedia(),
             'configuredOptionGroups' => $this->getConfiguredOptionsGroups(),
         ));
     }
