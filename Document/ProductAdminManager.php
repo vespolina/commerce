@@ -37,6 +37,27 @@ class ProductAdminManager extends BaseProductAdminManager
     /**
      * @inheritdoc
      */
+    public function findOptionGroupsData(array $orderBy = null, $limit = null, $offset = null)
+    {
+        $qb = $this->dm->createQueryBuilder($this->optionGroupClass);
+        $qb->hydrate(false);
+        if($limit) {
+            $qb->limit($limit);
+        }
+        if($offset) {
+            $qb->skip($offset);
+        }
+        if($orderBy) {
+            $qb->sort(key($orderBy), $orderBy);
+        }
+
+        return $qb->getQuery()
+            ->execute();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function findOptionGroupById($id)
     {
         return $this->optionGroupRepo->find($id);

@@ -71,13 +71,11 @@ class ProductController extends ContainerAware
         $form = $this->container->get('vespolina.product.form');
         $form->setData($product);
 
-        $configuredOptionGroups = $this->container->get('vespolina.product.admin_manager')->findOptionGroupsBy();
-$a  = 0;
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:edit.html.'.$this->getEngine(), array(
             'form'                   => $form->createView(),
             'id'                     => $id,
             'medium'                 => $product->getMedia(),
-            'configuredOptionGroups' => $configuredOptionGroups,
+            'configuredOptionGroups' => $this->getConfiguredOptionsGroups(),
         ));
     }
 
@@ -108,11 +106,9 @@ $a  = 0;
     {
         $form = $this->container->get('vespolina.product.form');
 
-        $configuredOptionGroups = json_encode($this->container->get('vespolina.product.admin_manager')->findOptionGroupsData());
-        $a = 0;
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
             'form'                   => $form->createView(),
-            'configuredOptionGroups' => $configuredOptionGroups,
+            'configuredOptionGroups' => $this->getConfiguredOptionsGroups(),
        ));
     }
 
@@ -139,6 +135,17 @@ $a  = 0;
         ));
     }
 
+    protected function getConfiguredOptionsGroups()
+    {
+        $groupData = array();
+        foreach ($this->container->get('vespolina.product.admin_manager')->findOptionGroupsData() as $optionGroup) {
+            $id = (string)$optionGroup['_id'];
+            unset($optionGroup['_id']);
+            $groupData[$id] = $optionGroup;
+        }
+        return $groupData;
+    }
+
     protected function setFlash($action, $value)
     {
         $this->container->get('session')->setFlash($action, $value);
@@ -147,7 +154,7 @@ $a  = 0;
     protected function getEngine()
     {
         return 'twig'; // HACK ALERT!
-// todo:        return $this->container->getParameter('vespolina.template.engine');
+// todo:        return $this->container->getParameter('vespolina_product.template.engine');
     }
 
     protected function getProductFormOptions()
