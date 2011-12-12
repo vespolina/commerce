@@ -9,6 +9,7 @@
 namespace Vespolina\ProductBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
@@ -116,7 +117,10 @@ abstract class Product implements ProductInterface
      */
     public function addOptionGroup(OptionGroupInterface $optionGroup)
     {
-        $this->options[$optionGroup->getName()] = $optionGroup;
+        if (!$this->options instanceof Collection) {
+            $this->options = new ArrayCollection();
+        }
+        $this->options->add($optionGroup);
     }
 
     /**
@@ -124,7 +128,12 @@ abstract class Product implements ProductInterface
      */
     public function removeOptionGroup($name)
     {
-        unset($this->options[$name]);
+        foreach ($this->options as $key => $option) {
+            if ($option->getName() == $name) {
+                $this->options->remove($key);
+                return;
+            }
+        }
     }
 
     /**
@@ -132,6 +141,7 @@ abstract class Product implements ProductInterface
      */
     public function setOptions($optionGroups)
     {
+        $this->clearOptions();
         foreach ($optionGroups as $optionGroup) {
             $this->addOptionGroup($optionGroup);
         }
@@ -142,7 +152,7 @@ abstract class Product implements ProductInterface
      */
     public function clearOptions()
     {
-       $this->options = null;
+       $this->options = new ArrayCollection();
     }
 
     /**

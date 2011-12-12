@@ -29,12 +29,12 @@ class ProductTest extends ProductTestCommon
         $product->addOptionGroup($ogSize);
 
         $options = $productOptions->getValue($product);
-        $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');
-        $this->assertSame($ogSize, $options['size']);
+        $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $options, 'the options should be stored as a Doctrine collection');
+        $this->assertTrue($options->contains($ogSize), 'the options should be stored in the collection');
 
         $product->removeOptionGroup('size');
         $options = $productOptions->getValue($product);
-        $this->assertEmpty($options, 'nothing should be left');
+        $this->assertTrue($options->isEmpty(), 'nothing should be left');
 
         $product->addOptionGroup($ogSize);
         $ogColor = $this->createOptionGroup();
@@ -43,23 +43,20 @@ class ProductTest extends ProductTestCommon
 
         $options = $productOptions->getValue($product);
         $this->assertCount(2, $options);
-        $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');
-        $this->assertArrayHasKey('color', $options, 'the options should be stored with the type as the key');
+        $this->assertTrue($options->contains($ogSize), 'the options should be stored in the collection');
+        $this->assertTrue($options->contains($ogColor), 'the options should be stored in the collection');
 
         $product->clearOptions();
         $options = $productOptions->getValue($product);
-        $this->assertEmpty($options);
+        $this->assertTrue($options->isEmpty());
 
         $options = array($ogColor, $ogSize);
         $product->setOptions($options);
 
         $options = $productOptions->getValue($product);
         $this->assertCount(2, $options);
-        $this->assertArrayHasKey('size', $options, 'the options should be stored with the type as the key');
-        $this->assertArrayHasKey('color', $options, 'the options should be stored with the type as the key');
-
-        $productOptions = $product->getOptions();
-        $this->assertSame($options, $productOptions);
+        $this->assertTrue($options->contains($ogSize), 'the options should be stored in the collection');
+        $this->assertTrue($options->contains($ogColor), 'the options should be stored in the collection');
     }
 
     public function testProductFeatures()
