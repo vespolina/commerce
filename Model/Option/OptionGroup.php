@@ -43,8 +43,7 @@ abstract class OptionGroup implements OptionGroupInterface
         if ($this->name != $option->getType()) {
             throw new \UnexpectedValueException(sprintf('All OptionsNodes in this type must be %s', $this->name));
         }
-        $value = $option->getValue();
-        $this->options[$value] = $option;
+        $this->options->add($option);
     }
 
     /**
@@ -100,8 +99,7 @@ abstract class OptionGroup implements OptionGroupInterface
      */
     public function removeOption(OptionInterface $option)
     {
-        $value = $option->getValue();
-        $this->option->remove($value);
+        $this->option->remove($option);
     }
 
     /**
