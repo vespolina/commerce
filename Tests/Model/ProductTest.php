@@ -83,47 +83,41 @@ class ProductTest extends ProductTestCommon
 
     public function testProductIdentities()
     {
-        $this->markTestSkipped('ProductIdentifierSet behavior has changed');
-
         $product = $this->createProduct();
-
-        $identifierSet = $this->createProductIdentifierSet('test123');
-
-        $product->addIdentifierSet('test123', $identifierSet);
+        $identifierSets = $product->getIdentifierSets();
+        $this->assertCount(1, $identifierSets, 'there should be a single default identifier set');
         $this->assertInstanceOf(
             'Doctrine\Common\Collections\ArrayCollection',
-            $product->getIdentifiers(),
-            'the identifiers should be stored in an ArrayCollection'
+            $identifierSets,
+            'the identifierSets should be stored in an ArrayCollection'
         );
+        $identifierSet = $identifierSets->first();
+        $this->assertSame('primary', $identifierSet->getType(), 'default identifier set should before the primary identifier');
 
-        $this->assertSame(
-            $identifierSet,
-            $product->getIdentifierSet('test123'),
-            'the identifier should be returned by the key'
-        );
+        $identifierSet = $product->getIdentifierSet();
+        $this->assertSame('primary', $identifierSet->getType(), 'no parameter passed to getIdentifierSet should return the primary identifier');
 
-        $product = $this->createProduct();
+        $identifier = $this->createProductIdentifier('abc', '123');
+        $product->addIdentifier($identifier);
 
-        $identifierSet = $this->createProductIdentifierSet('test123');
+        $optionIdentifierSet = $this->createProductIdentifierSet(array('color' => 'blue'));
+        $rc = new \ReflectionClass($product);
+        $rp = $rc->getProperty('identifiers');
+        $rp->setAccessible(true);
+        $identifiers = $rp->getValue($product);
+        $identifiers->add($optionIdentifierSet);
 
-        $product->addIdentifierSet('test123', $identifierSet);
+        $identifier = $this->createIdentifier('abc', 'blue');
+        $product->addIdentifier($identifier, array('color' => 'blue'));
 
-        $identifiers = array();
+        $identifierSet = $product->getIdentifierSet(array('color' => 'blue'));
+        $identifiers = $identifierSet->getIdentifiers();
+        $this->assertCount(2, $identifiers);
+        foreach ($identifiers as $identifier) {
+            if ($identifier->getType() != 'id' && $identifier->getType() != 'abc') {
+                $this->fail('unknown identifier set type');
+            }
+        }
 
-        $identifiers['abc'] = $this->createProductIdentifierSet('abc');
-        $identifiers['123'] = $this->createProductIdentifierSet('123');
-
-        $product->setIdentifiers($identifiers);
-        $this->assertInstanceOf(
-            'Doctrine\Common\Collections\ArrayCollection',
-            $product->getIdentifiers(),
-            'an array of IdentifierSets should be put into an ArrayCollection'
-        );
-
-        $this->assertEquals(
-            2,
-            $product->getIdentifiers()->count(),
-            'any identifier sets already in product are removed when setIdentifiers is called'
-        );
     }
 }
