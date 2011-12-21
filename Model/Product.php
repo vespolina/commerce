@@ -32,11 +32,19 @@ abstract class Product implements ProductInterface
     protected $createdAt;
     protected $description;
     protected $features;
-    protected $primaryIdentifierSet;
+    protected $identifiers;
     protected $name;
     protected $options;
     protected $type;
     protected $updateAt;
+
+    public function __construct($identifierSetClass)
+    {
+        $this->identifierSetClass = $identifierSetClass;
+        $this->identifiers = new ArrayCollection();
+
+        $this->identifiers->set('primary', new $this->identifierSetClass());
+    }
 
     /**
      * @inheritdoc
@@ -161,6 +169,23 @@ abstract class Product implements ProductInterface
     public function getOptions()
     {
         return $this->options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentifierSets()
+    {
+        return $this->identifiers;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentifierSet($target = null)
+    {
+        $key = $target ? $this->generateKeyFromOptions($target) : 'primary';
+        return $this->identifiers->get($key);
     }
 
     /**

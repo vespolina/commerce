@@ -126,6 +126,22 @@ interface ProductInterface
     public function getOptions();
 
     /**
+     * Return the identifier set generated from the option choices
+     *
+     * @return array of Vespolina\ProductBundle\Option\ProductIdentifierSetInterface
+     */
+    public function getIdentifierSets();
+
+    /**
+     * Return an identifier set for the option set combination
+     *
+     * @param array (optional) option set or null returns primary
+     *
+     * @return Vespolina\ProductBundle\Option\ProductIdentifierSetInterface
+     */
+    public function getIdentifierSet($target = null);
+
+    /**
      * Use a different name or different technique
      *
      * These are valid types of products
