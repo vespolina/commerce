@@ -84,6 +84,9 @@ class ProductTest extends ProductTestCommon
     public function testProductIdentities()
     {
         $product = $this->createProduct();
+        $productIdentifiers = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
+        $productIdentifiers->setAccessible(true);
+
         $identifierSets = $product->getIdentifierSets();
         $this->assertCount(1, $identifierSets, 'there should be a single default identifier set');
         $this->assertInstanceOf(
@@ -91,20 +94,17 @@ class ProductTest extends ProductTestCommon
             $identifierSets,
             'the identifierSets should be stored in an ArrayCollection'
         );
-        $identifierSet = $identifierSets->first();
-        $this->assertSame('primary', $identifierSet->getType(), 'default identifier set should before the primary identifier');
+        $this->assertTrue($identifierSets->containsKey('primary'), 'default identifier set should before the primary identifier');
 
         $identifierSet = $product->getIdentifierSet();
-        $this->assertSame('primary', $identifierSet->getType(), 'no parameter passed to getIdentifierSet should return the primary identifier');
+        $this->assertSame('primary', $identifierSet->getKey(), 'no parameter passed to getIdentifierSet should return the primary identifier');
 
         $identifier = $this->createProductIdentifier('abc', '123');
         $product->addIdentifier($identifier);
 
         $optionIdentifierSet = $this->createProductIdentifierSet(array('color' => 'blue'));
-        $rc = new \ReflectionClass($product);
-        $rp = $rc->getProperty('identifiers');
-        $rp->setAccessible(true);
-        $identifiers = $rp->getValue($product);
+
+        $identifiers = $productIdentifiers->getValue($product);
         $identifiers->add($optionIdentifierSet);
 
         $identifier = $this->createIdentifier('abc', 'blue');
@@ -119,5 +119,97 @@ class ProductTest extends ProductTestCommon
             }
         }
 
+        $this->assertTrue($identifierSet->isActive(), 'active status should default to true');
+        $identifierSet->setActive(false);
+        $this->assertFalse($identifierSet->isActive(), 'active status should no longer be true');
+
+    }
+
+    public function testOptionIdentities()
+    {
+        $product = $this->createProduct();
+
+        $pi = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
+        $pi->setAccessible(true);
+
+        $ogSize = $this->createOptionGroup('size');
+
+        $ogSize->addOption($this->createOption('extra large', 'size', 'sizeXl'));
+        $product->addOptionGroup($ogSize);
+
+        $identifiers = $pi->getValue($product);
+
+        $this->assertCount(2, $identifiers, 'you should have a primary identifier and a sizeXL identifier');
+
+        $sizeIdentifierSet = $identifiers->get('size:sizeXL;');
+        $optionSet = $sizeIdentifierSet->getOptionSet();
+        $this->assertInternalType('array', $optionSet);
+        $this->assertArrayHasKey('size');
+        $this->assertSame('sizeXL', $optionSet['size']);
+
+        $identifierTypes = $sizeIdentifierSet->getIdentifierTypes();
+        $this->assertCount(1, $identifierTypes);
+        $this->assertSame('_id', $identifierTypes[0]);
+
+        $product->clearOptions();
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(0, $identifiers->count());
+
+        $ogSize->addOption($this->createOption('large', 'size', 'sizeLG'));
+
+        $ogColor = $this->createOptionGroup('color');
+        $ogColor->addOption($this->createOption('red', 'color', 'colorRD'));
+        $ogColor->addOption($this->createOption('blue', 'color', 'colorBL'));
+
+        $options = array($ogSize, $ogColor);
+
+        $product->setOptions($options);
+
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(5, $identifiers->count());
+        $largeBlue = $identifiers->get('color:colorBL;size:sizeLG;');
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $largeBlue);
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorBL;size:sizeXL;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeLG;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeXL;'));
+
+        $largeBlue->addIdentifier($this->createIdentifier('abc', '123'));
+        $product->setOptions($options);
+        $preservedIdentifiers = $product->getIdentifier(array('color' => 'colorBL', 'size' => 'sizeXL'));
+        $this->assertInArray('abc', $preservedIdentifiers->getIdentifierTypes(), 'existing options should be preserved when options are set (used by Form)');
+
+        $ogMaterial = $this->createOptionGroup('material');
+        $ogMaterial->addOption($this->createOption('iron', 'material', 'materialIron'));
+        $ogMaterial->addOption($this->createOption('mithril', 'material', 'materialMithril'));
+
+        $product->addOptionGroup($ogMaterial);
+
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(9, $identifiers->count());
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorBL;size:sizeLG;material:materialIron;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorBL;size:sizeXL;material:materialIron;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeLG;material:materialIron;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeXL;material:materialIron;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorBL;size:sizeLG;material:materialMithril;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorBL;size:sizeXL;material:materialMithril;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeLG;material:materialMithril;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeXL;material:materialMithril;'));
+
+        $product->removeOptionGroup($ogMaterial);
+
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(5, $identifiers->count(), 'removing the material options should make the number of identifier goes back');
+
+        $ogSize->addOption($this->createOption('small', 'size', 'sizeSM'));
+
+        $product->processIdentities();
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(7, $identifiers->count(), 'add option to group outside of product will not take affect until processed');
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorBL;size:sizeSM;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorBL;size:sizeLG;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorBL;size:sizeXL;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeSM;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeLG;'));
+        $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeXL;'));
     }
 }

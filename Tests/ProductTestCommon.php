@@ -61,9 +61,12 @@ abstract class ProductTestCommon extends WebTestCase
         return $option;
     }
 
-    protected function createOptionGroup()
+    protected function createOptionGroup($name = null)
     {
         $og = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup');
+        if ($name) {
+            $og->setName($name);
+        }
         return $og;
     }
 }
