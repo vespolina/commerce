@@ -17,7 +17,6 @@ abstract class ProductTestCommon extends WebTestCase
     protected function createFeature()
     {
         return $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Feature\Feature');
-
     }
 
     protected function createIdentifier($name, $code)
@@ -39,13 +38,33 @@ abstract class ProductTestCommon extends WebTestCase
 
     protected function createProduct()
     {
-        $product = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Product');
+        $product = $this->getMock('Vespolina\ProductBundle\Model\Product', array('createProductIdentifierSet'), array('ProductIdentifierSet'));
+        $product->expects($this->any())
+            ->method('createProductIdentifierSet')
+            ->withAnyParameters()
+            ->will($this->returnCallback(array($this, 'createProductIdentifierSetCallback')));
+
+        $pis = $this->createProductIdentifierSet(array('primary' => 'primary'));
+
+        $ip = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
+        $ip->setAccessible(true);
+        $identifiers = $ip->getValue($product);
+        $identifiers->set('primary:primary;', $pis);
+        $ip->setValue($product, $identifiers);
+
         return $product;
     }
 
-    protected function createProductIdentifierSet()
+    public function createProductIdentifierSetCallback()
     {
-        $pis = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array(), '', false);
+        $args = func_get_args();
+
+        return $this->createProductIdentifierSet($args[0]);
+    }
+
+    protected function createProductIdentifierSet($options)
+    {
+        $pis = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array($options), '', false);
 
         return $pis;
     }

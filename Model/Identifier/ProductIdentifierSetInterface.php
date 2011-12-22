@@ -53,4 +53,11 @@ interface ProductIdentifierSetInterface
      * @param IdentifierNodeInterface $identifier
      */
     public function removeIdentifier(IdentifierInterface $identifier);
+
+    /**
+     * Return the type of this identifier set
+     *
+     * @return array
+     */
+    public function getOptions();
 }

@@ -21,13 +21,6 @@ use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 interface ProductInterface
 {
     /**
-     * Return the system id for this product
-     *
-     * @return $id
-     */
-    public function getId();
-
-    /**
      * Set the description of the product
      *
      * @param $description
@@ -68,13 +61,6 @@ interface ProductInterface
      * @return identifiers
      */
     public function getPrimaryIdentifierSet();
-
-    /**
-     * Set the primary ProductIdentifierSet for this product
-     *
-     * @param ProductIdentifierSet $primaryIdentifierSet
-     */
-    public function setPrimaryIdentifierSet($primaryIdentifierSet);
 
     /**
      * Set the name of the product
@@ -126,9 +112,16 @@ interface ProductInterface
     public function getOptions();
 
     /**
+     * Return a new instance of the ProductIdentiferSet, based on the class passed into the Product from the constructor
+     *
+     * @return instance of Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
+     */
+    public function createProductIdentifierSet();
+
+    /**
      * Return the identifier set generated from the option choices
      *
-     * @return array of Vespolina\ProductBundle\Option\ProductIdentifierSetInterface
+     * @return array of Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
      */
     public function getIdentifierSets();
 
@@ -137,7 +130,7 @@ interface ProductInterface
      *
      * @param array (optional) option set or null returns primary
      *
-     * @return Vespolina\ProductBundle\Option\ProductIdentifierSetInterface
+     * @return Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
      */
     public function getIdentifierSet($target = null);
 

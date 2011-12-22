@@ -87,17 +87,17 @@ class ProductTest extends ProductTestCommon
         $productIdentifiers = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
         $productIdentifiers->setAccessible(true);
 
-        $identifierSets = $product->getIdentifierSets();
-        $this->assertCount(1, $identifierSets, 'there should be a single default identifier set');
+        $identifierSets = $productIdentifiers->getValue($product);
+        $this->assertSame(1, $identifierSets->count(), 'there should be a single default identifier set');
         $this->assertInstanceOf(
             'Doctrine\Common\Collections\ArrayCollection',
             $identifierSets,
             'the identifierSets should be stored in an ArrayCollection'
         );
-        $this->assertTrue($identifierSets->containsKey('primary'), 'default identifier set should before the primary identifier');
+        $this->assertTrue($identifierSets->containsKey('primary:primary;'), 'primary identifier should be set');
 
         $identifierSet = $product->getIdentifierSet();
-        $this->assertSame('primary', $identifierSet->getKey(), 'no parameter passed to getIdentifierSet should return the primary identifier');
+        $this->assertSame(array('primary' => 'primary'), $identifierSet->getOptions(), 'no parameter passed to getIdentifierSet should return the primary identifier');
 
         $identifier = $this->createProductIdentifier('abc', '123');
         $product->addIdentifier($identifier);
@@ -112,7 +112,7 @@ class ProductTest extends ProductTestCommon
 
         $identifierSet = $product->getIdentifierSet(array('color' => 'blue'));
         $identifiers = $identifierSet->getIdentifiers();
-        $this->assertCount(2, $identifiers);
+        $this->assertSame(2, $identifiers->count());
         foreach ($identifiers as $identifier) {
             if ($identifier->getType() != 'id' && $identifier->getType() != 'abc') {
                 $this->fail('unknown identifier set type');
@@ -122,7 +122,6 @@ class ProductTest extends ProductTestCommon
         $this->assertTrue($identifierSet->isActive(), 'active status should default to true');
         $identifierSet->setActive(false);
         $this->assertFalse($identifierSet->isActive(), 'active status should no longer be true');
-
     }
 
     public function testOptionIdentities()

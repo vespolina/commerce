@@ -16,6 +16,12 @@ use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
 {
     protected $identifiers;
+    protected $options;
+
+    public function __construct($options)
+    {
+        $this->options = $options;
+    }
 
     /*
      * @inheritdoc
@@ -58,7 +64,7 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
         $key = strtolower($key);
         return isset($this->identifiers[$key]) ? $this->identifiers[$key] : null;
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -78,7 +84,16 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
             }
         }
     }
-    
+
+    /**
+     * @inheritdoc
+     */
+
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
     public function __get($name)
     {
         if ($key = $this->getIdentifierKey($name)) {

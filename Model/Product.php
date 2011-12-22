@@ -43,7 +43,8 @@ abstract class Product implements ProductInterface
         $this->identifierSetClass = $identifierSetClass;
         $this->identifiers = new ArrayCollection();
 
-        $this->identifiers->set('primary', new $this->identifierSetClass());
+        $primaryIdentifierSet = $this->createProductIdentifierSet(array('primary' => 'primary'));
+        $this->identifiers->set('primary:primary;', $primaryIdentifierSet);
     }
 
     /**
@@ -91,9 +92,9 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setPrimaryIdentifierSet($identifiersSet)
+    public function createProductIdentifierSet()
     {
-        $this->primaryIdentifierSet = $identifiersSet;
+        return new $this->identifierSetClass;
     }
 
     /**
@@ -101,7 +102,7 @@ abstract class Product implements ProductInterface
      */
     public function getPrimaryIdentifierSet()
     {
-        return $this->primaryIdentifierSet;
+        return $this->identifiers->get('primary');
     }
 
     /**
@@ -129,6 +130,7 @@ abstract class Product implements ProductInterface
             $this->options = new ArrayCollection();
         }
         $this->options->add($optionGroup);
+        $this->processIdentities();
     }
 
     /**
@@ -184,7 +186,7 @@ abstract class Product implements ProductInterface
      */
     public function getIdentifierSet($target = null)
     {
-        $key = $target ? $this->generateKeyFromOptions($target) : 'primary';
+        $key = $target ? $this->generateKeyFromOptions($target) : 'primary:primary;';
         return $this->identifiers->get($key);
     }
 
@@ -218,6 +220,56 @@ abstract class Product implements ProductInterface
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function processIdentities()
+    {
+        $optionSet = array();
+        foreach ($this->options as $productOption) {
+            $options = $productOption->getOptions();
+            if ($options) {
+                $choices = array();
+                $name = $productOption->getName();
+                foreach($options as $option) {
+                    $choices[] = array($name => $option->getValue());
+                }
+                $optionSet[$name] = $choices;
+            }
+        }
+
+        ksort($optionSet);
+        if ($optionCombos = $this->extractOptionCombos($optionSet)) {
+            foreach ($optionCombos as $key => $combo) {
+                if (!$this->identifiers->containsKey($key)) {
+                    $this->identifiers->set($key, $this->createProductIdentifierSet($combo));
+                }
+            }
+        }
+    }
+
+    protected function extractOptionCombos($optionSet)
+    {
+        if ($curSet = array_shift($optionSet)) {
+            $combos = $this->extractOptionCombos($optionSet);
+            $return = array();
+            foreach ($curSet as $option) {
+                $optionType = key($option);
+                $key = sprintf('%s:%s;', $optionType, $option[$optionType]);
+                if ($combos) {
+                    foreach ($combos as $curKey => $curCombo) {
+                        $returnKey = $key . $curKey;
+                        $return[$returnKey] = array_merge($option, $curCombo);
+                    }
+                } else {
+                    $return[$key] = $option;
+                }
+            }
+            return $return;
+        }
+        return null;
     }
 
     public function incrementCreatedAt()
