@@ -25,56 +25,56 @@ interface ProductInterface
      *
      * @param $description
      */
-    public function setDescription($description);
+    function setDescription($description);
 
     /**
      * Return the description of the product
      *
      * @return string
      */
-    public function getDescription();
+    function getDescription();
 
     /**
      * Add a single feature to the product
      *
      * @param FeatureInterface $feature
      */
-    public function addFeature(FeatureInterface $feature);
+    function addFeature(FeatureInterface $feature);
 
     /**
      * Set the features of the product to a feature set
      *
      * @param $features
      */
-    public function setFeatures($features);
+    function setFeatures($features);
 
     /**
      * Return the features of the product
      *
      * @return ProductFeaturesInterface
      */
-    public function getFeatures();
+    function getFeatures();
 
     /**
      * Return the primary ProductIdentifierSet of the product
      *
      * @return identifiers
      */
-    public function getPrimaryIdentifierSet();
+    function getPrimaryIdentifierSet();
 
     /**
      * Set the name of the product
      *
      * @param $name
      */
-    public function setName($name);
+    function setName($name);
 
     /**
      * Return the name of the product
      *
      * @return string
      */
-    public function getName();
+    function getName();
 
     /**
      * Add an option set to the product
@@ -82,48 +82,48 @@ interface ProductInterface
      * @param Vespolina\ProductBundle\Option\OptionGroupInterface $optionGroup
      *
      */
-    public function addOptionGroup(OptionGroupInterface $optionGroup);
+    function addOptionGroup(OptionGroupInterface $optionGroup);
 
     /**
      * Remove an options set from the product
      *
      * @param string name of group $name
      */
-    public function removeOptionGroup($name);
+    function removeOptionGroup($name);
 
     /**
      * Set the options of the product to an option set
      *
      * @param array of Vespolina\ProductBundle\Node\OptionGroupInterface $optionGroup
      */
-    public function setOptions($options);
+    function setOptions($options);
 
     /**
      * Remove the option groups from the project
      *
      */
-    public function clearOptions();
+    function clearOptions();
 
     /**
      * Return the options of the product
      *
      * @return array of Vespolina\ProductBundle\Option\OptionGroupInterface
      */
-    public function getOptions();
+    function getOptions();
 
     /**
      * Return a new instance of the ProductIdentiferSet, based on the class passed into the Product from the constructor
      *
      * @return instance of Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
      */
-    public function createProductIdentifierSet();
+    function createProductIdentifierSet();
 
     /**
      * Return the identifier set generated from the option choices
      *
      * @return array of Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
      */
-    public function getIdentifierSets();
+    function getIdentifierSets();
 
     /**
      * Return an identifier set for the option set combination
@@ -132,7 +132,15 @@ interface ProductInterface
      *
      * @return Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
      */
-    public function getIdentifierSet($target = null);
+    function getIdentifierSet($target = null);
+
+    /**
+     * Add an identifier to an identifier set. No target adds identifier to primary.
+     *
+     * @param $identifier
+     * @param $target
+     */
+    function addIdentifier($identifier, $target = null);
 
     /**
      * Use a different name or different technique
@@ -152,25 +160,25 @@ interface ProductInterface
      *
      * @param $type
      */
-    public function setType($type);
+    function setType($type);
 
     /**
      * Get the product type.
      * @return type
      */
-    public function getType();
+    function getType();
 
     /*
      * Get the date and time the product was created
      *
      * @return \DateTime
      */
-    public function getCreatedAt();
+    function getCreatedAt();
 
     /*
      * Get the date and time the product was last updated
      *
      * @return \DateTime
      */
-    public function getUpdatedAt();
+    function getUpdatedAt();
 }

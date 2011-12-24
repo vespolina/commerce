@@ -15,11 +15,13 @@ use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
  */
 abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
 {
+    protected $active;
     protected $identifiers;
     protected $options;
 
     public function __construct($options)
     {
+        $this->active = true;
         $this->options = $options;
     }
 
@@ -88,10 +90,21 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
     /**
      * @inheritdoc
      */
-
     public function getOptions()
     {
         return $this->options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isActive($set = null)
+    {
+        if ($set !== null) {
+            $this->active = (boolean)$set;
+        }
+
+        return $this->active;
     }
 
     public function __get($name)

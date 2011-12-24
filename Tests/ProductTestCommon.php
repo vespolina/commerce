@@ -66,7 +66,22 @@ abstract class ProductTestCommon extends WebTestCase
     {
         $pis = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array($options), '', false);
 
+        $op = new \ReflectionProperty('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', 'options');
+        $op->setAccessible(true);
+        $op->setValue($pis, $options);
+
         return $pis;
+    }
+
+    protected function createProductIdentifier($type, $code)
+    {
+        $bi = $this->getMock('Vespolina\ProductBundle\Model\Identifier\BaseIdentifier', array('getName'));
+        $bi->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue($type));
+        $bi->setCode($code);
+
+        return $bi;
     }
 
     protected function createOption($display, $type, $value)

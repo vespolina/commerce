@@ -78,7 +78,6 @@ class ProductTest extends ProductTestCommon
         $features = $productFeatures->getValue($product);
         $this->assertArrayHasKey('label', $features, 'top level key is the type in lower case');
         $this->assertArrayHasKey('joat music', $features['label'], 'top level key is the search term in lower case');
-
     }
 
     public function testProductIdentities()
@@ -99,29 +98,12 @@ class ProductTest extends ProductTestCommon
         $identifierSet = $product->getIdentifierSet();
         $this->assertSame(array('primary' => 'primary'), $identifierSet->getOptions(), 'no parameter passed to getIdentifierSet should return the primary identifier');
 
-        $identifier = $this->createProductIdentifier('abc', '123');
-        $product->addIdentifier($identifier);
+        $identifierSet->isActive(false);
+        $this->assertFalse($identifierSet->isActive());
 
-        $optionIdentifierSet = $this->createProductIdentifierSet(array('color' => 'blue'));
-
-        $identifiers = $productIdentifiers->getValue($product);
-        $identifiers->add($optionIdentifierSet);
-
-        $identifier = $this->createIdentifier('abc', 'blue');
-        $product->addIdentifier($identifier, array('color' => 'blue'));
-
-        $identifierSet = $product->getIdentifierSet(array('color' => 'blue'));
-        $identifiers = $identifierSet->getIdentifiers();
-        $this->assertSame(2, $identifiers->count());
-        foreach ($identifiers as $identifier) {
-            if ($identifier->getType() != 'id' && $identifier->getType() != 'abc') {
-                $this->fail('unknown identifier set type');
-            }
-        }
-
-        $this->assertTrue($identifierSet->isActive(), 'active status should default to true');
-        $identifierSet->setActive(false);
-        $this->assertFalse($identifierSet->isActive(), 'active status should no longer be true');
+        $identifier = $this->createProductIdentifier('abc', 'blue');
+        $this->setExpectedException('\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException');
+        $product->addIdentifier($identifier, array('not' => 'available'));
     }
 
     public function testOptionIdentities()
@@ -133,7 +115,7 @@ class ProductTest extends ProductTestCommon
 
         $ogSize = $this->createOptionGroup('size');
 
-        $ogSize->addOption($this->createOption('extra large', 'size', 'sizeXl'));
+        $ogSize->addOption($this->createOption('extra large', 'size', 'sizeXL'));
         $product->addOptionGroup($ogSize);
 
         $identifiers = $pi->getValue($product);
@@ -210,5 +192,26 @@ class ProductTest extends ProductTestCommon
         $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeSM;'));
         $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeLG;'));
         $this->assertInstanceOf('Vespolina\Model\Identifiers\ProductIdentifierSet', $identifiers->get('color:colorRD;size:sizeXL;'));
+
+
+        $optionIdentifierSet = $this->createProductIdentifierSet(array('color' => 'blue'));
+
+        $identifiers = $pi->getValue($product);
+        $identifiers->set('color:blue;', $optionIdentifierSet);
+
+        $identifier = $this->createProductIdentifier('abc', 'blue');
+        $product->addIdentifier($identifier, array('color' => 'blue'));
+
+        $identifierSet = $product->getIdentifierSet(array('color' => 'blue'));
+
+        $identifiers = $identifierSet->getIdentifiers();
+
+        $this->assertSame(2, $identifiers->count());
+        foreach ($identifiers as $identifier) {
+            if ($identifier->getType() != 'id' && $identifier->getType() != 'abc') {
+                $this->fail('unknown identifier set type');
+            }
+        }
+
     }
 }

@@ -11,6 +11,8 @@ namespace Vespolina\ProductBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+
 use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
@@ -193,6 +195,24 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
+    public function addIdentifier($identifier, $target = null)
+    {
+        $key = $target ? $target : 'primary:primary;';
+        if (is_array($key)) {
+            $key = $this->createKeyFromOption($target);
+        }
+        if (!$idSet = $this->identifiers->get($key)) {
+            $optionGroup = key($target);
+            throw new ParameterNotFoundException(sprintf('There is not an option group %s with the option %s', $optionGroup, $target[$optionGroup]));
+        }
+        $idSet->addIdentifier($identifier);
+
+        $this->processIdentities();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setType($type)
     {
         $this->type = $type;
@@ -256,8 +276,7 @@ abstract class Product implements ProductInterface
             $combos = $this->extractOptionCombos($optionSet);
             $return = array();
             foreach ($curSet as $option) {
-                $optionType = key($option);
-                $key = sprintf('%s:%s;', $optionType, $option[$optionType]);
+                $key = $this->createKeyFromOption($option);
                 if ($combos) {
                     foreach ($combos as $curKey => $curCombo) {
                         $returnKey = $key . $curKey;
@@ -283,5 +302,12 @@ abstract class Product implements ProductInterface
     public function incrementUpdatedAt()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    protected function createKeyFromOption($option)
+    {
+        $optionGroup = key($option);
+
+        return sprintf('%s:%s;', $optionGroup, $option[$optionGroup]);
     }
 }

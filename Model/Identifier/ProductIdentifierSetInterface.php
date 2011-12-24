@@ -60,4 +60,13 @@ interface ProductIdentifierSetInterface
      * @return array
      */
     public function getOptions();
+
+    /**
+     * Return or set if this option set is active
+     *
+     * @param boolean optional sets the state
+     *
+     * @return boolean
+     */
+    public function isActive($set = null);
 }
