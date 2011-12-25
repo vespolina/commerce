@@ -40,6 +40,8 @@ interface ProductIdentifierSetInterface
      */
     public function getIdentifiers();
 
+    function getIdentifierTypes();
+
     /**
      * Add a collection of identifiers
      *

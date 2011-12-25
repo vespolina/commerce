@@ -132,17 +132,23 @@ abstract class Product implements ProductInterface
             $this->options = new ArrayCollection();
         }
         $this->options->add($optionGroup);
-        $this->processIdentities();
+        $this->identifiers = new ArrayCollection();
+        $this->processIdentifiers();
     }
 
     /**
      * @inheritdoc
      */
-    public function removeOptionGroup($name)
+    public function removeOptionGroup($group)
     {
+        if ($group instanceof OptionGroupInterface) {
+            $group = $group->getName();
+        }
         foreach ($this->options as $key => $option) {
-            if ($option->getName() == $name) {
+            if ($option->getName() == $group) {
                 $this->options->remove($key);
+                $this->identifiers = new ArrayCollection();
+                $this->processIdentifiers();
                 return;
             }
         }
@@ -153,10 +159,14 @@ abstract class Product implements ProductInterface
      */
     public function setOptions($optionGroups)
     {
+        $identifiers = $this->identifiers;
         $this->clearOptions();
+        $this->options = new ArrayCollection;
         foreach ($optionGroups as $optionGroup) {
-            $this->addOptionGroup($optionGroup);
+            $this->options->add($optionGroup);
         }
+        $this->identifiers = $identifiers;
+        $this->processIdentifiers();
     }
 
     /**
@@ -165,6 +175,7 @@ abstract class Product implements ProductInterface
     public function clearOptions()
     {
        $this->options = new ArrayCollection();
+       $this->identifiers = new ArrayCollection();
     }
 
     /**
@@ -188,7 +199,7 @@ abstract class Product implements ProductInterface
      */
     public function getIdentifierSet($target = null)
     {
-        $key = $target ? $this->generateKeyFromOptions($target) : 'primary:primary;';
+        $key = $target ? $this->createKeyFromOptions($target) : 'primary:primary;';
         return $this->identifiers->get($key);
     }
 
@@ -199,7 +210,7 @@ abstract class Product implements ProductInterface
     {
         $key = $target ? $target : 'primary:primary;';
         if (is_array($key)) {
-            $key = $this->createKeyFromOption($target);
+            $key = $this->createKeyFromOptions($target);
         }
         if (!$idSet = $this->identifiers->get($key)) {
             $optionGroup = key($target);
@@ -207,7 +218,7 @@ abstract class Product implements ProductInterface
         }
         $idSet->addIdentifier($identifier);
 
-        $this->processIdentities();
+        $this->processIdentifiers();
     }
 
     /**
@@ -245,7 +256,7 @@ abstract class Product implements ProductInterface
     /*
      * @inheritdoc
      */
-    public function processIdentities()
+    public function processIdentifiers()
     {
         $optionSet = array();
         foreach ($this->options as $productOption) {
@@ -276,7 +287,7 @@ abstract class Product implements ProductInterface
             $combos = $this->extractOptionCombos($optionSet);
             $return = array();
             foreach ($curSet as $option) {
-                $key = $this->createKeyFromOption($option);
+                $key = $this->createKeyFromOptions($option);
                 if ($combos) {
                     foreach ($combos as $curKey => $curCombo) {
                         $returnKey = $key . $curKey;
@@ -304,10 +315,13 @@ abstract class Product implements ProductInterface
         $this->updatedAt = new \DateTime();
     }
 
-    protected function createKeyFromOption($option)
+    protected function createKeyFromOptions($options)
     {
-        $optionGroup = key($option);
-
-        return sprintf('%s:%s;', $optionGroup, $option[$optionGroup]);
+        $key = '';
+        ksort($options);
+        foreach ($options as $optionGroup => $option) {
+            $key .= sprintf('%s:%s;', $optionGroup, $option);
+        }
+        return $key;
     }
 }
