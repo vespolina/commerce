@@ -7,6 +7,9 @@
  */
 namespace Vespolina\ProductBundle\Model\Option;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 
 /**
@@ -24,6 +27,9 @@ abstract class OptionGroup implements OptionGroupInterface
      */
     public function addOption(OptionInterface $option)
     {
+        if (!$this->options instanceof Collection) {
+            $this->options = new ArrayCollection();
+        }
         $optionType = $option->getType();
         if (!$this->name && !$optionType) {
             throw new \UnexpectedValueException('The OptionGroup must have the name set or the Option must have the group type set');
@@ -37,8 +43,7 @@ abstract class OptionGroup implements OptionGroupInterface
         if ($this->name != $option->getType()) {
             throw new \UnexpectedValueException(sprintf('All OptionsNodes in this type must be %s', $this->name));
         }
-        $value = $option->getValue();
-        $this->options[$value] = $option;
+        $this->options->add($option);
     }
 
     /**
@@ -46,7 +51,7 @@ abstract class OptionGroup implements OptionGroupInterface
      */
     public function clearOptions()
     {
-        $this->options = null;
+        $this->options = new ArrayCollection();
     }
 
     /**
@@ -83,7 +88,10 @@ abstract class OptionGroup implements OptionGroupInterface
      */
     public function setOptions($options)
     {
-        $this->options = $options;
+        $this->clearOptions();
+        foreach ($options as $option) {
+            $this->addOption($option);
+        }
     }
 
     /**
@@ -91,8 +99,7 @@ abstract class OptionGroup implements OptionGroupInterface
      */
     public function removeOption(OptionInterface $option)
     {
-        $value = $option->getValue();
-        unset($this->option[$value]);
+        $this->option->remove($option);
     }
 
     /**

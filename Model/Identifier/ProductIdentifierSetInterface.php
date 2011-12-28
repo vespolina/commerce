@@ -40,6 +40,8 @@ interface ProductIdentifierSetInterface
      */
     public function getIdentifiers();
 
+    function getIdentifierTypes();
+
     /**
      * Add a collection of identifiers
      *
@@ -53,4 +55,20 @@ interface ProductIdentifierSetInterface
      * @param IdentifierNodeInterface $identifier
      */
     public function removeIdentifier(IdentifierInterface $identifier);
+
+    /**
+     * Return the type of this identifier set
+     *
+     * @return array
+     */
+    public function getOptions();
+
+    /**
+     * Return or set if this option set is active
+     *
+     * @param boolean optional sets the state
+     *
+     * @return boolean
+     */
+    public function isActive($set = null);
 }

@@ -9,6 +9,9 @@
 namespace Vespolina\ProductBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
 use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
@@ -31,11 +34,20 @@ abstract class Product implements ProductInterface
     protected $createdAt;
     protected $description;
     protected $features;
-    protected $primaryIdentifierSet;
+    protected $identifiers;
     protected $name;
     protected $options;
     protected $type;
     protected $updateAt;
+
+    public function __construct($identifierSetClass)
+    {
+        $this->identifierSetClass = $identifierSetClass;
+        $this->identifiers = new ArrayCollection();
+
+        $primaryIdentifierSet = $this->createProductIdentifierSet(array('primary' => 'primary'));
+        $this->identifiers->set('primary:primary;', $primaryIdentifierSet);
+    }
 
     /**
      * @inheritdoc
@@ -82,9 +94,9 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setPrimaryIdentifierSet($identifiersSet)
+    public function createProductIdentifierSet()
     {
-        $this->primaryIdentifierSet = $identifiersSet;
+        return new $this->identifierSetClass;
     }
 
     /**
@@ -92,7 +104,7 @@ abstract class Product implements ProductInterface
      */
     public function getPrimaryIdentifierSet()
     {
-        return $this->primaryIdentifierSet;
+        return $this->identifiers->get('primary');
     }
 
     /**
@@ -116,15 +128,30 @@ abstract class Product implements ProductInterface
      */
     public function addOptionGroup(OptionGroupInterface $optionGroup)
     {
-        $this->options[$optionGroup->getName()] = $optionGroup;
+        if (!$this->options instanceof Collection) {
+            $this->options = new ArrayCollection();
+        }
+        $this->options->add($optionGroup);
+        $this->identifiers = new ArrayCollection();
+        $this->processIdentifiers();
     }
 
     /**
      * @inheritdoc
      */
-    public function removeOptionGroup($name)
+    public function removeOptionGroup($group)
     {
-        unset($this->options[$name]);
+        if ($group instanceof OptionGroupInterface) {
+            $group = $group->getName();
+        }
+        foreach ($this->options as $key => $option) {
+            if ($option->getName() == $group) {
+                $this->options->remove($key);
+                $this->identifiers = new ArrayCollection();
+                $this->processIdentifiers();
+                return;
+            }
+        }
     }
 
     /**
@@ -132,9 +159,14 @@ abstract class Product implements ProductInterface
      */
     public function setOptions($optionGroups)
     {
+        $identifiers = $this->identifiers;
+        $this->clearOptions();
+        $this->options = new ArrayCollection;
         foreach ($optionGroups as $optionGroup) {
-            $this->addOptionGroup($optionGroup);
+            $this->options->add($optionGroup);
         }
+        $this->identifiers = $identifiers;
+        $this->processIdentifiers();
     }
 
     /**
@@ -142,7 +174,8 @@ abstract class Product implements ProductInterface
      */
     public function clearOptions()
     {
-       $this->options = null;
+       $this->options = new ArrayCollection();
+       $this->identifiers = new ArrayCollection();
     }
 
     /**
@@ -151,6 +184,41 @@ abstract class Product implements ProductInterface
     public function getOptions()
     {
         return $this->options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentifierSets()
+    {
+        return $this->identifiers;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentifierSet($target = null)
+    {
+        $key = $target ? $this->createKeyFromOptions($target) : 'primary:primary;';
+        return $this->identifiers->get($key);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addIdentifier($identifier, $target = null)
+    {
+        $key = $target ? $target : 'primary:primary;';
+        if (is_array($key)) {
+            $key = $this->createKeyFromOptions($target);
+        }
+        if (!$idSet = $this->identifiers->get($key)) {
+            $optionGroup = key($target);
+            throw new ParameterNotFoundException(sprintf('There is not an option group %s with the option %s', $optionGroup, $target[$optionGroup]));
+        }
+        $idSet->addIdentifier($identifier);
+
+        $this->processIdentifiers();
     }
 
     /**
@@ -185,6 +253,55 @@ abstract class Product implements ProductInterface
         return $this->updatedAt;
     }
 
+    /*
+     * @inheritdoc
+     */
+    public function processIdentifiers()
+    {
+        $optionSet = array();
+        foreach ($this->options as $productOption) {
+            $options = $productOption->getOptions();
+            if ($options) {
+                $choices = array();
+                $name = $productOption->getName();
+                foreach($options as $option) {
+                    $choices[] = array($name => $option->getValue());
+                }
+                $optionSet[$name] = $choices;
+            }
+        }
+
+        ksort($optionSet);
+        if ($optionCombos = $this->extractOptionCombos($optionSet)) {
+            foreach ($optionCombos as $key => $combo) {
+                if (!$this->identifiers->containsKey($key)) {
+                    $this->identifiers->set($key, $this->createProductIdentifierSet($combo));
+                }
+            }
+        }
+    }
+
+    protected function extractOptionCombos($optionSet)
+    {
+        if ($curSet = array_shift($optionSet)) {
+            $combos = $this->extractOptionCombos($optionSet);
+            $return = array();
+            foreach ($curSet as $option) {
+                $key = $this->createKeyFromOptions($option);
+                if ($combos) {
+                    foreach ($combos as $curKey => $curCombo) {
+                        $returnKey = $key . $curKey;
+                        $return[$returnKey] = array_merge($option, $curCombo);
+                    }
+                } else {
+                    $return[$key] = $option;
+                }
+            }
+            return $return;
+        }
+        return null;
+    }
+
     public function incrementCreatedAt()
     {
         if (null === $this->createdAt) {
@@ -196,5 +313,15 @@ abstract class Product implements ProductInterface
     public function incrementUpdatedAt()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    protected function createKeyFromOptions($options)
+    {
+        $key = '';
+        ksort($options);
+        foreach ($options as $optionGroup => $option) {
+            $key .= sprintf('%s:%s;', $optionGroup, $option);
+        }
+        return $key;
     }
 }
