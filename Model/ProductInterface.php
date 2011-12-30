@@ -116,7 +116,7 @@ interface ProductInterface
      *
      * @return instance of Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
      */
-    function createProductIdentifierSet();
+    function createProductIdentifierSet($options);
 
     /**
      * Return the identifier set generated from the option choices

@@ -94,9 +94,9 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function createProductIdentifierSet()
+    public function createProductIdentifierSet($options)
     {
-        return new $this->identifierSetClass;
+        return new $this->identifierSetClass($options);
     }
 
     /**
