@@ -35,6 +35,7 @@ abstract class Product implements ProductInterface
     protected $description;
     protected $features;
     protected $identifiers;
+    protected $identifierSetClass;
     protected $name;
     protected $options;
     protected $type;

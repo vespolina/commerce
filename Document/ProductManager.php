@@ -53,7 +53,12 @@ class ProductManager extends BaseProductManager
      */
     public function findProductById($id)
     {
-        return $this->productRepo->find($id);
+        $product = $this->productRepo->find($id);
+        $rp = new \ReflectionProperty($product, 'identifierSetClass');
+        $rp->setAccessible(true);
+        $rp->setValue($product, $this->identifierSetClass);
+
+        return $product;
     }
 
     /**
