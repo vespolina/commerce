@@ -35,6 +35,7 @@ abstract class Product implements ProductInterface
     protected $description;
     protected $features;
     protected $identifiers;
+    protected $identifierSetClass;
     protected $name;
     protected $options;
     protected $type;
@@ -94,9 +95,9 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function createProductIdentifierSet()
+    public function createProductIdentifierSet($options)
     {
-        return new $this->identifierSetClass;
+        return new $this->identifierSetClass($options);
     }
 
     /**

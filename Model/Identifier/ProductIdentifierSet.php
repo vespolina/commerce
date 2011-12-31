@@ -22,10 +22,11 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
     protected $identifiers;
     protected $options;
 
-    public function __construct($options)
+    public function __construct($options = null)
     {
         $this->active = true;
         $this->options = $options;
+        $this->identifiers = new ArrayCollection();
     }
 
     public function getId()
@@ -42,9 +43,6 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
      */
     public function addIdentifier(IdentifierInterface $identifier)
     {
-        if (!$this->identifiers instanceof ArrayCollection) {
-            $this->identifiers = new ArrayCollection();
-        }
         $key = strtolower($identifier->getName());
         $this->identifiers->set($key, $identifier);
     }

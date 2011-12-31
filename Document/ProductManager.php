@@ -21,7 +21,7 @@ class ProductManager extends BaseProductManager
     protected $dm;
     protected $productClass;
     protected $productRepo;
-    
+
     public function __construct(DocumentManager $dm, $productClass, $identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null, $mediaManager = null)
     {
         $this->dm = $dm;
@@ -36,7 +36,7 @@ class ProductManager extends BaseProductManager
     public function createProduct()
     {
         // TODO: this will be using factories to allow for a number of different types of product classes
-        $product = new $this->productClass;
+        $product = new $this->productClass($this->identifierSetClass);
         return $product;
     }
 
@@ -53,7 +53,12 @@ class ProductManager extends BaseProductManager
      */
     public function findProductById($id)
     {
-        return $this->productRepo->find($id);
+        $product = $this->productRepo->find($id);
+        $rp = new \ReflectionProperty($product, 'identifierSetClass');
+        $rp->setAccessible(true);
+        $rp->setValue($product, $this->identifierSetClass);
+
+        return $product;
     }
 
     /**

@@ -108,6 +108,7 @@ class ProductController extends ContainerAware
         return $this->container->get('templating')->renderResponse('VespolinaProductBundle:Product:new.html.'.$this->getEngine(), array(
             'form'                   => $form->createView(),
             'configuredOptionGroups' => $this->getConfiguredOptionsGroups(),
+            'product'  => $this->container->get('vespolina.product_manager')->createProduct(),
        ));
     }
 
