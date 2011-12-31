@@ -8,5 +8,6 @@
         <field name="display" fieldName="display" type="string" />
         <field name="type" fieldName="type" type="string" />
         <field name="value" fieldName="value" type="string" />
+        <field name="upcharge" fieldName="upcharge" type="string" />
     </embedded-document>
 </doctrine-mongo-mapping>
