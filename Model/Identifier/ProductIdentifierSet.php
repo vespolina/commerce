@@ -21,6 +21,7 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
     protected $id;
     protected $identifiers;
     protected $options;
+    protected $upcharge;
 
     public function __construct($options = null)
     {
@@ -124,6 +125,22 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
         }
 
         return $this->active;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function setUpcharge($upcharge)
+    {
+        $this->upcharge = $upcharge;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function getUpcharge()
+    {
+        return $this->upcharge;
     }
 
     public function __get($name)
