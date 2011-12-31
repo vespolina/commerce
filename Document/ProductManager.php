@@ -53,12 +53,15 @@ class ProductManager extends BaseProductManager
      */
     public function findProductById($id)
     {
-        $product = $this->productRepo->find($id);
-        $rp = new \ReflectionProperty($product, 'identifierSetClass');
-        $rp->setAccessible(true);
-        $rp->setValue($product, $this->identifierSetClass);
+        if ($product = $this->productRepo->find($id)) {
+            $rp = new \ReflectionProperty($product, 'identifierSetClass');
+            $rp->setAccessible(true);
+            $rp->setValue($product, $this->identifierSetClass);
 
-        return $product;
+            return $product;
+        }
+
+        return null;
     }
 
     /**
@@ -67,6 +70,27 @@ class ProductManager extends BaseProductManager
     public function findProductByIdentifier($name, $code)
     {
 
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findProductByName($name)
+    {
+        $products = array();
+        if (!$results = $this->productRepo->findBy(array('name' => $name))) {
+
+            return null;
+        }
+
+        $rp = new \ReflectionProperty($this->productClass, 'identifierSetClass');
+        $rp->setAccessible(true);
+
+        foreach ($results as $product) {
+            $rp->setValue($product, $this->identifierSetClass);
+        }
+
+        return $results;
     }
 
     /**

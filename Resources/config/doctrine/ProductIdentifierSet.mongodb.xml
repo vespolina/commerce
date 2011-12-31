@@ -12,6 +12,6 @@
         <field name="upcharge" fieldName="upcharge" type="string" />
 
         <embed-many field="identifiers" fieldName="identifiers" strategy="set" />
-        
+
     </embedded-document>
 </doctrine-mongo-mapping>
