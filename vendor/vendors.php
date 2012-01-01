@@ -19,6 +19,7 @@ $deps = array(
     array('doctrine-mongodb-odm', 'http://github.com/doctrine/mongodb-odm.git', 'origin/master'),
     array('doctrine-mongodb', 'http://github.com/doctrine/mongodb.git', 'origin/master'),
     array('doctrine-couchdb', 'http://github.com/doctrine/couchdb-odm.git', 'origin/master'),
+    array('DoctrineMongoDBBundle', 'http://github.com/symfony/DoctrineMongoDBBundle.git', 'origin/master'),
 );
 
 foreach ($deps as $dep) {
