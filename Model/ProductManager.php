@@ -20,11 +20,9 @@ abstract class ProductManager implements ProductManagerInterface
 {
     protected $identifiers;
     protected $identifierSetClass;
-    protected $primaryIdentifier;
-    protected $primaryIdentifierLabel;
     protected $mediaManager;
 
-    public function __construct($identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null, $mediaManager = null)
+    public function __construct($identifiers, $identifierSetClass, $mediaManager = null)
     {
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
