@@ -18,8 +18,6 @@
             <argument>%vespolina.product.model.product.class%</argument>
             <argument>%vespolina.product.product_manager.identifiers%</argument>
             <argument>%vespolina.product.model.product_identifier_set.class%</argument>
-            <argument>%vespolina.product.product_manager.primary_identifier%</argument>
-            <argument></argument>
             <argument type="service" id="vespolina.product.image_manager" on-invalid="ignore" />
         </service>
         <service id="vespolina.product_manager" alias="vespolina.product.product_manager" />
