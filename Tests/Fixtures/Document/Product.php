@@ -21,6 +21,9 @@ class Product extends BaseProduct
     /** @ODM\Id */
     protected $id;
 
+    /** @ODM\String */
+    protected $name;
+
     public function __construct($identifierSetClass)
     {
         parent::__construct($identifierSetClass);

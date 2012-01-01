@@ -90,6 +90,10 @@ class ProductManager extends BaseProductManager
             $rp->setValue($product, $this->identifierSetClass);
         }
 
+        if ($results->count() === 1) {
+            return $results->current();
+        }
+
         return $results;
     }
 

@@ -30,12 +30,21 @@ class ProductManagerTest extends TestCase
 
     public function setup()
     {
+        $this->dm = self::createTestDocumentManager();
         $this->productMgr = new ProductManager(
-            self::createTestDocumentManager(),
+            $this->dm,
             '\Vespolina\ProductBundle\Tests\Fixtures\Document\Product',
             array(),
             '\Vespolina\ProductBundle\Document\ProductIdentifierSet'
         );
+    }
+
+    public function tearDown()
+    {
+        $collections = $this->dm->getDocumentCollections();
+        foreach ($collections as $collection) {
+            $collection->drop();
+        }
     }
 
     protected function persistNewProduct($name)
