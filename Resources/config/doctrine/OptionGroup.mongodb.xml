@@ -8,6 +8,6 @@
         <field name="name" fieldName="name" type="string" />
         <field name="display" fieldName="display" type="string" />
 
-        <embed-many target-document="Vespolina\ProductBundle\Document\Option" field="options" fieldName="options" strategy="set" />
+        <embed-many target-document="Vespolina\ProductBundle\Document\Option" field="options" fieldName="options" />
     </mapped-superclass>
 </doctrine-mongo-mapping>
