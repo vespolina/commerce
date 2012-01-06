@@ -125,7 +125,7 @@ If you want to override the Product form, create a new FormType class
 
     }
 
-In the configuraiton you would set the the form type to your custom form
+In the configuration you would set the the form type to your custom form
 
     vespolina_product:
         db_driver: mongodb
