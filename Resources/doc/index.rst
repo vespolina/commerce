@@ -139,7 +139,7 @@ Now Vespolina will use your product type in the forms.
 Configuration reference
 =======================
 
-All available configuration options are listed below with their default values::
+All available configuration options are listed below with their default values:
 
     # app/config/vespolina.yml
     vespolina_product:
@@ -149,6 +149,7 @@ All available configuration options are listed below with their default values::
             identifiers: id
                 id: Vespolina\ProductBundle\Model\Identifier\IdIdentifier
         product:
+            class: Application\Vespolina\ProductBundle\Document\Product
             form:
                 type:               vespolina.product.form.type
                 handler_service:    vespolina.product.form.handler
