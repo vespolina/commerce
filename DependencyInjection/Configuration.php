@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
 
         $this->addIdentifierSetSection($rootNode);
         $this->addOptionGroupSection($rootNode);
+        $this->addConfiguredOptionGroupSection($rootNode);
         $this->addOptionSection($rootNode);
         $this->addProductManagerSection($rootNode);
         $this->addProductSection($rootNode);
@@ -80,6 +81,25 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
+    private function addConfiguredOptionGroupSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('configured_option_group')
+                    ->children()
+                        ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
+                        ->arrayNode('form')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('data_class')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
     private function addOptionSection(ArrayNodeDefinition $node)
     {
         $node
@@ -106,6 +126,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('product')
                     ->children()
+                        ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
                             ->children()
