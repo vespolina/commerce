@@ -106,6 +106,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('product')
                     ->children()
+                        ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
                             ->children()

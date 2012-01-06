@@ -135,6 +135,9 @@ class VespolinaProductExtension extends Extension
 
     protected function configureProduct(array $config, ContainerBuilder $container)
     {
+        if (isset($config['class'])) {
+            $container->setParameter('vespolina.product.model.product.class', $config['class']);
+        }
         if (isset($config['form'])) {
             $formConfig = $config['form'];
             if (isset($formConfig['type'])) {
