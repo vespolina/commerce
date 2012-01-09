@@ -207,10 +207,14 @@ abstract class Product implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getOptionSet($target = null)
+    public function getOptionSet($target)
     {
-        $key = $target ? $this->createKeyFromOptions($target) : 'primary:primary;';
-        return $this->identifiers->get($key);
+        foreach ($this->identifiers as $optionSet) {
+            if (!count(array_diff_assoc($optionSet->getOptions(), $target))) {
+                return $optionSet;
+            }
+        }
+        return null;
     }
 
     /**
