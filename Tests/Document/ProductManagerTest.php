@@ -22,7 +22,7 @@ class ProductManagerTest extends TestCase
     {
         $product = $this->persistNewProduct('test');
 
-        $this->assertSame($product, $this->productMgr->findProductByName('test'), 'a single result should return that product');
+        $this->assertInstanceOf('Vespolina\ProductBundle\Model\ProductInterface', $this->productMgr->findProductByName('test'), 'a single result should return that product');
 
         $this->persistNewProduct('test');
         $this->assertInstanceOf('Doctrine\ODM\MongoDB\Cursor', $this->productMgr->findProductByName('test'), 'multiple results returns collection');
@@ -52,5 +52,7 @@ class ProductManagerTest extends TestCase
         $product = $this->productMgr->createProduct();
         $product->setName($name);
         $this->productMgr->updateProduct($product);
+
+        return $product;
     }
 }

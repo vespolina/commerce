@@ -91,6 +91,7 @@ class ProductManager extends BaseProductManager
         }
 
         if ($results->count() === 1) {
+            $results->reset();
             return $results->getNext();
         }
 
