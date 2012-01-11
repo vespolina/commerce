@@ -21,13 +21,13 @@ class ProductManager extends BaseProductManager
     protected $dm;
     protected $productClass;
     protected $productRepo;
-    
-    public function __construct(DocumentManager $dm, $productClass, $identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel = null, $mediaManager = null)
+
+    public function __construct(DocumentManager $dm, $productClass, $identifiers, $identifierSetClass, $mediaManager = null)
     {
         $this->dm = $dm;
         $this->productClass = $productClass;
         $this->productRepo = $this->dm->getRepository($productClass);
-        parent::__construct($identifiers, $identifierSetClass, $primaryIdentifier, $primaryIdentifierLabel, $mediaManager);
+        parent::__construct($identifiers, $identifierSetClass, $mediaManager);
     }
 
     /**
@@ -36,7 +36,7 @@ class ProductManager extends BaseProductManager
     public function createProduct()
     {
         // TODO: this will be using factories to allow for a number of different types of product classes
-        $product = new $this->productClass;
+        $product = new $this->productClass($this->identifierSetClass);
         return $product;
     }
 
@@ -53,7 +53,15 @@ class ProductManager extends BaseProductManager
      */
     public function findProductById($id)
     {
-        return $this->productRepo->find($id);
+        if ($product = $this->productRepo->find($id)) {
+            $rp = new \ReflectionProperty($product, 'identifierSetClass');
+            $rp->setAccessible(true);
+            $rp->setValue($product, $this->identifierSetClass);
+
+            return $product;
+        }
+
+        return null;
     }
 
     /**
@@ -62,6 +70,32 @@ class ProductManager extends BaseProductManager
     public function findProductByIdentifier($name, $code)
     {
 
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findProductByName($name)
+    {
+        $products = array();
+        if (!$results = $this->productRepo->findBy(array('name' => $name))) {
+
+            return null;
+        }
+
+        $rp = new \ReflectionProperty($this->productClass, 'identifierSetClass');
+        $rp->setAccessible(true);
+
+        foreach ($results as $product) {
+            $rp->setValue($product, $this->identifierSetClass);
+        }
+
+        if ($results->count() === 1) {
+            $results->reset();
+            return $results->getNext();
+        }
+
+        return $results;
     }
 
     /**

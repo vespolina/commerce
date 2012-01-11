@@ -35,30 +35,6 @@ Development
 
    
 
-
-Product Types
--------------
-
-NOTE: THIS WILL PROBABLY CHANGE
-
-These are valid types of products
-* Product::PHYSICAL
-* Product::UNIQUE
-* Product::DOWNLOAD
-* Product::TIME
-* Product::SERVICE
-
-*Product::PHYSICAL*
-
-*Product::UNIQUE*
-
-*Product::DOWNLOAD*
-
-*Product::TIME*
-
-*Product::SERVICE*
-
-
 Using the VespolinaProductBundle
 ================================
 
@@ -134,15 +110,36 @@ Next, you'll need to add the mapping for doctrine.
 
         </document
 
-If you want to override the form, create a new FormType class
+Adding to the form
 
-TODO
+If you want to override the Product form, create a new FormType class
+
+    class MyProductFormType extends Vespolina\ProductBundle\Form\Type\ProductFormType
+    {
+        public function buildForm(FormBuilder $builder, array $options)
+        {
+            parent::buildForm($builder, $options);
+
+            $builder->add('custom');
+        }
+
+    }
+
+In the configuration you would set the the form type to your custom form
+
+    vespolina_product:
+        db_driver: mongodb
+        product:
+            form:
+                type: My\Namespace\MyProductFormType
+
+Now Vespolina will use your product type in the forms.
 
 
 Configuration reference
 =======================
 
-All available configuration options are listed below with their default values::
+All available configuration options are listed below with their default values:
 
     # app/config/vespolina.yml
     vespolina_product:
@@ -152,7 +149,31 @@ All available configuration options are listed below with their default values::
             identifiers: id
                 id: Vespolina\ProductBundle\Model\Identifier\IdIdentifier
         product:
+            class: Application\Vespolina\ProductBundle\Document\Product
             form:
                 type:               vespolina.product.form.type
                 handler_service:    vespolina.product.form.handler
                 name:               vespolina_product_form
+
+
+Product Types
+-------------
+
+NOTE: THIS WILL PROBABLY CHANGE
+
+These are valid types of products
+* Product::PHYSICAL
+* Product::UNIQUE
+* Product::DOWNLOAD
+* Product::TIME
+* Product::SERVICE
+
+*Product::PHYSICAL*
+
+*Product::UNIQUE*
+
+*Product::DOWNLOAD*
+
+*Product::TIME*
+
+*Product::SERVICE*

@@ -10,7 +10,6 @@ namespace Vespolina\ProductBundle\Tests\Model;
 use Vespolina\ProductBundle\Model\Product;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
 use Vespolina\ProductBundle\Model\Identifier\Identifier;
-use Vespolina\ProductBundle\Model\Option\OptionSet;
 use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 /**
@@ -18,24 +17,46 @@ use Vespolina\ProductBundle\Tests\ProductTestCommon;
  */
 class ProductTest extends ProductTestCommon
 {
-    public function testOptionSet()
+    public function testOptionGroups()
     {
-        $this->markTestSkipped('Option behavior has changed');
         $product = $this->createProduct();
 
-        $sizeLgOption = $this->getMock('Vespolina\ProductBundle\Model\Option\Option', array('getType', 'getValue'));
-        $sizeLgOption->expects($this->any())
-                 ->method('getType')
-                 ->will($this->returnValue('size'));
-        $sizeLgOption->expects($this->any())
-                 ->method('getValue')
-                 ->will($this->returnValue('large'));
-        $product->addOption($sizeLgOption);
-        $this->assertSame(
-            $sizeLgOption,
-            $product->getOptions()->getOption('size', 'large'),
-            'addOption hands option off to OptionsSet'
-        );
+        $productOptions = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'options');
+        $productOptions->setAccessible(true);
+
+        $ogSize = $this->createOptionGroup();
+        $ogSize->setName('size');
+        $product->addOptionGroup($ogSize);
+
+        $options = $productOptions->getValue($product);
+        $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $options, 'the options should be stored as a Doctrine collection');
+        $this->assertTrue($options->contains($ogSize), 'the options should be stored in the collection');
+
+        $product->removeOptionGroup('size');
+        $options = $productOptions->getValue($product);
+        $this->assertTrue($options->isEmpty(), 'nothing should be left');
+
+        $product->addOptionGroup($ogSize);
+        $ogColor = $this->createOptionGroup();
+        $ogColor->setName('color');
+        $product->addOptionGroup($ogColor);
+
+        $options = $productOptions->getValue($product);
+        $this->assertCount(2, $options);
+        $this->assertTrue($options->contains($ogSize), 'the options should be stored in the collection');
+        $this->assertTrue($options->contains($ogColor), 'the options should be stored in the collection');
+
+        $product->clearOptions();
+        $options = $productOptions->getValue($product);
+        $this->assertTrue($options->isEmpty());
+
+        $options = array($ogColor, $ogSize);
+        $product->setOptions($options);
+
+        $options = $productOptions->getValue($product);
+        $this->assertCount(2, $options);
+        $this->assertTrue($options->contains($ogSize), 'the options should be stored in the collection');
+        $this->assertTrue($options->contains($ogColor), 'the options should be stored in the collection');
     }
 
     public function testProductFeatures()
@@ -57,52 +78,131 @@ class ProductTest extends ProductTestCommon
         $features = $productFeatures->getValue($product);
         $this->assertArrayHasKey('label', $features, 'top level key is the type in lower case');
         $this->assertArrayHasKey('joat music', $features['label'], 'top level key is the search term in lower case');
-
     }
 
     public function testProductIdentities()
     {
-        $this->markTestSkipped('ProductIdentifierSet behavior has changed');
-
         $product = $this->createProduct();
+        $productIdentifiers = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
+        $productIdentifiers->setAccessible(true);
 
-        $identifierSet = $this->createProductIdentifierSet('test123');
-
-        $product->addIdentifierSet('test123', $identifierSet);
+        $identifierSets = $productIdentifiers->getValue($product);
+        $this->assertSame(1, $identifierSets->count(), 'there should be a single default identifier set');
         $this->assertInstanceOf(
             'Doctrine\Common\Collections\ArrayCollection',
-            $product->getIdentifiers(),
-            'the identifiers should be stored in an ArrayCollection'
+            $identifierSets,
+            'the identifierSets should be stored in an ArrayCollection'
         );
+        $this->assertTrue($identifierSets->containsKey('primary:primary;'), 'primary identifier should be set');
 
-        $this->assertSame(
-            $identifierSet,
-            $product->getIdentifierSet('test123'),
-            'the identifier should be returned by the key'
-        );
+        $identifierSet = $product->getIdentifierSet();
+        $this->assertSame(array('primary' => 'primary'), $identifierSet->getOptions(), 'no parameter passed to getIdentifierSet should return the primary identifier');
 
+        $identifierSet->isActive(false);
+        $this->assertFalse($identifierSet->isActive());
+
+        $identifier = $this->createProductIdentifier('abc', 'blue');
+        $this->setExpectedException('\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException');
+        $product->addIdentifier($identifier, array('not' => 'available'));
+    }
+
+    public function testOptionIdentities()
+    {
         $product = $this->createProduct();
 
-        $identifierSet = $this->createProductIdentifierSet('test123');
+        $pi = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
+        $pi->setAccessible(true);
 
-        $product->addIdentifierSet('test123', $identifierSet);
+        $ogSize = $this->createOptionGroup('size');
 
-        $identifiers = array();
+        $ogSize->addOption($this->createOption('extra large', 'size', 'sizeXL'));
+        $product->addOptionGroup($ogSize);
 
-        $identifiers['abc'] = $this->createProductIdentifierSet('abc');
-        $identifiers['123'] = $this->createProductIdentifierSet('123');
+        $identifiers = $pi->getValue($product);
 
-        $product->setIdentifiers($identifiers);
-        $this->assertInstanceOf(
-            'Doctrine\Common\Collections\ArrayCollection',
-            $product->getIdentifiers(),
-            'an array of IdentifierSets should be put into an ArrayCollection'
-        );
+        $this->assertCount(1, $identifiers, 'you should have a sizeXL identifier');
 
-        $this->assertEquals(
-            2,
-            $product->getIdentifiers()->count(),
-            'any identifier sets already in product are removed when setIdentifiers is called'
-        );
+        $sizeIdentifierSet = $identifiers->get('size:sizeXL;');
+        $optionSet = $sizeIdentifierSet->getOptions();
+        $this->assertInternalType('array', $optionSet);
+        $this->assertArrayHasKey('size', $optionSet);
+        $this->assertSame('sizeXL', $optionSet['size']);
+
+        $product->clearOptions();
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(0, $identifiers->count());
+
+        $ogSize->addOption($this->createOption('large', 'size', 'sizeLG'));
+
+        $ogColor = $this->createOptionGroup('color');
+        $ogColor->addOption($this->createOption('red', 'color', 'colorRD'));
+        $ogColor->addOption($this->createOption('blue', 'color', 'colorBL'));
+
+        $options = array($ogSize, $ogColor);
+
+        $product->setOptions($options);
+
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(4, $identifiers->count());
+        $this->assertTrue($identifiers->containsKey('color:colorBL;size:sizeLG;'));
+        $this->assertTrue($identifiers->containsKey('color:colorBL;size:sizeXL;'));
+        $this->assertTrue($identifiers->containsKey('color:colorRD;size:sizeLG;'));
+        $this->assertTrue($identifiers->containsKey('color:colorRD;size:sizeXL;'));
+
+        $largeBlue = $identifiers->get('color:colorBL;size:sizeLG;');
+        $largeBlue->addIdentifier($this->createIdentifier('abc', '123'));
+        $product->setOptions($options);
+        $preservedIdentifiers = $product->getIdentifierSet(array('color' => 'colorBL', 'size' => 'sizeLG'));
+        $this->assertContains('abc', $preservedIdentifiers->getIdentifierTypes(), 'existing options should be preserved when options are set (used by Form)');
+
+        $ogMaterial = $this->createOptionGroup('material');
+        $ogMaterial->addOption($this->createOption('iron', 'material', 'materialIron'));
+        $ogMaterial->addOption($this->createOption('mithril', 'material', 'materialMithril'));
+
+        $product->addOptionGroup($ogMaterial);
+
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(8, $identifiers->count());
+        $this->assertTrue($identifiers->containsKey('color:colorBL;material:materialIron;size:sizeLG;'));
+        $this->assertTrue($identifiers->containsKey('color:colorBL;material:materialIron;size:sizeXL;'));
+        $this->assertTrue($identifiers->containsKey('color:colorRD;material:materialIron;size:sizeLG;'));
+        $this->assertTrue($identifiers->containsKey('color:colorRD;material:materialIron;size:sizeXL;'));
+        $this->assertTrue($identifiers->containsKey('color:colorBL;material:materialMithril;size:sizeLG;'));
+        $this->assertTrue($identifiers->containsKey('color:colorBL;material:materialMithril;size:sizeXL;'));
+        $this->assertTrue($identifiers->containsKey('color:colorRD;material:materialMithril;size:sizeLG;'));
+        $this->assertTrue($identifiers->containsKey('color:colorRD;material:materialMithril;size:sizeXL;'));
+
+        $product->removeOptionGroup($ogMaterial);
+
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(4, $identifiers->count(), 'removing the material options should make the number of identifier goes back');
+
+        $ogSize->addOption($this->createOption('small', 'size', 'sizeSM'));
+
+        $product->processIdentifiers();
+        $identifiers = $pi->getValue($product);
+        $this->assertSame(6, $identifiers->count(), 'add option to group outside of product will not take affect until processed');
+        $this->assertTrue($identifiers->containsKey('color:colorBL;size:sizeSM;'));
+        $this->assertTrue($identifiers->containsKey('color:colorBL;size:sizeLG;'));
+        $this->assertTrue($identifiers->containsKey('color:colorBL;size:sizeXL;'));
+        $this->assertTrue($identifiers->containsKey('color:colorRD;size:sizeSM;'));
+        $this->assertTrue($identifiers->containsKey('color:colorRD;size:sizeLG;'));
+        $this->assertTrue($identifiers->containsKey('color:colorRD;size:sizeXL;'));
+
+
+        $optionIdentifierSet = $this->createProductIdentifierSet(array('color' => 'blue'));
+
+        $identifiers = $pi->getValue($product);
+        $identifiers->set('color:blue;', $optionIdentifierSet);
+
+        $identifier = $this->createProductIdentifier('abc', 'blue');
+        $product->addIdentifier($identifier, array('color' => 'blue'));
+
+        $identifierSet = $product->getIdentifierSet(array('color' => 'blue'));
+
+        $identifiers = $identifierSet->getIdentifiers();
+
+        $this->assertSame(1, $identifiers->count());
+        $this->assertSame('abc', $identifiers->first()->getName());
     }
 }

@@ -4,9 +4,10 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Vespolina\ProductBundle\Document\OptionGroup">
+    <mapped-superclass name="Vespolina\ProductBundle\Document\OptionGroup">
         <field name="name" fieldName="name" type="string" />
+        <field name="display" fieldName="display" type="string" />
 
-        <embed-many target-document="Vespolina\ProductBundle\Document\Option" field="options" fieldName="options" strategy="set" />
-    </embedded-document>
+        <embed-many target-document="Vespolina\ProductBundle\Document\Option" field="options" fieldName="options" />
+    </mapped-superclass>
 </doctrine-mongo-mapping>

@@ -4,10 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Vespolina\ProductBundle\Document\Option">
-        <field name="display" fieldName="display" type="string" />
-        <field name="type" fieldName="type" type="string" />
-        <field name="value" fieldName="value" type="string" />
-        <field name="upcharge" fieldName="upcharge" type="string" />
+    <embedded-document name="Application\Vespolina\ProductBundle\Document\OptionGroup">
+        <field name="id" id="true" />
     </embedded-document>
 </doctrine-mongo-mapping>

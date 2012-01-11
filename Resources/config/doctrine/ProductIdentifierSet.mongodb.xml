@@ -6,7 +6,12 @@
 
     <embedded-document name="Vespolina\ProductBundle\Document\ProductIdentifierSet">
 
-        <embed-many field="identifiers" strategy="set" fieldName="identifiers" />
+        <field name="id" fieldName="id" type="string" />
+        <field name="active" fieldName="active" type="boolean" />
+        <field name="options" fieldName="options" type="hash" />
+        <field name="upcharge" fieldName="upcharge" type="string" />
+
+        <embed-many field="identifiers" fieldName="identifiers" strategy="set" />
 
     </embedded-document>
 </doctrine-mongo-mapping>

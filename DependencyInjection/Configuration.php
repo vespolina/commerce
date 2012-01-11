@@ -29,11 +29,11 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->cannotBeEmpty()->end()
             ->end();
-        
+
         $this->addIdentifierSetSection($rootNode);
         $this->addOptionGroupSection($rootNode);
+        $this->addConfiguredOptionGroupSection($rootNode);
         $this->addOptionSection($rootNode);
-        $this->addOptionSetSection($rootNode);
         $this->addProductManagerSection($rootNode);
         $this->addProductSection($rootNode);
         $this->addFeatureSection($rootNode);
@@ -81,17 +81,16 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function addOptionSection(ArrayNodeDefinition $node)
+    private function addConfiguredOptionGroupSection(ArrayNodeDefinition $node)
     {
         $node
             ->children()
-                ->arrayNode('option')
+                ->arrayNode('configured_option_group')
                     ->children()
+                        ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('type')->end()
-                                ->scalarNode('name')->end()
                                 ->scalarNode('data_class')->end()
                             ->end()
                         ->end()
@@ -101,12 +100,11 @@ class Configuration implements ConfigurationInterface
         ;
     }
 
-
-    private function addOptionSetSection(ArrayNodeDefinition $node)
+    private function addOptionSection(ArrayNodeDefinition $node)
     {
         $node
             ->children()
-                ->arrayNode('option_set')
+                ->arrayNode('option')
                     ->children()
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
@@ -128,6 +126,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('product')
                     ->children()
+                        ->scalarNode('class')->end()
                         ->arrayNode('form')
                             ->addDefaultsIfNotSet()
                             ->children()
@@ -148,19 +147,15 @@ class Configuration implements ConfigurationInterface
     {
         $node
             ->children()
-
                 ->arrayNode('product_manager')
                     ->children()
-                    ->scalarNode('primary_identifier')->isRequired()->cannotBeEmpty()->end()
-
-                    ->arrayNode('identifiers')
-                        ->useAttributeAsKey('name')
-                        ->prototype('scalar')
+                        ->arrayNode('identifiers')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')
+                            ->end()
                         ->end()
-                    ->end()
                     ->scalarNode('image_manager')->defaultNull()->end()
                 ->end()
-
             ->end()
         ;
     }

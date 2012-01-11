@@ -13,7 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Vespolina\ProductBundle\Model\Product;
-use Vespolina\ProductBundle\Model\Option\OptionSet;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
 
 /**
@@ -27,8 +26,7 @@ class ProductManagerTest extends WebTestCase
     protected function setUp()
     {
         $this->mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');
-        $this->product = $this->createProduct('Vespolina\ProductBundle\Model\Product');
-        //Product(new OptionSet())
+        $this->product = $this->getMockforAbstractClass('Vespolina\ProductBundle\Model\Product');
     }
 
     public function testSearchForProductByIdentifier()
@@ -57,15 +55,11 @@ class ProductManagerTest extends WebTestCase
 
     public function testCreateOption()
     {
-<<<<<<< HEAD
-        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');
-=======
         $this->markTestIncomplete(
             'This test has not been implemented yet.'
         );
 
         $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\Identifier');
->>>>>>> 116e70a5cfb29515a3cc0c9af00b1e78b96fdce6
 
         $option = $mgr->createOption('CoLoR', 'BlAcK');
 
@@ -102,20 +96,12 @@ class ProductManagerTest extends WebTestCase
 
     public function testGetImageManager()
     {
-<<<<<<< HEAD
-        $mediaManager = null;
-        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');
-
-        // @todo commenting this because we are not passing the mediamanager on the createProductManager method yet
-        //$this->assertSame($mediaManager, $mgr->getMediaManager());
-=======
         $this->markTestIncomplete(
             'This test has not been implemented yet.'
         );
         $mgr = $this->createProductManager($mediaManager);
 
         $this->assertSame($mediaManager, $mgr->getMediaManager());
->>>>>>> 116e70a5cfb29515a3cc0c9af00b1e78b96fdce6
 
         $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
         $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');

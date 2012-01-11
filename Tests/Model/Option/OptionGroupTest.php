@@ -8,27 +8,20 @@
 
 namespace Vespolina\ProductBundle\Tests\Model\Node;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
 use Vespolina\ProductBundle\Model\Option\Option;
 use Vespolina\ProductBundle\Model\Option\OptionGroup;
+use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class OptionGroupTest extends WebTestCase
+class OptionGroupTest extends ProductTestCommon
 {
     public function testProductOptions()
     {
-        $colorRed = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
-        $colorRed->setValue('colorRed');
-        $colorRed->setType('color');
-        $colorRed->setDisplay('red');
+        $colorRed = $this->createOption('red', 'color', 'colorRed');
 
-        $sizeXl = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
-        $sizeXl->setValue('sizeXl');
-        $sizeXl->setType('size');
-        $sizeXl->setDisplay('extra large');
+        $sizeXl = $this->createOption('extra large', 'size', 'sizeXl');
 
         $og = $this->createOptionGroup();
         // DO NOT SET THE NAME IN THE GROUP!
@@ -52,9 +45,7 @@ class OptionGroupTest extends WebTestCase
             'the name of the option node should be set to the value'
         );
 
-        $noTypeGreen = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
-        $noTypeGreen->setValue('colorGreen');
-        $noTypeGreen->setDisplay('green');
+        $noTypeGreen = $this->createOption('green', null, 'colorGreen');
         $og->addOption($noTypeGreen);
 
         $this->assertSame(
@@ -72,18 +63,10 @@ class OptionGroupTest extends WebTestCase
         $this->setExpectedException('UnexpectedValueException', 'All OptionsNodes in this type must be color');
         $og->addOption($sizeXl);
 
-        $noTypeBlue = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
-        $noTypeBlue->setValue('colorBlue');
-        $noTypeBlue->setDisplay('blue');
+        $noTypeBlue = $this->createOption('blue', null, 'colorBlue');
         $og = $this->createOptionGroup();
         // DO NOT SET THE NAME IN THE GROUP!
         $this->setExpectedException('UnexpectedValueException', 'The OptionGroup must have the name set or the Option must have the group type set');
         $og->addOption($noTypeBlue);
-    }
-
-    protected function createOptionGroup()
-    {
-        $og = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup');
-        return $og;
     }
 }

@@ -13,16 +13,21 @@ use Symfony\Component\Form\FormBuilder;
 class OptionFormType extends AbstractType
 {
     protected $dataClass;
+    protected $name;
 
-    public function __construct($dataClass)
+    public function __construct($dataClass, $name)
     {
         $this->dataClass = $dataClass;
+        $this->name = $name;
     }
 
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
             ->add('display', 'text', array(
+                'required' => false,
+            ))
+            ->add('value', 'text', array(
                 'required' => false,
             ))
         ;
@@ -37,6 +42,6 @@ class OptionFormType extends AbstractType
 
     function getName()
     {
-        return 'vespolina_product_option';
+        return $this->name;
     }
 }

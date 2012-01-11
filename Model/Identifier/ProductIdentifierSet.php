@@ -7,6 +7,8 @@
  */
 namespace Vespolina\ProductBundle\Model\Identifier;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 
@@ -15,7 +17,27 @@ use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
  */
 abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
 {
+    protected $active;
+    protected $id;
     protected $identifiers;
+    protected $options;
+    protected $upcharge;
+
+    public function __construct($options = null)
+    {
+        $this->active = true;
+        $this->options = $options;
+        $this->identifiers = new ArrayCollection();
+    }
+
+    public function getId()
+    {
+        if ($this->id === null) {
+            // todo generate id
+        }
+
+        return $this->id;
+    }
 
     /*
      * @inheritdoc
@@ -23,7 +45,7 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
     public function addIdentifier(IdentifierInterface $identifier)
     {
         $key = strtolower($identifier->getName());
-        $this->identifiers[$key] = $identifier;
+        $this->identifiers->set($key, $identifier);
     }
 
     /*
@@ -39,7 +61,7 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
      */
     public function clearIdentifiers()
     {
-        $this->identifiers = null;
+        $this->identifiers = new Arraycollection();
     }
 
     /**
@@ -56,15 +78,18 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
     public function getIdentifier($key)
     {
         $key = strtolower($key);
-        return isset($this->identifiers[$key]) ? $this->identifiers[$key] : null;
+        return $this->identifiers->get($key);
     }
-    
+
     /**
      * @inheritdoc
      */
     public function setIdentifiers(array $identifiers)
     {
-        $this->identifiers = $identifiers;
+        $this->identifiers = new ArrayCollection();
+        foreach ($identifiers as $identifier) {
+            $this->addIdentifier($identifier);
+        }
     }
 
     /**
@@ -72,13 +97,52 @@ abstract class ProductIdentifierSet implements ProductIdentifierSetInterface
      */
     public function removeIdentifier(IdentifierInterface $identifier)
     {
-        foreach ($this->identifiers as $key => $curIdentifier) {
-            if ($curIdentifier == $identifier) {
-                unset($this->identifiers[$key]);
-            }
-        }
+        $key = strtolower($identifier->getName());
+
+        $this->identifiers->remove($key);
     }
-    
+
+    public function getIdentifierTypes()
+    {
+        return $this->identifiers->getKeys();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isActive($set = null)
+    {
+        if ($set !== null) {
+            $this->active = (boolean)$set;
+        }
+
+        return $this->active;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function setUpcharge($upcharge)
+    {
+        $this->upcharge = $upcharge;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function getUpcharge()
+    {
+        return $this->upcharge;
+    }
+
     public function __get($name)
     {
         if ($key = $this->getIdentifierKey($name)) {

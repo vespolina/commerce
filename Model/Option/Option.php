@@ -17,6 +17,7 @@ abstract class Option implements OptionInterface
     protected $display;
     protected $type;
     protected $value;
+    protected $upcharge;
 
     /*
      * @inheritdoc
@@ -64,7 +65,23 @@ abstract class Option implements OptionInterface
     {
         return $this->type;
     }
-    
+
+    /*
+     * @inheritdoc
+     */
+    public function setUpcharge($upcharge)
+    {
+        $this->upcharge = $upcharge;
+    }
+
+    /*
+     * @inheritdoc
+     */
+    public function getUpcharge()
+    {
+        return $this->upcharge;
+    }
+
     public function __toString()
     {
         return $this->display;

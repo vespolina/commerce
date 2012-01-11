@@ -19,14 +19,16 @@ $deps = array(
     array('doctrine-mongodb-odm', 'http://github.com/doctrine/mongodb-odm.git', 'origin/master'),
     array('doctrine-mongodb', 'http://github.com/doctrine/mongodb.git', 'origin/master'),
     array('doctrine-couchdb', 'http://github.com/doctrine/couchdb-odm.git', 'origin/master'),
+    array('DoctrineMongoDBBundle', 'http://github.com/symfony/DoctrineMongoDBBundle.git', 'origin/master', 'Symfony/Bundle/'),
 );
 
 foreach ($deps as $dep) {
-    list($name, $url, $rev) = $dep;
+    list($name, $url, $rev, $namespace) = $dep;
 
     echo "> Installing/Updating $name\n";
 
-    $installDir = $vendorDir.'/'.$name;
+
+    $installDir = $vendorDir.'/'.$namespace.$name;
     if (!is_dir($installDir)) {
         system(sprintf('git clone -q %s %s', escapeshellarg($url), escapeshellarg($installDir)));
     }

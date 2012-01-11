@@ -17,7 +17,6 @@ abstract class ProductTestCommon extends WebTestCase
     protected function createFeature()
     {
         return $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Feature\Feature');
-
     }
 
     protected function createIdentifier($name, $code)
@@ -39,31 +38,69 @@ abstract class ProductTestCommon extends WebTestCase
 
     protected function createProduct()
     {
-        $product = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Product');
+        $product = $this->getMock('Vespolina\ProductBundle\Model\Product', array('createProductIdentifierSet'), array('ProductIdentifierSet'));
+        $product->expects($this->any())
+            ->method('createProductIdentifierSet')
+            ->withAnyParameters()
+            ->will($this->returnCallback(array($this, 'createProductIdentifierSetCallback')));
+
+        $pis = $this->createProductIdentifierSet(array('primary' => 'primary'));
+
+        $ip = new \ReflectionProperty('Vespolina\ProductBundle\Model\Product', 'identifiers');
+        $ip->setAccessible(true);
+        $identifiers = $ip->getValue($product);
+        $identifiers->set('primary:primary;', $pis);
+        $ip->setValue($product, $identifiers);
+
         return $product;
     }
-    
-    protected function createProductIdentifierSet()
+
+    public function createProductIdentifierSetCallback()
     {
-        $pis = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array(), '', false);
+        $args = func_get_args();
+
+        return $this->createProductIdentifierSet($args[0]);
+    }
+
+    protected function createProductIdentifierSet($options)
+    {
+        $pis = $this->getMock('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', null, array($options), '', false);
+
+        $op = new \ReflectionProperty('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet', 'options');
+        $op->setAccessible(true);
+        $op->setValue($pis, $options);
 
         return $pis;
     }
 
-    protected function createOption($type, $value)
+    protected function createProductIdentifier($type, $code)
     {
-        $option = $this->getMock(
-            'Vespolina\ProductBundle\Model\Option\Option',
-            array('getType', 'getValue'),
-            array('Vespolina\ProductBundle\Model\Option\OptionsSet')
-        );
-        $option->expects($this->any())
-             ->method('getType')
-             ->will($this->returnValue($type));
-        $option->expects($this->any())
-             ->method('getValue')
-             ->will($this->returnValue($value));
+        $bi = $this->getMock('Vespolina\ProductBundle\Model\Identifier\BaseIdentifier', array('getName'));
+        $bi->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue($type));
+        $bi->setCode($code);
+
+        return $bi;
+    }
+
+    protected function createOption($display, $type, $value)
+    {
+        $option = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\Option');
+
+        $option->setType($type);
+        $option->setDisplay($display);
+        $option->setValue($value);
 
         return $option;
+    }
+
+    protected function createOptionGroup($name = null)
+    {
+        $og = $this->getMockForAbstractClass('Vespolina\ProductBundle\Model\Option\OptionGroup');
+        if ($name) {
+            $og->setName($name);
+        }
+        return $og;
     }
 }

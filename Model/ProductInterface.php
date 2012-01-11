@@ -12,7 +12,7 @@ use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
-use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
+use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -21,108 +21,126 @@ use Vespolina\ProductBundle\Model\Option\OptionSetInterface;
 interface ProductInterface
 {
     /**
-     * Return the system id for this product
-     *
-     * @return $id
-     */
-    public function getId();
-
-    /**
      * Set the description of the product
      *
      * @param $description
      */
-    public function setDescription($description);
+    function setDescription($description);
 
     /**
      * Return the description of the product
      *
      * @return string
      */
-    public function getDescription();
+    function getDescription();
 
     /**
      * Add a single feature to the product
      *
      * @param FeatureInterface $feature
      */
-    public function addFeature(FeatureInterface $feature);
+    function addFeature(FeatureInterface $feature);
 
     /**
      * Set the features of the product to a feature set
      *
      * @param $features
      */
-    public function setFeatures($features);
+    function setFeatures($features);
 
     /**
      * Return the features of the product
      *
      * @return ProductFeaturesInterface
      */
-    public function getFeatures();
+    function getFeatures();
 
     /**
      * Return the primary ProductIdentifierSet of the product
      *
      * @return identifiers
      */
-    public function getPrimaryIdentifierSet();
-
-    /**
-     * Set the primary ProductIdentifierSet for this product
-     *
-     * @param ProductIdentifierSet $primaryIdentifierSet
-     */
-    public function setPrimaryIdentifierSet($primaryIdentifierSet);
+    function getPrimaryIdentifierSet();
 
     /**
      * Set the name of the product
      *
      * @param $name
      */
-    public function setName($name);
+    function setName($name);
 
     /**
      * Return the name of the product
      *
      * @return string
      */
-    public function getName();
-
-    /**
-     * Set the options of the product to an option set
-     *
-     * @param Vespolina\ProductBundle\Node\OptionSetInterface $options
-     */
-    public function setOptions($options);
-
-    /**
-     * Add options to the product
-     */
-    public function addOptions($option);
+    function getName();
 
     /**
      * Add an option set to the product
      *
-     * @param Vespolina\ProductBundle\Option\OptionSetInterface $optionSet
+     * @param Vespolina\ProductBundle\Option\OptionGroupInterface $optionGroup
      *
      */
-    public function addOptionSet(OptionSetInterface $optionSet);
+    function addOptionGroup(OptionGroupInterface $optionGroup);
 
     /**
      * Remove an options set from the product
      *
-     * @param Vespolina\ProductBundle\Option\OptionSetInterface $optionSet
+     * @param string name of group $name
      */
-    public function removeOptionSet(OptionSetInterface $optionSet);
+    function removeOptionGroup($name);
+
+    /**
+     * Set the options of the product to an option set
+     *
+     * @param array of Vespolina\ProductBundle\Node\OptionGroupInterface $optionGroup
+     */
+    function setOptions($options);
+
+    /**
+     * Remove the option groups from the project
+     *
+     */
+    function clearOptions();
 
     /**
      * Return the options of the product
      *
-     * @return array of Vespolina\ProductBundle\Option\OptionSetInterface
+     * @return array of Vespolina\ProductBundle\Option\OptionGroupInterface
      */
-    public function getOptions();
+    function getOptions();
+
+    /**
+     * Return a new instance of the ProductIdentiferSet, based on the class passed into the Product from the constructor
+     *
+     * @return instance of Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
+     */
+    function createProductIdentifierSet($options);
+
+    /**
+     * Return the identifier set generated from the option choices
+     *
+     * @return array of Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
+     */
+    function getIdentifierSets();
+
+    /**
+     * Return an identifier set for the option set combination
+     *
+     * @param array (optional) option set or null returns primary
+     *
+     * @return Vespolina\ProductBundle\Identifier\ProductIdentifierSetInterface
+     */
+    function getIdentifierSet($target = null);
+
+    /**
+     * Add an identifier to an identifier set. No target adds identifier to primary.
+     *
+     * @param $identifier
+     * @param $target
+     */
+    function addIdentifier($identifier, $target = null);
 
     /**
      * Use a different name or different technique
@@ -142,25 +160,25 @@ interface ProductInterface
      *
      * @param $type
      */
-    public function setType($type);
+    function setType($type);
 
     /**
      * Get the product type.
      * @return type
      */
-    public function getType();
+    function getType();
 
     /*
      * Get the date and time the product was created
      *
      * @return \DateTime
      */
-    public function getCreatedAt();
+    function getCreatedAt();
 
     /*
      * Get the date and time the product was last updated
      *
      * @return \DateTime
      */
-    public function getUpdatedAt();
+    function getUpdatedAt();
 }
