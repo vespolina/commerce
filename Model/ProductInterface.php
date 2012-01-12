@@ -57,7 +57,7 @@ interface ProductInterface
 
     /**
      * Return a feature by its type
-     * 
+     *
      * @param $type
      *
      * @return Vespolina\ProductBundle\Model\Feature\FeatureInterface
