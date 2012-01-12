@@ -33,11 +33,13 @@ class ProductTest extends ProductTestCommon
         $features = $product->getFeatures();
         $this->productMgr->updateProduct($product);
 
-
         $persistedProduct = $this->productMgr->findProductById($product->getId());
         $persistedFeatures = $product->getFeatures();
 
+        $this->assertArrayHasKey(0, $persistedFeatures);
+        $this->assertArrayHasKey(1, $persistedFeatures);
         $this->assertSame($features->count(), $persistedFeatures->count());
+
         foreach ($features as $feature) {
             $type = $feature->getType();
             $persistedFeature = $persistedProduct->getFeature($type);
