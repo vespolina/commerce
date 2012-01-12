@@ -81,7 +81,10 @@ abstract class Product implements ProductInterface
      */
     public function setFeatures($features)
     {
-        $this->features = $features;
+        $this->features = array();
+        foreach($features as $feature) {
+            $this->addFeature($feature);
+        }
     }
 
     /**
