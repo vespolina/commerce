@@ -24,6 +24,9 @@ class Product extends BaseProduct
     /** @ODM\String */
     protected $name;
 
+    /** @ODM\EmbedMany(targetDocument="Vespolina\ProductBundle\Document\Feature") */
+    protected $features;
+
     public function __construct($identifierSetClass)
     {
         parent::__construct($identifierSetClass);
