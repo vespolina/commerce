@@ -5,7 +5,7 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <embedded-document name="Vespolina\ProductBundle\Document\Recur">
-        <field name="billingFrequency" fieldName="billingFrequency" type="integer" />
+        <field name="billingFrequency" fieldName="billingFrequency" type="int" />
         <field name="billingPeriod" fieldName="billingPeriod" type="string" />
     </embedded-document>
 </doctrine-mongo-mapping>
