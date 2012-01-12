@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2011-2012 Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -22,6 +22,13 @@ class FeatureFormType extends AbstractType
                 'required' => false,
             ))
         ;
+    }
+
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'data_class' => 'Vespolina\ProductBundle\Document\Feature',
+        );
     }
 
     function getName()

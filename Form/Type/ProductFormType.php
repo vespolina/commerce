@@ -1,6 +1,6 @@
 <?php
 /**
-* (c) 2011 Vespolina Project http://www.vespolina-project.org
+* (c) 2011-2012 Vespolina Project http://www.vespolina-project.org
 *
 * This source file is subject to the MIT license that is bundled
 * with this source code in the file LICENSE.
@@ -35,7 +35,8 @@ class ProductFormType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-            ))
+                'prototype_name' => 'features',
+           ))
         ;
     }
 
