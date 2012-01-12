@@ -71,9 +71,7 @@ abstract class Product implements ProductInterface
      */
     public function addFeature(FeatureInterface $feature)
     {
-        $type = strtolower($feature->getType());
-        $searchTerm = strtolower($feature->getSearchTerm());
-        $this->features[$type][$searchTerm] = $feature;
+        $this->features = $feature;
     }
 
     /**
