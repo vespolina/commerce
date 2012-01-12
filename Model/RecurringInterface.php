@@ -20,12 +20,12 @@ interface RecurringInterface
      *
      * @param Vespolina\ProductBundle\Model\RecurInterface $recur
      */
-    public function setRecur(RecurInterface $recur);
+    function setRecur(RecurInterface $recur);
 
     /**
      * Return the Recur object for this recurring product
      *
      * @return Vespolina\ProductBundle\Model\RecurInterface
      */
-    public function getRecur();
+    function getRecur();
 }
