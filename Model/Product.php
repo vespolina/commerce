@@ -43,6 +43,8 @@ abstract class Product implements ProductInterface
 
     public function __construct($identifierSetClass)
     {
+        $this->features = array();
+
         $this->identifierSetClass = $identifierSetClass;
         $this->identifiers = new ArrayCollection();
 
@@ -71,9 +73,7 @@ abstract class Product implements ProductInterface
      */
     public function addFeature(FeatureInterface $feature)
     {
-        $type = strtolower($feature->getType());
-        $searchTerm = strtolower($feature->getSearchTerm());
-        $this->features[$type][$searchTerm] = $feature;
+        $this->features[] = $feature;
     }
 
     /**
@@ -90,6 +90,21 @@ abstract class Product implements ProductInterface
     public function getFeatures()
     {
         return $this->features;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFeature($type)
+    {
+        foreach ($this->features as $feature) {
+            if ($feature->getType() == $type) {
+
+                return $feature;
+            }
+        }
+
+        return null;
     }
 
     /**
