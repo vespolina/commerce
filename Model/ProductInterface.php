@@ -51,9 +51,18 @@ interface ProductInterface
     /**
      * Return the features of the product
      *
-     * @return ProductFeaturesInterface
+     * @return Vespolina\ProductBundle\Model\Feature\FeatureInterface
      */
     function getFeatures();
+
+    /**
+     * Return a feature by its type
+     * 
+     * @param $type
+     *
+     * @return Vespolina\ProductBundle\Model\Feature\FeatureInterface
+     */
+    function getFeature($type);
 
     /**
      * Return the primary ProductIdentifierSet of the product
