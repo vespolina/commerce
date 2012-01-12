@@ -34,7 +34,7 @@ class ProductTest extends ProductTestCommon
         $this->productMgr->updateProduct($product);
 
         $persistedProduct = $this->productMgr->findProductById($product->getId());
-        $persistedFeatures = $product->getFeatures();
+        $persistedFeatures = $persistedProduct->getFeatures();
 
         $this->assertSame(count($features), count($persistedFeatures));
         $this->assertArrayHasKey(0, $persistedFeatures);
