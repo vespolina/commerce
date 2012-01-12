@@ -1,23 +1,21 @@
 <?php
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2012 Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Vespolina\ProductBundle\Tests\Document;
 
 use Vespolina\ProductBundle\Document\ProductManager;
-
-use Symfony\Bundle\DoctrineMongoDBBundle\Tests\TestCase;
+use Vespolina\ProductBundle\Tests\Document\ProductTestCommon;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductManagerTest extends TestCase
+class ProductManagerTest extends ProductTestCommon
 {
-    protected $productMgr;
-
     public function testFindByName()
     {
         $product = $this->persistNewProduct('test');
@@ -30,29 +28,11 @@ class ProductManagerTest extends TestCase
 
     public function setup()
     {
-        $this->dm = self::createTestDocumentManager();
-        $this->productMgr = new ProductManager(
-            $this->dm,
-            '\Vespolina\ProductBundle\Tests\Fixtures\Document\Product',
-            array(),
-            '\Vespolina\ProductBundle\Document\ProductIdentifierSet'
-        );
+        parent::setup();
     }
 
     public function tearDown()
     {
-        $collections = $this->dm->getDocumentCollections();
-        foreach ($collections as $collection) {
-            $collection->drop();
-        }
-    }
-
-    protected function persistNewProduct($name)
-    {
-        $product = $this->productMgr->createProduct();
-        $product->setName($name);
-        $this->productMgr->updateProduct($product);
-
-        return $product;
+        parent::tearDown();
     }
 }
