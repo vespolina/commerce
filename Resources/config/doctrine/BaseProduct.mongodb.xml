@@ -6,8 +6,6 @@
 
     <mapped-superclass name="Vespolina\ProductBundle\Document\BaseProduct" collection="vespolina_products">
 
-        <field name="features" fieldName="features" type="hash" />
-
         <field name="description" fieldName="description" type="string" />
 
         <field name="name" fieldName="name" type="string" />
