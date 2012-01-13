@@ -17,6 +17,7 @@ abstract class Recur implements RecurInterface
 {
     protected $billingFrequency;
     protected $billingPeriod;
+    protected $price;
 
     /**
      * @inheritdoc
@@ -48,5 +49,21 @@ abstract class Recur implements RecurInterface
     public function getBillingPeriod()
     {
         return $this->billingPeriod;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPrice()
+    {
+        return $this->price;
     }
 }
