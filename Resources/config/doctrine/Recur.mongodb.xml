@@ -6,6 +6,7 @@
 
     <embedded-document name="Vespolina\ProductBundle\Document\Recur">
         <field name="billingFrequency" fieldName="billingFrequency" type="int" />
-        <field name="billingPeriod" fieldName="billingPeriod" type="string" />
+        <field name="billingPeriod"    fieldName="billingPeriod"    type="string" />
+        <field name="price"            fieldName="price"            type="string" />
     </embedded-document>
 </doctrine-mongo-mapping>
