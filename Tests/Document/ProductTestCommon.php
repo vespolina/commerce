@@ -9,7 +9,7 @@ namespace Vespolina\ProductBundle\Tests\Document;
 
 use Vespolina\ProductBundle\Document\ProductManager;
 
-use Symfony\Bundle\DoctrineMongoDBBundle\Tests\TestCase;
+use Doctrine\Bundle\MongoDBBundle\Tests\TestCase;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
