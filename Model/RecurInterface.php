@@ -18,27 +18,40 @@ interface RecurInterface
      *
      * @param integer $billingFrequency
      */
-    public function setBillingFrequency($billingFrequency);
+    function setBillingFrequency($billingFrequency);
 
     /**
      * Return the frequency of the billing period
      *
      * @return integer
      */
-    public function getBillingFrequency();
+    function getBillingFrequency();
 
     /**
      * Set the billing period, typically set to day, week, month, year
      *
-     * @param string $billingPeriod
+     * @param string $billingInterval
      */
-    public function setBillingPeriod($billingPeriod);
+    function setBillingInterval($billingInterval);
 
     /**
      * Return the billing peroid
      *
      * @return string
      */
-    public function getBillingPeriod();
+    function getBillingInterval();
 
+    /**
+     * Set the monetary amount of this recurring product
+     *
+     * @param $amount
+     */
+    function setAmount($amount);
+
+    /**
+     * Return the monetary amount of this recurring product
+     *
+     * @return $amount
+     */
+    function getAmount();
 }

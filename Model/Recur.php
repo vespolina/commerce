@@ -15,9 +15,9 @@ use Vespolina\ProductBundle\Model\RecurInterface;
  */
 abstract class Recur implements RecurInterface
 {
+    protected $amount;
     protected $billingFrequency;
-    protected $billingPeriod;
-    protected $price;
+    protected $billingInterval;
 
     /**
      * @inheritdoc
@@ -38,32 +38,32 @@ abstract class Recur implements RecurInterface
     /**
      * @inheritdoc
      */
-    public function setBillingPeriod($billingPeriod)
+    public function setBillingInterval($billingInterval)
     {
-        $this->billingPeriod = $billingPeriod;
+        $this->billingInterval = $billingInterval;
     }
 
     /**
      * @inheritdoc
      */
-    public function getBillingPeriod()
+    public function getBillingInterval()
     {
-        return $this->billingPeriod;
+        return $this->billingInterval;
     }
 
     /**
      * @inheritdoc
      */
-    public function setPrice($price)
+    public function setAmount($amount)
     {
-        $this->price = $price;
+        $this->amount = $amount;
     }
 
     /**
      * @inheritdoc
      */
-    public function getPrice()
+    public function getAmount()
     {
-        return $this->price;
+        return $this->amount;
     }
 }
