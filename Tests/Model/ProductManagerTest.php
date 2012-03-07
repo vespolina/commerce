@@ -9,24 +9,23 @@
 namespace Vespolina\ProductBundle\Tests\Model;
 
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Vespolina\ProductBundle\Model\Product;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
+use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductManagerTest extends WebTestCase
+class ProductManagerTest extends ProductTestCommon
 {
     protected $mgr;
     protected $product;
 
     protected function setUp()
     {
-        $this->mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');
-        $this->product = $this->getMockforAbstractClass('Vespolina\ProductBundle\Model\Product');
+        $this->mgr = $this->createProductManager();
     }
 
     public function testSearchForProductByIdentifier()
@@ -120,7 +119,28 @@ class ProductManagerTest extends WebTestCase
         // full results flag returns the full data set for the product
     }
 
-    protected function createProductManager($primaryIdentifier)
+    public function testAddProductHandler()
+    {
+        $handler = $this->createProductHandler('test');
+        $this->mgr->addProductHandler($handler);
+
+        $this->assertSame($handler, $this->mgr->getProductHandler('test'), 'a handler should be returned by type');
+        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $this->mgr->getProductHandlers());
+        $this->assertContains($handler, $this->mgr->getProductHandlers(), 'return all of the handlers');
+
+        $handler2 = $this->createProductHandler('test2');
+        $this->mgr->addProductHandler($handler2);
+        $this->assertContains($handler2, $this->mgr->getProductHandlers(), 'return all of the handlers');
+        $this->assertCount(2, $this->mgr->getProductHandlers());
+
+        $this->mgr->removeHandler('test2');
+        $this->assertCount(1, $this->mgr->getProductHandlers(), 'there should now only be one handler');
+
+        $this->mgr->removeHandler('test');
+        $this->assertEmpty($this->mgr->getProductHandlers(), 'there should be no handlers after test has been removed');
+    }
+
+    protected function createProductManager()
     {
         $mgr = $this->getMockBuilder('Vespolina\ProductBundle\Model\ProductManager')
             ->setMethods(array(
@@ -137,54 +157,11 @@ class ProductManagerTest extends WebTestCase
              ->disableOriginalConstructor()
              ->getMock();
         $mgr->expects($this->any())
-             ->method('getPrimaryIdentifier')
-             ->will($this->returnValue($primaryIdentifier));
-        $mgr->expects($this->any())
              ->method('getIdentifierSetClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Document\ProductIdentifierSet'));
         $mgr->expects($this->any())
              ->method('getOptionClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Document\Option'));
         return $mgr;
-    }
-
-    protected function createProduct($productAbstractClass)
-    {
-        $product = $this->getMockforAbstractClass($productAbstractClass);
-        return $product;
-    }
-
-    protected function createProductIdentifiers($code)
-    {
-        $pi = $this->getMockforAbstractClass('Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet');
-
-        $pi->addIdentifier($this->createIdentifierNode($code));
-        return $pi;
-    }
-
-    protected function createIdentifierNode($code)
-    {
-        $identifier = $this->getMock('Vespolina\ProductBundle\Model\Identifier\IdIdentifier', array('getCode', 'getName'));
-        $identifier->expects($this->any())
-             ->method('getCode')
-             ->will($this->returnValue($code));
-        $identifier->expects($this->any())
-             ->method('getName')
-             ->will($this->returnValue($code));
-        return $identifier;
-    }
-
-    protected function createFeature($type, $name)
-    {
-        $feature = $this->getMock('Vespolina\ProductBundle\Model\Feature\Feature', array('getType', 'getName', 'getSearchTerm'));
-        $feature->expects($this->any())
-             ->method('getType')
-             ->will($this->returnValue($type));
-        $feature->expects($this->any())
-             ->method('getName')
-             ->will($this->returnValue($name));
-        $feature->expects($this->any())
-             ->method('getSearchTerm')
-             ->will($this->returnValue(strtolower($name)));
     }
 }
