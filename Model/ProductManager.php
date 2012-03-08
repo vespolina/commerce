@@ -7,6 +7,7 @@
  */
 namespace Vespolina\ProductBundle\Model;
 
+use Vespolina\ProductBundle\Handler\HandlerInterface;
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
@@ -19,15 +20,26 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 abstract class ProductManager implements ProductManagerInterface
 {
+    protected $handlers;
     protected $identifiers;
     protected $identifierSetClass;
     protected $mediaManager;
 
     public function __construct($identifiers, $identifierSetClass, $mediaManager = null)
     {
+        $this->handler = array();
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
         $this->mediaManager = $mediaManager;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addProductHandler(HandlerInterface $handler)
+    {
+        $type = $handler->getType();
+        $this->handler[$type] = $handler;
     }
 
     /**
