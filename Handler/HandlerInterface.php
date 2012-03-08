@@ -11,4 +11,10 @@ use Vespolina\ProductBundle\Model\ProductInterface;
 
 interface HandlerInterface
 {
+    function createProduct();
+
+    function getType();
+
+
+    function setType($type);
 }

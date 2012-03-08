@@ -80,7 +80,10 @@ abstract class ProductManager implements ProductManagerInterface
      */
     public function createProduct($type = 'default')
     {
+        if (isset($this->productHandlers[$type])) {
 
+            return $this->productHandlers[$type]->createProduct();
+        }
         // TODO: this is a bit hacky, but it allows the legacy setup to work correctly until it can be updated to the handler
 
         if ($type !== 'default') {
