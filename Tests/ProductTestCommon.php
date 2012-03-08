@@ -36,10 +36,18 @@ abstract class ProductTestCommon extends WebTestCase
         return $identifier;
     }
 
-    protected function createProductHandler($name, $productClass = null)
+    protected function createProductHandler($name, $productClass = 'Vespolina\ProductBundle\Model\Product')
     {
-        $productHandler = $this->getMock('Vespolina\ProductBundle\Handler\AbstractHandler');
-        // todo: need to pass product class
+        $productHandler = $this->getMockForAbstractClass(
+            'Vespolina\ProductBundle\Handler\AbstractHandler',
+            array(),
+            '',
+            false
+        );
+        $productHandler->expects($this->any())
+            ->method('createProduct')
+            ->will($this->returnValue($this->getMock($productClass)));
+
         return $productHandler;
     }
 
