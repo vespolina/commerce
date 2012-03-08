@@ -78,6 +78,22 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
+    public function createProduct($type = 'default')
+    {
+
+        // TODO: this is a bit hacky, but it allows the legacy setup to work correctly until it can be updated to the handler
+
+        if ($type !== 'default') {
+            throw new \Exception(sprintf("%s is not a valid product type", $type));
+        }
+        $product = new $this->productClass($this->identifierSetClass);
+
+        return $product;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getIdentifierSetClass()
     {
         return $this->identifierSetClass;

@@ -27,9 +27,11 @@ interface ProductManagerInterface
     /**
      * Create a Product instance
      *
+     * @param string $type (optional)
+     *
      * @return Vespolina\ProductBundle\Model\ProductInterface
      */
-    function createProduct();
+    function createProduct($type = 'default');
 
     /**
      * Create a ProductIdentifierSet from a PrimaryIdentifier
