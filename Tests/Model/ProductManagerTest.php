@@ -28,6 +28,35 @@ class ProductManagerTest extends ProductTestCommon
         $this->mgr = $this->createProductManager();
     }
 
+    public function testAddProductHandler()
+    {
+        $handler = $this->createProductHandler('test');
+        $this->mgr->addProductHandler($handler);
+
+        $this->assertSame($handler, $this->mgr->getProductHandler('test'), 'a handler should be returned by type');
+        $this->assertTrue(is_array($this->mgr->getProductHandlers()));
+        $this->assertContains($handler, $this->mgr->getProductHandlers(), 'return all of the handlers');
+
+        $handler2 = $this->createProductHandler('test2');
+        $this->mgr->addProductHandler($handler2);
+        $this->assertContains($handler2, $this->mgr->getProductHandlers(), 'return all of the handlers');
+        $this->assertCount(2, $this->mgr->getProductHandlers());
+
+        $this->mgr->removeProductHandler('test2');
+        $this->assertCount(1, $this->mgr->getProductHandlers(), 'there should now only be one handler');
+
+        $this->mgr->removeProductHandler('test');
+        $this->assertEmpty($this->mgr->getProductHandlers(), 'there should be no handlers after test has been removed');
+    }
+
+    public function testCreateProduct()
+    {
+        $handler = $this->createProductHandler('test');
+        $this->mgr->addProductHandler($handler);
+
+        $this->assertInstanceOf('Vespolina\ProductBundle\Model\ProductInterface', $this->mgr->createProduct('test'));
+    }
+
     public function testSearchForProductByIdentifier()
     {
         $this->markTestIncomplete(
@@ -117,27 +146,6 @@ class ProductManagerTest extends ProductTestCommon
     {
         // search by identifier should return a product set up with the specific information for that identifier
         // full results flag returns the full data set for the product
-    }
-
-    public function testAddProductHandler()
-    {
-        $handler = $this->createProductHandler('test');
-        $this->mgr->addProductHandler($handler);
-
-        $this->assertSame($handler, $this->mgr->getProductHandler('test'), 'a handler should be returned by type');
-        $this->assertTrue(is_array($this->mgr->getProductHandlers()));
-        $this->assertContains($handler, $this->mgr->getProductHandlers(), 'return all of the handlers');
-
-        $handler2 = $this->createProductHandler('test2');
-        $this->mgr->addProductHandler($handler2);
-        $this->assertContains($handler2, $this->mgr->getProductHandlers(), 'return all of the handlers');
-        $this->assertCount(2, $this->mgr->getProductHandlers());
-
-        $this->mgr->removeProductHandler('test2');
-        $this->assertCount(1, $this->mgr->getProductHandlers(), 'there should now only be one handler');
-
-        $this->mgr->removeProductHandler('test');
-        $this->assertEmpty($this->mgr->getProductHandlers(), 'there should be no handlers after test has been removed');
     }
 
     protected function createProductManager()
