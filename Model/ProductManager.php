@@ -24,6 +24,7 @@ abstract class ProductManager implements ProductManagerInterface
     protected $identifiers;
     protected $identifierSetClass;
     protected $mediaManager;
+    protected $productClass; // todo: remove after default product is created through a handler
 
     public function __construct($identifiers, $identifierSetClass, $mediaManager = null)
     {
