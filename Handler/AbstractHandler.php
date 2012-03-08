@@ -20,6 +20,11 @@ abstract class AbstractHandler implements HandlerInterface
         $this->productClass = $productClass;
     }
 
+    public function createProduct()
+    {
+        return new $this->productClass();
+    }
+
     public function getType()
     {
         return $this->type;

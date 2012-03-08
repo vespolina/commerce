@@ -13,12 +13,14 @@ use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 class ProductHandlerTest extends ProductTestCommon
 {
+    protected $handler;
+
     protected function setUp()
     {
         // don't use the common handler, so the product creation and related functionality can be tested
         $this->handler = $this->getMock(
             'Vespolina\ProductBundle\Handler\AbstractHandler',
-            array(),
+            null,
             array('Vespolina\ProductBundle\Tests\Fixtures\Model\Product')
         );
     }
