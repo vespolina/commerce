@@ -12,10 +12,21 @@ use Vespolina\ProductBundle\Model\ProductInterface;
 
 abstract class AbstractHandler implements HandlerInterface
 {
-    private $productClass;
+    protected $productClass;
+    protected $type = 'default';
 
     public function __construct(ProductInterface $productClass)
     {
         $this->productClass = $productClass;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 }

@@ -125,7 +125,7 @@ class ProductManagerTest extends ProductTestCommon
         $this->mgr->addProductHandler($handler);
 
         $this->assertSame($handler, $this->mgr->getProductHandler('test'), 'a handler should be returned by type');
-        $this->assertType(PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $this->mgr->getProductHandlers());
+        $this->assertTrue(is_array($this->mgr->getProductHandlers()));
         $this->assertContains($handler, $this->mgr->getProductHandlers(), 'return all of the handlers');
 
         $handler2 = $this->createProductHandler('test2');
@@ -133,10 +133,10 @@ class ProductManagerTest extends ProductTestCommon
         $this->assertContains($handler2, $this->mgr->getProductHandlers(), 'return all of the handlers');
         $this->assertCount(2, $this->mgr->getProductHandlers());
 
-        $this->mgr->removeHandler('test2');
+        $this->mgr->removeProductHandler('test2');
         $this->assertCount(1, $this->mgr->getProductHandlers(), 'there should now only be one handler');
 
-        $this->mgr->removeHandler('test');
+        $this->mgr->removeProductHandler('test');
         $this->assertEmpty($this->mgr->getProductHandlers(), 'there should be no handlers after test has been removed');
     }
 

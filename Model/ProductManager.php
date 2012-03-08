@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2011-2012 Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -20,14 +20,14 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 abstract class ProductManager implements ProductManagerInterface
 {
-    protected $handlers;
+    protected $productHandlers;
     protected $identifiers;
     protected $identifierSetClass;
     protected $mediaManager;
 
     public function __construct($identifiers, $identifierSetClass, $mediaManager = null)
     {
-        $this->handler = array();
+        $this->productHandlers = array();
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
         $this->mediaManager = $mediaManager;
@@ -39,7 +39,7 @@ abstract class ProductManager implements ProductManagerInterface
     public function addProductHandler(HandlerInterface $handler)
     {
         $type = $handler->getType();
-        $this->handler[$type] = $handler;
+        $this->productHandlers[$type] = $handler;
     }
 
     /**
@@ -101,5 +101,33 @@ abstract class ProductManager implements ProductManagerInterface
     {
         // TODO: make configurable
         return '\Vespolina\ProductBundle\Document\Option';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getProductHandler($type)
+    {
+        if (isset($this->productHandlers[$type])) {
+            return $this->productHandlers[$type];
+        }
+
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getProductHandlers()
+    {
+        return $this->productHandlers;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeProductHandler($type)
+    {
+        unset($this->productHandlers[$type]);
     }
 }
