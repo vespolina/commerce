@@ -15,7 +15,7 @@ abstract class AbstractHandler implements HandlerInterface
     protected $productClass;
     protected $type = 'default';
 
-    public function __construct(ProductInterface $productClass)
+    public function __construct($productClass)
     {
         $this->productClass = $productClass;
     }
