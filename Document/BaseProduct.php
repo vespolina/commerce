@@ -14,4 +14,17 @@ use Vespolina\ProductBundle\Model\Product as AbstractProduct;
 abstract class BaseProduct extends AbstractProduct
 {
     protected $id;
+
+    protected $features;
+    protected $identifiers;
+    protected $identifierSetClass;
+
+    public function __construct($identifierSetClass)
+    {
+        $this->features = array();
+
+        $this->identifierSetClass = $identifierSetClass;
+        $this->identifiers = new ArrayCollection();
+
+    }
 }
