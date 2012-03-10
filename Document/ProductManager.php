@@ -101,6 +101,23 @@ class ProductManager extends BaseProductManager
     /**
      * @inheritdoc
      */
+    public function findProductBySlug($slug)
+    {
+        if ($product = $this->productRepo->findOneBy(array('slug' => $slug))) {
+
+            $rp = new \ReflectionProperty($product, 'identifierSetClass');
+            $rp->setAccessible(true);
+            $rp->setValue($product, $this->identifierSetClass);
+
+            return $product;
+        }
+
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function updateProduct(ProductInterface $product, $andFlush = true)
     {
         $this->dm->persist($product);

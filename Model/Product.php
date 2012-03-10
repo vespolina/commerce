@@ -38,6 +38,7 @@ abstract class Product implements ProductInterface
     protected $identifierSetClass;
     protected $name;
     protected $options;
+    protected $slug;
     protected $type;
     protected $updateAt;
 
@@ -108,6 +109,22 @@ abstract class Product implements ProductInterface
         }
 
         return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**

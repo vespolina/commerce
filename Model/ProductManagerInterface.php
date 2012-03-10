@@ -62,6 +62,14 @@ interface ProductManagerInterface
     function findProductById($id);
 
     /**
+     * Find a Product by its slug
+     *
+     * @param $slug
+     * @return Vespolina\ProductBundle\Model\ProductInterface
+     */
+    function findProductBySlug($slug);
+
+    /**
      * Find a Product by an identifier node
      *
      * @param $name

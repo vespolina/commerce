@@ -165,6 +165,19 @@ interface ProductInterface
      */
 
     /**
+     * Set the product slug
+     *
+     * @param $slug
+     */
+    function setSlug($slug);
+
+    /**
+     * Get the product slug.
+     * @return slug
+     */
+    function getSlug();
+
+    /**
      * Set the product type, ie shirt, cd, tickets
      *
      * @param $type
