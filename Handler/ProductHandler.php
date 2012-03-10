@@ -7,10 +7,10 @@
  */
 namespace Vespolina\ProductBundle\Handler;
 
-use Vespolina\ProductBundle\Handler\HandlerInterface;
+use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
 use Vespolina\ProductBundle\Model\ProductInterface;
 
-abstract class AbstractHandler implements HandlerInterface
+abstract class ProductHandler implements ProductHandlerInterface
 {
     protected $productClass;
     protected $type = 'default';
@@ -28,10 +28,5 @@ abstract class AbstractHandler implements HandlerInterface
     public function getType()
     {
         return $this->type;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
     }
 }

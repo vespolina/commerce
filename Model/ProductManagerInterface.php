@@ -7,7 +7,7 @@
  */
 namespace Vespolina\ProductBundle\Model;
 
-use Vespolina\ProductBundle\Handler\HandlerInterface;
+use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
@@ -20,9 +20,9 @@ interface ProductManagerInterface
     /**
      * Add a product handler to the manager
      *
-     * @param HandlerInterface $handler
+     * @param ProductHandlerInterface $handler
      */
-    function addProductHandler(HandlerInterface $handler);
+    function addProductHandler(ProductHandlerInterface $handler);
 
     /**
      * Create a Product instance

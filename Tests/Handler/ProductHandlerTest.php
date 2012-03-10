@@ -8,7 +8,7 @@
 
 namespace Vespolina\ProductBundle\Tests\Model;
 
-use Vespolina\ProductBundle\Handler\HandlerInterface;
+use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
 use Vespolina\ProductBundle\Tests\ProductTestCommon;
 
 class ProductHandlerTest extends ProductTestCommon
@@ -19,7 +19,7 @@ class ProductHandlerTest extends ProductTestCommon
     {
         // don't use the common handler, so the product creation and related functionality can be tested
         $this->handler = $this->getMock(
-            'Vespolina\ProductBundle\Handler\AbstractHandler',
+            'Vespolina\ProductBundle\Handler\ProductHandler',
             null,
             array('Vespolina\ProductBundle\Tests\Fixtures\Model\Product')
         );

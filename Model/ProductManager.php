@@ -7,7 +7,7 @@
  */
 namespace Vespolina\ProductBundle\Model;
 
-use Vespolina\ProductBundle\Handler\HandlerInterface;
+use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
@@ -37,7 +37,7 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function addProductHandler(HandlerInterface $handler)
+    public function addProductHandler(ProductHandlerInterface $handler)
     {
         $type = $handler->getType();
         $this->productHandlers[$type] = $handler;

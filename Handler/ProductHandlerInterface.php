@@ -9,12 +9,19 @@ namespace Vespolina\ProductBundle\Handler;
 
 use Vespolina\ProductBundle\Model\ProductInterface;
 
-interface HandlerInterface
+interface ProductHandlerInterface
 {
+    /**
+     * Return a newly created product type for the handler
+     *
+     * @return Vespolina\ProductBundle\Model\ProductInterface
+     */
     function createProduct();
 
+    /**
+     * Return the product type
+     *
+     * @return string
+     */
     function getType();
-
-
-    function setType($type);
 }
