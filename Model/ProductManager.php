@@ -1,12 +1,13 @@
 <?php
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2011-2012 Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
 namespace Vespolina\ProductBundle\Model;
 
+use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
@@ -19,15 +20,27 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
  */
 abstract class ProductManager implements ProductManagerInterface
 {
+    protected $productHandlers;
     protected $identifiers;
     protected $identifierSetClass;
     protected $mediaManager;
+    protected $productClass; // todo: remove after default product is created through a handler
 
     public function __construct($identifiers, $identifierSetClass, $mediaManager = null)
     {
+        $this->productHandlers = array();
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
         $this->mediaManager = $mediaManager;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addProductHandler(ProductHandlerInterface $handler)
+    {
+        $type = $handler->getType();
+        $this->productHandlers[$type] = $handler;
     }
 
     /**
@@ -66,6 +79,25 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
+    public function createProduct($type = 'default')
+    {
+        if (isset($this->productHandlers[$type])) {
+
+            return $this->productHandlers[$type]->createProduct();
+        }
+        // TODO: this is a bit hacky, but it allows the legacy setup to work correctly until it can be updated to the handler
+
+        if ($type !== 'default') {
+            throw new \Exception(sprintf("%s is not a valid product type", $type));
+        }
+        $product = new $this->productClass($this->identifierSetClass);
+
+        return $product;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getIdentifierSetClass()
     {
         return $this->identifierSetClass;
@@ -89,5 +121,33 @@ abstract class ProductManager implements ProductManagerInterface
     {
         // TODO: make configurable
         return '\Vespolina\ProductBundle\Document\Option';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getProductHandler($type)
+    {
+        if (isset($this->productHandlers[$type])) {
+            return $this->productHandlers[$type];
+        }
+
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getProductHandlers()
+    {
+        return $this->productHandlers;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function removeProductHandler($type)
+    {
+        unset($this->productHandlers[$type]);
     }
 }

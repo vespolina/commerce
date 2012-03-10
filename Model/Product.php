@@ -33,25 +33,11 @@ abstract class Product implements ProductInterface
 
     protected $createdAt;
     protected $description;
-    protected $features;
-    protected $identifiers;
-    protected $identifierSetClass;
     protected $name;
     protected $options;
     protected $slug;
     protected $type;
     protected $updateAt;
-
-    public function __construct($identifierSetClass)
-    {
-        $this->features = array();
-
-        $this->identifierSetClass = $identifierSetClass;
-        $this->identifiers = new ArrayCollection();
-
-        $primaryIdentifierSet = $this->createProductIdentifierSet(array('primary' => 'primary'));
-        $this->identifiers->set('primary:primary;', $primaryIdentifierSet);
-    }
 
     /**
      * @inheritdoc

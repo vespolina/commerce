@@ -1,12 +1,13 @@
 <?php
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2011-2012 Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
 namespace Vespolina\ProductBundle\Model;
 
+use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
 use Vespolina\ProductBundle\Model\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
@@ -17,11 +18,20 @@ use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 interface ProductManagerInterface
 {
     /**
+     * Add a product handler to the manager
+     *
+     * @param ProductHandlerInterface $handler
+     */
+    function addProductHandler(ProductHandlerInterface $handler);
+
+    /**
      * Create a Product instance
+     *
+     * @param string $type (optional)
      *
      * @return Vespolina\ProductBundle\Model\ProductInterface
      */
-    function createProduct();
+    function createProduct($type = 'default');
 
     /**
      * Create a ProductIdentifierSet from a PrimaryIdentifier
@@ -80,17 +90,40 @@ interface ProductManagerInterface
     function findProductByIdentifier($name, $code);
 
     /**
+     * Return the configured media manager for the ProductBundle
+     *
+     * @return service or null
+     */
+    function getMediaManager();
+
+    /**
+     * Return a product handler object
+     *
+     * @param $type
+     *
+     * @returns HandlerInterface
+     */
+    function getProductHandler($type);
+
+    /**
+     * Return all of the product handlers
+     *
+     * @return array of HandlerInterface
+     */
+    function getProductHandlers();
+
+    /**
+     * Remove a product handler from the manager
+     *
+     * @param string $type
+     */
+    function removeProductHandler($type);
+
+    /**
      * Update and persist the product
      *
      * @param Vespolina\ProductBundle\Model\ProductInterface $product
      * @param Boolean $andFlush Whether to flush the changes (default true)
      */
     function updateProduct(ProductInterface $product, $andFlush = true);
-
-    /**
-     * Return the configured media manager for the ProductBundle
-     *
-     * @return service or null
-     */
-    function getMediaManager();
 }

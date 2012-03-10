@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2012 Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -34,6 +34,25 @@ abstract class ProductTestCommon extends WebTestCase
             ->will($this->returnValue($code));
 
         return $identifier;
+    }
+
+    protected function createProductHandler($type, $productClass = 'Vespolina\ProductBundle\Model\Product')
+    {
+        $productHandler = $this->getMock(
+            'Vespolina\ProductBundle\Handler\ProductHandler',
+            array('createProduct', 'getType'),
+            array(),
+            '',
+            false
+        );
+        $productHandler->expects($this->any())
+            ->method('createProduct')
+            ->will($this->returnValue($this->getMock($productClass)));
+        $productHandler->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue($type));
+
+        return $productHandler;
     }
 
     protected function createProduct()
