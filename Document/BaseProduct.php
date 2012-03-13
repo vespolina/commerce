@@ -7,6 +7,9 @@
  */
 namespace Vespolina\ProductBundle\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 use Vespolina\ProductBundle\Model\Product as AbstractProduct;
 /**
  * @author Richard Shank <develop@zestic.com>
