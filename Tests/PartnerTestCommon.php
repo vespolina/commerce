@@ -8,15 +8,18 @@
 
 namespace Vespolina\PartnerBundle\Tests;
 
-use Vespolina\PartnerBundle\Model\IndividualPartner;
-
 use Vespolina\PartnerBundle\Model\PartnerManager;
-
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class PartnerTestCommon extends WebTestCase
 {
 	static $kernel;
+	
+	/**
+	 * PartnerManager
+	 * @var Vespolina\PartnerBundle\Model\PartnerManager
+	 */
+	protected $manager;
 	
 	public function getKernel(array $options = array())
 	{
@@ -26,5 +29,14 @@ abstract class PartnerTestCommon extends WebTestCase
 		}
 
 		return self::$kernel;
+	}
+	
+	public function getManager()
+	{
+		if (!$this->manager) {
+			$this->manager = new PartnerManager('Vespolina\\PartnerBundle\\Model\\Partner');
+		}
+		
+		return $this->manager;
 	}
 }

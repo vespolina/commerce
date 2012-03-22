@@ -11,6 +11,8 @@ namespace Vespolina\PartnerBundle\Tests\Model;
 use Vespolina\PartnerBundle\Model\IndividualPartner;
 use Vespolina\PartnerBundle\Model\OrganisationPartner;
 use Vespolina\PartnerBundle\Model\Partner;
+use Vespolina\PartnerBundle\Model\Role;
+use Vespolina\PartnerBundle\Model\PartnerManager;
 use Vespolina\PartnerBundle\Tests\PartnerTestCommon;
 
 /**
@@ -20,6 +22,13 @@ class PartnerManagerTest extends PartnerTestCommon
 {
 	protected function setUp() 
 	{
-		
+		$this->getManager();
+	}
+	
+	public function testCreatePartner()
+	{
+		$partner = $this->manager->createPartner(Partner::INDIVIDUAL);
+		$this->assertTrue($partner instanceOf Partner);
+		$this->assertEquals(Partner::INDIVIDUAL, $partner->getType());
 	}
 }
