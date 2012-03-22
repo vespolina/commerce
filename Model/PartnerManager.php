@@ -13,32 +13,27 @@ namespace Vespolina\PartnerBundle\Model;
  * 
  * @author Willem-Jan Zijderveld <willemjan@beeldspraak.com>
  */
-class PartnerManager implements PartnerManagerInterface
+abstract class PartnerManager implements PartnerManagerInterface
 {
-	protected $partnerClass;
-	
-	public function __construct($partnerClass)
-	{
-		$this->partnerClass = $partnerClass;
-	}
-	
-	/**
-	 * {@inheritdoc}
-	 */
-	public function createPartner($type = Partner::INDIVIDUAL)
-	{
-		/* @var $partner Partner */
-		$partner = new $this->partnerClass;
-		$partner->setType($type);
-		
-		return $partner;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function findByPartnerId($partnerId)
-	{
-		
-	}
+    protected $partnerClass;
+    protected $partnerRoles;
+    
+    public function __construct($partnerClass, array $partnerRoles)
+    {
+        $this->partnerClass = $partnerClass;
+        $this->partnerRoles = $partnerRoles;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function createPartner($type = Partner::INDIVIDUAL)
+    {
+        /* @var $partner Partner */
+        $partner = new $this->partnerClass;
+        $partner->setType($type);
+        $partner->addRole(Partner::ROLE_CUSTOMER);
+        
+        return $partner;
+    }
 }

@@ -11,6 +11,6 @@ use Vespolina\PartnerBundle\Model\Partner as BasePartner;
 
 class Employee extends BasePartner
 {
-	protected $employeeId;
-	protected $accessLevel;
+    protected $employeeId;
+    protected $accessLevel;
 }

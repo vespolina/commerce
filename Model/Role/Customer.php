@@ -11,5 +11,5 @@ use Vespolina\PartnerBundle\Model\Partner as BasePartner;
 
 class Customer extends BasePartner
 {
-	
+    
 }

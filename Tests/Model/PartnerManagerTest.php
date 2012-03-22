@@ -20,15 +20,11 @@ use Vespolina\PartnerBundle\Tests\PartnerTestCommon;
  */
 class PartnerManagerTest extends PartnerTestCommon
 {
-	protected function setUp() 
-	{
-		$this->getManager();
-	}
-	
-	public function testCreatePartner()
-	{
-		$partner = $this->manager->createPartner(Partner::INDIVIDUAL);
-		$this->assertTrue($partner instanceOf Partner);
-		$this->assertEquals(Partner::INDIVIDUAL, $partner->getType());
-	}
+    public function testCreatePartner()
+    {
+        $partner = $this->getManager()->createPartner(Partner::INDIVIDUAL);
+        $this->assertTrue($partner instanceOf Partner);
+        $this->assertEquals(Partner::INDIVIDUAL, $partner->getType());
+        $this->assertContains(Partner::ROLE_CUSTOMER, $partner->getRoles());
+    }
 }

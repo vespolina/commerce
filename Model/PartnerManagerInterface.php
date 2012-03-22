@@ -10,15 +10,15 @@ namespace Vespolina\PartnerBundle\Model;
 
 interface PartnerManagerInterface
 {
-	/**
-	 * Returns a new instance of given partner type
-	 * @param string $partnerType
-	 */
-	function createPartner($partnerType);
-	
-	/**
-	 * Returns a single partner with given partnerId
-	 * @param string $partnerId
-	 */
-	function findByPartnerId($partnerId);
+    /**
+     * Returns a new instance of given partner type
+     * @param string $partnerType
+     */
+    function createPartner($partnerType);
+    
+    /**
+     * Returns a single partner with given partnerId
+     * @param string $partnerId
+     */
+    function findByPartnerId($partnerId);
 }
