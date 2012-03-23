@@ -6,10 +6,23 @@
 
     <mapped-superclass name="Vespolina\PartnerBundle\Document\BasePartner" collection="vespolina_partners">
 
-        <field name="partnerId"       fieldName="partnerId"     type="string" />
-        <field name="partnerSince"    fieldName="partnerSince"  type="date" />
-        <field name="name"            fieldName="name"          type="string" />
+        <field name="partnerId"         fieldName="partnerId"       type="string" />
+        <field name="partnerSince"      fieldName="partnerSince"    type="date" />
+        <field name="name"              fieldName="name"            type="string" />
+        <field name="roles"             fieldName="roles"           type="hash" />
+        <field name="type"              fieldName="type"            type="string" />
+        <field name="currency"          fieldName="currency"        type="string" />                
+        <field name="language"          fieldName="language"        type="string" />                
+        <field name="paymentTerms"      fieldName="paymentTerms"    type="string" />                
+        <field name="paymentType"       fieldName="paymentType"     type="string" />
 
+        <embed-one field="personalDetails" target-document="Vespolina\PartnerBundle\Document\PersonalDetails" />
+        <embed-one field="organisationDetails" target-document="Vespolina\PartnerBundle\Document\OrganisationDetails" />
+        
+                                              <!-- Both should probabyly be moved to a VespolinaCommonBundle  -->
+        <embed-one field="primaryContact" target-document="Vespolina\PartnerBundle\Document\Contact" />
+        <embed-many field="addresses" target-document="Vespolina\PartnerBundle\Document\Address" />
+        
     </mapped-superclass>
 
 </doctrine-mongo-mapping>
