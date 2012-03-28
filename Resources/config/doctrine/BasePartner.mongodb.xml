@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <mapped-superclass name="Vespolina\PartnerBundle\Document\BasePartner" collection="vespolina_partners">
+    <mapped-superclass name="Vespolina\PartnerBundle\Document\BasePartner">
 
         <field name="partnerId"         fieldName="partnerId"       type="string" />
         <field name="partnerSince"      fieldName="partnerSince"    type="date" />

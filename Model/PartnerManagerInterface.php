@@ -20,5 +20,5 @@ interface PartnerManagerInterface
      * Returns a single partner with given partnerId
      * @param string $partnerId
      */
-    function findByPartnerId($partnerId);
+    function findOneByPartnerId($partnerId);
 }

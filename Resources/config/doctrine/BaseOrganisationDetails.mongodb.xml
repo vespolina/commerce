@@ -4,9 +4,11 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <!-- Embedded for now, we probably want to move this to a real document in a CommonBundle -->
-    <document name="Vespolina\PartnerBundle\Document\Address">
-        <field name="id" id="true" />
-    </document>
+    <mapped-superclass name="Vespolina\PartnerBundle\Document\BaseOrganisationDetails">
+        <field name="name"      fieldName="name"        type="string" />
+        <field name="category"  fieldName="category"    type="string" />
+        <field name="employees" fieldName="employees"    type="string" />
+        
+    </mapped-superclass>
 
 </doctrine-mongo-mapping>

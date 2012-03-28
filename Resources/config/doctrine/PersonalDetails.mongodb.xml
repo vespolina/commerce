@@ -4,9 +4,8 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <!-- Embedded for now, we probably want to move this to a real document in a CommonBundle -->
-    <document name="Vespolina\PartnerBundle\Document\Address">
+    <embedded-document name="Vespolina\PartnerBundle\Document\PersonalDetails">
         <field name="id" id="true" />
-    </document>
+    </embedded-document>
 
 </doctrine-mongo-mapping>
