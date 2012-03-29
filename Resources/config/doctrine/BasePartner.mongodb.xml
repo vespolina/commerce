@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                        http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <mapped-superclass name="Vespolina\PartnerBundle\Document\BasePartner">
+
+        <field name="partnerId"         fieldName="partnerId"       type="string" />
+        <field name="partnerSince"      fieldName="partnerSince"    type="date" />
+        <field name="name"              fieldName="name"            type="string" />
+        <field name="roles"             fieldName="roles"           type="hash" />
+        <field name="type"              fieldName="type"            type="string" />
+        <field name="currency"          fieldName="currency"        type="string" />                
+        <field name="language"          fieldName="language"        type="string" />                
+        <field name="paymentTerms"      fieldName="paymentTerms"    type="string" />                
+        <field name="paymentType"       fieldName="paymentType"     type="string" />
+
+        <embed-one field="personalDetails" target-document="Vespolina\PartnerBundle\Document\PersonalDetails" />
+        <embed-one field="organisationDetails" target-document="Vespolina\PartnerBundle\Document\OrganisationDetails" />
+        
+                                              <!-- Both should probabyly be moved to a VespolinaCommonBundle  -->
+        <embed-one field="primaryContact" target-document="Vespolina\PartnerBundle\Document\Contact" />
+        <embed-many field="addresses" target-document="Vespolina\PartnerBundle\Document\Address" />
+        
+    </mapped-superclass>
+
+</doctrine-mongo-mapping>
