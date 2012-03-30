@@ -36,32 +36,6 @@ class PartnerManagerTest extends TestCase
      * @var \Doctrine\ODM\MongoDB\DocumentManager
      */
     protected $dm;
-
-    public function setup()
-    {
-        $this->dm = self::createTestDocumentManager();
-        $path = realpath(__DIR__.'/../') . '/Resources/config/doctrine';
-        $xmlDriver = new XmlDriver(array($path => 'Vespolina\PartnerBundle\Tests\Fixtures\Document'));
-        $xmlDriver->setFileExtension('.mongodb.xml');
-        $this->dm->getConfiguration()->setMetadataDriverImpl($xmlDriver);
-        $this->partnerMgr = new PartnerManager(
-            $this->dm,
-            'Vespolina\PartnerBundle\Tests\Fixtures\Document\Partner',
-            array(
-                Partner::ROLE_CUSTOMER,
-                Partner::ROLE_EMPLOYEE,
-                Partner::ROLE_SUPPLIER,
-            )
-        );
-    }
-
-    public function tearDown()
-    {
-        $collections = $this->dm->getDocumentCollections();
-        foreach ($collections as $collection) {
-            $collection->drop();
-        }
-    }
     
     public function testCreatePartner()
     {
@@ -76,7 +50,7 @@ class PartnerManagerTest extends TestCase
     
     public function testFindPartner()
     {
-        $p = $this->partnerMgr->createPartner(Partner::ORGANISATION);
+        $p = $this->partnerMgr->createPartner(Partner::ROLE_CUSTOMER, Partner::ORGANISATION);
         $p->setPartnerId('PartnerTest002');
         $p->addRole(Partner::ROLE_EMPLOYEE);
         $this->dm->persist($p);
@@ -86,5 +60,43 @@ class PartnerManagerTest extends TestCase
         $this->assertTrue($partner instanceOf PartnerInterface);
         $this->assertEquals(Partner::ORGANISATION, $partner->getType());
         $this->assertEquals(array(Partner::ROLE_CUSTOMER, Partner::ROLE_EMPLOYEE), $partner->getRoles());
+    }
+    
+    public function testUpdatePartner()
+    {
+        $partner = $this->partnerMgr->createPartner();
+        $partner->setPartnerId('testUpdatePartner');
+        
+        $this->partnerMgr->updatePartner($partner);
+        
+        $this->assertTrue($this->partnerMgr->findOneByPartnerId('testUpdatePartner') instanceOf PartnerInterface);   
+    }
+    
+
+    public function setup()
+    {
+        $this->dm = self::createTestDocumentManager();
+        $path = realpath(__DIR__.'/../') . '/Resources/config/doctrine';
+        $xmlDriver = new XmlDriver(array($path => 'Vespolina\PartnerBundle\Tests\Fixtures\Document'));
+        $xmlDriver->setFileExtension('.mongodb.xml');
+        $this->dm->getConfiguration()->setMetadataDriverImpl($xmlDriver);
+        $this->partnerMgr = new PartnerManager(
+            $this->dm,
+            'Vespolina\PartnerBundle\Tests\Fixtures\Document\Partner',
+            'Vespolina\PartnerBundle\Tests\Fixtures\Document\Address',
+            array(
+                Partner::ROLE_CUSTOMER,
+                Partner::ROLE_EMPLOYEE,
+                Partner::ROLE_SUPPLIER,
+            )
+        );
+    }
+
+    public function tearDown()
+    {
+        $collections = $this->dm->getDocumentCollections();
+        foreach ($collections as $collection) {
+            $collection->drop();
+        }
     }
 }
