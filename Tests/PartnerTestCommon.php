@@ -36,7 +36,18 @@ abstract class PartnerTestCommon extends WebTestCase
     public function getManager()
     {
         if (!$this->manager) {
-            $this->manager = $this->getMockForAbstractClass('Vespolina\PartnerBundle\Model\PartnerManager', array('Vespolina\PartnerBundle\Model\Partner', 'Vespolina\PartnerBundle\Model\Address', array(Partner::ROLE_CUSTOMER)));
+            $this->manager = $this->getMockForAbstractClass('Vespolina\PartnerBundle\Model\PartnerManager', 
+                array(
+                	array(
+                		'partnerClass'                    => 'Vespolina\PartnerBundle\Model\Partner', 
+                		'partnerAddressClass'             => 'Vespolina\PartnerBundle\Model\Address',
+                		'partnerContactClass'             => 'Vespolina\PartnerBundle\Model\Contact',
+                		'partnerPersonalDetailsClass'     => 'Vespolina\PartnerBundle\Model\PersonalDetails',
+                		'partnerOrganisationDetailsClass' => 'Vespolina\PartnerBundle\Model\OrganisationDetails',
+                	), 
+                    array(Partner::ROLE_CUSTOMER)
+                )
+            );
         }
         
         return $this->manager;

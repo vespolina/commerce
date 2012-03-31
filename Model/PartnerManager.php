@@ -8,6 +8,8 @@
 
 namespace Vespolina\PartnerBundle\Model;
 
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+
 /**
  * PartnerManager - handles partner creation, updating, deletion, etc
  * 
@@ -15,14 +17,47 @@ namespace Vespolina\PartnerBundle\Model;
  */
 abstract class PartnerManager implements PartnerManagerInterface
 {
-    protected $partnerClass;
-    protected $partnerAddressClass;
+    /**
+     * Configurable partner classes
+     * @var string
+     */
+    protected $partnerClass,
+              $partnerAddressClass,
+              $partnerContactClass,
+              $partnerPersonalDetailsClass;
+    
+    /**
+     * Array with available partnerRoles
+     * @var array $partnerRoles
+     */
     protected $partnerRoles;
     
-    public function __construct($partnerClass, $partnerAddressClass, array $partnerRoles)
+    /**
+     * Constructor to setup the partner manager
+     * 
+     * @param array $classMapping - mapping for the partner class and his embedded classes
+     * @param array $partnerRoles - array with available partner roles
+     */
+    public function __construct(array $classMapping, array $partnerRoles)
     {
-        $this->partnerClass            = $partnerClass;
-        $this->partnerAddressClass     = $partnerAddressClass;
+        $missingClasses = array();
+        foreach (array('', 'Address', 'Contact', 'PersonalDetails', 'OrganisationDetails') as $class) {
+            $class = 'partner' . $class . 'Class';
+            if (isset($classMapping[$class])) {
+                
+                if (!class_exists($classMapping[$class]))
+                    throw new InvalidConfigurationException(sprintf("Class '%s' not found as '%s'", $classMapping[$class], $class));
+                    
+                $this->{$class} = $classMapping[$class];
+                continue;
+            } 
+            $missingClasses[] = $class;
+        }
+        
+        if (count($missingClasses)) {
+            throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
+        }
+        
         $this->partnerRoles            = $partnerRoles;
     }
     
@@ -49,8 +84,39 @@ abstract class PartnerManager implements PartnerManagerInterface
     public function createPartnerAddress()
     {
         $address = new $this->partnerAddressClass;
+        $address->setType(Address::BOTH);
         
         return $address;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function createPartnerContact()
+    {
+        $contact = new $this->partnerContactClass;
+        
+        return $contact;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function createPartnerPersonalDetails()
+    {
+        $personalDetails = new $this->partnerPersonalDetailsClass;
+        
+        return $personalDetails;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function createPartnerOrganisationDetails()
+    {
+        $organisationDetails = new $this->partnerOrganisationDetailsClass;
+        
+        return $organisationDetails;
     }
     
     /**
