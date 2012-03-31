@@ -8,6 +8,8 @@
 
 namespace Vespolina\PartnerBundle\Tests\Model;
 
+use Vespolina\PartnerBundle\Model\AddressInterface;
+
 use Vespolina\PartnerBundle\Model\IndividualPartner;
 use Vespolina\PartnerBundle\Model\OrganisationPartner;
 use Vespolina\PartnerBundle\Model\Partner;
@@ -22,9 +24,20 @@ class PartnerManagerTest extends PartnerTestCommon
 {
     public function testCreatePartner()
     {
-        $partner = $this->getManager()->createPartner(Partner::INDIVIDUAL);
+        $partner = $this->getManager()->createPartner(Partner::ROLE_CUSTOMER, Partner::INDIVIDUAL);
         $this->assertTrue($partner instanceOf Partner);
         $this->assertEquals(Partner::INDIVIDUAL, $partner->getType());
         $this->assertContains(Partner::ROLE_CUSTOMER, $partner->getRoles());
+    }
+    
+    public function testValidRoles()
+    {
+        $this->assertTrue($this->getManager()->isValidRole(Partner::ROLE_CUSTOMER));
+        $this->assertFalse($this->getManager()->isValidRole('ROLE_XYZ'));
+    }
+    
+    public function testCreateAddress()
+    {
+        $this->assertTrue($this->getManager()->createPartnerAddress() instanceOf AddressInterface);
     }
 }

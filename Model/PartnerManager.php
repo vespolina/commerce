@@ -16,24 +16,50 @@ namespace Vespolina\PartnerBundle\Model;
 abstract class PartnerManager implements PartnerManagerInterface
 {
     protected $partnerClass;
+    protected $partnerAddressClass;
     protected $partnerRoles;
     
-    public function __construct($partnerClass, array $partnerRoles)
+    public function __construct($partnerClass, $partnerAddressClass, array $partnerRoles)
     {
-        $this->partnerClass = $partnerClass;
-        $this->partnerRoles = $partnerRoles;
+        $this->partnerClass            = $partnerClass;
+        $this->partnerAddressClass     = $partnerAddressClass;
+        $this->partnerRoles            = $partnerRoles;
     }
     
     /**
      * {@inheritdoc}
      */
-    public function createPartner($type = Partner::INDIVIDUAL)
+    public function createPartner($role = Partner::ROLE_CUSTOMER, $type = Partner::INDIVIDUAL)
     {
-        /* @var $partner Partner */
+        /* @var $partner PartnerInterface */
         $partner = new $this->partnerClass;
         $partner->setType($type);
-        $partner->addRole(Partner::ROLE_CUSTOMER);
+        
+        if (!$this->isValidRole($role))
+            throw new \Exception(sprintf("'%s' is not a valid role", $role));
+            
+        $partner->addRole($role);
         
         return $partner;
     }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function createPartnerAddress()
+    {
+        $address = new $this->partnerAddressClass;
+        
+        return $address;
+    }
+    
+    /**
+     * Returns if the given Role is valid.
+     * @param string $role
+     */
+    public function isValidRole($role)
+    {
+        return in_array($role, $this->partnerRoles);
+    }
+    
 }
