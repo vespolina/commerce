@@ -2,12 +2,13 @@
     "name": "vespolina/invoice",
     "type": "system",
     "description": "system for handling invoices",
-    "keywords": ["ecommerce", "inventory", "vespolina"],
+    "keywords": ["ecommerce", "invoice", "vespolina"],
     "homepage": "https://github.com/vespolina/VespolinaInvoice",
     "license": "MIT",
     "require": {
         "php": ">=5.3.2",
-        "vespolina/entity": "master-dev"
+        "vespolina/entity": "master-dev",
+        "behat/behat": ">=2.2.2"
     },
     "autoload": {
         "psr-0": { "Vespolina\\Invoice": "" }
