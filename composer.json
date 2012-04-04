@@ -11,7 +11,6 @@
         "behat/behat": ">=2.2.2"
     },
     "autoload": {
-        "psr-0": { "Vespolina\\Invoice": "" }
-    },
-    "target-dir": "Vespolina/Invoice"
+        "psr-0": { "Vespolina\\Invoice": "lib/" }
+    }
 }

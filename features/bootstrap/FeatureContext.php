@@ -1,4 +1,12 @@
 <?php
+if (!@include __DIR__ . '/../../vendor/.composer/autoload.php') {
+    die(<<<'EOT'
+You must set up the project dependencies, run the following commands:
+wget http://getcomposer.org/composer.phar
+php composer.phar install
+EOT
+    );
+}
 
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
@@ -7,18 +15,25 @@ use Behat\Behat\Context\ClosuredContextInterface,
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
+use Vespolina\Entity\Order;
+use Vespolina\Invoice\InvoiceManager;
+
 //
 // Require 3rd-party libraries here:
-//
-//   require_once 'PHPUnit/Autoload.php';
-//   require_once 'PHPUnit/Framework/Assert/Functions.php';
-//
+
+   require_once 'PHPUnit/Autoload.php';
+   require_once 'PHPUnit/Framework/Assert/Functions.php';
+
 
 /**
  * Features context.
  */
 class FeatureContext extends BehatContext
 {
+    protected $invoice;
+    protected $order;
+    protected $manager;
+
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
@@ -27,7 +42,7 @@ class FeatureContext extends BehatContext
      */
     public function __construct(array $parameters)
     {
-        // Initialize your context here
+        $this->manager = new InvoiceManager('\Vespolina\Entity\Invoice');
     }
 
     /**
@@ -35,54 +50,31 @@ class FeatureContext extends BehatContext
      */
     public function theCustomerHasAnOrder()
     {
-        throw new PendingException();
+        $this->order = new Order();
+    }
+    /**
+     * @When /^I create an invoice with the order$/
+     */
+    public function iCreateAnInvoiceWithTheOrder()
+    {
+        $this->invoice = $this->manager->createInvoice($this->order);
     }
 
     /**
-     * @When /^I "([^"]*)" an invoice request$/
+     * @Then /^I should receive an invoice$/
      */
-    public function iAnInvoiceRequest($argument1)
+    public function iShouldReceiveAnInvoice()
     {
-        throw new PendingException();
+        assertInstanceOf('Vespolina\Entity\InvoiceInterface', $this->invoice);
     }
 
     /**
-     * @Given /^I "([^"]*)" the "([^"]*)" to the invoice request$/
+     * @Given /^the invoice should contain the "([^"]*)"$/
      */
-    public function iTheToTheInvoiceRequest($argument1, $argument2)
+    public function theInvoiceShouldContainThe($argument1)
     {
-        throw new PendingException();
+        $getter = 'get' . ucfirst(strtolower($argument1));
+        assertSame($this->order, $this->invoice->$getter());
     }
 
-    /**
-     * @Given /^I "([^"]*)" the invoice request$/
-     */
-    public function iTheInvoiceRequest($argument1)
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Then /^I should receive an invoice response$/
-     */
-    public function iShouldReceiveAnInvoiceResponse()
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Given /^the invoice response should have an "([^"]*)"$/
-     */
-    public function theInvoiceResponseShouldHaveAn($argument1)
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Given /^the "([^"]*)" should contain the "([^"]*)"$/
-     */
-    public function theShouldContainThe($argument1, $argument2)
-    {
-        throw new PendingException();
-    }
 }
