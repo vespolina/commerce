@@ -8,6 +8,7 @@
 
 namespace Vespolina\Invoice;
 
+use Vespolina\Entity\InvoiceInterface;
 use Vespolina\Entity\OrderInterface;
 
 /**
@@ -22,10 +23,9 @@ class InvoiceManager implements InvoiceManagerInterface
         $this->invoiceClass = $invoiceClass;
     }
 
-    public function createInvoice(OrderInterface $order)
+    public function createInvoice()
     {
         $invoice = new $this->invoiceClass();
-        $invoice->setOrder($order);
 
         return $invoice;
     }

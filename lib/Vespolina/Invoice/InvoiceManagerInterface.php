@@ -21,5 +21,5 @@ interface InvoiceManagerInterface
      *
      * @return Vespolina\Entity\InvoiceInterface;
      */
-    function createInvoice(OrderInterface $order);
+    function createInvoice();
 }
