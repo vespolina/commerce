@@ -16,6 +16,7 @@ use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
 use Vespolina\Entity\Order;
+use Vespolina\Invoice\InvoiceManager;
 
 //
 // Require 3rd-party libraries here:
@@ -30,6 +31,7 @@ use Vespolina\Entity\Order;
 class FeatureContext extends BehatContext
 {
     protected $order;
+    protected $manager;
 
     /**
      * Initializes context.
@@ -39,7 +41,7 @@ class FeatureContext extends BehatContext
      */
     public function __construct(array $parameters)
     {
-
+        $this->manager = new InvoiceManager();
     }
 
     /**
@@ -68,7 +70,7 @@ class FeatureContext extends BehatContext
     /**
      * @Given /^the invoice should contain the "([^"]*)"$/
      */
-    public function theInvoiceShouldContainThe($argument1)
+    public function theInvoiceShouldContainTheOrder($argument1)
     {
         throw new PendingException();
     }
