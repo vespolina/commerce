@@ -20,16 +20,17 @@ use Vespolina\Invoice\InvoiceManager;
 
 //
 // Require 3rd-party libraries here:
-//
-//   require_once 'PHPUnit/Autoload.php';
-//   require_once 'PHPUnit/Framework/Assert/Functions.php';
-//
+
+   require_once 'PHPUnit/Autoload.php';
+   require_once 'PHPUnit/Framework/Assert/Functions.php';
+
 
 /**
  * Features context.
  */
 class FeatureContext extends BehatContext
 {
+    protected $invoice;
     protected $order;
     protected $manager;
 
@@ -41,7 +42,7 @@ class FeatureContext extends BehatContext
      */
     public function __construct(array $parameters)
     {
-        $this->manager = new InvoiceManager();
+        $this->manager = new InvoiceManager('\Vespolina\Entity\Invoice');
     }
 
     /**
@@ -56,7 +57,7 @@ class FeatureContext extends BehatContext
      */
     public function iCreateAnInvoiceWithTheOrder()
     {
-        throw new PendingException();
+        $this->invoice = $this->manager->createInvoice($this->order);
     }
 
     /**
@@ -64,15 +65,16 @@ class FeatureContext extends BehatContext
      */
     public function iShouldReceiveAnInvoice()
     {
-        throw new PendingException();
+        assertInstanceOf('Vespolina\Entity\InvoiceInterface', $this->invoice);
     }
 
     /**
      * @Given /^the invoice should contain the "([^"]*)"$/
      */
-    public function theInvoiceShouldContainTheOrder($argument1)
+    public function theInvoiceShouldContainThe($argument1)
     {
-        throw new PendingException();
+        $getter = 'get' . ucfirst(strtolower($argument1));
+        assertSame($this->order, $this->invoice->$getter());
     }
 
 }
