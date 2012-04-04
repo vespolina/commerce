@@ -84,7 +84,7 @@ abstract class PartnerManager implements PartnerManagerInterface
     public function createPartnerAddress()
     {
         $address = new $this->partnerAddressClass;
-        $address->setType(Address::BOTH);
+        $address->setType(Address::INVOICE);
         
         return $address;
     }
