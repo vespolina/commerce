@@ -1,4 +1,12 @@
 <?php
+if (!@include __DIR__ . '/../../vendor/.composer/autoload.php') {
+    die(<<<'EOT'
+You must set up the project dependencies, run the following commands:
+wget http://getcomposer.org/composer.phar
+php composer.phar install
+EOT
+    );
+}
 
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
@@ -6,6 +14,8 @@ use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
+
+use Vespolina\Entity\Order;
 
 //
 // Require 3rd-party libraries here:
@@ -19,6 +29,8 @@ use Behat\Gherkin\Node\PyStringNode,
  */
 class FeatureContext extends BehatContext
 {
+    protected $order;
+
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
@@ -27,7 +39,7 @@ class FeatureContext extends BehatContext
      */
     public function __construct(array $parameters)
     {
-        // Initialize your context here
+
     }
 
     /**
@@ -35,54 +47,30 @@ class FeatureContext extends BehatContext
      */
     public function theCustomerHasAnOrder()
     {
-        throw new PendingException();
+        $this->order = new Order();
     }
-
     /**
-     * @When /^I "([^"]*)" an invoice request$/
+     * @When /^I create an invoice with the order$/
      */
-    public function iAnInvoiceRequest($argument1)
+    public function iCreateAnInvoiceWithTheOrder()
     {
         throw new PendingException();
     }
 
     /**
-     * @Given /^I "([^"]*)" the "([^"]*)" to the invoice request$/
+     * @Then /^I should receive an invoice$/
      */
-    public function iTheToTheInvoiceRequest($argument1, $argument2)
+    public function iShouldReceiveAnInvoice()
     {
         throw new PendingException();
     }
 
     /**
-     * @Given /^I "([^"]*)" the invoice request$/
+     * @Given /^the invoice should contain the "([^"]*)"$/
      */
-    public function iTheInvoiceRequest($argument1)
+    public function theInvoiceShouldContainThe($argument1)
     {
         throw new PendingException();
     }
 
-    /**
-     * @Then /^I should receive an invoice response$/
-     */
-    public function iShouldReceiveAnInvoiceResponse()
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Given /^the invoice response should have an "([^"]*)"$/
-     */
-    public function theInvoiceResponseShouldHaveAn($argument1)
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Given /^the "([^"]*)" should contain the "([^"]*)"$/
-     */
-    public function theShouldContainThe($argument1, $argument2)
-    {
-        throw new PendingException();
-    }
 }

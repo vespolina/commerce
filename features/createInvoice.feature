@@ -5,10 +5,8 @@ Feature: create invoice
 
   Scenario:
     Given the customer has an order
-     When I "create" an invoice request
-      And I "add" the "order" to the invoice request
-      And I "execute" the invoice request
-     Then I should receive an invoice response
-      And the invoice response should have an "invoice"
-      And the "invoice" should contain the "order"
+     When I create an invoice with the order
+     Then I should receive an invoice
+      And the invoice should contain the "order"
+
 
