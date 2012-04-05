@@ -34,10 +34,28 @@ interface PartnerManagerInterface
     function deletePartner(PartnerInterface $partner, $andFlush = true);
     
     /**
-     * Creates and returns a new PartnerAddress
+     * Creates and returns a new Partner Address
      * @return Vespolina\PartnerBundle\Model\AddressInterface
      */
     function createPartnerAddress();
+    
+    /**
+     * Creates and returns a new Partner Contact
+     * @return Vespolina\PartnerBundle\Model\ContactInterface
+     */
+    function createPartnerContact();
+    
+    /**
+     * Creates and returns new Partner Personal Details
+     * @return Vespolina\PartnerBundle\Model\PersonalDetailsInterface
+     */
+    function createPartnerPersonalDetails();
+    
+    /**
+     * Creates and returns new Partner Organisation Details
+     * @return Vespolina\PartnerBundle\Model\OrganisationDetailsInterface
+     */
+    function createPartnerOrganisationDetails();
     
     /**
      * Returns a single partner with given partnerId

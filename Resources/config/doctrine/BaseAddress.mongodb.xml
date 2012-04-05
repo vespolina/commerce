@@ -6,6 +6,7 @@
 
     <mapped-superclass name="Vespolina\PartnerBundle\Document\BaseAddress">
 
+        <field name="type"          fieldName="type"            type="string" />
         <field name="street"        fieldName="street"          type="string" />
         <field name="number"        fieldName="number"          type="int" />
         <field name="numbersuffix"  fieldName="numbersuffix"    type="string" />
