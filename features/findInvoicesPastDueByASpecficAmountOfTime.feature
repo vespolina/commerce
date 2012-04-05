@@ -7,7 +7,8 @@ Feature: find invoices past due by a specific amount of time
     Given I have created an invoice due in "-10" days
       And I have created an invoice due in "-15" days
       And I have created an invoice due in "-20" days
-     When I ask for invoices past due by at least "15" days
+      And I have created an invoice due in "-5" days that has been paid
+    When I ask for invoices past due by at least "15" days
      Then I should receive the invoice due in "-15" days
       And I should receive the invoice due in "-20" days
       And I should not receive the invoice due in "-10" days
