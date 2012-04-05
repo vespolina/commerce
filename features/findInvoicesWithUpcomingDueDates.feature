@@ -10,6 +10,7 @@ Feature: find invoices with upcoming due dates
      When I ask for invoices due in "15" days
      Then I should receive the invoice due in "15" days
       And I should receive the invoice due in "20" days
+      And I should not receive the invoice due in "10" days
 
   Scenario:
     Given I have created an invoice due in "10" days
