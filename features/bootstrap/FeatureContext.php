@@ -57,7 +57,8 @@ class FeatureContext extends BehatContext
      */
     public function iCreateAnInvoiceWithTheOrder()
     {
-        $this->invoice = $this->manager->createInvoice($this->order);
+        $this->invoice = $this->manager->createInvoice();
+        $this->invoice->setOrder($this->order);
     }
 
     /**
