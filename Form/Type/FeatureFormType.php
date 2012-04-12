@@ -24,7 +24,7 @@ class FeatureFormType extends AbstractType
         ;
     }
 
-    public function getDefaultOptions(array $options)
+    public function getDefaultOptions()
     {
         return array(
             'data_class' => 'Vespolina\ProductBundle\Document\Feature',
