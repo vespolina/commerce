@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Vespolina\PartnerBundle\Document\Partner" collection="vespolina_partners">
+    <document name="Vespolina\PartnerBundle\Document\Partner" collection="VespolinaPartner">
         <field name="id" id="true" />
     </document>
 

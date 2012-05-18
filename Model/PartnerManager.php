@@ -75,6 +75,15 @@ abstract class PartnerManager implements PartnerManagerInterface
             
         $partner->addRole($role);
         
+        switch ($type) {
+            case Partner::INDIVIDUAL:
+                $partner->setPersonalDetails($this->createPartnerPersonalDetails());
+                break;
+            case Partner::ORGANISATION:
+                $partner->setOrganisationDetails($this->createPartnerOrganisationDetails());
+                break;
+        }
+        
         return $partner;
     }
     
