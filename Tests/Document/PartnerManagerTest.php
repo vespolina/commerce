@@ -48,6 +48,7 @@ class PartnerManagerTest extends TestCase
         $this->assertEquals(Partner::INDIVIDUAL, $partner->getType());
         $this->assertEquals($partner->getPartnerId(), 'TEST12345');
         $this->assertEquals(array(Partner::ROLE_CUSTOMER, Partner::ROLE_EMPLOYEE), $partner->getRoles());
+        $this->assertNotNull($partner->getPersonalDetails(), "The PartnerManager should have created empty personalDetails");
     }
     
     public function testFindPartner()

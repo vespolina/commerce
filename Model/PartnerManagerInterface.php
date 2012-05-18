@@ -58,10 +58,32 @@ interface PartnerManagerInterface
     function createPartnerOrganisationDetails();
     
     /**
+     * Returns a single partner with given id
+     * @param string $id
+     * @return Vespolina\PartnerBundle\Model\PartnerInterface or null when no result found
+     */
+    function find($id);
+    
+    /**
      * Returns a single partner with given partnerId
      * @param string $partnerId
      * @return Vespolina\PartnerBundle\Model\PartnerInterface or null when no result found
      */
     function findOneByPartnerId($partnerId);
+    
+    /**
+     * Returns all partners
+     * 
+     * @return Doctrine\MongoDB\Collection
+     */
+    function findAll();
+    
+    /**
+     * Returns all partners for given role
+     * 
+     * @param string $role
+     * @return Doctrine\MongoDB\Collection
+     */
+    function findAllByRole($role);
     
 }
