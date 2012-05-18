@@ -5,6 +5,10 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <mapped-superclass name="Vespolina\PartnerBundle\Document\BasePersonalDetails">
+        <field name="initials"                          fieldName="initials"                           type="string" />
+        <field name="firstname"                         fieldName="firstname"                          type="string" />
+        <field name="prefix"                            fieldName="prefix"                             type="string" />
+        <field name="lastname"                          fieldName="lastname"                           type="string" />
         <field name="nationalIdentificationNumber"      fieldName="nationalIdentificationNumber"       type="string" />
     </mapped-superclass>
 
