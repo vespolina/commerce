@@ -105,6 +105,9 @@ class PartnerManagerTest extends TestCase
         $partner->setPrimaryContact($contact);
         
         $personalDetails = $this->partnerMgr->createPartnerPersonalDetails();
+        $personalDetails->setInitials('W');
+        $personalDetails->setFirstname('Willem-Jan');
+        $personalDetails->setLastname('Zijderveld');
         $personalDetails->setNationalIdentificationNumber('1234567890');
         
         $partner->setPersonalDetails($personalDetails);
@@ -143,6 +146,8 @@ class PartnerManagerTest extends TestCase
         // personal details
         $details = $partner->getPersonalDetails();
         $this->assertEquals('1234567890', $details->getNationalIdentificationNumber());
+        $this->assertEquals('W', $details->getInitials());
+        $this->assertEquals('Zijderveld', $details->getLastname());
     }
 
     public function testCustomField()

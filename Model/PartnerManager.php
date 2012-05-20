@@ -137,4 +137,19 @@ abstract class PartnerManager implements PartnerManagerInterface
         return in_array($role, $this->partnerRoles);
     }
     
+    /**
+     * Generates and returns the name of the partner
+     * @return string
+     */
+    public function generatePartnerName(PersonalDetails $personalDetails)
+    {
+        $parts = array();
+        foreach (array('initials', 'prefix', 'lastname') as $part) {
+            if ('' !== ($value = (string)$personalDetails->{'get'.ucfirst($part)}()))
+                $parts[] = $value;
+        }
+        
+        return join(' ', $parts);
+    }
+    
 }

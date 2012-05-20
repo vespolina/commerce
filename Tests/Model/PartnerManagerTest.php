@@ -8,6 +8,8 @@
 
 namespace Vespolina\PartnerBundle\Tests\Model;
 
+use Vespolina\PartnerBundle\Model\PersonalDetails;
+
 use Vespolina\PartnerBundle\Model\AddressInterface;
 
 use Vespolina\PartnerBundle\Model\IndividualPartner;
@@ -39,5 +41,16 @@ class PartnerManagerTest extends PartnerTestCommon
     public function testCreateAddress()
     {
         $this->assertTrue($this->getManager()->createPartnerAddress() instanceOf AddressInterface);
+    }
+    
+    public function testGenerateName()
+    {
+        $personalDetails = new PersonalDetails();
+        $personalDetails->setFirstname('Willem-Jan');
+        $personalDetails->setInitials('W');
+        $personalDetails->setPrefix('the');
+        $personalDetails->setLastname('Lastname');
+        
+        $this->assertEquals('W the Lastname', $this->getManager()->generatePartnerName($personalDetails));
     }
 }
