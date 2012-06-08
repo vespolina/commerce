@@ -37,6 +37,7 @@ abstract class Product implements ProductInterface
     protected $options;
     protected $slug;
     protected $type;
+    protected $assets;
     protected $updateAt;
 
     /**
@@ -95,6 +96,22 @@ abstract class Product implements ProductInterface
         }
 
         return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addAsset(AssetInterface $asset)
+    {
+        $this->assets[] = $asset;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAssets()
+    {
+        return $this->assets;
     }
 
     /**
