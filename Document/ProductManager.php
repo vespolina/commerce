@@ -21,12 +21,12 @@ class ProductManager extends BaseProductManager
     protected $productClass;
     protected $productRepo;
 
-    public function __construct(DocumentManager $dm, $productClass, $identifiers, $identifierSetClass, $mediaManager = null)
+    public function __construct(DocumentManager $dm, $productClass, $identifiers, $identifierSetClass, $assetManager)
     {
         $this->dm = $dm;
         $this->productClass = $productClass;
         $this->productRepo = $this->dm->getRepository($productClass);
-        parent::__construct($identifiers, $identifierSetClass, $mediaManager);
+        parent::__construct($identifiers, $identifierSetClass, $assetManager);
     }
 
     /**

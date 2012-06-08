@@ -12,12 +12,24 @@
     <div class="span10">
         <div class="row">
             <div class="span8">
-                <span class="v-product-primary-media-item">
-                {% include 'VespolinaProductBundle:Default:_product_primary_media.html.twig' with {'product': product, 'type': 'medium' } %}
-                </span>
-                <span class ="v-product-description">
-                    {{product.description}}
-                </span>
+                <div class="v-product-primary-media-item row">
+                <ul class="thumbnails">
+                    <li class="span8">
+                        <div class="thumbnail">
+                            <img src="{{ asset( product.findAsset('main_detail').filename ) }}"
+                        </div>
+                    </li>
+                {% for asset in product.assets %}
+                    {% if asset.type == 'secondary_detail' %}
+                    <li class="span2">
+                        <div class="thumbnail">
+                            <img src="{{ asset( asset.filename) }}"
+                        </div>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+                </div>
             </div>
             <div class="v-product-order span2">
                 <div class="v-product-price well">
@@ -39,6 +51,9 @@
                     </div>
                 </div>
 
+                <span class ="v-product-description">
+                    {{product.description}}
+                </span>
             </div>
         </div>
     </div>
