@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use Vespolina\ProductBundle\Model\Asset as AbstractAsset;
+use Vespolina\ProductBundle\Model\AssetInterface;
 /**
  * @author Myke Hines <myke@webhines.com>
  */
