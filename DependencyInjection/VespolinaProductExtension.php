@@ -37,6 +37,7 @@ class VespolinaProductExtension extends Extension
         $loader->load('features.xml');
         $loader->load('options.xml');
         $loader->load('product.xml');
+        $loader->load('twig.xml');
 
         if (isset($config['identifier_set'])) {
             $this->configureIdentifierSet($config['identifier_set'], $container);

@@ -18,11 +18,9 @@
 
         <field name="updatedAt" fieldName="updatedAt" type="date" />
 
-        <embed-many
+        <refence-many
             target-document="Vespolina\ProductBundle\Document\Asset"
             field="assets"
-            fieldName="assets"
-            strategy="set"
         />
 
         <lifecycle-callbacks>

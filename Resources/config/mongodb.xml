@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="vespolina.product.product_manager.class">Vespolina\ProductBundle\Document\ProductManager</parameter>
-        <parameter key="vespolina.product.asset_manager.class">Vespolina\ProductBundle\Model\AssetManager</parameter>
+        <parameter key="vespolina.product.asset_manager.class">Vespolina\ProductBundle\Document\AssetManager</parameter>
         <parameter key="vespolina.product.asset.class">Vespolina\ProductBundle\Document\Asset</parameter>
         <parameter key="vespolina.product.admin_manager.class">Vespolina\ProductBundle\Document\ProductAdminManager</parameter>
         <parameter key="vespolina.product.model.product.class">Application\Vespolina\ProductBundle\Document\Product</parameter>

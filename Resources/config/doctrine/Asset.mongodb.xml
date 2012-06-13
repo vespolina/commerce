@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                        http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <document name="Vespolina\ProductBundle\Document\Asset" collection="vespolina_assets">
+        <field name="id" id="true" />
+        <field name="lable" fieldName="label" type="string" />
+        <field name="priority" fieldName="priority" type="string" />
+        <field name="file_name" fieldName="file_name" type="string" />
+        <field name="height" fieldName="height" type="string" />
+        <field name="width" fieldName="width" type="string" />
+        <field name="mime" fieldName="mime" type="string" />
+        <field name="type" fieldName="type" type="string" />
+
+        <reference-one
+            field="product"
+            target-document="Vespolina\ProductBundle\Document\BaseProduct"
+        />
+    </document>
+</doctrine-mongo-mapping>
