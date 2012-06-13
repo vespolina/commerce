@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
  */
 abstract class Asset implements AssetInterface
 {
+    protected $id;
     protected $label;
     protected $priority;
     protected $file_name;
@@ -24,6 +25,16 @@ abstract class Asset implements AssetInterface
     protected $type;
     protected $product;
 
+
+    function getId()
+    {
+        return $this->id;
+    }
+
+    function setId($id)
+    {
+        $this->id = $id;
+    }
     /**
      * Set the asset label
      *

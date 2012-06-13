@@ -17,6 +17,10 @@ class AssetManager
     private $dm;
     protected $assetModelClass;
 
+    /**
+     * Searches for a particular asset type from a product
+     *
+     */
     public function hasType( ProductInterface $product, $type)
     {
         if ($this->findAssetByType($product, $type))
@@ -24,11 +28,26 @@ class AssetManager
         return false;
     }
 
+    /**
+     * Returns a single asset (first) of a particular type
+     */
     public function getType (ProductInterface $product, $type)
     {
         return $this->findAssetByType($product, $type);
     }
 
+    /**
+     * Returns all assets of a particular type
+     */
+    public function getTypes (ProductInterface $product, $type)
+    {
+        return $this->findAssetsByType($product, $type);
+    }
+
+    /**
+     * Creates an asset and links to a product
+     * $product must be persisted before this action is executed
+     */
     public function createAsset (ProductInterface $product, $fileLocation, $type)
     {
         $baseClass = $this->assetModelClass;

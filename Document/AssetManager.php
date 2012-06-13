@@ -40,9 +40,18 @@ class AssetManager extends BaseAssetManager
     /**
      * @inheritdoc
      */
+    public function findAssetsByType($product, $type)
+    {
+        $assets = $this->assetRepo->findBy( array('type' => $type, 'product' => new \MongoId($product->getId() )));
+        return $assets;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function findAssetByType($product, $type)
     {
-        $asset = $this->dm->getRepository('VespolinaProductBundle:Asset')->findOneBy( array('type' => 'main_detail', 'product.id' => $product->getId() ));
+        $asset = $this->assetRepo->findOneBy( array('type' => $type, 'product' => new \MongoId($product->getId() )));
         return $asset;
     }
 

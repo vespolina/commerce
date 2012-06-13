@@ -14,7 +14,7 @@ use Vespolina\ProductBundle\Model\Asset as AbstractAsset;
 /**
  * @author Myke Hines <myke@webhines.com>
  */
-class Asset extends AbstractAsset
+class Asset extends AbstractAsset implements AssetInterface
 {
     protected $id;
 

@@ -4,9 +4,9 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Vespolina\ProductBundle\Document\Asset" collection="vespolina_assets">
+    <document name="Vespolina\ProductBundle\Document\Asset" collection="vespolinaProductAssets">
         <field name="id" id="true" />
-        <field name="lable" fieldName="label" type="string" />
+        <field name="label" fieldName="label" type="string" />
         <field name="priority" fieldName="priority" type="string" />
         <field name="file_name" fieldName="file_name" type="string" />
         <field name="height" fieldName="height" type="string" />
@@ -16,7 +16,8 @@
 
         <reference-one
             field="product"
-            target-document="Vespolina\ProductBundle\Document\BaseProduct"
+            simple="true"
+            target-document="Application\Vespolina\ProductBundle\Document\Product"
         />
     </document>
 </doctrine-mongo-mapping>

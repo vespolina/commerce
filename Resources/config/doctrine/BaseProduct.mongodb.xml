@@ -21,6 +21,7 @@
         <refence-many
             target-document="Vespolina\ProductBundle\Document\Asset"
             field="assets"
+            simple="true"
         />
 
         <lifecycle-callbacks>
