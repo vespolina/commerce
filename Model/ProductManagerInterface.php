@@ -90,11 +90,11 @@ interface ProductManagerInterface
     function findProductByIdentifier($name, $code);
 
     /**
-     * Return the configured media manager for the ProductBundle
+     * Return the configured asset manager for the ProductBundle
      *
      * @return service or null
      */
-    function getMediaManager();
+    function getAssetManager();
 
     /**
      * Return a product handler object

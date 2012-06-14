@@ -23,15 +23,15 @@ abstract class ProductManager implements ProductManagerInterface
     protected $productHandlers;
     protected $identifiers;
     protected $identifierSetClass;
-    protected $mediaManager;
     protected $productClass; // todo: remove after default product is created through a handler
+    protected $assetManager;
 
-    public function __construct($identifiers, $identifierSetClass, $mediaManager = null)
+    public function __construct($identifiers, $identifierSetClass, $assetManager)
     {
         $this->productHandlers = array();
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
-        $this->mediaManager = $mediaManager;
+        $this->assetManager = $assetManager;
     }
 
     /**
@@ -106,17 +106,6 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function getMediaManager()
-    {
-        if (!$this->mediaManager) {
-            throw new InvalidConfigurationException('The MediaManager has not been configured for the Vespolina ProductBundle');
-        }
-        return $this->mediaManager;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getOptionClass()
     {
         // TODO: make configurable
@@ -149,5 +138,10 @@ abstract class ProductManager implements ProductManagerInterface
     public function removeProductHandler($type)
     {
         unset($this->productHandlers[$type]);
+    }
+
+    public function getAssetManager()
+    {
+        return $this->assetManager;
     }
 }

@@ -28,5 +28,7 @@ abstract class BaseProduct extends AbstractProduct
 
         $this->identifierSetClass = $identifierSetClass;
         $this->identifiers = new ArrayCollection();
+        $this->assets = new ArrayCollection();
     }
+
 }
