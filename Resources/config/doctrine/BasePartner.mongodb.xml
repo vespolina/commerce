@@ -21,7 +21,7 @@
         
                                               <!-- Both should probabyly be moved to a VespolinaCommonBundle  -->
         <embed-one field="primaryContact" target-document="Vespolina\PartnerBundle\Document\Contact" />
-        <embed-many field="addresses" target-document="Vespolina\PartnerBundle\Document\Address" unique="true" order="asc" />
+        <embed-many field="addresses" target-document="Vespolina\PartnerBundle\Document\Address" />
         
     </mapped-superclass>
 
