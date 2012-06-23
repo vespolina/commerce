@@ -9,12 +9,12 @@
 namespace Vespolina\CartBundle\Event;
 
 use \Symfony\Component\HttpKernel\Event\KernelEvent;
-use \Vespolina\CartBundle\Model\CartInterface;
+use \Vespolina\Entity\OrderInterface;
 
 class CartEvent extends KernelEvent
 {
     /**
-     * @var \Vespolina\CartBundle\Model\CartInterface $cart
+     * @var \Vespolina\Entity\OrderInterface $cart
      */
     protected $cart;
 

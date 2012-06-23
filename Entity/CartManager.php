@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManager;
 
 use Vespolina\CartBundle\Entity\Cart;
 use Vespolina\CartBundle\Model\CartableItemInterface;
-use Vespolina\CartBundle\Model\CartInterface;
+use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Model\CartItemInterface;
 use Vespolina\CartBundle\Model\CartManager as BaseCartManager;
 use Vespolina\CartBundle\Pricing\CartPricingProviderInterface;

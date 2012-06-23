@@ -10,7 +10,7 @@
 namespace Vespolina\CartBundle\Model;
 
 use Vespolina\CartBundle\Model\CartableItemInterface;
-use Vespolina\CartBundle\Model\CartInterface;
+use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Model\CartItemInterface;
 
 interface CartManagerInterface
@@ -89,7 +89,7 @@ interface CartManagerInterface
      * Save or update the supplied cart
      *
      * @abstract
-     * @param \Vespolina\CartBundle\Model\CartInterface $cart
+     * @param \Vespolina\Entity\OrderInterface $cart
      * @param $andFlush
      * @return void
      */

@@ -9,7 +9,7 @@
 namespace Vespolina\CartBundle\Handler;
 
 use Vespolina\CartBundle\Handler\AbstractCartHandler;
-use Vespolina\CartBundle\Model\CartInterface;
+use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Model\CartItemInterface;
 
 /**

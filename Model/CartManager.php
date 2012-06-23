@@ -15,7 +15,7 @@ use Vespolina\CartBundle\CartEvents;
 use Vespolina\CartBundle\Event\CartEvent;
 use Vespolina\CartBundle\Event\CartPricingEvent;
 use Vespolina\CartBundle\Model\CartableItemInterface;
-use Vespolina\CartBundle\Model\CartInterface;
+use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Model\CartItemInterface;
 use Vespolina\CartBundle\Model\CartManagerInterface;
 use Vespolina\CartBundle\Pricing\CartPricingProviderInterface;

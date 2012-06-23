@@ -8,7 +8,7 @@
 
 namespace Vespolina\CartBundle\Model;
 
-use Vespolina\CartBundle\Model\CartInterface;
+use Vespolina\Entity\OrderInterface;
 
 /**
  * CartItemInterface is a generic interface for shopping cart item
@@ -29,7 +29,7 @@ interface CartItemInterface
     /**
      * Get the cart to which this item belongs
      *
-     * @return Vespolina\CartBundle\Model\CartInterface
+     * @return Vespolina\Entity\OrderInterface
      */
     function getCart();
 

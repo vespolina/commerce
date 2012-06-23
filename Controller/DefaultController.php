@@ -10,7 +10,7 @@ namespace Vespolina\CartBundle\Controller;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Vespolina\CartBundle\Model\CartInterface;
+use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Form\Cart as CartForm;
 use Vespolina\StoreBundle\Controller\AbstractController;
 
