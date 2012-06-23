@@ -11,8 +11,8 @@ use Symfony\Component\DependencyInjection\Container;
 use Doctrine\ORM\EntityManager;
 
 use Vespolina\CartBundle\Entity\Cart;
-use Vespolina\CartBundle\Model\CartableItemInterface;
 use Vespolina\Entity\OrderInterface;
+use Vespolina\Entity\ProductInterface;
 use Vespolina\CartBundle\Model\CartItemInterface;
 use Vespolina\CartBundle\Model\CartManager as BaseCartManager;
 use Vespolina\CartBundle\Pricing\CartPricingProviderInterface;
@@ -41,7 +41,7 @@ class CartManager extends BaseCartManager
         parent::__construct($pricingProvider, $cartClass, $cartItemClass);
     }
 
-    public function addItemToCart(CartInterface $cart, CartableItemInterface $cartableItem, $quantity = null)
+    public function addItemToCart(CartInterface $cart, ProductInterface $cartableItem, $quantity = null)
     {
         $item = $this->doAddItemToCart($cart, $cartableItem, $quantity);
 

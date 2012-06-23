@@ -11,7 +11,7 @@ namespace Vespolina\CartBundle\Pricing;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Vespolina\CartBundle\Handler\CartHandlerInterface;
-use Vespolina\CartBundle\Model\CartableItemInterface;
+use Vespolina\Entity\ProductInterface;
 use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Model\CartItemInterface;
 use Vespolina\CartBundle\Pricing\AbstractCartPricingProvider;

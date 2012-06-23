@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Vespolina\CartBundle\CartEvents;
 use Vespolina\CartBundle\Event\CartEvent;
 use Vespolina\CartBundle\Event\CartPricingEvent;
-use Vespolina\CartBundle\Model\CartableItemInterface;
+use Vespolina\Entity\ProductInterface;
 use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Model\CartItemInterface;
 use Vespolina\CartBundle\Model\CartManagerInterface;
@@ -44,9 +44,9 @@ abstract class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function addItemToCart(CartInterface $cart, CartableItemInterface $cartableItem)
+    public function addItemToCart(CartInterface $cart, ProductInterface $product)
     {
-        $item = $this->doAddItemToCart($cart, $cartableItem);
+        $item = $this->doAddItemToCart($cart, $product);
 
         return $item;
     }
@@ -65,9 +65,9 @@ abstract class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function createItem(CartableItemInterface $cartableItem = null)
+    public function createItem(ProductInterface $product = null)
     {
-        $cartItem = new $this->cartItemClass($cartableItem);
+        $cartItem = new $this->cartItemClass($product);
         $this->initCartItem($cartItem);
 
         return $cartItem;
@@ -174,7 +174,7 @@ abstract class CartManager implements CartManagerInterface
         $rp->setAccessible(false);
     }
 
-    public function findItemInCart(CartInterface $cart, CartableItemInterface $cartableItem)
+    public function findItemInCart(CartInterface $cart, ProductInterface $cartableItem)
     {
         foreach ($cart->getItems() as $item)
         {
@@ -186,7 +186,7 @@ abstract class CartManager implements CartManagerInterface
         return null;
     }
 
-    public function removeItemFromCart(CartInterface $cart, CartableItemInterface $cartableItem, $flush = true)
+    public function removeItemFromCart(CartInterface $cart, ProductInterface $cartableItem, $flush = true)
     {
         $this->doRemoveItemFromCart($cart, $cartableItem);
     }
@@ -200,7 +200,7 @@ abstract class CartManager implements CartManagerInterface
         $rm->setAccessible(false);
     }
 
-    protected function doAddItemToCart(CartInterface $cart, CartableItemInterface $cartableItem)
+    protected function doAddItemToCart(CartInterface $cart, ProductInterface $cartableItem)
     {
         if ($cartItem = $this->findItemInCart($cart, $cartableItem)) {
             $quantity = $cartItem->getQuantity() + 1;
@@ -220,7 +220,7 @@ abstract class CartManager implements CartManagerInterface
         return $item;
     }
 
-    protected function doRemoveItemFromCart(CartInterface $cart, CartableItemInterface $cartableItem)
+    protected function doRemoveItemFromCart(CartInterface $cart, ProductInterface $cartableItem)
     {
         $item = $this->findItemInCart($cart, $cartableItem);
 

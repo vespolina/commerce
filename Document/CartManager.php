@@ -10,7 +10,7 @@ namespace Vespolina\CartBundle\Document;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Vespolina\CartBundle\Document\Cart;
-use Vespolina\CartBundle\Model\CartableItemInterface;
+use Vespolina\Entity\ProductInterface;
 use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Model\CartItemInterface;
 use Vespolina\CartBundle\Model\CartManager as BaseCartManager;
