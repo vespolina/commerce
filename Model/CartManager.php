@@ -128,15 +128,15 @@ abstract class CartManager implements CartManagerInterface
     {
         // todo: this should be moved into a handler
         //Default cart item description to the product name
-        if ($cartableItem = $cartItem->getCartableItem()) {
-            $cartItem->setName($cartableItem->getCartableName());
+        if ($product = $cartItem->getProduct()) {
+            $cartItem->setName($product->getName());
             $cartItem->setDescription($cartItem->getName());
             $rpPricingSet = new \ReflectionProperty($cartItem, 'pricingSet');
             $rpPricingSet->setAccessible(true);
             $rpPricingSet->setValue($cartItem, $this->getPricingProvider()->createPricingSet());
             $rpPricingSet->setAccessible(false);
             // todo: especially this damn thing, and get the Interface out of the __construct
-            if ($cartableItem instanceof $this->recurringInterface) {
+            if ($product instanceof $this->recurringInterface) {
                 $rp = new \ReflectionProperty($cartItem, 'isRecurring');
                 $rp->setAccessible(true);
                 $rp->setValue($cartItem, true);
@@ -174,11 +174,10 @@ abstract class CartManager implements CartManagerInterface
         $rp->setAccessible(false);
     }
 
-    public function findItemInCart(CartInterface $cart, ProductInterface $cartableItem)
+    public function findItemInCart(CartInterface $cart, ProductInterface $product)
     {
-        foreach ($cart->getItems() as $item)
-        {
-            if ($item->getCartableItem() == $cartableItem) {
+        foreach ($cart->getItems() as $item) {
+            if ($item->getProduct() == $product) {
                 return $item;
             };
         }
@@ -186,9 +185,9 @@ abstract class CartManager implements CartManagerInterface
         return null;
     }
 
-    public function removeItemFromCart(CartInterface $cart, ProductInterface $cartableItem, $flush = true)
+    public function removeItemFromCart(CartInterface $cart, ProductInterface $product, $flush = true)
     {
-        $this->doRemoveItemFromCart($cart, $cartableItem);
+        $this->doRemoveItemFromCart($cart, $product);
     }
 
     public function setItemQuantity(CartItemInterface $cartItem, $quantity)
@@ -200,16 +199,16 @@ abstract class CartManager implements CartManagerInterface
         $rm->setAccessible(false);
     }
 
-    protected function doAddItemToCart(CartInterface $cart, ProductInterface $cartableItem)
+    protected function doAddItemToCart(CartInterface $cart, ProductInterface $product)
     {
-        if ($cartItem = $this->findItemInCart($cart, $cartableItem)) {
+        if ($cartItem = $this->findItemInCart($cart, $product)) {
             $quantity = $cartItem->getQuantity() + 1;
             $this->setItemQuantity($cartItem, $quantity);
 
             return $cartItem;
         }
 
-        $item = $this->createItem($cartableItem);
+        $item = $this->createItem($product);
 
         // add item to cart
         $rm = new \ReflectionMethod($cart, 'addItem');
@@ -220,9 +219,9 @@ abstract class CartManager implements CartManagerInterface
         return $item;
     }
 
-    protected function doRemoveItemFromCart(CartInterface $cart, ProductInterface $cartableItem)
+    protected function doRemoveItemFromCart(CartInterface $cart, ProductInterface $product)
     {
-        $item = $this->findItemInCart($cart, $cartableItem);
+        $item = $this->findItemInCart($cart, $product);
 
         // add item to cart
         $rm = new \ReflectionMethod($cart, 'removeItem');

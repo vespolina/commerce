@@ -49,7 +49,7 @@ abstract class AbstractCartPricingProvider implements CartPricingProviderInterfa
 
     protected function getCartHandler(CartItemInterface $cartItem)
     {
-        $type = $cartItem->getCartableItem()->getType();
+        $type = $cartItem->getProduct()->getType();
         if (!isset($this->handlers[$type])) {
 
             //Fall back to the default handler

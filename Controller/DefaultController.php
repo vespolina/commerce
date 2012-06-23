@@ -22,7 +22,6 @@ class DefaultController extends AbstractController
 {
     public function quickInspectionAction()
     {
-
         $cartManager = $this->container->get('vespolina.cart_manager');
         $cart = $this->getCart();
 
@@ -42,26 +41,26 @@ class DefaultController extends AbstractController
         return $this->render('VespolinaCartBundle:Default:navBar.html.twig', array('cart' => $cart, 'totalPrice' => $totalPrice ));
     }
 
-    public function addToCartAction($cartableId, $cartId = null)
+    public function addToCartAction($productId, $cartId = null)
     {
-        $cartable = $this->findCartableById($cartableId);
+        $product = $this->findProductById($productId);
         $cart = $this->getCart($cartId);
 
         try{
-            $this->container->get('vespolina.cart_manager')->addItemToCart($cart, $cartable);
+            $this->container->get('vespolina.cart_manager')->addItemToCart($cart, $product);
             $this->finishCart($cart);
         }catch(\Exception $e) {}    //Dirty temporary hack
 
         return new RedirectResponse($this->container->get('router')->generate('vespolina_cart_show', array('cartId' => $cartId)));
     }
 
-    public function removeFromCartAction($cartableId, $cartId = null)
+    public function removeFromCartAction($productId, $cartId = null)
     {
         $cart = $this->getCart($cartId);
-        $cartable = $this->findCartableById($cartableId);
+        $product = $this->findProductById($productId);
 
         try{
-            $this->container->get('vespolina.cart_manager')->removeItemFromCart($cart, $cartable);
+            $this->container->get('vespolina.cart_manager')->removeItemFromCart($cart, $product);
             $this->finishCart($cart);
 
         }catch(\Exception $e) {}    //Dirty temporary hack
@@ -78,11 +77,11 @@ class DefaultController extends AbstractController
             $data = $request->get('cart');
             foreach ($data['items'] as $item)
             {
-                $cartableItem = $this->findCartableById($item['cartableItem']['id']);
+                $product = $this->findProductById($item['product']['id']);
                 if ($item['quantity'] < 1)
                 {
-                    $this->container->get('vespolina.cart_manager')->removeItemFromCart ($cart, $cartableItem);
-                } elseif ($cartItem = $this->container->get('vespolina.cart_manager')->findItemInCart($cart, $cartableItem)) {
+                    $this->container->get('vespolina.cart_manager')->removeItemFromCart ($cart, $product);
+                } elseif ($cartItem = $this->container->get('vespolina.cart_manager')->findItemInCart($cart, $product)) {
                     $this->container->get('vespolina.cart_manager')->setItemQuantity($cartItem, $item['quantity']);
                 }
             }
@@ -105,7 +104,7 @@ class DefaultController extends AbstractController
         return new Response($template);
     }
 
-    protected function findCartableById($productId)
+    protected function findProductById($productId)
     {
         return $this->container->get('vespolina.product_manager')->findProductById($productId);
     }

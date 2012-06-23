@@ -28,7 +28,7 @@ class DefaultCartHandler extends  AbstractCartHandler
 
     public function determineCartItemPrices(CartItemInterface $cartItem, $pricingContext)
     {
-        $pricing = $cartItem->getCartableItem()->getPricing();
+        $pricing = $cartItem->getProduct()->getPricing();
         $pricingSet = $cartItem->getPricingSet();
         $unitNett = $pricing['unitPriceTotal'];
         $upChargeNett = 0;
@@ -74,7 +74,7 @@ class DefaultCartHandler extends  AbstractCartHandler
 
         foreach($cartItem->getOptions() as $type => $value) {
 
-            if ($productOption = $cartItem->getCartableItem()->getOptionSet(array($type => $value))) {
+            if ($productOption = $cartItem->getProduct()->getOptionSet(array($type => $value))) {
                 $upCharge += $productOption->getUpcharge();
             }
         }

@@ -5,7 +5,7 @@ namespace Vespolina\CartBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class CartableItem extends AbstractType
+class Product extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -22,7 +22,7 @@ class CartableItem extends AbstractType
 
     public function getName()
     {
-        return 'cartableItem';
+        return 'product';
     }
 
 }

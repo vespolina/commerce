@@ -11,6 +11,7 @@ namespace Vespolina\CartBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+use Vespolina\Entity\Item;
 use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Model\CartItemInterface;
 
@@ -20,10 +21,8 @@ use Vespolina\CartBundle\Model\CartItemInterface;
  * @author Daniel Kucharski <daniel@xerias.be>
  * @author Richard Shank <develop@zestic.com>
  */
-abstract class CartItem implements CartItemInterface
+abstract class CartItem extends Item
 {
-    protected $cart;
-    protected $cartableItem;
     protected $description;
     protected $isRecurring;
     protected $name;
@@ -35,9 +34,9 @@ abstract class CartItem implements CartItemInterface
     protected $state;
     protected $totalPrice;
 
-    public function __construct($cartableItem = null)
+    public function __construct($product = null)
     {
-        $this->cartableItem = $cartableItem;
+        $this->product = $product;
         $this->isRecurring = false;
         $this->options = array();
         $this->prices = array();
@@ -52,42 +51,9 @@ abstract class CartItem implements CartItemInterface
     /**
      * @inheritdoc
      */
-    public function addOption($type, $value = null)
-    {
-        if (is_array($type)) {
-            $key = key($type);
-            $value = $type[$key];
-            $type = $key;
-        }
-
-        $this->options[$type] = $value;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getCart()
     {
-        return $this->cart;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getOption($type)
-    {
-        if (array_key_exists($type, $this->options)) {
-
-            return $this->options[$type];
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getOptions()
-    {
-        return $this->options;
+        return $this->getParent();
     }
 
 
@@ -99,33 +65,9 @@ abstract class CartItem implements CartItemInterface
     /**
      * @inheritdoc
      */
-    public function getCartableItem()
-    {
-        return $this->cartableItem;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function setCart(CartInterface $cart)
     {
-        $this->cart = $cart;
+        $this->setParent($cart);
     }
 
     /**
@@ -157,38 +99,6 @@ abstract class CartItem implements CartItemInterface
     public function setPricingSet($pricingSet)
     {
         $this->pricingSet = $pricingSet;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function setState($state)
-    {
-        $this->state = $state;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**

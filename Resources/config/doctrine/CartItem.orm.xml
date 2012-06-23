@@ -18,7 +18,7 @@
 
         <many-to-one field="cart" target-entity="Vespolina\CartBundle\Entity\Cart" inversed-by="cartItems">
               <join-column name="cartId" referenced-column-name="id" />
-          </many-to-one>
+        </many-to-one>
 
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="prePersistCartItem" />

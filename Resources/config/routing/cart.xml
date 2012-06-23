@@ -14,17 +14,17 @@
         <requirement key="_method">POST</requirement>
     </route>
 
-    <route id="vespolina_cart_add_cartable" pattern="/add/{cartableId}/{cartId}">
+    <route id="vespolina_cart_add_product" pattern="/add/{productId}/{cartId}">
         <default key="_controller">VespolinaCartBundle:Default:addToCart</default>
         <default key="cartId"></default>
     </route>
 
-    <route id="vespolina_cart_update_cartable_quantity" pattern="/update-quantity/{cartableId}/{count}">
+    <route id="vespolina_cart_update_product_quantity" pattern="/update-quantity/{productId}/{count}">
         <default key="_controller">VespolinaCartBundle:Default:updateQuantity</default>
         <default key="cartId"></default>
     </route>
 
-    <route id="vespolina_cart_remove_cartable" pattern="/remove/{cartableId}/{cartId}">
+    <route id="vespolina_cart_remove_product" pattern="/remove/{productId}/{cartId}">
         <default key="_controller">VespolinaCartBundle:Default:removeFromCart</default>
         <default key="cartId"></default>
     </route>
