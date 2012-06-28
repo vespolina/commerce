@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class OptionFormType extends AbstractType
 {
@@ -21,7 +21,7 @@ class OptionFormType extends AbstractType
         $this->name = $name;
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('display', 'text', array(

@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Vespolina\ProductBundle\Form\Type\FeatureFormType;
 
 /**
@@ -16,7 +16,8 @@ use Vespolina\ProductBundle\Form\Type\FeatureFormType;
  */
 class ProductFormType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')

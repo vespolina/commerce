@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 use Vespolina\ProductBundle\Form\Type\ConfiguredOptionGroupFormType;
 
 class OptionGroupFormType extends ConfiguredOptionGroupFormType
@@ -18,7 +18,7 @@ class OptionGroupFormType extends ConfiguredOptionGroupFormType
         parent::__construct($dataClass);
     }
 
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
         $builder
