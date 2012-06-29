@@ -20,7 +20,7 @@ class ProductManagerTest extends ProductTestCommon
     {
         $product = $this->persistNewProduct('test');
 
-        $this->assertInstanceOf('Vespolina\ProductBundle\Model\ProductInterface', $this->productMgr->findProductByName('test'), 'a single result should return that product');
+        $this->assertInstanceOf('Vespolina\Entity\ProductInterface', $this->productMgr->findProductByName('test'), 'a single result should return that product');
 
         $this->persistNewProduct('test');
         $this->assertInstanceOf('Doctrine\ODM\MongoDB\Cursor', $this->productMgr->findProductByName('test'), 'multiple results returns collection');

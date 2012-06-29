@@ -7,14 +7,14 @@
  */
 namespace Vespolina\ProductBundle\Handler;
 
-use Vespolina\ProductBundle\Model\ProductInterface;
+use Vespolina\Entity\ProductInterface;
 
 interface ProductHandlerInterface
 {
     /**
      * Return a newly created product type for the handler
      *
-     * @return Vespolina\ProductBundle\Model\ProductInterface
+     * @return Vespolina\Entity\ProductInterface
      */
     function createProduct();
 

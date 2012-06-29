@@ -22,7 +22,7 @@
                         <div class="v-product-order">
                             <span class="v-product-price">
                                 {% include 'VespolinaProductBundle:Default:_product_prices.html.twig' with {'product': product } %}
-                                <a class="btn" href="{{ path('vespolina_cart_add_cartable', {'cartableId': product.id}) }}">Add to Cart</a>
+                                <a class="btn" href="{{ path('vespolina_cart_add_product', {'productId': product.id}) }}">Add to Cart</a>
                             </span>
                         </div>
                     </span>

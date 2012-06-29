@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Handler;
 
 use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
-use Vespolina\ProductBundle\Model\ProductInterface;
+use Vespolina\Entity\ProductInterface;
 
 abstract class ProductHandler implements ProductHandlerInterface
 {

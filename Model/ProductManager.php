@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
-use Vespolina\ProductBundle\Model\ProductInterface;
+use Vespolina\Entity\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;

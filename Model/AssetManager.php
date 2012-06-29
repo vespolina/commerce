@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Model;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-
+use Vespolina\Entity\ProductInterface;
 /**
  * @author Myke Hines <myke@webhines.com>
  */
@@ -21,7 +21,7 @@ class AssetManager
      * Searches for a particular asset type from a product
      *
      */
-    public function hasType( ProductInterface $product, $type)
+    public function hasType(ProductInterface $product, $type)
     {
         if ($this->findAssetByType($product, $type))
             return true;
@@ -31,7 +31,7 @@ class AssetManager
     /**
      * Returns a single asset (first) of a particular type
      */
-    public function getType (ProductInterface $product, $type)
+    public function getType(ProductInterface $product, $type)
     {
         return $this->findAssetByType($product, $type);
     }
@@ -39,7 +39,7 @@ class AssetManager
     /**
      * Returns all assets of a particular type
      */
-    public function getTypes (ProductInterface $product, $type)
+    public function getTypes(ProductInterface $product, $type)
     {
         return $this->findAssetsByType($product, $type);
     }
@@ -48,7 +48,7 @@ class AssetManager
      * Creates an asset and links to a product
      * $product must be persisted before this action is executed
      */
-    public function createAsset (ProductInterface $product, $fileLocation, $type)
+    public function createAsset(ProductInterface $product, $fileLocation, $type)
     {
         $baseClass = $this->assetModelClass;
         $asset = new $baseClass;
@@ -59,5 +59,4 @@ class AssetManager
         $this->updateasset($asset, true);
         return $asset;
     }
-
 }
