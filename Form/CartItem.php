@@ -9,7 +9,7 @@ class CartItem extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('cartableItem', new CartableItem());
+        $builder->add('product', new Product());
         $builder->add('quantity', 'integer', array('required' => true ));
     }
 

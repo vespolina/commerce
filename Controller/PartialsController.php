@@ -9,7 +9,7 @@ namespace Vespolina\CartBundle\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 
-use Vespolina\CartBundle\Model\CartInterface;
+use Vespolina\Entity\OrderInterface;
 
 /**
  * @author Richard D Shank <develop@zestic.com>

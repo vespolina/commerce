@@ -9,7 +9,7 @@
 namespace Vespolina\CartBundle\Handler;
 
 use Vespolina\CartBundle\Handler\CartHandlerInterface;
-use Vespolina\CartBundle\Model\CartItemInterface;
+use Vespolina\Entity\ItemInterface;
 use Vespolina\CartBundle\Pricing\PricingSet;
 
 /**
@@ -24,7 +24,7 @@ abstract class AbstractCartHandler implements CartHandlerInterface
         return new PricingSet();
     }
 
-    public function determineCartItemPrices(CartItemInterface $cartItem, $pricingContext)
+    public function determineCartItemPrices(ItemInterface $cartItem, $pricingContext)
     {
         throw new \Exception("Sorry determineCartItemPrices() doesn't have default functionality in place");
     }

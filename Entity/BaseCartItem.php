@@ -13,14 +13,13 @@ use Vespolina\CartBundle\Model\CartItem as AbstractCartItem;
  */
 abstract class BaseCartItem extends AbstractCartItem
 {
-
     protected $cartableItemId;
     protected $pricingSetData;
 
     public function prePersistCartItem()
     {
-        if ($this->cartableItem) {
-            $this->cartableItemId = $this->cartableItem->getId();
+        if ($this->product) {
+            $this->cartableItemId = $this->product->getId();
         }
         $this->pricingSetData = $this->pricingSet->all();
     }

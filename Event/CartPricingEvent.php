@@ -9,16 +9,16 @@
 namespace Vespolina\CartBundle\Event;
 
 use \Symfony\Component\HttpKernel\Event\KernelEvent;
-use \Vespolina\CartBundle\Model\CartInterface;
+use \Vespolina\Entity\OrderInterface;
 
 class CartPricingEvent extends KernelEvent
 {
     /**
-     * @var \Vespolina\CartBundle\Model\CartInterface $cart
+     * @var \Vespolina\Entity\OrderInterface $cart
      */
     protected $cart;
 
-    public function __construct(CartInterface $cart, $pricingContext)
+    public function __construct(OrderInterface $cart, $pricingContext)
     {
         $this->cart = $cart;
         $this->pricingContext = $pricingContext;

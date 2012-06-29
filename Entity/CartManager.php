@@ -11,9 +11,9 @@ use Symfony\Component\DependencyInjection\Container;
 use Doctrine\ORM\EntityManager;
 
 use Vespolina\CartBundle\Entity\Cart;
-use Vespolina\CartBundle\Model\CartableItemInterface;
-use Vespolina\CartBundle\Model\CartInterface;
-use Vespolina\CartBundle\Model\CartItemInterface;
+use Vespolina\Entity\OrderInterface;
+use Vespolina\Entity\ProductInterface;
+use Vespolina\Entity\ItemInterface;
 use Vespolina\CartBundle\Model\CartManager as BaseCartManager;
 use Vespolina\CartBundle\Pricing\CartPricingProviderInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -41,9 +41,9 @@ class CartManager extends BaseCartManager
         parent::__construct($pricingProvider, $cartClass, $cartItemClass);
     }
 
-    public function addItemToCart(CartInterface $cart, CartableItemInterface $cartableItem, $quantity = null)
+    public function addItemToCart(CartInterface $cart, ProductInterface $product, $quantity = null)
     {
-        $item = $this->doAddItemToCart($cart, $cartableItem, $quantity);
+        $item = $this->doAddItemToCart($cart, $product, $quantity);
 
         // todo: just update this cart, don't flush everything
         if ($cart->getId() !== $cart->getId()) {

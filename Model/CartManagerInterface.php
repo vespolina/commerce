@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2012 Vespolina Project http://www.vespolina-project.org
  *
  * (c) Daniel Kucharski <daniel@xerias.be>
  * This source file is subject to the MIT license that is bundled
@@ -9,9 +9,10 @@
 
 namespace Vespolina\CartBundle\Model;
 
-use Vespolina\CartBundle\Model\CartableItemInterface;
-use Vespolina\CartBundle\Model\CartInterface;
-use Vespolina\CartBundle\Model\CartItemInterface;
+use Vespolina\Entity\CartInterface;
+use Vespolina\Entity\ItemInterface;
+use Vespolina\Entity\ProductInterface;
+use Vespolina\Entity\OrderInterface;
 
 interface CartManagerInterface
 {
@@ -27,11 +28,11 @@ interface CartManagerInterface
     /**
      * Create a cart item
      *
-     * @abstract
-     * @param Vespolina\CartBundle\Model\CartableItemInterface $cartableItem
-     * @return CartItemInterface
+     * @param Vespolina\Entity\ProductInterface $product
+     *
+     * @return ItemInterface
      */
-    function createItem(CartableItemInterface $cartableItem = null);
+    function createItem(ProductInterface $product = null);
 
     /**
      *
@@ -73,9 +74,9 @@ interface CartManagerInterface
     /**
      * Initialize a new cart item.  Eg. setting the initial item state
      * @abstract
-     * @param CartItemInterface $cartItem
+     * @param ItemInterface $cartItem
      */
-    function initCartItem(CartItemInterface $cartItem);
+    function initCartItem(ItemInterface $cartItem);
 
     /**
      * Manually set the state of the cart
@@ -89,7 +90,7 @@ interface CartManagerInterface
      * Save or update the supplied cart
      *
      * @abstract
-     * @param \Vespolina\CartBundle\Model\CartInterface $cart
+     * @param \Vespolina\Entity\OrderInterface $cart
      * @param $andFlush
      * @return void
      */
