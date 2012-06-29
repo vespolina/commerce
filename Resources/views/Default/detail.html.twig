@@ -45,7 +45,7 @@
                         Save {{ product_pricing['MSRPDiscountRate'] | number_format(0) }}%
                     </div>
                     <div style="clear: both; margin-top:2em;">
-                        <a class="btn btn-primary" href="{{ path('vespolina_cart_add_cartable', {'cartableId': product.id}) }}">Add to Cart</a>
+                        <a class="btn btn-primary" href="{{ path('vespolina_cart_add_product', {'productId': product.id}) }}">Add to Cart</a>
                     </div>
                 </div>
 
