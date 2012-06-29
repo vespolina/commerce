@@ -8,13 +8,13 @@
 
 namespace Vespolina\CartBundle\Handler;
 
-use Vespolina\CartBundle\Model\CartItemInterface;
+use Vespolina\Entity\ItemInterface;
 
 interface CartHandlerInterface
 {
     function createPricingSet();
 
-    function determineCartItemPrices(CartItemInterface $cartItem, $pricingContext);
+    function determineCartItemPrices(ItemInterface $cartItem, $pricingContext);
 
     function getTypes();
 }

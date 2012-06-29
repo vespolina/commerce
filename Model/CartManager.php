@@ -14,9 +14,10 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Vespolina\CartBundle\CartEvents;
 use Vespolina\CartBundle\Event\CartEvent;
 use Vespolina\CartBundle\Event\CartPricingEvent;
+use Vespolina\Entity\CartInterface;
+use Vespolina\Entity\ItemInterface;
 use Vespolina\Entity\ProductInterface;
 use Vespolina\Entity\OrderInterface;
-use Vespolina\CartBundle\Model\CartItemInterface;
 use Vespolina\CartBundle\Model\CartManagerInterface;
 use Vespolina\CartBundle\Pricing\CartPricingProviderInterface;
 
@@ -124,7 +125,7 @@ abstract class CartManager implements CartManagerInterface
         }
     }
 
-    public function initCartItem(CartItemInterface $cartItem)
+    public function initCartItem(ItemInterface $cartItem)
     {
         // todo: this should be moved into a handler
         //Default cart item description to the product name
@@ -158,7 +159,7 @@ abstract class CartManager implements CartManagerInterface
         $this->dispatcher = $dispatcher;
     }
 
-    public function setCartItemState(CartItemInterface $cartItem, $state)
+    public function setCartItemState(ItemInterface $cartItem, $state)
     {
         $rp = new \ReflectionProperty($cartItem, 'state');
         $rp->setAccessible(true);
@@ -190,7 +191,7 @@ abstract class CartManager implements CartManagerInterface
         $this->doRemoveItemFromCart($cart, $product);
     }
 
-    public function setItemQuantity(CartItemInterface $cartItem, $quantity)
+    public function setItemQuantity(ItemInterface $cartItem, $quantity)
     {
         // add item to cart
         $rm = new \ReflectionMethod($cartItem, 'setQuantity');

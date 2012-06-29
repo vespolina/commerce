@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Vespolina\CartBundle\Entity\Cart;
 use Vespolina\Entity\OrderInterface;
 use Vespolina\Entity\ProductInterface;
-use Vespolina\CartBundle\Model\CartItemInterface;
+use Vespolina\Entity\ItemInterface;
 use Vespolina\CartBundle\Model\CartManager as BaseCartManager;
 use Vespolina\CartBundle\Pricing\CartPricingProviderInterface;
 use Symfony\Component\HttpFoundation\Session\Session;

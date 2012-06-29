@@ -18,12 +18,13 @@ use Vespolina\Entity\Cart as CoreCart;
  */
 class Cart extends CoreCart
 {
+    protected $createdAt;
+
     /**
      * Constructor
      */
     public function __construct($name)
     {
-        parent::__construct();
         $this->items = new ArrayCollection(); // TODO: see if this is really necessary for persistence
         $this->name = $name; // TODO: does this need to be set on initiation?
     }

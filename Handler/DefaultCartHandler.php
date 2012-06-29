@@ -9,8 +9,8 @@
 namespace Vespolina\CartBundle\Handler;
 
 use Vespolina\CartBundle\Handler\AbstractCartHandler;
+use Vespolina\Entity\ItemInterface;
 use Vespolina\Entity\OrderInterface;
-use Vespolina\CartBundle\Model\CartItemInterface;
 
 /**
  * DefaultHandler for the cart
@@ -26,7 +26,7 @@ class DefaultCartHandler extends  AbstractCartHandler
         $this->taxPricingEnabled = true;
     }
 
-    public function determineCartItemPrices(CartItemInterface $cartItem, $pricingContext)
+    public function determineCartItemPrices(ItemInterface $cartItem, $pricingContext)
     {
         $pricing = $cartItem->getProduct()->getPricing();
         $pricingSet = $cartItem->getPricingSet();
@@ -68,7 +68,7 @@ class DefaultCartHandler extends  AbstractCartHandler
         return 'default';
     }
 
-    protected function determineCartItemUpCharge(CartItemInterface $cartItem, $pricingContext)
+    protected function determineCartItemUpCharge(ItemInterface $cartItem, $pricingContext)
     {
         $upCharge = 0;
 
@@ -82,7 +82,7 @@ class DefaultCartHandler extends  AbstractCartHandler
         return $upCharge;
     }
 
-    protected function determineCartItemTaxes(CartItemInterface $cartItem, array $pricesToBeTaxed, $cartItemPricingSet, $pricingContext)
+    protected function determineCartItemTaxes(ItemInterface $cartItem, array $pricesToBeTaxed, $cartItemPricingSet, $pricingContext)
     {
 
         $rate = 0;
@@ -112,7 +112,7 @@ class DefaultCartHandler extends  AbstractCartHandler
         // eg. fixed fulfillment fee
     }
 
-    protected function sumItemPrices(CartItemInterface $cartItem, $pricingContext)
+    protected function sumItemPrices(ItemInterface $cartItem, $pricingContext)
     {
         return null;
         //$pricingContext['total'] += $cartItem->getPrice('total');

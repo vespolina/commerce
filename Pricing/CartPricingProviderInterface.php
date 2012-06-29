@@ -9,8 +9,8 @@
 namespace Vespolina\CartBundle\Pricing;
 
 use Vespolina\CartBundle\Handler\CartHandlerInterface;
+use Vespolina\Entity\ItemInterface;
 use Vespolina\Entity\OrderInterface;
-use Vespolina\CartBundle\Model\CartItemInterface;
 
 /**
  * @author Daniel Kucharski <daniel@xerias.be>
@@ -55,10 +55,10 @@ interface CartPricingProviderInterface
 
     /**
      * @abstract
-     * @param \Vespolina\CartBundle\Model\CartItemInterface $cartItem
+     * @param \Vespolina\CartBundle\Model\ItemInterface $cartItem
      * @param $pricingContext
      */
-    function determineCartItemPrices(CartItemInterface $cartItem, $pricingContext);
+    function determineCartItemPrices(ItemInterface $cartItem, $pricingContext);
 
 
 

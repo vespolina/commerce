@@ -11,9 +11,9 @@ namespace Vespolina\CartBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+use Vespolina\Entity\CartInterface;
 use Vespolina\Entity\Item;
 use Vespolina\Entity\OrderInterface;
-use Vespolina\CartBundle\Model\CartItemInterface;
 
 /**
  * CartItem implements a basic cart item implementation

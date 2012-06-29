@@ -18,7 +18,7 @@ class CartPricingEvent extends KernelEvent
      */
     protected $cart;
 
-    public function __construct(CartInterface $cart, $pricingContext)
+    public function __construct(OrderInterface $cart, $pricingContext)
     {
         $this->cart = $cart;
         $this->pricingContext = $pricingContext;
