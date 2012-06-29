@@ -8,7 +8,7 @@
 namespace Vespolina\ProductBundle\Model;
 
 use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
-use Vespolina\ProductBundle\Model\ProductInterface;
+use Vespolina\Entity\ProductInterface;
 use Vespolina\ProductBundle\Model\ProductManagerInterface;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
@@ -29,7 +29,7 @@ interface ProductManagerInterface
      *
      * @param string $type (optional)
      *
-     * @return Vespolina\ProductBundle\Model\ProductInterface
+     * @return Vespolina\Entity\ProductInterface
      */
     function createProduct($type = 'default');
 
@@ -67,7 +67,7 @@ interface ProductManagerInterface
      * Find a Product by its object identifier
      *
      * @param $id
-     * @return Vespolina\ProductBundle\Model\ProductInterface
+     * @return Vespolina\Entity\ProductInterface
      */
     function findProductById($id);
 
@@ -75,7 +75,7 @@ interface ProductManagerInterface
      * Find a Product by its slug
      *
      * @param $slug
-     * @return Vespolina\ProductBundle\Model\ProductInterface
+     * @return Vespolina\Entity\ProductInterface
      */
     function findProductBySlug($slug);
 
@@ -85,7 +85,7 @@ interface ProductManagerInterface
      * @param $name
      * @param $code
      *
-     * @return Vespolina\ProductBundle\Model\ProductInterface
+     * @return Vespolina\Entity\ProductInterface
      */
     function findProductByIdentifier($name, $code);
 
@@ -122,7 +122,7 @@ interface ProductManagerInterface
     /**
      * Update and persist the product
      *
-     * @param Vespolina\ProductBundle\Model\ProductInterface $product
+     * @param Vespolina\Entity\ProductInterface $product
      * @param Boolean $andFlush Whether to flush the changes (default true)
      */
     function updateProduct(ProductInterface $product, $andFlush = true);

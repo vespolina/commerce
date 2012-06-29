@@ -18,7 +18,7 @@ abstract class Asset implements AssetInterface
     protected $id;
     protected $label;
     protected $priority;
-    protected $file_name;
+    protected $fileName;
     protected $height;
     protected $width;
     protected $mime;
@@ -75,22 +75,22 @@ abstract class Asset implements AssetInterface
     }
 
     /**
-     * Set the asset file_name
+     * Set the asset filename
      *
-     * @param $file_name
+     * @param $fileName
      */
-    function setFileName($file_name)
+    function setFileName($fileName)
     {
-        $this->file_name = $file_name;
+        $this->fileName = $fileName;
     }
 
     /**
-     * Get the asset file_name.
-     * @return file_name
+     * Get the asset file name.
+     * @return fileName
      */
     function getFileName()
     {
-        return $this->file_name;
+        return $this->fileName;
     }
 
     /**

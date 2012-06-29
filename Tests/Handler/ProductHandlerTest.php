@@ -27,6 +27,6 @@ class ProductHandlerTest extends ProductTestCommon
 
     public function testCreateProduct()
     {
-        $this->assertInstanceOf('Vespolina\ProductBundle\Model\ProductInterface', $this->handler->createProduct());
+        $this->assertInstanceOf('Vespolina\Entity\ProductInterface', $this->handler->createProduct());
     }
 }

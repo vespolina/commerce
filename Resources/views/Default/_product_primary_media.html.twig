@@ -3,7 +3,7 @@
 {% endif %}
 
 {% if assetManager().hasType(product, type) %}
-    <img class="v-media-item" src="{{ asset( assetManager().getType(product, type).fileName  ) }}"/>
+    <img class="v-media-item" src="{{ asset( assetManager().getType(product, type).getFileName() ) }}"/>
 {%  else %}
     <img class="thumbs" src="{{ asset('bundles/vespolinaproduct/images/no-product-image.jpg') }}"/>
 {%  endif %}

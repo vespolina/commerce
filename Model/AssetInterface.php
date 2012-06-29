@@ -41,15 +41,15 @@ interface AssetInterface
     function getPriority();
 
     /**
-     * Set the asset file_name
+     * Set the asset file name
      *
-     * @param $file_name
+     * @param $fileName
      */
-    function setFileName($file_name);
+    function setFileName($fileName);
 
     /**
-     * Get the asset file_name.
-     * @return file_name
+     * Get the asset file name.
+     * @return fileName
      */
     function getFileName();
 
@@ -104,6 +104,4 @@ interface AssetInterface
      * @return type
      */
     function getType();
-
-
 }

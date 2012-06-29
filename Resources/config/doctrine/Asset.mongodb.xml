@@ -8,7 +8,7 @@
         <field name="id" id="true" />
         <field name="label" fieldName="label" type="string" />
         <field name="priority" fieldName="priority" type="string" />
-        <field name="file_name" fieldName="file_name" type="string" />
+        <field name="fileName" fieldName="fileName" type="string" />
         <field name="height" fieldName="height" type="string" />
         <field name="width" fieldName="width" type="string" />
         <field name="mime" fieldName="mime" type="string" />

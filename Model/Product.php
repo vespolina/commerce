@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2012 Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -13,7 +13,8 @@ use Doctrine\Common\Collections\Collection;
 
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
-use Vespolina\ProductBundle\Model\Feature\FeatureInterface;
+use Vespolina\Entity\FeatureInterface;
+use Vespolina\Entity\Product as BaseProduct;
 use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Vespolina\ProductBundle\Model\Option\OptionInterface;
@@ -23,7 +24,7 @@ use Vespolina\ProductBundle\Model\Option\OptionGroupInterface;
  * @author Richard D Shank <develop@zestic.com>
  * @author Daniel Kucharski <daniel@xerias.be>
  */
-abstract class Product implements ProductInterface
+abstract class Product extends BaseProduct
 {
     const PHYSICAL      = 1;
     const UNIQUE        = 2;

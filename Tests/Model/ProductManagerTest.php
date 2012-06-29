@@ -54,15 +54,15 @@ class ProductManagerTest extends ProductTestCommon
         $handler = $this->createProductHandler('test');
         $this->mgr->addProductHandler($handler);
 
-        $this->assertInstanceOf('Vespolina\ProductBundle\Model\ProductInterface', $this->mgr->createProduct('test'));
+        $this->assertInstanceOf('Vespolina\Entity\ProductInterface', $this->mgr->createProduct('test'));
 
         // todo: this should be through a handler also, but for now, it is using the legacy method of creating a class
         $pc = new \ReflectionProperty($this->mgr, 'productClass');
         $pc->setAccessible(true);
         $pc->setValue($this->mgr, 'Vespolina\ProductBundle\Tests\Fixtures\Model\Product');
 
-        $this->assertInstanceOf('Vespolina\ProductBundle\Model\ProductInterface', $this->mgr->createProduct('default'));
-        $this->assertInstanceOf('Vespolina\ProductBundle\Model\ProductInterface', $this->mgr->createProduct());
+        $this->assertInstanceOf('Vespolina\Entity\ProductInterface', $this->mgr->createProduct('default'));
+        $this->assertInstanceOf('Vespolina\Entity\ProductInterface', $this->mgr->createProduct());
     }
 
     public function testSearchForProductByIdentifier()
