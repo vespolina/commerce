@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Vespolina\CartBundle\Handler\CartHandlerInterface;
 use Vespolina\Entity\ItemInterface;
 use Vespolina\Entity\ProductInterface;
-use Vespolina\Entity\OrderInterface;
+use Vespolina\Entity\CartInterface;
 use Vespolina\CartBundle\Pricing\AbstractCartPricingProvider;
 
 /**

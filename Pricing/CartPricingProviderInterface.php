@@ -10,7 +10,7 @@ namespace Vespolina\CartBundle\Pricing;
 
 use Vespolina\CartBundle\Handler\CartHandlerInterface;
 use Vespolina\Entity\ItemInterface;
-use Vespolina\Entity\OrderInterface;
+use Vespolina\Entity\CartInterface;
 
 /**
  * @author Daniel Kucharski <daniel@xerias.be>

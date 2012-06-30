@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Doctrine\ORM\EntityManager;
 
 use Vespolina\CartBundle\Entity\Cart;
+use Vespolina\Entity\CartInterface;
 use Vespolina\Entity\OrderInterface;
 use Vespolina\Entity\ProductInterface;
 use Vespolina\Entity\ItemInterface;
