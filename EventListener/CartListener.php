@@ -29,7 +29,7 @@ class CartListener
 
     }
 
-    protected function getMailBody(SalesOrder $salesOrder)
+    protected function getMailBody(OrderInterface $salesOrder)
     {
         // @TODO: Make template configurable
         $twig = $this->container->get('twig');
