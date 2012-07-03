@@ -1,0 +1,5 @@
+{% extends "VespolinaProductBundle::layout.html.twig" %}
+
+{% block content %}
+{% include "VespolinaProductBundle:Form:_option_group.html.twig" with {'formAction': path('vespolina_option_group_edit', {'id': optionGroup.id}) } %}
+{% endblock content %}

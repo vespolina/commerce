@@ -2,8 +2,9 @@
     {% set type = 'thumbnail' %}
 {% endif %}
 
-{% if assetManager().hasType(product, type) %}
-    <img class="v-media-item" src="{{ asset( assetManager().getType(product, type).getFileName() ) }}"/>
+{% if product.mediaItems|length > 0 %}
+{% set mediaItem = product.mediaItems[0] %}
+    <img class="v-media-item" src="{{ asset(mediaItem.relativePath) }}"/>
 {%  else %}
     <img class="thumbs" src="{{ asset('bundles/vespolinaproduct/images/no-product-image.jpg') }}"/>
 {%  endif %}
