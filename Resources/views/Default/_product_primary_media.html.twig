@@ -4,7 +4,7 @@
 
 {% if product.mediaItems|length > 0 %}
 {% set mediaItem = product.mediaItems[0] %}
-    <img class="v-media-item" src="{{ asset(mediaItem.relativePath) }}"/>
+    <img class="v-media-item" src="{{ asset( assetManager().getType(product, type).getFileName() ) }}"/>
 {%  else %}
     <img class="thumbs" src="{{ asset('bundles/vespolinaproduct/images/no-product-image.jpg') }}"/>
 {%  endif %}
