@@ -8,12 +8,4 @@
         <default key="_controller">VespolinaProductBundle:Default:detail</default>
         <requirement key="_method">GET</requirement>
     </route>
-
-    <route id="vespolina_products" pattern="/products/{taxonomyTerm}">
-        <default key="_controller">VespolinaProductBundle:Default:zoneDetail</default>
-        <requirement key="_method">GET</requirement>
-    </route>
-
 </routes>
-
-
