@@ -16,7 +16,6 @@ use Vespolina\ProductBundle\Form\Type\FeatureFormType;
  */
 class ProductFormType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
