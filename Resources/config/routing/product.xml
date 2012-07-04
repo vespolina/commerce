@@ -8,7 +8,4 @@
         <default key="_controller">VespolinaProductBundle:Default:detail</default>
         <requirement key="_method">GET</requirement>
     </route>
-
 </routes>
-
-
