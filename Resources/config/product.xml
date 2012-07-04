@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="vespolina.product.form.name">vespolina_product_form</parameter>
+        <parameter key="vespolina.product.form.name">vespolina_product</parameter>
         <parameter key="vespolina.product.form.handler.class">Vespolina\ProductBundle\Form\ProductFormHandler</parameter>
         <parameter key="vespolina.product.form.type.class">Vespolina\ProductBundle\Form\Type\ProductFormType</parameter>
         <parameter key="vespolina.product.form.validation_groups">Product</parameter>
@@ -21,8 +21,8 @@
     </parameters>
     <services>
         <service id="vespolina.product.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
-            <argument type="service" id="vespolina.product.form.type" />
             <argument>%vespolina.product.form.name%</argument>
+            <argument>%vespolina.product.form.type.class%</argument>
             <argument />
             <argument type="collection">
                 <argument key="data_class">%vespolina.product.form.model.check_product.class%</argument>
@@ -31,7 +31,7 @@
         </service>
 
         <service id="vespolina.product.form.type" class="%vespolina.product.form.type.class%">
-            <tag name="form.type" />
+            <tag name="form.type" alias="vespolina_product"/>
         </service>
 
         <service id="vespolina.product.form.fucking.handler" class="Application\Vespolina\ProductBundle\Form\Handler\ProductFormHandler" scope="request">
