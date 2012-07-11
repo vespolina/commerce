@@ -12,7 +12,7 @@ Features include:
 
 **Caution:** This bundle is developed in sync with [vespolina's sandbox repository](https://github.com/vespolina/vespolina_sandbox)
 
-[![Build Status](https://secure.travis-ci.org/vespolina/VespolinaCartBundle.png)](http://travis-ci.org/vespolina/VespolinaCartBundle)
+[![Build Status](https://secure.travis-ci.org/vespolina/VespolinaCartBundle.png?branch=master)](http://travis-ci.org/vespolina/VespolinaCartBundle)
 
 Documentation
 -------------
