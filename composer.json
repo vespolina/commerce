@@ -1,7 +1,7 @@
 {
     "name": "vespolina/partner-bundle",
     "type": "symfony-bundle",
-    "description": "Vespolina Partner Bundle, Customer (Relation) Management and more.",
+    "description": "Vespolina Partner Bundle, Customer Relation Management ( CRM ) and more to come.",
     "keywords": ["vespolina", "customer", "ecommerce", "partner", "crm"],
     "homepage": "http://vespolina-project.org",
     "license": "MIT",
@@ -12,13 +12,14 @@
         }
     ],
     "require": {
-        "php": ">=5.3.2"
-    },
-    "suggest": {
-    	"symfony/mongodb-odm-bundle": "*"
+        "php": ">=5.3.2",
+        "symfony/symfony": "2.1.*",
+        "doctrine/mongodb-odm-bundle": "*",
+        "vespolina/core": "dev-master"
     },
     "autoload": {
         "psr-0": { "Vespolina\\PartnerBundle": "" }
     },
-    "target-dir": "Vespolina/PartnerBundle"
+    "target-dir": "Vespolina/PartnerBundle",
+    "minimum-stability": "dev"
 }
