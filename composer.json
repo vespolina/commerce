@@ -17,7 +17,7 @@
         "vespolina/core": "dev-master"
     },
     "require-dev": {
-        "doctrine/mongodb-odm-bundle": "@dev"
+        "doctrine/mongodb-odm-bundle": "*"
     },
     "suggest": {
         "symfony/doctrine-bundle": "dev-master",
@@ -26,6 +26,7 @@
     "autoload": {
         "psr-0": { "Vespolina\\CartBundle": "" }
     },
-    "target-dir": "Vespolina/CartBundle"
+    "target-dir": "Vespolina/CartBundle",
+    "minimum-stability": "dev"
 }
 
