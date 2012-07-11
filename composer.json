@@ -17,7 +17,7 @@
         "vespolina/core": "dev-master"
     },
     "require-dev": {
-        "doctrine/mongodb-odm-bundle": "dev-master"
+        "doctrine/mongodb-odm-bundle": "@dev"
     },
     "suggest": {
         "symfony/doctrine-bundle": "dev-master",
