@@ -7,93 +7,129 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\CartBundle\Model;
+namespace Vespolina\Cart\Manager;
 
 use Vespolina\Entity\CartInterface;
 use Vespolina\Entity\ItemInterface;
 use Vespolina\Entity\ProductInterface;
-use Vespolina\Entity\OrderInterface;
+use Vespolina\Entity\Pricing\PricingSetInterface;
 
 interface CartManagerInterface
 {
     /**
-     * Create a cart instance
+     * Add a product to the cart.
+     * This also triggers a CartEvents::INIT_ITEM event
      *
-     * @abstract
+     * @param Vespolina\Entity\CartInterface $cart
+     * @param Vespolina\Entity\ProductInterface $product
+     * @param integer $quantity - null defaults to one item
+     */
+    function addProductToCart(CartInterface $cart, ProductInterface $product, $orderedQuantity = null, $andPersist = true);
+
+    /**
+     * Create a new cart instance.
+     * This also triggers a CartEvents::INIT event
+     *
      * @param string $name Name of the cart
-     * @return void
      */
     function createCart($name = 'default');
 
     /**
-     * Create a cart item
-     *
-     * @param Vespolina\Entity\ProductInterface $product
-     *
-     * @return ItemInterface
-     */
-    function createItem(ProductInterface $product = null);
-
-    /**
-     *
      * Calculate prices for a given cart.
+     * This also triggers a
      *
-     * @abstract
      * @param CartInterface $cart
      * @param bool $determineItemPrices
-     * @return void
      */
-
     function determinePrices(CartInterface $cart, $determineItemPrices = true);
-    /**
-     * Find an open cart for the given cart owner
-     *
-     * @abstract
-     * @param $owner
-     * @param string $cartState
-     */
-    function findOpenCartByOwner($owner);
 
     /**
-     * Hint the manager that no further manipulations will be performed on the cart anymore
+     * Find a cart by the specified fields and values
      *
-     * @abstract
-     * @param CartInterface $cart
-     * @return mixed
+     * @param array $criteria
+     * @param array $orderBy
+     * @param null $limit
+     * @param null $offset
+     *
+     * @return array|Vespolina\Entity\CartInterface|null
      */
-    function finishCart(CartInterface $cart);
+    function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
     /**
-     * Initialize a new cart.  Eg. setting the initial state
+     * Find a cart by the system id
      *
-     * @abstract
-     * @param CartInterface $cart
+     * @param $id
+     * @return Vespolina\Entity\CartInterface|null
      */
-    function initCart(CartInterface $cart);
+    function findCartById($id);
 
     /**
-     * Initialize a new cart item.  Eg. setting the initial item state
-     * @abstract
-     * @param ItemInterface $cartItem
+     * Find a cart item that contains the passed product
+     *
+     * @param \Vespolina\Entity\CartInterface $cart
+     * @param \Vespolina\Entity\ProductInterface $product
+     *
+     * @return Vespolina\Entity\CartInterface|null
      */
-    function initCartItem(ItemInterface $cartItem);
+    function findProductInCart(CartInterface $cart, ProductInterface $product);
 
     /**
-     * Manually set the state of the cart
+     * Return the PricingProvider for this manager
      *
-     * @param CartInterface $cart
+     * @return Vespolina\Entity\Pricing\PricingProviderInterface
+     */
+    function getPricingProvider();
+
+    /**
+     * Completely remove a product from the cart
+     *
+     * @param Vespolina\Entity\CartInterface $cart
+     * @param Vespolina\Entity\ProductInterface $product
+     * @param bool $andPersist
+     */
+    function removeProductFromCart(CartInterface $cart, ProductInterface $product, $andPersist = true)
+
+    /**
+     * Manually set the state of an item in the cart
+     * This also triggers an CartEvents::ITEM_CHANGE event
+     *
+     * @param Vespolina\Entity\ItemInterface $cartItem
+     * @param $state
+     */
+    function setCartItemState(ItemInterface $cartItem, $state);
+
+    /**
+     * Manually set the pricing set for a cart
+     *
+     * @param Vespolina\Entity\CartInterface $cart
+     * @param Vespolina\Entity\Pricing\PricingSetInterface $pricingSet
+     */
+    function setCartPricingSet(CartInterface $cart, PricingSetInterface $pricingSet);
+
+    /**
+     * Manually set the state of the cart.
+     * This also triggers an CartEvents::STATE_CHANGE event
+     *
+     * @param Vespolina\Entity\CartInterface $cart
      * @param $state
      */
     function setCartState(CartInterface $cart, $state);
 
     /**
-     * Save or update the supplied cart
+     * Find the product in the cart and set the quantity for it
+     * This also triggers an CartEvents::ITEM_CHANGE event
      *
-     * @abstract
-     * @param \Vespolina\Entity\OrderInterface $cart
-     * @param $andFlush
-     * @return void
+     * @param Vespolina\Entity\CartInterface $cart
+     * @param Vespolina\Entity\ProductInterface $product
+     * @param integer $quantity
      */
-    function updateCart(CartInterface $cart, $andFlush = true);
+    function setProductQuantity(CartInterface $cart, ProductInterface $product, $quantity);
 
+    /**
+     * Triggers a CartEvents::UPDATE event and by default, persists the cart
+     *
+     * @param Vespolina\Entity\CartInterface $cart
+     * @param boolean $andPersist defaults to true
+     */
+    function updateCart(CartInterface $cart, $andPersist = true);
 }
