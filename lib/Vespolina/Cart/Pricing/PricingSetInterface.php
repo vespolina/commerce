@@ -6,7 +6,7 @@
  * with this source code in the file LICENSE.
  */
  
-namespace Vespolina\CartBundle\Pricing;
+namespace Vespolina\Cart\Pricing;
 
 
 interface PricingSetInterface

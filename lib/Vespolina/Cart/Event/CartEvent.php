@@ -6,7 +6,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\CartBundle\Event;
+namespace Vespolina\Cart\Event;
 
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Vespolina\Entity\OrderInterface;

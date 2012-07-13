@@ -6,11 +6,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\CartBundle\Pricing;
+namespace Vespolina\Cart\Pricing;
 
-use Vespolina\CartBundle\Handler\CartHandlerInterface;
-use Vespolina\CartBundle\Pricing\CartPricingProviderInterface;
-use Vespolina\CartBundle\Pricing\PricingSet;
+use Vespolina\Cart\Handler\CartHandlerInterface;
+use Vespolina\Cart\Pricing\CartPricingProviderInterface;
+use Vespolina\Cart\Pricing\PricingSet;
 use Vespolina\Entity\ItemInterface;
 
 /**

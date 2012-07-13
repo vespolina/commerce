@@ -6,7 +6,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\CartBundle\Handler;
+namespace Vespolina\Cart\Handler;
 
 use Vespolina\Entity\ItemInterface;
 

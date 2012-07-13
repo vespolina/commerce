@@ -6,9 +6,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\CartBundle\Pricing;
+namespace Vespolina\Cart\Pricing;
 
-use Vespolina\CartBundle\Handler\CartHandlerInterface;
+use Vespolina\Cart\Handler\CartHandlerInterface;
 use Vespolina\Entity\ItemInterface;
 use Vespolina\Entity\CartInterface;
 
@@ -30,7 +30,7 @@ interface CartPricingProviderInterface
     /**
      * Add a cart handler for a product to the pricing provider
      *
-     * @param \Vespolina\CartBundle\Handler\CartHandlerInterface $handler
+     * @param \Vespolina\Cart\Handler\CartHandlerInterface $handler
      */
     function addCartHandler(CartHandlerInterface $handler);
 
@@ -55,7 +55,7 @@ interface CartPricingProviderInterface
 
     /**
      * @abstract
-     * @param \Vespolina\CartBundle\Model\ItemInterface $cartItem
+     * @param \Vespolina\Cart\Model\ItemInterface $cartItem
      * @param $pricingContext
      */
     function determineCartItemPrices(ItemInterface $cartItem, $pricingContext);

@@ -6,11 +6,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\CartBundle\Handler;
+namespace Vespolina\Cart\Handler;
 
-use Vespolina\CartBundle\Handler\CartHandlerInterface;
+use Vespolina\Cart\Handler\CartHandlerInterface;
 use Vespolina\Entity\ItemInterface;
-use Vespolina\CartBundle\Pricing\PricingSet;
+use Vespolina\Cart\Pricing\PricingSet;
 
 /**
  * This provides a default set of actions for the methods that can be used by any other CartHandler by extending this class

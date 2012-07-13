@@ -6,15 +6,15 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\CartBundle\Pricing;
+namespace Vespolina\Cart\Pricing;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Vespolina\CartBundle\Handler\CartHandlerInterface;
+use Vespolina\Cart\Handler\CartHandlerInterface;
 use Vespolina\Entity\ItemInterface;
 use Vespolina\Entity\ProductInterface;
 use Vespolina\Entity\CartInterface;
-use Vespolina\CartBundle\Pricing\AbstractCartPricingProvider;
+use Vespolina\Cart\Pricing\AbstractCartPricingProvider;
 
 /**
  * @author Daniel Kucharski <daniel@xerias.be>
