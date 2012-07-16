@@ -19,9 +19,7 @@ use Vespolina\Entity\Order\CartInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\ProductInterface;
-use Vespolina\Entity\OrderInterface;
-use Vespolina\CartBundle\Model\CartManagerInterface;
-use Vespolina\CartBundle\Pricing\CartPricingProviderInterface;
+use Vespolina\EventDispatcher\NullDispatcher;
 
 /**
  * @author Daniel Kucharski <daniel@xerias.be>
@@ -31,14 +29,17 @@ class CartManager implements CartManagerInterface
 {
     protected $cartClass;
     protected $cartItemClass;
-    protected $dispatcher;
+    protected $eventDispatcher;
     protected $pricingProvider;
 
-    // todo: $recurringInterface should be handled in a handler
-    function __construct(CartPricingProviderInterface $pricingProvider, $cartClass, $cartItemClass, $recurringInterface = 'Vespolina\ProductSubscriptionBundle\Model\RecurringInterface')
+    function __construct(CartPricingProviderInterface $pricingProvider, $cartClass, $cartItemClass, EventDispatcherInterface $eventDispatcher = null)
     {
+        if (!$eventDispatcher) {
+            $eventDispatcher = new NullDispatcher();
+        }
         $this->cartClass = $cartClass;
         $this->cartItemClass = $cartItemClass;
+        $this->eventDispatcher = $eventDispatcher;
         $this->pricingProvider = $pricingProvider;
     }
 
