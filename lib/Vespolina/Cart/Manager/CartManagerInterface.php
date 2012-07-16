@@ -72,10 +72,11 @@ interface CartManagerInterface
      *
      * @param \Vespolina\Entity\Order\CartInterface $cart
      * @param \Vespolina\Entity\ProductInterface $product
+     * @param array $options
      *
      * @return Vespolina\Entity\Order\ItemInterface|null
      */
-    function findProductInCart(CartInterface $cart, ProductInterface $product);
+    function findProductInCart(CartInterface $cart, ProductInterface $product, array $options = null);
 
     /**
      * Return the EventDistpatcher for this manager
@@ -96,9 +97,10 @@ interface CartManagerInterface
      *
      * @param Vespolina\Entity\Order\CartInterface $cart
      * @param Vespolina\Entity\ProductInterface $product
+     * @param array $options
      * @param bool $andPersist
      */
-    function removeProductFromCart(CartInterface $cart, ProductInterface $product, $andPersist = true);
+    function removeProductFromCart(CartInterface $cart, ProductInterface $product, array $options, $andPersist = true);
 
     /**
      * Manually set the state of an item in the cart
@@ -132,9 +134,10 @@ interface CartManagerInterface
      *
      * @param Vespolina\Entity\Order\CartInterface $cart
      * @param Vespolina\Entity\ProductInterface $product
+     * @param array $options
      * @param integer $quantity
      */
-    function setProductQuantity(CartInterface $cart, ProductInterface $product, $quantity);
+    function setProductQuantity(CartInterface $cart, ProductInterface $product, array $options, $quantity);
 
     /**
      * Triggers a CartEvents::UPDATE event and by default, persists the cart
