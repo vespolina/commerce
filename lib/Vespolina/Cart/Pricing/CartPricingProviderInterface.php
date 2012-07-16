@@ -18,12 +18,8 @@ use Vespolina\Entity\CartInterface;
  */
 interface CartPricingProviderInterface
 {
-
     /**
      * Create a pricing set
-     *
-     * @abstract
-     *
      */
     function createPricingSet();
 
@@ -37,8 +33,6 @@ interface CartPricingProviderInterface
     /**
      * Create a pricing context which holds 'global variables' used while computing prices
      *
-     * @abstract
-     *
      * @return
      */
     function createPricingContext();
@@ -46,16 +40,16 @@ interface CartPricingProviderInterface
     /**
      * Determine cart and (optionally) item level prices
      *
-     * @abstract
-     * @param \Vespolina\Entity\OrderInterface $cart
+     * @param \Vespolina\Entity\Order\OrderInterface $cart
      * @param $pricingContext
      * @param $determineItemPrices
      */
     function determineCartPrices(CartInterface $cart, $pricingContext = null, $determineItemPrices = true);
 
     /**
-     * @abstract
-     * @param \Vespolina\Cart\Model\ItemInterface $cartItem
+     *
+     *
+     * @param \Vespolina\Cart\Order\ItemInterface $cartItem
      * @param $pricingContext
      */
     function determineCartItemPrices(ItemInterface $cartItem, $pricingContext);

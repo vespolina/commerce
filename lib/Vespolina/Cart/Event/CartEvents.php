@@ -27,8 +27,6 @@ final class CartEvents
     /**
      * The cart finished event is triggered  when all basic operations on a cart have been completed
      * For instance one first adds three items, adjust quantity and then triggers the cart finished event
-     *
-     * @var string
      */
     const FINISHED = 'vespolina_cart.cart_finished';
 }
