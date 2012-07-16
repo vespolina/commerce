@@ -6,16 +6,18 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\CartBundle\Model;
+namespace Vespolina\Cart\Manager;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-
-use Vespolina\CartBundle\CartEvents;
-use Vespolina\CartBundle\Event\CartEvent;
-use Vespolina\CartBundle\Event\CartPricingEvent;
-use Vespolina\Entity\CartInterface;
-use Vespolina\Entity\ItemInterface;
+use Vespolina\Cart\Event\CartEvents;
+use Vespolina\Cart\Event\CartEvent;
+use Vespolina\Cart\Event\CartPricingEvent;
+use Vespolina\Cart\Manager\CartManagerInterface;
+use Vespolina\Cart\Pricing\CartPricingProviderInterface;
+use Vespolina\Cart\Pricing\PricingSetInterface;
+use Vespolina\Entity\Order\Cart;
+use Vespolina\Entity\Order\CartInterface;
+use Vespolina\Entity\Order\ItemInterface;
+use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\ProductInterface;
 use Vespolina\Entity\OrderInterface;
 use Vespolina\CartBundle\Model\CartManagerInterface;
@@ -25,13 +27,12 @@ use Vespolina\CartBundle\Pricing\CartPricingProviderInterface;
  * @author Daniel Kucharski <daniel@xerias.be>
  * @author Richard Shank <develop@zestic.com>
  */
-abstract class CartManager implements CartManagerInterface
+class CartManager implements CartManagerInterface
 {
     protected $cartClass;
     protected $cartItemClass;
     protected $dispatcher;
     protected $pricingProvider;
-    protected $recurringInterface;
 
     // todo: $recurringInterface should be handled in a handler
     function __construct(CartPricingProviderInterface $pricingProvider, $cartClass, $cartItemClass, $recurringInterface = 'Vespolina\ProductSubscriptionBundle\Model\RecurringInterface')
@@ -39,13 +40,12 @@ abstract class CartManager implements CartManagerInterface
         $this->cartClass = $cartClass;
         $this->cartItemClass = $cartItemClass;
         $this->pricingProvider = $pricingProvider;
-        $this->recurringInterface = $recurringInterface;
     }
 
     /**
      * @inheritdoc
      */
-    public function addItemToCart(CartInterface $cart, ProductInterface $product)
+    public function addProductToCart(CartInterface $cart, ProductInterface $product, array $options = null, $orderedQuantity = null)
     {
         $item = $this->doAddItemToCart($cart, $product);
 
@@ -66,26 +66,13 @@ abstract class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function createItem(ProductInterface $product = null)
-    {
-        $cartItem = new $this->cartItemClass($product);
-        $this->initCartItem($cartItem);
-
-        return $cartItem;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function determinePrices(CartInterface $cart, $determineItemPrices = true)
     {
         $pricingProvider = $this->getPricingProvider();
         $pricingContext = $pricingProvider->createPricingContext();
 
         //Init the pricing context container and have it filled if required through the event dispatcher
-        if (null != $this->dispatcher) {
-            $this->dispatcher->dispatch(CartEvents::CART_INIT_PRICING_CONTEXT,  new CartPricingEvent($cart, $pricingContext));
-        }
+        $this->eventDispatcher->dispatch(CartEvents::INIT_PRICING_CONTEXT, new CartPricingEvent($cart, $pricingContext));
 
         $pricingProvider->determineCartPrices($cart, $pricingContext, $determineItemPrices);
     }
@@ -93,11 +80,17 @@ abstract class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function finishCart(CartInterface $cart)
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        if (null != $this->dispatcher) {
-            $this->dispatcher->dispatch(CartEvents::CART_FINISHED,  new CartEvent($cart));
-        }
+        throw new \Exception('gateway implementation needed');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findCartById($id)
+    {
+        throw new \Exception('gateway implementation needed');
     }
 
     /**
@@ -111,42 +104,7 @@ abstract class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function initCart(CartInterface $cart)
-    {
-        // Create the pricing set to hold cart level pricing data
-        $this->setCartPricingSet($cart, $this->pricingProvider->createPricingSet());
-
-        // Set default state (for now we set it to "open"), do this last since it will persist and flush the cart
-        $this->setCartState($cart, Cart::STATE_OPEN);
-
-        //Delegate further initialization of the cart to those concerned
-        if (null != $this->dispatcher) {
-            $this->dispatcher->dispatch(CartEvents::CART_INIT,  new CartEvent($cart));
-        }
-    }
-
-    public function initCartItem(ItemInterface $cartItem)
-    {
-        // todo: this should be moved into a handler
-        //Default cart item description to the product name
-        if ($product = $cartItem->getProduct()) {
-            $cartItem->setName($product->getName());
-            $cartItem->setDescription($cartItem->getName());
-            $rpPricingSet = new \ReflectionProperty($cartItem, 'pricingSet');
-            $rpPricingSet->setAccessible(true);
-            $rpPricingSet->setValue($cartItem, $this->getPricingProvider()->createPricingSet());
-            $rpPricingSet->setAccessible(false);
-            // todo: especially this damn thing, and get the Interface out of the __construct
-            if ($product instanceof $this->recurringInterface) {
-                $rp = new \ReflectionProperty($cartItem, 'isRecurring');
-                $rp->setAccessible(true);
-                $rp->setValue($cartItem, true);
-                $rp->setAccessible(false);
-            }
-        }
-    }
-
-    public function setCartPricingSet(CartInterface $cart, $pricingSet)
+    public function setCartPricingSet(CartInterface $cart, PricingSetInterface $pricingSet)
     {
         $rp = new \ReflectionProperty($cart, 'pricingSet');
         $rp->setAccessible(true);
@@ -154,28 +112,10 @@ abstract class CartManager implements CartManagerInterface
         $rp->setAccessible(false);
     }
 
-    public function setEventDispatcher($dispatcher) {
-
-        $this->dispatcher = $dispatcher;
-    }
-
-    public function setCartItemState(ItemInterface $cartItem, $state)
-    {
-        $rp = new \ReflectionProperty($cartItem, 'state');
-        $rp->setAccessible(true);
-        $rp->setValue($cartItem, $state);
-        $rp->setAccessible(false);
-    }
-
-    public function setCartState(CartInterface $cart, $state)
-    {
-        $rp = new \ReflectionProperty($cart, 'state');
-        $rp->setAccessible(true);
-        $rp->setValue($cart, $state);
-        $rp->setAccessible(false);
-    }
-
-    public function findItemInCart(CartInterface $cart, ProductInterface $product)
+    /**
+     * @inheritdoc
+     */
+    public function findProductInCart(CartInterface $cart, ProductInterface $product)
     {
         foreach ($cart->getItems() as $item) {
             if ($item->getProduct() == $product) {
@@ -186,18 +126,75 @@ abstract class CartManager implements CartManagerInterface
         return null;
     }
 
-    public function removeItemFromCart(CartInterface $cart, ProductInterface $product, $flush = true)
+    /**
+     * @inheritdoc
+     */
+    public function removeProductFromCart(CartInterface $cart, ProductInterface $product, $flush = true)
     {
         $this->doRemoveItemFromCart($cart, $product);
     }
 
-    public function setItemQuantity(ItemInterface $cartItem, $quantity)
+    /**
+     * @inheritdoc
+     */
+    public function setCartItemState(ItemInterface $cartItem, $state)
+    {
+        $rp = new \ReflectionProperty($cartItem, 'state');
+        $rp->setAccessible(true);
+        $rp->setValue($cartItem, $state);
+        $rp->setAccessible(false);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCartState(CartInterface $cart, $state)
+    {
+        $rp = new \ReflectionProperty($cart, 'state');
+        $rp->setAccessible(true);
+        $rp->setValue($cart, $state);
+        $rp->setAccessible(false);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setProductQuantity(CartInterface $cart, ProductInterface $product, $quantity)
     {
         // add item to cart
         $rm = new \ReflectionMethod($cartItem, 'setQuantity');
         $rm->setAccessible(true);
         $rm->invokeArgs($cartItem, array($quantity));
         $rm->setAccessible(false);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function updateCart(CartInterface $cart, $andPersist = true)
+    {
+        $this->eventDispatcher->dispatch(CartEvents::FINISHED, new CartEvent($cart));
+        // gateway->persist();
+    }
+
+    protected function createItem(ProductInterface $product = null)
+    {
+        $cartItem = new $this->cartItemClass($product);
+        $this->initCartItem($cartItem);
+
+        return $cartItem;
+    }
+
+    protected function initCart(CartInterface $cart)
+    {
+        // Create the pricing set to hold cart level pricing data
+        $this->setCartPricingSet($cart, $this->pricingProvider->createPricingSet());
+
+        // Set default state (for now we set it to "open"), do this last since it will persist and flush the cart
+        $this->setCartState($cart, Cart::STATE_OPEN);
+
+        //Delegate further initialization of the cart to those concerned
+        $this->eventDispatcher->dispatch(CartEvents::CART_INIT,  new CartEvent($cart));
     }
 
     protected function doAddItemToCart(CartInterface $cart, ProductInterface $product)
@@ -229,5 +226,26 @@ abstract class CartManager implements CartManagerInterface
         $rm->setAccessible(true);
         $rm->invokeArgs($cart, array($item));
         $rm->setAccessible(false);
+    }
+
+    protected function initCartItem(ItemInterface $cartItem)
+    {
+        // todo: this should be moved into a handler
+        //Default cart item description to the product name
+        if ($product = $cartItem->getProduct()) {
+            $cartItem->setName($product->getName());
+            $cartItem->setDescription($cartItem->getName());
+            $rpPricingSet = new \ReflectionProperty($cartItem, 'pricingSet');
+            $rpPricingSet->setAccessible(true);
+            $rpPricingSet->setValue($cartItem, $this->getPricingProvider()->createPricingSet());
+            $rpPricingSet->setAccessible(false);
+            // todo: especially this damn thing, and get the Interface out of the __construct
+            if ($product instanceof $this->recurringInterface) {
+                $rp = new \ReflectionProperty($cartItem, 'isRecurring');
+                $rp->setAccessible(true);
+                $rp->setValue($cartItem, true);
+                $rp->setAccessible(false);
+            }
+        }
     }
 }
