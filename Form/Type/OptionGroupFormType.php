@@ -37,7 +37,7 @@ class OptionGroupFormType extends ConfiguredOptionGroupFormType
         ;
     }
 
-    function getParent(array $options)
+    function getParent()
     {
         return 'vespolina_product_configured_option_group';
     }
