@@ -79,7 +79,7 @@ interface CartManagerInterface
 
     /**
      * Return the EventDistpatcher for this manager
-     * 
+     *
      * @return Vespolina\EventDispatcher\EventDispatcherInterface
      */
     function getEventDispatcher();

@@ -19,6 +19,7 @@ use Vespolina\Entity\Order\CartInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\ProductInterface;
+use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\NullDispatcher;
 
 /**
@@ -29,16 +30,19 @@ class CartManager implements CartManagerInterface
 {
     protected $cartClass;
     protected $cartItemClass;
+    protected $eventClass;
     protected $eventDispatcher;
     protected $pricingProvider;
 
-    function __construct(CartPricingProviderInterface $pricingProvider, $cartClass, $cartItemClass, EventDispatcherInterface $eventDispatcher = null)
+    function __construct(CartPricingProviderInterface $pricingProvider, $cartClass, $cartItemClass, $cartEvents, $eventClass, EventDispatcherInterface $eventDispatcher = null)
     {
         if (!$eventDispatcher) {
             $eventDispatcher = new NullDispatcher();
         }
         $this->cartClass = $cartClass;
+        $this->cartEvents = $cartEvents;
         $this->cartItemClass = $cartItemClass;
+        $this->eventClass = $eventClass;
         $this->eventDispatcher = $eventDispatcher;
         $this->pricingProvider = $pricingProvider;
     }
@@ -56,9 +60,10 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function createCart($cartType = 'default')
+    public function createCart($name = 'default')
     {
-        $cart = new $this->cartClass($cartType);
+        $cart = new $this->cartClass();
+        $cart->setName($name);
         $this->initCart($cart);
 
         return $cart;
@@ -200,10 +205,12 @@ class CartManager implements CartManagerInterface
         $this->setCartPricingSet($cart, $this->pricingProvider->createPricingSet());
 
         // Set default state (for now we set it to "open"), do this last since it will persist and flush the cart
-        $this->setCartState($cart, Cart::STATE_OPEN);
+        $cartClass = $this->cartClass;
+        $this->setCartState($cart, $cartClass::STATE_OPEN);
 
         //Delegate further initialization of the cart to those concerned
-        $this->eventDispatcher->dispatch(CartEvents::CART_INIT,  new CartEvent($cart));
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::INIT, new $this->eventClass($cart));
     }
 
     protected function doAddItemToCart(CartInterface $cart, ProductInterface $product)
