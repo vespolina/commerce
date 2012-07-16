@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="./Tests/bootstrap.php" color="true">
-
+<phpunit bootstrap="tests/bootstrap.php" color="true">
     <testsuites>
-        <testsuite name="VespolinaCartBundle test suite">
-            <directory suffix="Test.php">./Tests</directory>
+        <testsuite name="VespolinaCart Test Suite">
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-            </exclude>
+            <directory suffix=".php">./lib</directory>
         </whitelist>
     </filter>
 </phpunit>

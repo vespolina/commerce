@@ -1,9 +1,19 @@
 <?php
 
 use Vespolina\Cart\Manager\CartManager;
+use Vespolina\Cart\Pricing\DefaultCartPricingProvider;
 
 class CartManagerTest extends \PHPUnit_Framework_TestCase
 {
+    public function testConstruct()
+    {
+        $mgr = $this->createCartManager();
+        $rp = new \ReflectionProperty($mgr, 'eventDispatcher');
+        $rp->setAccessible(true);
+        $dispatcher = $rp->getValue($mgr);
+        $this->assertInstanceOf('Vespolina\EventDispatcher\NullDispatcher', $dispatcher, 'if a dispatcher is not passed set up the NullDispatcher');
+    }
+
     public function testCreateCart()
     {
         $mgr = $this->createCartManager();
@@ -17,8 +27,18 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->asserSame(Cart::STATE_OPEN, $cart->getState());
     }
 
-    protected function createCartManager()
+    protected function createCartManager($pricingProvider = null, $cartClass = null, $cartItemClass = null)
     {
+        if (!$pricingProvider) {
+            $pricingProvider = new DefaultCartPricingProvider();
+        }
+        if (!$cartClass) {
+            $cartClass = 'Vespolina\Entity\Order\Cart';
+        }
+        if (!$cartItemClass) {
+            $cartItemClass = 'Vespolina\Entity\Order\CartItem';
+        }
 
+        return new CartManager($pricingProvider, $cartClass, $cartItemClass);
     }
 }
