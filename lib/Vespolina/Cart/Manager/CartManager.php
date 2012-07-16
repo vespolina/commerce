@@ -97,6 +97,14 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
+    public function getEventDispatcher()
+    {
+        return $this->eventDispatcher;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getPricingProvider()
     {
         return $this->pricingProvider;

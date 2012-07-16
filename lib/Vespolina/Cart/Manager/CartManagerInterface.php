@@ -78,6 +78,13 @@ interface CartManagerInterface
     function findProductInCart(CartInterface $cart, ProductInterface $product);
 
     /**
+     * Return the EventDistpatcher for this manager
+     * 
+     * @return Vespolina\EventDispatcher\EventDispatcherInterface
+     */
+    function getEventDispatcher();
+
+    /**
      * Return the PricingProvider for this manager
      *
      * @return Vespolina\Entity\Pricing\PricingProviderInterface
