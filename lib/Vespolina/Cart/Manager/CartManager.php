@@ -13,7 +13,7 @@ use Vespolina\Cart\Event\CartEvent;
 use Vespolina\Cart\Event\CartPricingEvent;
 use Vespolina\Cart\Manager\CartManagerInterface;
 use Vespolina\Cart\Pricing\CartPricingProviderInterface;
-use Vespolina\Cart\Pricing\PricingSetInterface;
+use Vespolina\Entity\Pricing\PricingSetInterface;
 use Vespolina\Entity\Order\Cart;
 use Vespolina\Entity\Order\CartInterface;
 use Vespolina\Entity\Order\ItemInterface;
