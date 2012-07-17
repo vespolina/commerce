@@ -120,10 +120,12 @@ class CartManager implements CartManagerInterface
      */
     public function findProductInCart(CartInterface $cart, ProductInterface $product, array $options = null)
     {
-        foreach ($cart->getItems() as $item) {
-            if ($item->getProduct() == $product) {
-                return $item;
-            };
+        if ($items = $cart->getItems()) {
+            foreach ($cart->getItems() as $item) {
+                if ($item->getProduct() == $product) {
+                    return $item;
+                };
+            }
         }
 
         return null;
