@@ -170,18 +170,23 @@ class CartManager implements CartManagerInterface
         $rp->setAccessible(false);
     }
 
+    public function setItemQuantity(ItemInterface $item, $quantity)
+    {
+        // todo: trigger events
+
+        $rm = new \ReflectionMethod($item, 'setQuantity');
+        $rm->setAccessible(true);
+        $rm->invokeArgs($item, array($quantity));
+        $rm->setAccessible(false);
+    }
+
     /**
      * @inheritdoc
      */
     public function setProductQuantity(CartInterface $cart, ProductInterface $product, array $options, $quantity)
     {
         $item = $this->findProductInCart($cart, $product, $options);
-
-        // add item to cart
-        $rm = new \ReflectionMethod($item, 'setQuantity');
-        $rm->setAccessible(true);
-        $rm->invokeArgs($item, array($quantity));
-        $rm->setAccessible(false);
+        $this->setItemQuantity($item, $quantity);
     }
 
     /**
