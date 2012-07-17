@@ -256,15 +256,8 @@ class CartManager implements CartManagerInterface
 
     protected function initCartItem(ItemInterface $cartItem)
     {
-        // todo: this should be moved into a handler
-        //Default cart item description to the product name
         if ($product = $cartItem->getProduct()) {
             $cartItem->setName($product->getName());
-            $cartItem->setDescription($cartItem->getName());
-            $rpPricingSet = new \ReflectionProperty($cartItem, 'pricingSet');
-            $rpPricingSet->setAccessible(true);
-            $rpPricingSet->setValue($cartItem, $this->getPricingProvider()->createPricingSet());
-            $rpPricingSet->setAccessible(false);
         }
     }
 }
