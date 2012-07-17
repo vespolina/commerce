@@ -4,6 +4,7 @@ use Vespolina\Cart\Event\CartEvents;
 use Vespolina\Cart\Manager\CartManager;
 use Vespolina\Cart\Pricing\DefaultCartPricingProvider;
 use Vespolina\Entity\Order\Cart;
+use Vespolina\Entity\Product;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\EventInterface;
 
@@ -32,6 +33,32 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('the cart should be persisted through the gateway');
     }
 
+    public function testAddProductToCart()
+    {
+        $mgr = $this->createCartManager();
+        $cart = $mgr->createCart('test');
+
+        $product = new Product();
+        $product->setName('test product');
+
+        $mgr->addProductToCart($cart, $product);
+
+        $items = $cart->getItems();
+        $this->assertSame(1, count($items));
+        $item = $items[0];
+        $this->assertSame($product, $item->getProduct());
+        $this->assertSame(1, $item->getQuantity());
+        $item->assertSame('test product', $item->getName());
+
+        $existingItem = $mgr->addProductToCart($cart, $product);
+        $items = $cart->getItems();
+        $this->assertSame(1, count($items));
+        $this->assertSame(2, $existingItem->getQuantity());
+
+        $this->markTestIncomplete('passing the quantity should add to the existing quantity');
+        $this->markTestIncomplete('different options for the same product should be different items');
+    }
+
     protected function createCartManager($pricingProvider = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $eventClass = null, $dispatcherClass = 'TestDispatcher')
     {
         if (!$pricingProvider) {
@@ -41,7 +68,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
             $cartClass = 'Vespolina\Entity\Order\Cart';
         }
         if (!$cartItemClass) {
-            $cartItemClass = 'Vespolina\Entity\Order\CartItem';
+            $cartItemClass = 'Vespolina\Entity\Order\Item';
         }
         if (!$cartEvents) {
             $cartEvents = 'Vespolina\Cart\Event\CartEvents';
