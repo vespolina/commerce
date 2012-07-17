@@ -50,11 +50,11 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function addProductToCart(CartInterface $cart, ProductInterface $product, array $options = null, $orderedQuantity = null)
+    public function addProductToCart(CartInterface $cart, ProductInterface $product, array $options = null, $quantity = null)
     {
-        $item = $this->doAddItemToCart($cart, $product);
+        $quantity = $quantity===null ? 1 : $quantity;
 
-        return $item;
+        return $this->doAddProductToCart($cart, $product, $options, $quantity);
     }
 
     /**
