@@ -222,24 +222,25 @@ class CartManager implements CartManagerInterface
         $this->eventDispatcher->dispatch($cartEvents::INIT, new $this->eventClass($cart));
     }
 
-    protected function doAddItemToCart(CartInterface $cart, ProductInterface $product)
+    protected function doAddProductToCart(CartInterface $cart, ProductInterface $product, $options, $quantity)
     {
-        if ($cartItem = $this->findItemInCart($cart, $product)) {
-            $quantity = $cartItem->getQuantity() + 1;
+        if ($cartItem = $this->findProductInCart($cart, $product, $options)) {
+            $quantity = $cartItem->getQuantity() + $quantity;
             $this->setItemQuantity($cartItem, $quantity);
 
             return $cartItem;
         }
 
-        $item = $this->createItem($product);
+        $cartItem = $this->createItem($product);
+        $this->setItemQuantity($cartItem, $quantity);
 
         // add item to cart
         $rm = new \ReflectionMethod($cart, 'addItem');
         $rm->setAccessible(true);
-        $rm->invokeArgs($cart, array($item));
+        $rm->invokeArgs($cart, array($cartItem));
         $rm->setAccessible(false);
 
-        return $item;
+        return $cartItem;
     }
 
     protected function doRemoveItemFromCart(CartInterface $cart, ProductInterface $product, array $options)
