@@ -58,7 +58,20 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $mgr->addProductToCart($cart, $product, array(), 2);
 
         $this->assertSame(4, $existingItem->getQuantity(), 'passing the quantity should add to the existing quantity');
-        $this->markTestIncomplete('different options for the same product should be different items');
+
+        $optionSet1 = array('color' => 'blue', 'size' => 'small');
+        $optionSet2 = array('color' => 'red', 'size' => 'small');
+
+        $option1Item = $mgr->addProductToCart($cart, $product, $optionSet1);
+        $this->assertNotSame($option1Item, $existingItem, 'different options for the same product should be different items');
+        $items = $cart->getItems();
+        $this->assertSame(2, count($items));
+
+        $option2Item = $mgr->addProductToCart($cart, $product, $optionSet2, 3);
+        $this->assertNotSame($option1Item, $option2Item, 'different options for the same product should be different items');
+        $items = $cart->getItems();
+        $this->assertSame(3, count($items));
+        $this->assertSame(3, $option2Item->getQuantity());
     }
 
     protected function createCartManager($pricingProvider = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $eventClass = null, $dispatcherClass = 'TestDispatcher')
