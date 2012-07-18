@@ -10,7 +10,7 @@ namespace Vespolina\Cart\Pricing;
 
 use Vespolina\Cart\Handler\CartHandlerInterface;
 use Vespolina\Cart\Pricing\CartPricingProviderInterface;
-use Vespolina\Cart\Pricing\PricingSet;
+use Vespolina\Entity\Pricing\PricingSet;
 use Vespolina\Entity\ItemInterface;
 
 /**
