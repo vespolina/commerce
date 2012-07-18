@@ -29,7 +29,6 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(Cart::STATE_OPEN, $cart->getState());
         $this->assertSame(CartEvents::INIT, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::INIT event should be triggered');
 
-        $this->markTestIncomplete('the pricing set should have been created'); // todo: not clear on behavior
         $this->markTestIncomplete('the cart should be persisted through the gateway');
     }
 
@@ -48,7 +47,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $item = $items[0];
         $this->assertSame($product, $item->getProduct());
         $this->assertSame(1, $item->getQuantity());
-        $item->assertSame('test product', $item->getName());
+        $this->assertSame('test product', $item->getName());
 
         $existingItem = $mgr->addProductToCart($cart, $product);
         $items = $cart->getItems();
