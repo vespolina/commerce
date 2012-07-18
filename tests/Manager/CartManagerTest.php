@@ -50,11 +50,14 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test product', $item->getName());
 
         $existingItem = $mgr->addProductToCart($cart, $product);
+        $this->assertSame($existingItem, $item);
         $items = $cart->getItems();
         $this->assertSame(1, count($items));
         $this->assertSame(2, $existingItem->getQuantity());
 
-        $this->markTestIncomplete('passing the quantity should add to the existing quantity');
+        $mgr->addProductToCart($cart, $product, array(), 2);
+
+        $this->assertSame(4, $existingItem->getQuantity(), 'passing the quantity should add to the existing quantity');
         $this->markTestIncomplete('different options for the same product should be different items');
     }
 
