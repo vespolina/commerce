@@ -32,6 +32,48 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('the cart should be persisted through the gateway');
     }
 
+    public function testFindProductInCart()
+    {
+        $mgr = $this->createCartManager();
+        $cart = $mgr->createCart('test');
+
+        $createItem = new \ReflectionMethod($mgr, 'createItem');
+        $createItem->setAccessible(true);
+        $addItem = new \ReflectionMethod($cart, 'addItem');
+        $addItem->setAccessible(true);
+
+        $product = new Product();
+        $product->setName('test product');
+        $testItem = $createItem->invokeArgs($mgr, array($product));
+        $addItem->invokeArgs($cart, array($testItem));
+
+        $item = $mgr->findProductInCart($cart, $product);
+        $this->assertSame($product, $item->getProduct(), 'find the item that contains the product');
+
+        $newProduct = new Product();
+        $newProduct->setName('with options');
+        $optionsBlue = array('color' => 'blue');
+        $blueItem = $createItem->invokeArgs($mgr, array($newProduct, $optionsBlue));
+        $addItem->invokeArgs($cart, array($blueItem));
+
+        $foundBlueItem = $mgr->findProductInCart($cart, $newProduct, $optionsBlue);
+        $this->assertSame($newProduct, $foundBlueItem->getProduct(), 'find the item that contains the product with the options');
+        $this->assertSame($optionsBlue, $foundBlueItem->getOptions(), 'find the item that contains the product with the options');
+
+        $optionsRed = array('color' => 'red');
+        $redItem = $createItem->invokeArgs($mgr, array($newProduct, $optionsRed));
+        $addItem->invokeArgs($cart, array($redItem));
+
+        $foundRedItem = $mgr->findProductInCart($cart, $newProduct, $optionsRed);
+        $this->assertNotSame($redItem, $blueItem);
+        $this->assertSame($newProduct, $foundRedItem->getProduct(), 'find the item that contains the product with the options');
+        $this->assertSame($optionsRed, $foundRedItem->getOptions(), 'find the item that contains the product with the options');
+
+        $this->assertNull($mgr->findProductInCart($cart, $product, $optionsRed), "product and options don't match, nothing returned");
+        $this->assertNull($mgr->findProductInCart($cart, $newProduct), 'this item has options, so nothing returned');
+        $this->assertNull($mgr->findProductInCart($cart, $newProduct, array('color' => 'yellow')), 'no yellow options set');
+    }
+
     public function testAddProductToCart()
     {
         $mgr = $this->createCartManager();
