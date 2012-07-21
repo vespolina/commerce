@@ -52,7 +52,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
 
         $newProduct = new Product();
         $newProduct->setName('with options');
-        $optionsBlue = array('color' => 'blue');
+        $optionsBlue = array('color' => 'blue', 'size' => 'small');
         $blueItem = $createItem->invokeArgs($mgr, array($newProduct, $optionsBlue));
         $addItem->invokeArgs($cart, array($blueItem));
 
@@ -60,11 +60,11 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($newProduct, $foundBlueItem->getProduct(), 'find the item that contains the product with the options');
         $this->assertSame($optionsBlue, $foundBlueItem->getOptions(), 'find the item that contains the product with the options');
 
-        $optionsRed = array('color' => 'red');
+        $optionsRed = array('color' => 'red', 'size' => 'large');
         $redItem = $createItem->invokeArgs($mgr, array($newProduct, $optionsRed));
         $addItem->invokeArgs($cart, array($redItem));
 
-        $foundRedItem = $mgr->findProductInCart($cart, $newProduct, $optionsRed);
+        $foundRedItem = $mgr->findProductInCart($cart, $newProduct, array('size' => 'large', 'color' => 'red'));
         $this->assertNotSame($redItem, $blueItem);
         $this->assertSame($newProduct, $foundRedItem->getProduct(), 'find the item that contains the product with the options');
         $this->assertSame($optionsRed, $foundRedItem->getOptions(), 'find the item that contains the product with the options');

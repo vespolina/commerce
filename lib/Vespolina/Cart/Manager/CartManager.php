@@ -52,7 +52,7 @@ class CartManager implements CartManagerInterface
      */
     public function addProductToCart(CartInterface $cart, ProductInterface $product, array $options = null, $quantity = null)
     {
-        $quantity = $quantity===null ? 1 : $quantity;
+        $quantity = $quantity === null ? 1 : $quantity;
 
         return $this->doAddProductToCart($cart, $product, $options, $quantity);
     }
@@ -123,7 +123,9 @@ class CartManager implements CartManagerInterface
         if ($items = $cart->getItems()) {
             foreach ($cart->getItems() as $item) {
                 if ($item->getProduct() == $product) {
-                    return $item;
+                    if ($this->doOptionsMatch($item->getOptions(), $options)) {
+                        return $item;
+                    }
                 };
             }
         }
@@ -200,12 +202,45 @@ class CartManager implements CartManagerInterface
         // gateway->persist();
     }
 
-    protected function createItem(ProductInterface $product = null)
+    protected function createItem(ProductInterface $product, array $options = null)
     {
-        $cartItem = new $this->cartItemClass($product);
-        $this->initCartItem($cartItem);
+        $item = new $this->cartItemClass();
 
-        return $cartItem;
+        $rm = new \ReflectionMethod($item, 'setProduct');
+        $rm->setAccessible(true);
+        $rm->invokeArgs($item, array($product));
+        $rm->setAccessible(false);
+
+        if ($options) {
+            $rm = new \ReflectionMethod($item, 'setOptions');
+            $rm->setAccessible(true);
+            $rm->invokeArgs($item, array($options));
+            $rm->setAccessible(false);
+        }
+        $this->initCartItem($item);
+
+        return $item;
+    }
+
+    protected function doOptionsMatch($itemOptions, $targetOptions)
+    {
+        if (empty($targetOptions)) {
+            if (empty($itemOptions)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        if (empty($itemOptions)) {
+            return false;
+        }
+        foreach ($targetOptions as $option) {
+            if (!in_array($option, $itemOptions)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected function initCart(CartInterface $cart)
@@ -231,7 +266,7 @@ class CartManager implements CartManagerInterface
             return $cartItem;
         }
 
-        $cartItem = $this->createItem($product);
+        $cartItem = $this->createItem($product, $options);
         $this->setItemQuantity($cartItem, $quantity);
 
         // add item to cart
