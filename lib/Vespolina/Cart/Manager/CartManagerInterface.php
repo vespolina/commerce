@@ -100,7 +100,7 @@ interface CartManagerInterface
      * @param array $options
      * @param bool $andPersist
      */
-    function removeProductFromCart(CartInterface $cart, ProductInterface $product, array $options, $andPersist = true);
+    function removeProductFromCart(CartInterface $cart, ProductInterface $product, array $options = null, $andPersist = true);
 
     /**
      * Manually set the state of an item in the cart
@@ -117,7 +117,7 @@ interface CartManagerInterface
      * @param Vespolina\Entity\Order\CartInterface $cart
      * @param Vespolina\Entity\Pricing\PricingSetInterface $pricingSet
      */
-    function setCartPricingSet(CartInterface $cart, PricingSetInterface $pricingSet);
+//    function setCartPricingSet(CartInterface $cart, PricingSetInterface $pricingSet);
 
     /**
      * Manually set the state of the cart.

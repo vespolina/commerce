@@ -119,10 +119,9 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
     public function testRemoveProductFromCart()
     {
         $mgr = $this->createCartManager();
-        $cart = $mgr->createCart('test');
+        $cart = $mgr->createCart();
 
         $product = new Product();
-        $product->setName('test product');
         $options = array('size' => 'large');
 
         $item = $mgr->addProductToCart($cart, $product);
@@ -146,14 +145,15 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCartItemState()
     {
-        $this->markTestIncomplete('write the damn test');
+        $mgr = $this->createCartManager();
+        $cart = $mgr->createCart();
+        $product = new Product();
 
-    }
+        $item = $mgr->addProductToCart($cart, $product);
 
-    public function testSetCartPricingSet()
-    {
-        $this->markTestIncomplete('write the damn test');
-
+        $this->assertNotSame('test', $item->getState(), "make sure the state isn't set to test");
+        $mgr->setCartItemState($item, 'test');
+        $this->assertSame('test', $item->getState(), "the state should now be set to test");
     }
 
     public function testSetCartState()
