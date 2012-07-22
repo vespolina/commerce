@@ -147,8 +147,11 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function removeProductFromCart(CartInterface $cart, ProductInterface $product, array $options, $flush = true)
+    public function removeProductFromCart(CartInterface $cart, ProductInterface $product, array $options = null, $flush = true)
     {
+        if (!$options) {
+            $options = array();
+        }
         $this->doRemoveItemFromCart($cart, $product, $options);
     }
 
@@ -280,13 +283,12 @@ class CartManager implements CartManagerInterface
 
     protected function doRemoveItemFromCart(CartInterface $cart, ProductInterface $product, array $options)
     {
-        $item = $this->findProductInCart($cart, $product, $options);
-
-        // add item to cart
-        $rm = new \ReflectionMethod($cart, 'removeItem');
-        $rm->setAccessible(true);
-        $rm->invokeArgs($cart, array($item));
-        $rm->setAccessible(false);
+        if ($item = $this->findProductInCart($cart, $product, $options)) {
+            $rm = new \ReflectionMethod($cart, 'removeItem');
+            $rm->setAccessible(true);
+            $rm->invokeArgs($cart, array($item));
+            $rm->setAccessible(false);
+        }
     }
 
     protected function initCartItem(ItemInterface $cartItem)

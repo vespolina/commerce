@@ -116,6 +116,64 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(3, $option2Item->getQuantity());
     }
 
+    public function testRemoveProductFromCart()
+    {
+        $mgr = $this->createCartManager();
+        $cart = $mgr->createCart('test');
+
+        $product = new Product();
+        $product->setName('test product');
+        $options = array('size' => 'large');
+
+        $item = $mgr->addProductToCart($cart, $product);
+        $this->assertCount(1, $cart->getItems(), 'verify item is in cart');
+        $mgr->removeProductFromCart($cart, $product, $options);
+        $this->assertContains($item, $cart->getItems(), "the items should still be in the cart since the item didn't have options");
+        $mgr->removeProductFromCart($cart, $product);
+        $this->assertEmpty($cart->getItems(), 'the cart should be empty again');
+
+        $mgr->addProductToCart($cart, $product, $options);
+        $mgr->removeProductFromCart($cart, $product, $options);
+        $this->assertEmpty($cart->getItems(), 'removing product with options');
+
+        $item = $mgr->addProductToCart($cart, $product, $options);
+        $mgr->removeProductFromCart($cart, $product);
+        $this->assertContains($item, $cart->getItems(), 'the items should still be in the cart since options were not passed');
+        $mgr->removeProductFromCart($cart, $product, array('size' => 'small'));
+        $this->assertContains($item, $cart->getItems(), 'the items should still be in the cart since the wrong options were passed');
+
+    }
+
+    public function testSetCartItemState()
+    {
+        $this->markTestIncomplete('write the damn test');
+
+    }
+
+    public function testSetCartPricingSet()
+    {
+        $this->markTestIncomplete('write the damn test');
+
+    }
+
+    public function testSetCartState()
+    {
+        $this->markTestIncomplete('write the damn test');
+
+    }
+
+    public function testSetProductQuantity()
+    {
+        $this->markTestIncomplete('write the damn test');
+
+    }
+
+    public function testUpdateCart()
+    {
+        $this->markTestIncomplete('write the damn test');
+
+    }
+
     protected function createCartManager($pricingProvider = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $eventClass = null, $dispatcherClass = 'TestDispatcher')
     {
         if (!$pricingProvider) {
