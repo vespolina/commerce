@@ -30,7 +30,7 @@ interface CartManagerInterface
 
     /**
      * Create a new cart instance.
-     * This also triggers a CartEvents::INIT event
+     * This also triggers a CartEvents::INIT_CART event
      *
      * @param string $name Name of the cart
      *
@@ -39,8 +39,7 @@ interface CartManagerInterface
     function createCart($name = 'default');
 
     /**
-     * Calculate prices for a given cart.
-     * This also triggers a
+     * Triggers a CartEvents::UPDATE_CART_PRICE event
      *
      * @param CartInterface $cart
      * @param bool $determineItemPrices
@@ -94,6 +93,7 @@ interface CartManagerInterface
 
     /**
      * Completely remove a product from the cart
+     * This also triggers a CartEvents::REMOVE_ITEM event
      *
      * @param Vespolina\Entity\Order\CartInterface $cart
      * @param Vespolina\Entity\ProductInterface $product
@@ -129,8 +129,17 @@ interface CartManagerInterface
     function setCartState(CartInterface $cart, $state);
 
     /**
+     * Set the quantity for an item.
+     * This also triggers an CartEvents::UPDATE_ITEM event
+     *
+     * @param Vespolina\Entity\Order\ItemInterface $cart
+     * @param integer $quantity
+     */
+    function setItemQuantity(ItemInterface $item, $quantity);
+
+    /**
      * Find the product in the cart and set the quantity for it
-     * This also triggers an CartEvents::ITEM_CHANGE event
+     * This also triggers an CartEvents::UPDATE_ITEM event
      *
      * @param Vespolina\Entity\Order\CartInterface $cart
      * @param Vespolina\Entity\ProductInterface $product
@@ -140,7 +149,7 @@ interface CartManagerInterface
     function setProductQuantity(CartInterface $cart, ProductInterface $product, array $options, $quantity);
 
     /**
-     * Triggers a CartEvents::UPDATE event and by default, persists the cart
+     * Triggers a CartEvents::UPDATE_CART event and by default, persists the cart
      *
      * @param Vespolina\Entity\Order\CartInterface $cart
      * @param boolean $andPersist defaults to true
