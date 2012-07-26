@@ -13,7 +13,7 @@ use Vespolina\Cart\Event\CartEvent;
 use Vespolina\Cart\Event\CartPricingEvent;
 use Vespolina\Cart\Manager\CartManagerInterface;
 use Vespolina\Cart\Pricing\CartPricingProviderInterface;
-use Vespolina\Cart\Pricing\PricingSetInterface;
+use Vespolina\Entity\Pricing\PricingSetInterface;
 use Vespolina\Entity\Order\Cart;
 use Vespolina\Entity\Order\CartInterface;
 use Vespolina\Entity\Order\ItemInterface;
@@ -50,11 +50,11 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function addProductToCart(CartInterface $cart, ProductInterface $product, array $options = null, $orderedQuantity = null)
+    public function addProductToCart(CartInterface $cart, ProductInterface $product, array $options = null, $quantity = null)
     {
-        $item = $this->doAddItemToCart($cart, $product);
+        $quantity = $quantity === null ? 1 : $quantity;
 
-        return $item;
+        return $this->doAddProductToCart($cart, $product, $options, $quantity);
     }
 
     /**
@@ -74,13 +74,12 @@ class CartManager implements CartManagerInterface
      */
     public function determinePrices(CartInterface $cart, $determineItemPrices = true)
     {
+        // TODO: this needs to be removed, but I need to check to make sure it doesn't break StoreBundle
         $pricingProvider = $this->getPricingProvider();
         $pricingContext = $pricingProvider->createPricingContext();
 
-        //Init the pricing context container and have it filled if required through the event dispatcher
-        $this->eventDispatcher->dispatch(CartEvents::INIT_PRICING_CONTEXT, new CartPricingEvent($cart, $pricingContext));
-
-        $pricingProvider->determineCartPrices($cart, $pricingContext, $determineItemPrices);
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_PRICE, new $this->eventClass($cart));
     }
 
     /**
@@ -120,10 +119,14 @@ class CartManager implements CartManagerInterface
      */
     public function findProductInCart(CartInterface $cart, ProductInterface $product, array $options = null)
     {
-        foreach ($cart->getItems() as $item) {
-            if ($item->getProduct() == $product) {
-                return $item;
-            };
+        if ($items = $cart->getItems()) {
+            foreach ($cart->getItems() as $item) {
+                if ($item->getProduct() == $product) {
+                    if ($this->doOptionsMatch($item->getOptions(), $options)) {
+                        return $item;
+                    }
+                };
+            }
         }
 
         return null;
@@ -143,8 +146,11 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function removeProductFromCart(CartInterface $cart, ProductInterface $product, array $options, $flush = true)
+    public function removeProductFromCart(CartInterface $cart, ProductInterface $product, array $options = null, $flush = true)
     {
+        if (!$options) {
+            $options = array();
+        }
         $this->doRemoveItemFromCart($cart, $product, $options);
     }
 
@@ -157,6 +163,9 @@ class CartManager implements CartManagerInterface
         $rp->setAccessible(true);
         $rp->setValue($cartItem, $state);
         $rp->setAccessible(false);
+
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM_STATE, new $this->eventClass($cartItem));
     }
 
     /**
@@ -170,18 +179,23 @@ class CartManager implements CartManagerInterface
         $rp->setAccessible(false);
     }
 
+    public function setItemQuantity(ItemInterface $item, $quantity)
+    {
+        // todo: trigger events
+
+        $rm = new \ReflectionMethod($item, 'setQuantity');
+        $rm->setAccessible(true);
+        $rm->invokeArgs($item, array($quantity));
+        $rm->setAccessible(false);
+    }
+
     /**
      * @inheritdoc
      */
     public function setProductQuantity(CartInterface $cart, ProductInterface $product, array $options, $quantity)
     {
         $item = $this->findProductInCart($cart, $product, $options);
-
-        // add item to cart
-        $rm = new \ReflectionMethod($item, 'setQuantity');
-        $rm->setAccessible(true);
-        $rm->invokeArgs($item, array($quantity));
-        $rm->setAccessible(false);
+        $this->setItemQuantity($item, $quantity);
     }
 
     /**
@@ -193,12 +207,45 @@ class CartManager implements CartManagerInterface
         // gateway->persist();
     }
 
-    protected function createItem(ProductInterface $product = null)
+    protected function createItem(ProductInterface $product, array $options = null)
     {
-        $cartItem = new $this->cartItemClass($product);
-        $this->initCartItem($cartItem);
+        $item = new $this->cartItemClass();
 
-        return $cartItem;
+        $rm = new \ReflectionMethod($item, 'setProduct');
+        $rm->setAccessible(true);
+        $rm->invokeArgs($item, array($product));
+        $rm->setAccessible(false);
+
+        if ($options) {
+            $rm = new \ReflectionMethod($item, 'setOptions');
+            $rm->setAccessible(true);
+            $rm->invokeArgs($item, array($options));
+            $rm->setAccessible(false);
+        }
+        $this->initCartItem($item);
+
+        return $item;
+    }
+
+    protected function doOptionsMatch($itemOptions, $targetOptions)
+    {
+        if (empty($targetOptions)) {
+            if (empty($itemOptions)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        if (empty($itemOptions)) {
+            return false;
+        }
+        foreach ($targetOptions as $option) {
+            if (!in_array($option, $itemOptions)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected function initCart(CartInterface $cart)
@@ -212,51 +259,47 @@ class CartManager implements CartManagerInterface
 
         //Delegate further initialization of the cart to those concerned
         $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::INIT, new $this->eventClass($cart));
+        $this->eventDispatcher->dispatch($cartEvents::INIT_CART, new $this->eventClass($cart));
     }
 
-    protected function doAddItemToCart(CartInterface $cart, ProductInterface $product)
+    protected function doAddProductToCart(CartInterface $cart, ProductInterface $product, $options, $quantity)
     {
-        if ($cartItem = $this->findItemInCart($cart, $product)) {
-            $quantity = $cartItem->getQuantity() + 1;
+        if ($cartItem = $this->findProductInCart($cart, $product, $options)) {
+            $quantity = $cartItem->getQuantity() + $quantity;
             $this->setItemQuantity($cartItem, $quantity);
 
             return $cartItem;
         }
 
-        $item = $this->createItem($product);
+        $cartItem = $this->createItem($product, $options);
+        $this->setItemQuantity($cartItem, $quantity);
 
         // add item to cart
         $rm = new \ReflectionMethod($cart, 'addItem');
         $rm->setAccessible(true);
-        $rm->invokeArgs($cart, array($item));
+        $rm->invokeArgs($cart, array($cartItem));
         $rm->setAccessible(false);
 
-        return $item;
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::INIT_ITEM, new $this->eventClass($cartItem));
+
+        return $cartItem;
     }
 
     protected function doRemoveItemFromCart(CartInterface $cart, ProductInterface $product, array $options)
     {
-        $item = $this->findProductInCart($cart, $product, $options);
-
-        // add item to cart
-        $rm = new \ReflectionMethod($cart, 'removeItem');
-        $rm->setAccessible(true);
-        $rm->invokeArgs($cart, array($item));
-        $rm->setAccessible(false);
+        if ($item = $this->findProductInCart($cart, $product, $options)) {
+            $rm = new \ReflectionMethod($cart, 'removeItem');
+            $rm->setAccessible(true);
+            $rm->invokeArgs($cart, array($item));
+            $rm->setAccessible(false);
+        }
     }
 
     protected function initCartItem(ItemInterface $cartItem)
     {
-        // todo: this should be moved into a handler
-        //Default cart item description to the product name
         if ($product = $cartItem->getProduct()) {
             $cartItem->setName($product->getName());
-            $cartItem->setDescription($cartItem->getName());
-            $rpPricingSet = new \ReflectionProperty($cartItem, 'pricingSet');
-            $rpPricingSet->setAccessible(true);
-            $rpPricingSet->setValue($cartItem, $this->getPricingProvider()->createPricingSet());
-            $rpPricingSet->setAccessible(false);
         }
     }
 }

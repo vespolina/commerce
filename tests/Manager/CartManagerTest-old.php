@@ -64,24 +64,6 @@ class CartManagerTest extends TestCase
         $this->assertSame(2, $item->getQuantity());
     }
 
-    public function testAddItemToCart()
-    {
-        $cart = $this->persistNewCart();
-        $cartable = $this->persistNewCartable('product');
-        $this->cartMgr->addItemToCart($cart, $cartable);
-
-        $items = $cart->getItems();
-        $this->assertSame(1, $items->count());
-        $item = $items->current();
-        $this->assertSame($cartable, $item->getCartableItem());
-        $this->assertSame(1, $item->getQuantity());
-
-        $existingItem = $this->cartMgr->addItemToCart($cart, $cartable);
-        $items = $cart->getItems();
-        $this->assertSame(1, $items->count());
-        $this->assertSame(2, $existingItem->getQuantity());
-    }
-
     public function testRemoveItemFromCart()
     {
         $cart = $this->persistNewCart();
