@@ -74,13 +74,12 @@ class CartManager implements CartManagerInterface
      */
     public function determinePrices(CartInterface $cart, $determineItemPrices = true)
     {
+        // TODO: this needs to be removed, but I need to check to make sure it doesn't break StoreBundle
         $pricingProvider = $this->getPricingProvider();
         $pricingContext = $pricingProvider->createPricingContext();
 
-        //Init the pricing context container and have it filled if required through the event dispatcher
-        $this->eventDispatcher->dispatch(CartEvents::INIT_PRICING_CONTEXT, new CartPricingEvent($cart, $pricingContext));
-
-        $pricingProvider->determineCartPrices($cart, $pricingContext, $determineItemPrices);
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_PRICE, new $this->eventClass($cart));
     }
 
     /**
@@ -164,6 +163,9 @@ class CartManager implements CartManagerInterface
         $rp->setAccessible(true);
         $rp->setValue($cartItem, $state);
         $rp->setAccessible(false);
+
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM_STATE, new $this->eventClass($cartItem));
     }
 
     /**
@@ -257,7 +259,7 @@ class CartManager implements CartManagerInterface
 
         //Delegate further initialization of the cart to those concerned
         $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::INIT, new $this->eventClass($cart));
+        $this->eventDispatcher->dispatch($cartEvents::INIT_CART, new $this->eventClass($cart));
     }
 
     protected function doAddProductToCart(CartInterface $cart, ProductInterface $product, $options, $quantity)
@@ -277,6 +279,9 @@ class CartManager implements CartManagerInterface
         $rm->setAccessible(true);
         $rm->invokeArgs($cart, array($cartItem));
         $rm->setAccessible(false);
+
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::INIT_ITEM, new $this->eventClass($cartItem));
 
         return $cartItem;
     }
