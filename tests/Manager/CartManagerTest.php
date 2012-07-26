@@ -114,6 +114,8 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $items = $cart->getItems();
         $this->assertSame(3, count($items));
         $this->assertSame(3, $option2Item->getQuantity());
+
+        $this->assertSame(CartEvents::INIT_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::INIT_ITEM event should be triggered');
     }
 
     public function testRemoveProductFromCart()
@@ -143,6 +145,14 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testDetermineCartPrices()
+    {
+        $mgr = $this->createCartManager();
+        $cart = $mgr->createCart();
+
+        $this->assertSame(CartEvents::UPDATE_CART_PRICE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART_PRICE event should be triggered');
+    }
+
     public function testSetCartItemState()
     {
         $mgr = $this->createCartManager();
@@ -154,24 +164,59 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame('test', $item->getState(), "make sure the state isn't set to test");
         $mgr->setCartItemState($item, 'test');
         $this->assertSame('test', $item->getState(), "the state should now be set to test");
+
+        $this->assertSame(CartEvents::UPDATE_ITEM_STATE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM_STATE event should be triggered');
     }
 
     public function testSetCartState()
     {
-        $this->markTestIncomplete('write the damn test');
+        $mgr = $this->createCartManager();
+        $cart = $mgr->createCart();
 
+        $this->assertNotSame('test', $cart->getState(), "make sure the state isn't set to test");
+        $mgr->setCartState($cart, 'test');
+        $this->assertSame('test', $cart->getState(), "the state should now be set to test");
+
+        $this->assertSame(CartEvents::UPDATE_CART_STATE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART_STATE event should be triggered');
+    }
+
+    public function testSetItemQuantity()
+    {
+        $mgr = $this->createCartManager();
+        $cart = $mgr->createCart();
+
+        $product = new Product();
+        $item = $mgr->addProductToCart($cart, $product);
+
+        $mgr->setItemQuantity($item, 5);
+        $this->assertSame(5, $item->getQuantity(), 'the quantity should be updated');
+
+        $this->assertSame(CartEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM event should be triggered');
     }
 
     public function testSetProductQuantity()
     {
+        $mgr = $this->createCartManager();
+        $cart = $mgr->createCart();
+
+        $product = new Product();
+        $item = $mgr->addProductToCart($cart, $product);
+
         $this->markTestIncomplete('write the damn test');
 
+        $this->assertSame(CartEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM event should be triggered');
     }
 
     public function testUpdateCart()
     {
-        $this->markTestIncomplete('write the damn test');
+        $mgr = $this->createCartManager();
+        $cart = $mgr->createCart();
 
+        $mgr->updateCart($cart);
+
+        $this->assertSame(CartEvents::UPDATE_CART, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART event should be triggered');
+
+        $this->markTestIncomplete('persistence tests are needed');
     }
 
     protected function createCartManager($pricingProvider = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $eventClass = null, $dispatcherClass = 'TestDispatcher')

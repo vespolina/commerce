@@ -104,7 +104,7 @@ interface CartManagerInterface
 
     /**
      * Manually set the state of an item in the cart
-     * This also triggers an CartEvents::ITEM_CHANGE event
+     * This also triggers an CartEvents::UPDATE_ITEM_STATE event
      *
      * @param Vespolina\Entity\Order\ItemInterface $cartItem
      * @param $state
@@ -121,7 +121,7 @@ interface CartManagerInterface
 
     /**
      * Manually set the state of the cart.
-     * This also triggers an CartEvents::STATE_CHANGE event
+     * This also triggers an CartEvents::UPDATE_CART_STATE event
      *
      * @param Vespolina\Entity\Order\CartInterface $cart
      * @param $state
