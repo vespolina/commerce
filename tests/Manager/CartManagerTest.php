@@ -27,7 +27,10 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Vespolina\Entity\Order\Cart', $cart, 'it should be an instance of the cart class passed in the construct');
         $this->assertSame('test', $cart->getName(), 'the name of cart should have been set when it was created');
         $this->assertSame(Cart::STATE_OPEN, $cart->getState());
+
         $this->assertSame(CartEvents::INIT_CART, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::INIT_CART event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
 
         $this->markTestIncomplete('the cart should be persisted through the gateway');
     }
@@ -116,6 +119,8 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(3, $option2Item->getQuantity());
 
         $this->assertSame(CartEvents::INIT_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::INIT_ITEM event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
     }
 
     public function testRemoveProductFromCart()
@@ -153,6 +158,8 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $mgr->determinePrices($cart);
 
         $this->assertSame(CartEvents::UPDATE_CART_PRICE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART_PRICE event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
     }
 
     public function testSetCartItemState()
@@ -168,6 +175,8 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test', $item->getState(), "the state should now be set to test");
 
         $this->assertSame(CartEvents::UPDATE_ITEM_STATE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM_STATE event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
     }
 
     public function testSetCartState()
@@ -180,6 +189,8 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test', $cart->getState(), "the state should now be set to test");
 
         $this->assertSame(CartEvents::UPDATE_CART_STATE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART_STATE event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
     }
 
     public function testSetItemQuantity()
@@ -194,6 +205,8 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(5, $item->getQuantity(), 'the quantity should be updated');
 
         $this->assertSame(CartEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
     }
 
     public function testSetProductQuantity()
@@ -207,6 +220,8 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('write the damn test');
 
         $this->assertSame(CartEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
     }
 
     public function testUpdateCart()
@@ -217,6 +232,8 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $mgr->updateCart($cart);
 
         $this->assertSame(CartEvents::UPDATE_CART, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
 
         $this->markTestIncomplete('persistence tests are needed');
     }
