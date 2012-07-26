@@ -8,13 +8,13 @@
 
 namespace Vespolina\Cart\Pricing;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 use Vespolina\Cart\Handler\CartHandlerInterface;
 use Vespolina\Cart\Pricing\AbstractCartPricingProvider;
-use Vespolina\Entity\ItemInterface;
+use Vespolina\Entity\Order\CartInterface;
+use Vespolina\Entity\Order\ItemInterface;
+use Vespolina\Entity\Pricing\PricingContext;
+use Vespolina\Entity\Pricing\PricingContextInterface;
 use Vespolina\Entity\ProductInterface;
-use Vespolina\Entity\CartInterface;
 
 /**
  * @author Daniel Kucharski <daniel@xerias.be>
@@ -31,22 +31,22 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
 
     public function createPricingContext()
     {
-        return new ArrayCollection();
+        return new PricingContext();
     }
 
-    public function determineCartPrices(CartInterface $cart, $pricingContext = null, $determineItemPrices = true)
+    public function determineCartPrices(CartInterface $cart, PricingContextInterface $pricingContext = null, $determineItemPrices = true)
     {
         if (null == $pricingContext) {
             $pricingContext = $this->createPricingContext();
-            $pricingContext['totalNett'] = 0;
-            $pricingContext['totalGross'] = 0;
+            $pricingContext->set('totalNett', 0);
+            $pricingContext->set('totalGross', 0);
 
         }
         //Check if the cart has taxation enabled
         $taxationEnabled = $cart->getAttribute('taxation_enabled');
 
         if ($taxationEnabled) {
-            $pricingContext['totalTax'] = 0;
+            $pricingContext->set('totalTax', 0);
             $this->preparePricingContextForTaxation($pricingContext);
         }
 
@@ -65,22 +65,22 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
         }
 
         $cartPricingSet = $cart->getPricingSet();
-        $cartPricingSet->set('totalNett', $pricingContext['totalNett']);
+        $cartPricingSet->set('totalNett', $pricingContext->get('totalNett'));
 
         // Determine header level tax (eg. one shot tax)
         if ($taxationEnabled) {
             $this->determineCartTaxes($cart, $pricingContext);
-            $totalGross =  $pricingContext['totalNett'] +  $pricingContext['totalTax'];
-            $cartPricingSet->set('totalTax', $pricingContext['totalTax']);
+            $totalGross =  $pricingContext->get('totalNett') +  $pricingContext->get('totalTax');
+            $cartPricingSet->set('totalTax', $pricingContext->get('totalTax'));
 
         } else {
-            $totalGross = $pricingContext['totalNett'];
+            $totalGross = $pricingContext->get('totalNett');
         }
         $cartPricingSet->set('totalGross', $totalGross);
         $cart->setTotalPrice($pricingContext['totalNett']); //Todo: remove
     }
 
-    public function determineCartItemPrices(ItemInterface $cartItem, $pricingContext)
+    public function determineCartItemPrices(ItemInterface $cartItem, PricingContextInterface $pricingContext)
     {
         $handler = $this->getCartHandler($cartItem);
         $handler->determineCartItemPrices($cartItem, $pricingContext);
@@ -97,7 +97,7 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
         //Additional taxes to be applied not related to cart item taxes
     }
 
-    protected function preparePricingContextForTaxation($pricingContext)
+    protected function preparePricingContextForTaxation(PricingContextInterface $pricingContext)
     {
         //Find out if the tax zone was supplied
         $taxZone = $pricingContext->get('taxZone');
@@ -127,11 +127,14 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
     {
         $cartItemPricingSet = $cartItem->getPricingSet();
 
-        $pricingContext['totalNett'] += $cartItemPricingSet->get('totalNett');
-        $pricingContext['totalGross'] += $cartItemPricingSet->get('totalGross');
+        $totalNet = $pricingContext->get('totalNett') + $cartItemPricingSet->get('totalNett');
+        $pricingContext->set('totalNett', $totalNet);
+        $totalGross = $pricingContext->get('totalGross') + $cartItemPricingSet->get('totalGross');
+        $pricingContext->set('totalGross', $totalGross);
 
         if (null != $this->taxationManager) {
-            $pricingContext['totalTax'] += $cartItemPricingSet->get('totalTax');
+            $totalTax = $pricingContext->get('totalTax') + $cartItemPricingSet->get('totalTax');
+            $pricingContext->set('totalTax', $totalTax);
         }
     }
 }

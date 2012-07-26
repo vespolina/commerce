@@ -9,8 +9,6 @@
 namespace Vespolina\Cart\Manager;
 
 use Vespolina\Cart\Event\CartEvents;
-use Vespolina\Cart\Event\CartEvent;
-use Vespolina\Cart\Event\CartPricingEvent;
 use Vespolina\Cart\Manager\CartManagerInterface;
 use Vespolina\Cart\Pricing\CartPricingProviderInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;
@@ -177,6 +175,9 @@ class CartManager implements CartManagerInterface
         $rp->setAccessible(true);
         $rp->setValue($cart, $state);
         $rp->setAccessible(false);
+
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_STATE, new $this->eventClass($cart));
     }
 
     public function setItemQuantity(ItemInterface $item, $quantity)
@@ -187,6 +188,9 @@ class CartManager implements CartManagerInterface
         $rm->setAccessible(true);
         $rm->invokeArgs($item, array($quantity));
         $rm->setAccessible(false);
+
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM, new $this->eventClass($item));
     }
 
     /**
@@ -203,7 +207,8 @@ class CartManager implements CartManagerInterface
      */
     public function updateCart(CartInterface $cart, $andPersist = true)
     {
-        $this->eventDispatcher->dispatch(CartEvents::FINISHED, new CartEvent($cart));
+        $cartEvents = $this->cartEvents;
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, new $this->eventClass($cart));
         // gateway->persist();
     }
 
