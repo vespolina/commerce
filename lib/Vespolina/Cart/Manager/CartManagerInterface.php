@@ -42,9 +42,8 @@ interface CartManagerInterface
      * Triggers a CartEvents::UPDATE_CART_PRICE event
      *
      * @param CartInterface $cart
-     * @param bool $determineItemPrices
      */
-    function determinePrices(CartInterface $cart, $determineItemPrices = true);
+    function determinePrices(CartInterface $cart);
 
     /**
      * Find a cart by the specified fields and values
