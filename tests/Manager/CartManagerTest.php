@@ -27,7 +27,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Vespolina\Entity\Order\Cart', $cart, 'it should be an instance of the cart class passed in the construct');
         $this->assertSame('test', $cart->getName(), 'the name of cart should have been set when it was created');
         $this->assertSame(Cart::STATE_OPEN, $cart->getState());
-        $this->assertSame(CartEvents::INIT, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::INIT event should be triggered');
+        $this->assertSame(CartEvents::INIT_CART, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::INIT_CART event should be triggered');
 
         $this->markTestIncomplete('the cart should be persisted through the gateway');
     }
@@ -149,6 +149,8 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
     {
         $mgr = $this->createCartManager();
         $cart = $mgr->createCart();
+
+        $mgr->determinePrices($cart);
 
         $this->assertSame(CartEvents::UPDATE_CART_PRICE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART_PRICE event should be triggered');
     }
