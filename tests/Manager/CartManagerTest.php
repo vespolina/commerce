@@ -238,7 +238,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->markTestIncomplete('persistence tests are needed');
     }
 
-    protected function createCartManager($pricingProvider = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $eventClass = null, $dispatcherClass = 'TestDispatcher')
+    protected function createCartManager($pricingProvider = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $dispatcherClass = 'TestDispatcher')
     {
         if (!$pricingProvider) {
             $pricingProvider = new DefaultCartPricingProvider();
@@ -252,16 +252,13 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         if (!$cartEvents) {
             $cartEvents = 'Vespolina\Cart\Event\CartEvents';
         }
-        if (!$eventClass) {
-            $eventClass = 'Vespolina\EventDispatcher\Event';
-        }
         if ($dispatcherClass) {
             $eventDispatcher = new $dispatcherClass();
         } else {
             $eventDispatcher = null;
         }
 
-        return new CartManager($pricingProvider, $cartClass, $cartItemClass, $cartEvents, $eventClass, $eventDispatcher);
+        return new CartManager($pricingProvider, $cartClass, $cartItemClass, $cartEvents, $eventDispatcher);
     }
 }
 
@@ -269,6 +266,14 @@ class TestDispatcher implements EventDispatcherInterface
 {
     protected $lastEvent;
     protected $lastEventName;
+
+    public function createEvent($name, $subject = null)
+    {
+        $event = new Event($subject);
+        $event->setName($name);
+
+        return $event;
+    }
 
     public function dispatch($eventName, EventInterface $event = null)
     {

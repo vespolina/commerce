@@ -28,11 +28,10 @@ class CartManager implements CartManagerInterface
 {
     protected $cartClass;
     protected $cartItemClass;
-    protected $eventClass;
     protected $eventDispatcher;
     protected $pricingProvider;
 
-    function __construct(CartPricingProviderInterface $pricingProvider, $cartClass, $cartItemClass, $cartEvents, $eventClass, EventDispatcherInterface $eventDispatcher = null)
+    function __construct(CartPricingProviderInterface $pricingProvider, $cartClass, $cartItemClass, $cartEvents, EventDispatcherInterface $eventDispatcher = null)
     {
         if (!$eventDispatcher) {
             $eventDispatcher = new NullDispatcher();
@@ -40,7 +39,6 @@ class CartManager implements CartManagerInterface
         $this->cartClass = $cartClass;
         $this->cartEvents = $cartEvents;
         $this->cartItemClass = $cartItemClass;
-        $this->eventClass = $eventClass;
         $this->eventDispatcher = $eventDispatcher;
         $this->pricingProvider = $pricingProvider;
     }
@@ -77,7 +75,7 @@ class CartManager implements CartManagerInterface
         $pricingContext = $pricingProvider->createPricingContext();
 
         $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_PRICE, new $this->eventClass($cart));
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_PRICE, $this->eventDispatcher->createEvent($cart));
     }
 
     /**
@@ -163,7 +161,7 @@ class CartManager implements CartManagerInterface
         $rp->setAccessible(false);
 
         $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM_STATE, new $this->eventClass($cartItem));
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM_STATE, $this->eventDispatcher->createEvent($cartItem));
     }
 
     /**
@@ -177,7 +175,7 @@ class CartManager implements CartManagerInterface
         $rp->setAccessible(false);
 
         $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_STATE, new $this->eventClass($cart));
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_STATE, $this->eventDispatcher->createEvent($cart));
     }
 
     public function setItemQuantity(ItemInterface $item, $quantity)
@@ -190,7 +188,7 @@ class CartManager implements CartManagerInterface
         $rm->setAccessible(false);
 
         $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM, new $this->eventClass($item));
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM, $this->eventDispatcher->createEvent($item));
     }
 
     /**
@@ -208,7 +206,7 @@ class CartManager implements CartManagerInterface
     public function updateCart(CartInterface $cart, $andPersist = true)
     {
         $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, new $this->eventClass($cart));
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, $this->eventDispatcher->createEvent($cart));
         // gateway->persist();
     }
 
@@ -264,7 +262,7 @@ class CartManager implements CartManagerInterface
 
         //Delegate further initialization of the cart to those concerned
         $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::INIT_CART, new $this->eventClass($cart));
+        $this->eventDispatcher->dispatch($cartEvents::INIT_CART, $this->eventDispatcher->createEvent($cart));
     }
 
     protected function doAddProductToCart(CartInterface $cart, ProductInterface $product, $options, $quantity)
@@ -286,7 +284,7 @@ class CartManager implements CartManagerInterface
         $rm->setAccessible(false);
 
         $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::INIT_ITEM, new $this->eventClass($cartItem));
+        $this->eventDispatcher->dispatch($cartEvents::INIT_ITEM, $this->eventDispatcher->createEvent($cartItem));
 
         return $cartItem;
     }
