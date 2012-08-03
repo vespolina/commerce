@@ -8,7 +8,7 @@
 
 namespace Vespolina\Cart\Manager;
 
-use Vespolina\Cart\Event\CartEvents;
+use Vespolina\Entity\Order\CartEvents;
 use Vespolina\Cart\Manager\CartManagerInterface;
 use Vespolina\Cart\Pricing\CartPricingProviderInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;

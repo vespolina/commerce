@@ -1,6 +1,6 @@
 <?php
 
-use Vespolina\Cart\Event\CartEvents;
+use Vespolina\Entity\Order\CartEvents;
 use Vespolina\Cart\Manager\CartManager;
 use Vespolina\Cart\Pricing\DefaultCartPricingProvider;
 use Vespolina\Entity\Order\Cart;
@@ -250,7 +250,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
             $cartItemClass = 'Vespolina\Entity\Order\Item';
         }
         if (!$cartEvents) {
-            $cartEvents = 'Vespolina\Cart\Event\CartEvents';
+            $cartEvents = 'Vespolina\Entity\Order\CartEvents';
         }
         if ($dispatcherClass) {
             $eventDispatcher = new $dispatcherClass();
@@ -288,5 +288,31 @@ class TestDispatcher implements EventDispatcherInterface
     public function getLastEventName()
     {
         return $this->lastEventName;
+    }
+}
+
+class Event implements EventInterface
+{
+    protected $name;
+    protected $subject;
+
+    public function __construct($subject)
+    {
+        $this->subject = $subject;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getSubject()
+    {
+        return $this->subject;
     }
 }
