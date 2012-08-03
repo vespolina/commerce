@@ -267,10 +267,9 @@ class TestDispatcher implements EventDispatcherInterface
     protected $lastEvent;
     protected $lastEventName;
 
-    public function createEvent($name, $subject = null)
+    public function createEvent($subject = null)
     {
         $event = new Event($subject);
-        $event->setName($name);
 
         return $event;
     }
