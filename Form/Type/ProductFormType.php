@@ -10,6 +10,7 @@ namespace Vespolina\ProductBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vespolina\ProductBundle\Form\Type\FeatureFormType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -40,11 +41,11 @@ class ProductFormType extends AbstractType
         ;
     }
 
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => 'Application\Vespolina\ProductBundle\Document\Product',
-        );
+        ));
     }
 
     /**

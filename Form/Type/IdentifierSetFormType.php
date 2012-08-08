@@ -10,6 +10,7 @@ namespace Vespolina\ProductBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Vespolina\ProductBundle\Form\Type\IdentifierFormType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class IdentifierSetFormType extends AbstractType
 {
@@ -30,12 +31,11 @@ class IdentifierSetFormType extends AbstractType
             ))
         ;
     }
-
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => $this->dataClass,
-        );
+        ));
     }
 
     function getName()
