@@ -9,6 +9,7 @@ namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class FeatureFormType extends AbstractType
 {
@@ -24,11 +25,11 @@ class FeatureFormType extends AbstractType
         ;
     }
 
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => 'Vespolina\ProductBundle\Document\Feature',
-        );
+        ));
     }
 
     function getName()

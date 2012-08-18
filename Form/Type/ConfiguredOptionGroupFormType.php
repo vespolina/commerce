@@ -9,6 +9,7 @@ namespace Vespolina\ProductBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ConfiguredOptionGroupFormType extends AbstractType
 {
@@ -39,11 +40,11 @@ class ConfiguredOptionGroupFormType extends AbstractType
         ;
     }
 
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => $this->dataClass,
-        );
+        ));
     }
 
     function getName()
