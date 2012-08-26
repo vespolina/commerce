@@ -10,7 +10,7 @@ namespace Vespolina\Cart\Manager;
 
 use Vespolina\Entity\Order\CartEvents;
 use Vespolina\Cart\Manager\CartManagerInterface;
-use Vespolina\Cart\Pricing\CartPricingProviderInterface;
+use Vespolina\Cart\Gateway\CartGatewayInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;
 use Vespolina\Entity\Order\Cart;
 use Vespolina\Entity\Order\CartInterface;
@@ -29,9 +29,9 @@ class CartManager implements CartManagerInterface
     protected $cartClass;
     protected $cartItemClass;
     protected $eventDispatcher;
-    protected $pricingProvider;
+    protected $gateway;
 
-    function __construct(CartPricingProviderInterface $pricingProvider, $cartClass, $cartItemClass, $cartEvents, EventDispatcherInterface $eventDispatcher = null)
+    function __construct(CartGatewayInterface $gateway, $cartClass, $cartItemClass, $cartEvents, EventDispatcherInterface $eventDispatcher = null)
     {
         if (!$eventDispatcher) {
             $eventDispatcher = new NullDispatcher();
@@ -40,7 +40,7 @@ class CartManager implements CartManagerInterface
         $this->cartEvents = $cartEvents;
         $this->cartItemClass = $cartItemClass;
         $this->eventDispatcher = $eventDispatcher;
-        $this->pricingProvider = $pricingProvider;
+        $this->gateway = $gateway;
     }
 
     /**
@@ -68,19 +68,6 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function determinePrices(CartInterface $cart, $determineItemPrices = true)
-    {
-        // TODO: this needs to be removed, but I need to check to make sure it doesn't break StoreBundle
-        $pricingProvider = $this->getPricingProvider();
-        $pricingContext = $pricingProvider->createPricingContext();
-
-        $cartEvents = $this->cartEvents;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_PRICE, $this->eventDispatcher->createEvent($cart));
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         throw new \Exception('gateway implementation needed');
@@ -100,14 +87,6 @@ class CartManager implements CartManagerInterface
     public function getEventDispatcher()
     {
         return $this->eventDispatcher;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPricingProvider()
-    {
-        return $this->pricingProvider;
     }
 
     /**
@@ -253,9 +232,6 @@ class CartManager implements CartManagerInterface
 
     protected function initCart(CartInterface $cart)
     {
-        // Create the pricing set to hold cart level pricing data
-        $this->setCartPricingSet($cart, $this->pricingProvider->createPricingSet());
-
         // Set default state (for now we set it to "open"), do this last since it will persist and flush the cart
         $cartClass = $this->cartClass;
         $this->setCartState($cart, $cartClass::STATE_OPEN);

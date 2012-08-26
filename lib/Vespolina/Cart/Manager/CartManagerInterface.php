@@ -39,13 +39,6 @@ interface CartManagerInterface
     function createCart($name = 'default');
 
     /**
-     * Triggers a CartEvents::UPDATE_CART_PRICE event
-     *
-     * @param CartInterface $cart
-     */
-    function determinePrices(CartInterface $cart);
-
-    /**
      * Find a cart by the specified fields and values
      *
      * @param array $criteria
@@ -82,13 +75,6 @@ interface CartManagerInterface
      * @return Vespolina\EventDispatcher\EventDispatcherInterface
      */
     function getEventDispatcher();
-
-    /**
-     * Return the PricingProvider for this manager
-     *
-     * @return Vespolina\Entity\Pricing\PricingProviderInterface
-     */
-    function getPricingProvider();
 
     /**
      * Completely remove a product from the cart
