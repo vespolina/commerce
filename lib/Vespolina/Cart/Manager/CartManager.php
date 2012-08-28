@@ -61,6 +61,7 @@ class CartManager implements CartManagerInterface
         $cart = new $this->cartClass();
         $cart->setName($name);
         $this->initCart($cart);
+        $this->gateway->persistCart($cart);
 
         return $cart;
     }
@@ -186,7 +187,9 @@ class CartManager implements CartManagerInterface
     {
         $cartEvents = $this->cartEvents;
         $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, $this->eventDispatcher->createEvent($cart));
-        // gateway->persist();
+        if ($andPersist) {
+            $this->gateway->updateCart($cart);
+        }
     }
 
     protected function createItem(ProductInterface $product, array $options = null)

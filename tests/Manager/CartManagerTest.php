@@ -1,6 +1,7 @@
 <?php
 
 use Vespolina\Entity\Order\CartEvents;
+use Vespolina\Cart\Gateway\CartMemoryGateway;
 use Vespolina\Cart\Manager\CartManager;
 use Vespolina\Cart\Pricing\DefaultCartPricingProvider;
 use Vespolina\Entity\Order\Cart;
@@ -10,7 +11,16 @@ use Vespolina\EventDispatcher\EventInterface;
 
 class CartManagerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testConstruct()
+    static protected $gateway;
+
+    public function __construct()
+    {
+        if (!self::$gateway) {
+            self::$gateway = new CartMemoryGateway();
+        }
+    }
+
+    public function testConstructDistpatcher()
     {
         $mgr = $this->createCartManager(null, null, null, null, null, null);
         $rp = new \ReflectionProperty($mgr, 'eventDispatcher');
@@ -32,7 +42,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $event = $mgr->getEventDispatcher()->getLastEvent();
         $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
 
-        $this->markTestIncomplete('the cart should be persisted through the gateway');
+        $this->verifyPersistence($cart);
     }
 
     public function testFindProductInCart()
@@ -94,15 +104,24 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(1, $item->getQuantity());
         $this->assertSame('test product', $item->getName());
 
+        // add the same product again to increase the quantity
         $existingItem = $mgr->addProductToCart($cart, $product);
         $this->assertSame($existingItem, $item);
         $items = $cart->getItems();
         $this->assertSame(1, count($items));
         $this->assertSame(2, $existingItem->getQuantity());
 
-        $mgr->addProductToCart($cart, $product, array(), 2);
+        $this->assertSame(CartEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
 
+        // specifiy the quantity when adding a product to the cart
+        $mgr->addProductToCart($cart, $product, array(), 2);
         $this->assertSame(4, $existingItem->getQuantity(), 'passing the quantity should add to the existing quantity');
+
+        $this->assertSame(CartEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
 
         $optionSet1 = array('color' => 'blue', 'size' => 'small');
         $optionSet2 = array('color' => 'red', 'size' => 'small');
@@ -148,18 +167,6 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $mgr->removeProductFromCart($cart, $product, array('size' => 'small'));
         $this->assertContains($item, $cart->getItems(), 'the items should still be in the cart since the wrong options were passed');
 
-    }
-
-    public function testDetermineCartPrices()
-    {
-        $mgr = $this->createCartManager();
-        $cart = $mgr->createCart();
-
-        $mgr->determinePrices($cart);
-
-        $this->assertSame(CartEvents::UPDATE_CART_PRICE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART_PRICE event should be triggered');
-        $event = $mgr->getEventDispatcher()->getLastEvent();
-        $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
     }
 
     public function testSetCartItemState()
@@ -216,8 +223,13 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
 
         $product = new Product();
         $item = $mgr->addProductToCart($cart, $product);
+        $mgr->setProductQuantity($cart, $product, array(), 5);
+        $this->assertSame(5, $item->getQuantity(), 'the quantity should be updated');
 
-        $this->markTestIncomplete('write the damn test');
+        $options = array('size' => 'large');
+        $optionItem = $mgr->addProductToCart($cart, $product, $options);
+        $mgr->setProductQuantity($cart, $product, $options, 5);
+        $this->assertSame(5, $optionItem->getQuantity(), 'the quantity should be updated');
 
         $this->assertSame(CartEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM event should be triggered');
         $event = $mgr->getEventDispatcher()->getLastEvent();
@@ -227,22 +239,33 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
     public function testUpdateCart()
     {
         $mgr = $this->createCartManager();
-        $cart = $mgr->createCart();
+        $cart = $mgr->createCart('testUpdateCart');
+        $dummyCart = $mgr->createCart('toMakeSureTestUpdateCartIsNotLastCart');
 
-        $mgr->updateCart($cart);
+        $mgr->updateCart($cart, false);
 
         $this->assertSame(CartEvents::UPDATE_CART, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART event should be triggered');
         $event = $mgr->getEventDispatcher()->getLastEvent();
         $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
 
-        $this->markTestIncomplete('persistence tests are needed');
+        $this->verifyPersistence($dummyCart); // should still be dummy cart since persist parameter was false
+
+       $mgr->createCart('toMakeSureLastEventIsCreate');
+
+        $mgr->updateCart($cart);
+        $this->assertSame(CartEvents::UPDATE_CART, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART event should be triggered');
+        $event = $mgr->getEventDispatcher()->getLastEvent();
+        $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
+
+        $this->verifyPersistence($cart);
     }
 
-    protected function createCartManager($pricingProvider = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $dispatcherClass = 'TestDispatcher')
+    protected function createCartManager($gateway = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $dispatcherClass = 'TestDispatcher')
     {
-        if (!$pricingProvider) {
-            $pricingProvider = new DefaultCartPricingProvider();
+        if (!$gateway) {
+            $gateway = self::$gateway;
         }
+
         if (!$cartClass) {
             $cartClass = 'Vespolina\Entity\Order\Cart';
         }
@@ -258,7 +281,17 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
             $eventDispatcher = null;
         }
 
-        return new CartManager($pricingProvider, $cartClass, $cartItemClass, $cartEvents, $eventDispatcher);
+        return new CartManager($gateway, $cartClass, $cartItemClass, $cartEvents, $eventDispatcher);
+    }
+
+    protected function verifyPersistence($cart)
+    {
+        if (method_exists(self::$gateway, 'getLastCart')) {
+            $lastCart = self::$gateway->getLastCart();
+            $this->assertSame($lastCart->getId(), $cart->getId(), 'verify that the cart was persisted through the gateway');
+        } else {
+            $this->markTestIncomplete('the persistance through the gateway was not tested');
+        }
     }
 }
 

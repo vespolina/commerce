@@ -16,6 +16,7 @@ class CartMemoryGateway implements CartGatewayInterface
 {
     protected $carts;
     protected $deletedCarts;
+    protected $lastCart;
     protected $ids = array();
 
     public function deleteCart(CartInterface $cart)
@@ -23,6 +24,11 @@ class CartMemoryGateway implements CartGatewayInterface
         $cartId = $cart->getId();
         unset($this->carts);
         $this->deletedCarts[$cartId] = $cart;
+    }
+
+    public function getLastCart()
+    {
+        return $this->lastCart;
     }
 
     public function findCart(QueryInterface $query)
@@ -38,6 +44,7 @@ class CartMemoryGateway implements CartGatewayInterface
         $rp->setValue($cart, $cartId);
         $rp->setAccessible(false);
         $this->carts[$cartId] = $cart;
+        $this->lastCart = $cart;
     }
 
     public function updateCart(CartInterface $cart)
@@ -47,6 +54,7 @@ class CartMemoryGateway implements CartGatewayInterface
             throw new \Exception('This cart has not been persisted');
         }
         $this->carts[$cartId] = $cart;
+        $this->lastCart = $cart;
     }
 
     protected function generateNewId()
