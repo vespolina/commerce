@@ -8,6 +8,8 @@
 
 namespace Vespolina\Cart\Manager;
 
+use Gateway\Query;
+use Gateway\QueryBuilder;
 use Vespolina\Entity\Order\CartEvents;
 use Vespolina\Cart\Manager\CartManagerInterface;
 use Vespolina\Cart\Gateway\CartGatewayInterface;
@@ -71,7 +73,30 @@ class CartManager implements CartManagerInterface
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        throw new \Exception('gateway implementation needed');
+        $qb = new QueryBuilder();
+        foreach($criteria as $field => $value) {
+            $qb->field($field)->equals($value);
+        }
+        if ($orderBy) {
+            $qb->orderBy($orderBy);
+        }
+        if ($limit) {
+            $qb->limit($limit);
+        }
+        if ($offset) {
+            $qb->offset($offset);
+        }
+        $query = $qb->getQuery();
+
+        return $this->gateway->findCarts($query);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findCartsBy(Query $query)
+    {
+        return $this->gateway->findCarts($query);
     }
 
     /**
@@ -79,7 +104,11 @@ class CartManager implements CartManagerInterface
      */
     public function findCartById($id)
     {
-        throw new \Exception('gateway implementation needed');
+        $qb = new QueryBuilder();
+        $qb->field('id')->equals($id);
+        $query = $qb->getQuery();
+
+        return $this->gateway->findCarts($query);
     }
 
     /**

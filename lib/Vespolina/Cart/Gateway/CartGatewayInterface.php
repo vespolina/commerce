@@ -8,7 +8,7 @@
 
 namespace Vespolina\Cart\Gateway;
 
-use Gateway\QueryInterface;
+use Gateway\Query;
 use Vespolina\Entity\Order\CartInterface;
 use Vespolina\Entity\ItemInterface;
 
@@ -24,11 +24,11 @@ interface CartGatewayInterface
     /**
      * Find a Cart by the value in a field or combination of fields
      *
-     * @param Gateway\QueryInterface $query
+     * @param Gateway\Query $query
      *
-     * @return instance of Vespolina\Entity\Order\CartInterface
+     * @return single instance of or array of Vespolina\Entity\Order\CartInterface
      */
-    function findCart(QueryInterface $query);
+    function findCarts(Query $query);
 
     /**
      * Persist a Cart that has been created.  The Cart will be immediately flushed in the database

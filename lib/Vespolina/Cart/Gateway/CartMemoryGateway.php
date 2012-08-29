@@ -8,7 +8,7 @@
 
 namespace Vespolina\Cart\Gateway;
 
-use Gateway\QueryInterface;
+use Gateway\Query;
 use Vespolina\Cart\Gateway\CartGatewayInterface;
 use Vespolina\Entity\Order\CartInterface;
 
@@ -31,9 +31,23 @@ class CartMemoryGateway implements CartGatewayInterface
         return $this->lastCart;
     }
 
-    public function findCart(QueryInterface $query)
+    public function findCarts(Query $query)
     {
+        $criteria = $query->getCriteria();
 
+        $results = array();
+        if (isset($criteria['id'])) {
+            $value = $criteria['id'][1];
+            switch ($criteria['id'][0]) {
+                case 'equals':
+                    if (isset($this->carts[$value])) {
+                        $results[$value] = $this->carts[$value];
+                    }
+                    break;
+            }
+        }
+
+        return (sizeof($results) === 1) ? array_pop($results) : $results;
     }
 
     public function persistCart(CartInterface $cart)

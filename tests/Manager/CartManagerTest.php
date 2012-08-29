@@ -45,6 +45,21 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->verifyPersistence($cart);
     }
 
+    public function testFindCartById()
+    {
+        $mgr = $this->createCartManager();
+
+        $cart1 = $mgr->createCart('findCart1');
+        $cart2 = $mgr->createCart('findCart2');
+
+        $cartId = $cart1->getId();
+
+        $loadedCart = $mgr->findCartById($cartId);
+
+        $this->assertInstanceOf('Vespolina\Entity\Order\Cart', $loadedCart);
+        $this->assertSame($cart1, $loadedCart);
+    }
+
     public function testFindProductInCart()
     {
         $mgr = $this->createCartManager();
