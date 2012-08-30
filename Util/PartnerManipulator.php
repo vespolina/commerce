@@ -51,10 +51,23 @@ class PartnerManipulator
     }
 
     /**
-     * Map provided partner roles to FOS user roles
+     * Map provided partner business roles to FOS user roles
+     *
+     * For instance, a sales clerk might get multiple roles
      */
-    public function mapPartnerToUserRoles(array $roles)
+    public function mapPartnerToUserRoles(array $partnerRoles)
     {
-        return $roles;
+        $userRoles = array();
+        foreach ($partnerRoles as $partnerRole) {
+
+            $userRoles[] = $partnerRole;
+
+            if ($partnerRole == Partner::ROLE_EMPLOYEE) {
+
+                $userRoles[] = 'ROLE_ADMIN';
+            }
+
+        }
+        return $userRoles;
     }
 }
