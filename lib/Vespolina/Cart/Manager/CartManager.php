@@ -73,22 +73,7 @@ class CartManager implements CartManagerInterface
      */
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        $qb = new QueryBuilder();
-        foreach($criteria as $field => $value) {
-            $qb->field($field)->equals($value);
-        }
-        if ($orderBy) {
-            $qb->orderBy($orderBy);
-        }
-        if ($limit) {
-            $qb->limit($limit);
-        }
-        if ($offset) {
-            $qb->offset($offset);
-        }
-        $query = $qb->getQuery();
-
-        return $this->gateway->findCarts($query);
+        return $this->doFindBy($criteria, $orderBy, $limit, $offset);
     }
 
     /**
@@ -104,11 +89,7 @@ class CartManager implements CartManagerInterface
      */
     public function findCartById($id)
     {
-        $qb = new QueryBuilder();
-        $qb->field('id')->equals($id);
-        $query = $qb->getQuery();
-
-        return $this->gateway->findCarts($query);
+        return $this->doFindCartById($id);
     }
 
     /**
@@ -216,9 +197,7 @@ class CartManager implements CartManagerInterface
     {
         $cartEvents = $this->cartEvents;
         $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, $this->eventDispatcher->createEvent($cart));
-        if ($andPersist) {
-            $this->gateway->updateCart($cart);
-        }
+        $this->doUpdateCart($cart, $andPersist);
     }
 
     protected function createItem(ProductInterface $product, array $options = null)
@@ -241,6 +220,41 @@ class CartManager implements CartManagerInterface
         return $item;
     }
 
+    /**
+     * @inheritdoc
+     */
+    protected function doFindBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $qb = new QueryBuilder();
+        foreach($criteria as $field => $value) {
+            $qb->field($field)->equals($value);
+        }
+        if ($orderBy) {
+            $qb->orderBy($orderBy);
+        }
+        if ($limit) {
+            $qb->limit($limit);
+        }
+        if ($offset) {
+            $qb->offset($offset);
+        }
+        $query = $qb->getQuery();
+
+        return $this->gateway->findCarts($query);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doFindCartById($id)
+    {
+        $qb = new QueryBuilder();
+        $qb->field('id')->equals($id);
+        $query = $qb->getQuery();
+
+        return $this->gateway->findCarts($query);
+    }
+
     protected function doOptionsMatch($itemOptions, $targetOptions)
     {
         if (empty($targetOptions)) {
@@ -260,6 +274,16 @@ class CartManager implements CartManagerInterface
         }
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doUpdateCart(CartInterface $cart, $andPersist = true)
+    {
+        if ($andPersist) {
+            $this->gateway->updateCart($cart);
+        }
     }
 
     protected function initCart(CartInterface $cart)
