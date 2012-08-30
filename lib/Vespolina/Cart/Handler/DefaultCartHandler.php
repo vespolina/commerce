@@ -30,12 +30,12 @@ class DefaultCartHandler extends  AbstractCartHandler
     public function determineCartItemPrices(ItemInterface $cartItem, $pricingContext)
     {
         $pricing = $cartItem->getProduct()->getPricing();
-        $pricingSet = $cartItem->getPricingSet();
-        $unitNett = $pricing['unitPriceTotal'];
-        $upChargeNett = 0;
+        $pricingSet = $cartItem->getPricing();
+        $unitNet = $pricing['unitPriceTotal'];
+        $upChargeNet = 0;
 
         //Add additional upcharges for a chosen product option
-        $upChargeNett = $this->determineCartItemUpCharge($cartItem, $pricingContext);
+        $upChargeNet = $this->determineCartItemUpCharge($cartItem, $pricingContext);
 
         //Calculate fulfillment costs (eg. shipping, packaging cost)
         if ($this->fulfillmentPricingEnabled) {
@@ -43,9 +43,9 @@ class DefaultCartHandler extends  AbstractCartHandler
             //$this->determineCartItemFulfillmentPrices($cartItem, $pricingContext);
         }
 
-        $totalNett = ( $cartItem->getQuantity() * $unitNett ) + $upChargeNett;
-        $pricingSet->set('upchargeNett', $upChargeNett);
-        $pricingSet->set('totalNett', $totalNett);
+        $totalNet = ( $cartItem->getQuantity() * $unitNet ) + $upChargeNet;
+        $pricingSet->set('upchargeNett', $upChargeNet);
+        $pricingSet->set('totalNet', $totalNet);
 
         //Determine item level taxes
         $taxationEnabled = $cartItem->getCart()->getAttribute('taxation_enabled');
@@ -54,14 +54,14 @@ class DefaultCartHandler extends  AbstractCartHandler
 
             $this->determineCartItemTaxes(
                     $cartItem,
-                    array('totalNett' => $totalNett),
+                    array('totalNet' => $totalNet),
                     $pricingSet,
                     $pricingContext);
         }
 
-        $pricingSet->set('totalGross', $pricingContext['totalNett'] + $pricingContext['totalTax']);
+        $pricingSet->set('totalGross', $pricingContext['totalNet'] + $pricingContext['totalTax']);
         // set the total price in the cart item
-        $cartItem->setTotalPrice($totalNett);   //Todo: remove
+        $cartItem->setTotalPrice($totalNet);   //Todo: remove
     }
 
     public function getTypes()

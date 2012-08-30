@@ -38,7 +38,7 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
     {
         if (null == $pricingContext) {
             $pricingContext = $this->createPricingContext();
-            $pricingContext->set('totalNett', 0);
+            $pricingContext->set('totalNet', 0);
             $pricingContext->set('totalGross', 0);
 
         }
@@ -64,20 +64,20 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
             $this->determineCartFulfillmentPrices($cart, $pricingContext);
         }
 
-        $cartPricingSet = $cart->getPricingSet();
-        $cartPricingSet->set('totalNett', $pricingContext->get('totalNett'));
+        $cartPricingSet = $cart->getPricing();
+        $cartPricingSet->set('totalNet', $pricingContext->get('totalNet'));
 
         // Determine header level tax (eg. one shot tax)
         if ($taxationEnabled) {
             $this->determineCartTaxes($cart, $pricingContext);
-            $totalGross =  $pricingContext->get('totalNett') +  $pricingContext->get('totalTax');
+            $totalGross =  $pricingContext->get('totalNet') +  $pricingContext->get('totalTax');
             $cartPricingSet->set('totalTax', $pricingContext->get('totalTax'));
 
         } else {
-            $totalGross = $pricingContext->get('totalNett');
+            $totalGross = $pricingContext->get('totalNet');
         }
         $cartPricingSet->set('totalGross', $totalGross);
-        $cart->setTotalPrice($pricingContext['totalNett']); //Todo: remove
+        $cart->setTotalPrice($pricingContext->get('totalNet')); //Todo: remove
     }
 
     public function determineCartItemPrices(ItemInterface $cartItem, PricingContextInterface $pricingContext)
@@ -125,10 +125,10 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
 
     protected function sumItemPrices(ItemInterface $cartItem, $pricingContext)
     {
-        $cartItemPricingSet = $cartItem->getPricingSet();
+        $cartItemPricingSet = $cartItem->getPricing();
 
-        $totalNet = $pricingContext->get('totalNett') + $cartItemPricingSet->get('totalNett');
-        $pricingContext->set('totalNett', $totalNet);
+        $totalNet = $pricingContext->get('totalNet') + $cartItemPricingSet->get('totalNet');
+        $pricingContext->set('totalNet', $totalNet);
         $totalGross = $pricingContext->get('totalGross') + $cartItemPricingSet->get('totalGross');
         $pricingContext->set('totalGross', $totalGross);
 
