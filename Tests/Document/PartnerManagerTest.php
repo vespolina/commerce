@@ -161,8 +161,8 @@ class PartnerManagerTest extends TestCase
     public function setup()
     {
         $this->dm = self::createTestDocumentManager();
-        $xmlDriver = new XmlDriver(array(realpath(__DIR__.'/../') . '/Resources/config/doctrine' => 'Vespolina\PartnerBundle\Tests\Fixtures\Document'));
-        $xmlDriver->setFileExtension('.mongodb.xml');
+        $xmlDriver = new XmlDriver(array(realpath(__DIR__.'/../') . '/Resources/config/doctrine' => 'Vespolina\PartnerBundle\Tests\Fixtures\Document'), '.mongodb.xml');
+        //$xmlDriver->setFileExtension('.mongodb.xml');
         $this->dm->getConfiguration()->setMetadataDriverImpl($xmlDriver);
         $this->partnerMgr = new PartnerManager(
             $this->dm,
