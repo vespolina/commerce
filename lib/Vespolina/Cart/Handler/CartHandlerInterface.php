@@ -8,7 +8,7 @@
 
 namespace Vespolina\Cart\Handler;
 
-use Vespolina\Entity\ItemInterface;
+use Vespolina\Entity\Order\ItemInterface;
 
 interface CartHandlerInterface
 {

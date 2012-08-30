@@ -11,7 +11,7 @@ namespace Vespolina\Cart\Pricing;
 use Vespolina\Cart\Handler\CartHandlerInterface;
 use Vespolina\Cart\Pricing\CartPricingProviderInterface;
 use Vespolina\Entity\Pricing\PricingSet;
-use Vespolina\Entity\ItemInterface;
+use Vespolina\Entity\Order\ItemInterface;
 
 /**
  * @author Daniel Kucharski <daniel@xerias.be>

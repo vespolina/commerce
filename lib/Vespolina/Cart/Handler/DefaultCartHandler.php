@@ -9,9 +9,9 @@
 namespace Vespolina\Cart\Handler;
 
 use Vespolina\Cart\Handler\AbstractCartHandler;
-use Vespolina\Entity\ItemInterface;
-use Vespolina\Entity\CartInterface;
-use Vespolina\Entity\OrderInterface;
+use Vespolina\Entity\Order\ItemInterface;
+use Vespolina\Entity\Order\CartInterface;
+use Vespolina\Entity\Order\OrderInterface;
 
 /**
  * DefaultHandler for the cart
