@@ -8,11 +8,12 @@
     "require": {
         "iampersistent/gateway": "*",
         "php":                   ">=5.3.0",
-        "vespolina/entity":      "*"
+        "vespolina/core":      "*"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
-            "ImgSeek": "lib/"
+            "Vespolina": "lib/"
         }
     }
 }
