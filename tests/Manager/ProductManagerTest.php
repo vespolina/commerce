@@ -11,14 +11,13 @@ namespace Vespolina\ProductBundle\Tests\Model;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use Vespolina\ProductBundle\Model\Product;
-use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
-use Vespolina\ProductBundle\Tests\ProductTestCommon;
+use Vespolina\Entity\Product\Product;
+use Vespolina\Entity\Identifier\ProductIdentifierSet;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class ProductManagerTest extends ProductTestCommon
+class ProductManagerTest extends \PHPUnit_Framework_TestCase
 {
     protected $mgr;
     protected $product;
@@ -54,15 +53,31 @@ class ProductManagerTest extends ProductTestCommon
         $handler = $this->createProductHandler('test');
         $this->mgr->addProductHandler($handler);
 
-        $this->assertInstanceOf('Vespolina\Entity\ProductInterface', $this->mgr->createProduct('test'));
+        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct('test'));
 
         // todo: this should be through a handler also, but for now, it is using the legacy method of creating a class
         $pc = new \ReflectionProperty($this->mgr, 'productClass');
         $pc->setAccessible(true);
         $pc->setValue($this->mgr, 'Vespolina\ProductBundle\Tests\Fixtures\Model\Product');
 
-        $this->assertInstanceOf('Vespolina\Entity\ProductInterface', $this->mgr->createProduct('default'));
-        $this->assertInstanceOf('Vespolina\Entity\ProductInterface', $this->mgr->createProduct());
+        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct('default'));
+        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct());
+    }
+
+    public function testCreateMerchandise()
+    {
+        $handler = $this->createProductHandler('test');
+        $this->mgr->addProductHandler($handler);
+
+        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct('test'));
+
+        // todo: this should be through a handler also, but for now, it is using the legacy method of creating a class
+        $pc = new \ReflectionProperty($this->mgr, 'productClass');
+        $pc->setAccessible(true);
+        $pc->setValue($this->mgr, 'Vespolina\ProductBundle\Tests\Fixtures\Model\Product');
+
+        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct('default'));
+        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct());
     }
 
     public function testSearchForProductByIdentifier()

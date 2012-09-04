@@ -5,10 +5,10 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Vespolina\ProductBundle\Handler;
+namespace Vespolina\Product\Handler;
 
-use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
-use Vespolina\Entity\ProductInterface;
+use Vespolina\Product\Handler\ProductHandlerInterface;
+use Vespolina\Entity\Product\ProductInterface;
 
 abstract class ProductHandler implements ProductHandlerInterface
 {
