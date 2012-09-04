@@ -7,10 +7,12 @@
  */
 namespace Vespolina\Product\Manager;
 
-use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
-use Vespolina\Entity\ProductInterface;
-use Vespolina\Entity\IdentifierInterface
-;
+use Vespolina\Product\Handler\ProductHandlerInterface;
+use Vespolina\Entity\Product\MerchandiseInterface;
+use Vespolina\Entity\Product\OptionGroupInterface;
+use Vespolina\Entity\Product\ProductInterface;
+use Vespolina\Entity\Identitifer\IdentifierInterface;
+
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -22,7 +24,7 @@ interface ProductManagerInterface
      * an Option instance of a particular type, the new value is added to the object, otherwise a new Option object is
      * created. Optionally, just an Option object can be passed in, without a third value parameter.
      *
-     * @param \Vespolina\Entity\ProductInterface $product
+     * @param \Vespolina\Entity\Product\ProductInterface $product
      * @param $type string or Vespolina\Entity\OptionInterface
      * @param $value
      */
@@ -32,7 +34,7 @@ interface ProductManagerInterface
      * Add an Identifier to a product. If the options are passed in, the Identifier applies only to those specific
      * option types and values. The array of options can be Option objects or arrays with keys of 'type' and 'value'.
      *
-     * @param \Vespolina\Entity\ProductInterface $product
+     * @param \Vespolina\Entity\Product\ProductInterface $product
      * @param array|null $options
      */
     function addIdentifierToProduct(ProductInterface $product, array $options = null);
@@ -80,17 +82,10 @@ interface ProductManagerInterface
      * Find a Product by its object identifier
      *
      * @param $id
-     * @return Vespolina\Entity\ProductInterface
+     *
+     * @return \Vespolina\Entity\Product\ProductInterface
      */
     function findProductById($id);
-
-    /**
-     * Find a Product by its slug
-     *
-     * @param $slug
-     * @return Vespolina\Entity\ProductInterface
-     */
-    function findProductBySlug($slug);
 
     /**
      * Find a Product by an identifier node
@@ -98,7 +93,7 @@ interface ProductManagerInterface
      * @param $name
      * @param $code
      *
-     * @return Vespolina\Entity\ProductInterface
+     * @return \Vespolina\Entity\Product\ProductInterface
      */
     function findProductByIdentifier($name, $code);
 
@@ -126,14 +121,6 @@ interface ProductManagerInterface
     function removeProductHandler($type);
 
     /**
-     * Update and persist the product
-     *
-     * @param Vespolina\Entity\ProductInterface $product
-     * @param Boolean $andFlush Whether to flush the changes (default true)
-     */
-    function updateProduct(ProductInterface $product, $andFlush = true);
-
-    /**
      * Find a collection of option groups by the criteria
      *
      * @param array $criteria
@@ -149,7 +136,7 @@ interface ProductManagerInterface
      * Find an OptionGroup by its object identifier
      *
      * @param $id
-     * @return Vespolina\ProductBundle\Model\Option\OptionGroupInterface
+     * @return \Vespolina\Entity\Product\OptionGroupInterface
      */
     function findOptionGroupById($id);
 
@@ -164,16 +151,26 @@ interface ProductManagerInterface
     /**
      * Delete a persisted object
      *
-     * @param $object peristed object
+     * @param \Vespolina\Entity\Product\OptionGroupInterface $optionGroup
      * @param Boolean $andFlush Whether to flush the changes (default true)
      */
-    function delete($object, $andFlush = true);
+    function deleteOptionGroup(OptionGroupInterface $optionGroup, $andPersist = true);
 
     /**
      * Update and persist
      *
-     * @param $object persistable object
+     * @param \Vespolina\Entity\Product\OptionGroupInterface $optionGroup
      * @param Boolean $andFlush Whether to flush the changes (default true)
      */
-    function update($object, $andFlush = true);
+    function updateOptionGroup(OptionGroupInterface $optionGroup, $andPersist = true);
+
+    function updateMerchandise(MerchandiseInterface $merchandise, $andPersist = true);
+
+    /**
+     * Update and persist the product
+     *
+     * @param \Vespolina\Entity\Product\ProductInterface $product
+     * @param Boolean $andFlush Whether to flush the changes (default true)
+     */
+    function updateProduct(ProductInterface $product, $andPersist = true);
 }

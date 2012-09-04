@@ -5,25 +5,27 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Vespolina\ProductBundle\Model;
+namespace Vespolina\Product\Manager;
 
-use Vespolina\ProductBundle\Handler\ProductHandlerInterface;
-use Vespolina\Entity\ProductInterface;
-use Vespolina\ProductBundle\Model\ProductManagerInterface;
-use Vespolina\ProductBundle\Model\Identifier\IdentifierInterface;
-use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet;
-use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+
+use Vespolina\Entity\Product\MerchandiseInterface;
+use Vespolina\Entity\Product\OptionGroupInterface;
+use Vespolina\Entity\Product\ProductInterface;
+use Vespolina\Entity\Identifier\IdentifierInterface;
+use Vespolina\Entity\Identifier\ProductIdentifierSet;
+use Vespolina\Entity\Identifier\ProductIdentifierSetInterface;
+use Vespolina\Product\Handler\ProductHandlerInterface;
+use Vespolina\Product\Manager\ProductManagerInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
  */
-abstract class ProductManager implements ProductManagerInterface
+class ProductManager implements ProductManagerInterface
 {
     protected $productHandlers;
     protected $identifiers;
     protected $identifierSetClass;
-    protected $productClass; // todo: remove after default product is created through a handler
     protected $assetManager;
 
     public function __construct($identifiers, $identifierSetClass, $assetManager)
@@ -32,6 +34,16 @@ abstract class ProductManager implements ProductManagerInterface
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
         $this->assetManager = $assetManager;
+    }
+
+    public function addOptionToProduct(ProductInterface $product, $type, $value = null)
+    {
+
+    }
+
+    public function addIdentifierToProduct(ProductInterface $product, array $options = null)
+    {
+
     }
 
     /**
@@ -98,6 +110,22 @@ abstract class ProductManager implements ProductManagerInterface
         $product = new $this->productClass($this->identifierSetClass);
 
         return $product;
+    }
+
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+
+    }
+
+
+    public function findProductById($id)
+    {
+
+    }
+
+    public function findProductByIdentifier($name, $code)
+    {
+
     }
 
     /**
@@ -199,22 +227,60 @@ abstract class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    function delete($object, $andFlush = true)
+    function deleteOptionGroup(OptionGroupInterface $optionGroup, $andPersist = true)
     {
-        $this->dm->remove($object);
-        if ($andFlush) {
-            $this->dm->flush();
+        if ($andPersist) {
+            $this->doDeleteOptionGroup($optionGroup);
         }
     }
 
     /**
      * @inheritdoc
      */
-    public function update($object, $andFlush = true)
+    public function updateOptionGroup(OptionGroupInterface $optionGroup, $andPersist = true)
     {
-        $this->dm->persist($object);
-        if ($andFlush) {
-            $this->dm->flush();
+        if ($andPersist) {
+            $this->doUpdateOptionGroup($optionGroup);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function updateMerchandise(MerchandiseInterface $merchandise, $andPersist = true)
+    {
+        if ($andPersist) {
+            $this->doUpdateMerchandise($merchandise);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function updateProduct(ProductInterface $product, $andPersist = true)
+    {
+        if ($andPersist) {
+            $this->doUpdateProduct($product);
+        }
+    }
+
+    protected function doDeleteOptionGroup(OptionGroupInterface $merchandise)
+    {
+
+    }
+
+    protected function doUpdateMerchandise(MerchandiseInterface $optionGroup)
+    {
+
+    }
+
+    protected function doUpdateOptionGroup(OptionGroupInterface $optionGroup)
+    {
+
+    }
+
+    protected function doUpdateProduct(ProductInterface $product)
+    {
+
     }
 }
