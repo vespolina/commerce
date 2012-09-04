@@ -13,6 +13,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Vespolina\Entity\Product\Product;
 use Vespolina\Entity\Identifier\ProductIdentifierSet;
+use Vespolina\Product\Manager\ProductManager;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
@@ -171,6 +172,25 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
         // full results flag returns the full data set for the product
     }
 
+    protected function createProductHandler($type, $productClass = 'Vespolina\ProductBundle\Model\Product')
+    {
+        $productHandler = $this->getMock(
+            'Vespolina\ProductBundle\Handler\ProductHandler',
+            array('createProduct', 'getType'),
+            array(),
+            '',
+            false
+        );
+        $productHandler->expects($this->any())
+            ->method('createProduct')
+            ->will($this->returnValue($this->getMock($productClass)));
+        $productHandler->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue($type));
+
+        return $productHandler;
+    }
+
     protected function createProductManager()
     {
         $mgr = $this->getMockBuilder('Vespolina\ProductBundle\Model\ProductManager')
@@ -192,6 +212,9 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
         $mgr->expects($this->any())
              ->method('getOptionClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Document\Option'));
+
+        $mgr = new ProductManager();
+
         return $mgr;
     }
 }
