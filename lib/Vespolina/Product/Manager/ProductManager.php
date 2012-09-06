@@ -23,19 +23,21 @@ use Vespolina\Product\Manager\ProductManagerInterface;
  */
 class ProductManager implements ProductManagerInterface
 {
-    protected $productHandlers;
+    protected $assetManager;
     protected $identifiers;
     protected $identifierSetClass;
     protected $merchandiseClass;
-    protected $assetManager;
+    protected $productClass;
+    protected $productHandlers;
 
     public function __construct($identifiers, $identifierSetClass, $merchandiseClass, $assetManager)
     {
-        $this->productHandlers = array();
+        $this->assetManager = $assetManager;
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
         $this->merchandiseClass = $merchandiseClass;
-        $this->assetManager = $assetManager;
+        $this->productClass = $productClass;
+        $this->productHandlers = array();
     }
 
     public function addOptionToProduct(ProductInterface $product, $type, $value = null)
@@ -92,6 +94,7 @@ class ProductManager implements ProductManagerInterface
         $option = new $optionClass;
         $option->setType($type);
         $option->setValue($value);
+
         return $option;
     }
 
@@ -133,6 +136,11 @@ class ProductManager implements ProductManagerInterface
     public function findProductByIdentifier($name, $code)
     {
 
+    }
+
+    public function getAssetManager()
+    {
+        return $this->assetManager;
     }
 
     /**
