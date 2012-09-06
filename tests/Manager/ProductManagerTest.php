@@ -55,30 +55,15 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
         $this->mgr->addProductHandler($handler);
 
         $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct('test'));
-
-        // todo: this should be through a handler also, but for now, it is using the legacy method of creating a class
-        $pc = new \ReflectionProperty($this->mgr, 'productClass');
-        $pc->setAccessible(true);
-        $pc->setValue($this->mgr, 'Vespolina\ProductBundle\Tests\Fixtures\Model\Product');
-
-        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct('default'));
-        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct());
     }
 
     public function testCreateMerchandise()
     {
         $handler = $this->createProductHandler('test');
         $this->mgr->addProductHandler($handler);
+        $product = $this->mgr->createProduct('test');
 
-        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct('test'));
-
-        // todo: this should be through a handler also, but for now, it is using the legacy method of creating a class
-        $pc = new \ReflectionProperty($this->mgr, 'productClass');
-        $pc->setAccessible(true);
-        $pc->setValue($this->mgr, 'Vespolina\ProductBundle\Tests\Fixtures\Model\Product');
-
-        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct('default'));
-        $this->assertInstanceOf('Vespolina\Entity\Product\ProductInterface', $this->mgr->createProduct());
+        $this->assertInstanceOf('Vespolina\Entity\Product\MerchandiseInterface', $this->mgr->createMerchandise($product));
     }
 
     public function testSearchForProductByIdentifier()
@@ -172,10 +157,10 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
         // full results flag returns the full data set for the product
     }
 
-    protected function createProductHandler($type, $productClass = 'Vespolina\ProductBundle\Model\Product')
+    protected function createProductHandler($type, $productClass = 'Vespolina\Entity\Product\Product')
     {
         $productHandler = $this->getMock(
-            'Vespolina\ProductBundle\Handler\ProductHandler',
+            'Vespolina\Product\Handler\ProductHandler',
             array('createProduct', 'getType'),
             array(),
             '',
@@ -213,7 +198,7 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
              ->method('getOptionClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Document\Option'));
 
-        $mgr = new ProductManager();
+        $mgr = new ProductManager(array(), 'Error', 'Vespolina\Entity\Product\Merchandise', 'assetmgr');
 
         return $mgr;
     }

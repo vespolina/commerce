@@ -26,13 +26,15 @@ class ProductManager implements ProductManagerInterface
     protected $productHandlers;
     protected $identifiers;
     protected $identifierSetClass;
+    protected $merchandiseClass;
     protected $assetManager;
 
-    public function __construct($identifiers, $identifierSetClass, $assetManager)
+    public function __construct($identifiers, $identifierSetClass, $merchandiseClass, $assetManager)
     {
         $this->productHandlers = array();
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
+        $this->merchandiseClass = $merchandiseClass;
         $this->assetManager = $assetManager;
     }
 
@@ -74,6 +76,11 @@ class ProductManager implements ProductManagerInterface
     {
         $name = strtolower($name);
         return new $this->identifiers[$name];
+    }
+
+    public function createMerchandise(ProductInterface $product)
+    {
+        return new $this->merchandiseClass($product);
     }
 
     /**
