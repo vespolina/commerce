@@ -146,6 +146,14 @@ class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
+    public function getMerchandise(array $constraints = null)
+    {
+        return $this->doGetMerchandise($constraints);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getOptionClass()
     {
         // TODO: make configurable
@@ -272,6 +280,11 @@ class ProductManager implements ProductManagerInterface
     }
 
     protected function doDeleteOptionGroup(OptionGroupInterface $merchandise)
+    {
+
+    }
+
+    protected function doGetMerchandise(array $constraints = null)
     {
 
     }
