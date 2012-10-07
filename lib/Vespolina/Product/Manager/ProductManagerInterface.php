@@ -78,6 +78,10 @@ interface ProductManagerInterface
      */
     function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
+    function findMerchandiseBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
+
+    function findMerchandiseByTerms(array $terms);
+
     /**
      * Find a Product by its object identifier
      *

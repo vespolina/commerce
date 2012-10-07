@@ -13,8 +13,6 @@ use Vespolina\Entity\Product\MerchandiseInterface;
 use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Identifier\IdentifierInterface;
-use Vespolina\Entity\Identifier\ProductIdentifierSet;
-use Vespolina\Entity\Identifier\ProductIdentifierSetInterface;
 use Vespolina\Product\Handler\ProductHandlerInterface;
 use Vespolina\Product\Manager\ProductManagerInterface;
 
@@ -23,20 +21,16 @@ use Vespolina\Product\Manager\ProductManagerInterface;
  */
 class ProductManager implements ProductManagerInterface
 {
-    protected $assetManager;
     protected $identifiers;
     protected $identifierSetClass;
     protected $merchandiseClass;
-    protected $productClass;
     protected $productHandlers;
 
-    public function __construct($identifiers, $identifierSetClass, $merchandiseClass, $assetManager)
+    public function __construct($identifiers, $identifierSetClass, $merchandiseClass)
     {
-        $this->assetManager = $assetManager;
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
         $this->merchandiseClass = $merchandiseClass;
-        $this->productClass = $productClass;
         $this->productHandlers = array();
     }
 
@@ -138,6 +132,16 @@ class ProductManager implements ProductManagerInterface
 
     }
 
+    public function findMerchandiseBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->doFindMerchandiseBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    public function findMerchandiseByTerms(array $terms)
+    {
+        return $this->doFindMerchandiseByTerms($terms);
+    }
+
     public function getAssetManager()
     {
         return $this->assetManager;
@@ -199,7 +203,7 @@ class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function findOptionGroupsBy(array $criteria = array(), array $orderBy = null, $limit = null, $offset = null)
+    public function findOptionGroupsBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return $this->optionGroupRepo->findBy($criteria, $orderBy, $limit, $offset);
     }
@@ -288,6 +292,16 @@ class ProductManager implements ProductManagerInterface
     }
 
     protected function doDeleteOptionGroup(OptionGroupInterface $merchandise)
+    {
+
+    }
+
+    protected function doFindMerchandiseBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+
+    }
+
+    protected function doFindMerchandiseByTerms(array $terms)
     {
 
     }
