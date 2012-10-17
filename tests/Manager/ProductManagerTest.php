@@ -126,6 +126,9 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAttributeToProduct()
     {
+        $this->markTestIncomplete(
+            'This test needs asserts for listeners.'
+        );
         $product = new Product();
         $label = $this->mgr->createAttribute('label', 'Joat Music');
         $this->mgr->addAttributeToProduct($label, $product);
