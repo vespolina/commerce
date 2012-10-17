@@ -6,13 +6,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\ProductBundle\Tests\Model;
-
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Vespolina\Entity\Product\Product;
-use Vespolina\Entity\Identifier\ProductIdentifierSet;
 use Vespolina\Product\Manager\ProductManager;
 
 /**
@@ -119,16 +116,29 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAddFeatureToProduct()
+    public function testCreateAttribute()
     {
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $label = $this->mgr->createAttribute('label', 'Joat Music');
 
-        $label = $this->createFeature('label', 'Joat Music');
+        $this->assertSame('label', $label->getType(), 'the type should be copied');
+        $this->assertSame('Joat Music', $label->getName(), 'the name should be copied');
+    }
 
-        $this->mgr->addFeatureToProduct($label, $this->product);
-        $this->assertEquals(1, $this->product->getFeatures()->count(), 'make sure the feature has been added');
+    public function testAddAttributeToProduct()
+    {
+        $label = $this->mgr->createAttribute('label', 'Joat Music');
+        $this->mgr->addAttributeToProduct($label, $this->product);
+        $this->assertCount(1, $this->product->getAttributes(), 'the attribute should be added');
+        $this->assertSame($label, $this->product->getAttribute('label'), 'the original attribute should be returned');
+
+        $format = array('format' => 'mp3');
+        $this->mgr->addAttributeToProduct($format, $this->product);
+        $this->assertCount(2, $this->product->getAttributes(), 'an array has been passed in should be added as an attribute');
+
+        $formatAttribute = $this->product->getAttribute('format');
+        $this->assertInstanceOf('Vespolina\Entity\Product\Product', $formatAttribute, 'the array should be turned into an Attribute object');
+        $this->assertSame('format', $formatAttribute->getType(), 'the type should be copied');
+        $this->assertSame('mp3', $formatAttribute->getName(), 'the name should be copied');
     }
 
     public function testGetImageManager()
@@ -145,13 +155,13 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
         $mgr->getMediaManager();
     }
 
-    public function testSearchForProductByFeature()
+    public function testSearchForProductByAttribute()
     {
         // search by identifier should return a product set up with the specific information for that identifier
         // full results flag returns the full data set for the product
     }
 
-    public function testSearchForProductByFeatureType()
+    public function testSearchForProductByAttributeType()
     {
         // search by identifier should return a product set up with the specific information for that identifier
         // full results flag returns the full data set for the product
