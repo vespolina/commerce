@@ -21,13 +21,15 @@ use Vespolina\Product\Manager\ProductManagerInterface;
  */
 class ProductManager implements ProductManagerInterface
 {
+    protected $attributeClass;
     protected $identifiers;
     protected $identifierSetClass;
     protected $merchandiseClass;
     protected $productHandlers;
 
-    public function __construct($identifiers, $identifierSetClass, $merchandiseClass)
+    public function __construct($identifiers, $identifierSetClass, $merchandiseClass, $attributeClass)
     {
+        $this->attributeClass = $attributeClass;
         $this->identifiers = $identifiers;
         $this->identifierSetClass = $identifierSetClass;
         $this->merchandiseClass = $merchandiseClass;
@@ -51,6 +53,19 @@ class ProductManager implements ProductManagerInterface
     {
         $type = $handler->getType();
         $this->productHandlers[$type] = $handler;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createAttribute($type, $name)
+    {
+        /** @var $attribute \Vespolina\Entity\Product\AttributeInterface */
+        $attribute = new $this->attributeClass;
+        $attribute->setType($type);
+        $attribute->setName($name);
+
+        return $attribute;
     }
 
     /**

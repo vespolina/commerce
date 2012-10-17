@@ -17,8 +17,8 @@ use Vespolina\Product\Manager\ProductManager;
  */
 class ProductManagerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var $mgr \Vespolina\Product\Manager\ProductManager */
     protected $mgr;
-    protected $product;
 
     protected function setUp()
     {
@@ -126,16 +126,17 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAttributeToProduct()
     {
+        $product = new Product();
         $label = $this->mgr->createAttribute('label', 'Joat Music');
-        $this->mgr->addAttributeToProduct($label, $this->product);
-        $this->assertCount(1, $this->product->getAttributes(), 'the attribute should be added');
-        $this->assertSame($label, $this->product->getAttribute('label'), 'the original attribute should be returned');
+        $this->mgr->addAttributeToProduct($label, $product);
+        $this->assertCount(1, $product->getAttributes(), 'the attribute should be added');
+        $this->assertSame($label, $product->getAttribute('label'), 'the original attribute should be returned');
 
         $format = array('format' => 'mp3');
-        $this->mgr->addAttributeToProduct($format, $this->product);
-        $this->assertCount(2, $this->product->getAttributes(), 'an array has been passed in should be added as an attribute');
+        $this->mgr->addAttributeToProduct($format, $product);
+        $this->assertCount(2, $product->getAttributes(), 'an array has been passed in should be added as an attribute');
 
-        $formatAttribute = $this->product->getAttribute('format');
+        $formatAttribute = $product->getAttribute('format');
         $this->assertInstanceOf('Vespolina\Entity\Product\Product', $formatAttribute, 'the array should be turned into an Attribute object');
         $this->assertSame('format', $formatAttribute->getType(), 'the type should be copied');
         $this->assertSame('mp3', $formatAttribute->getName(), 'the name should be copied');
@@ -178,7 +179,7 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
         );
         $productHandler->expects($this->any())
             ->method('createProduct')
-            ->will($this->returnValue($this->getMock($productClass)));
+            ->will($this->returnValue(new Product()));
         $productHandler->expects($this->any())
             ->method('getType')
             ->will($this->returnValue($type));
@@ -208,7 +209,7 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
              ->method('getOptionClass')
              ->will($this->returnValue('Vespolina\ProductBundle\Document\Option'));
 
-        $mgr = new ProductManager(array(), 'Error', 'Vespolina\Entity\Product\Merchandise', 'assetmgr');
+        $mgr = new ProductManager(array(), 'Error', 'Vespolina\Entity\Product\Merchandise', 'Vespolina\Entity\Product\Attribute');
 
         return $mgr;
     }

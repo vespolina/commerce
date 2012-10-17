@@ -8,6 +8,7 @@
 namespace Vespolina\Product\Manager;
 
 use Vespolina\Product\Handler\ProductHandlerInterface;
+use Vespolina\Entity\Product\AttributeInterface;
 use Vespolina\Entity\Product\MerchandiseInterface;
 use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
@@ -47,6 +48,16 @@ interface ProductManagerInterface
     function addProductHandler(ProductHandlerInterface $handler);
 
     /**
+     * Create a product attribute.
+     *
+     * @param string $type
+     * @param string $name
+     *
+     * @return \Vespolina\Entity\Product\AttributeInterface
+     */
+    function createAttribute($type, $name);
+
+    /**
      * Create a product identifier. This will be moved out of ProductManager in the future.
      *
      * @param $name the name of the specific Product identifier
@@ -62,7 +73,7 @@ interface ProductManagerInterface
      *
      * @param string $type (optional)
      *
-     * @return Vespolina\Entity\ProductInterface
+     * @return \Vespolina\Entity\ProductInterface
      */
     function createProduct($type = 'default');
 
