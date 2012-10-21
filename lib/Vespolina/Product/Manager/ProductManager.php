@@ -133,13 +133,13 @@ class ProductManager implements ProductManagerInterface
 
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-
+        return $this->doFindBy($criteria, $orderBy, $limit, $offset);
     }
 
 
     public function findProductById($id)
     {
-
+        return $this->doFindProductById($id);
     }
 
     public function findProductByIdentifier($name, $code)
