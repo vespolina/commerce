@@ -147,6 +147,11 @@ class ProductManager implements ProductManagerInterface
 
     }
 
+    public function findProductBySlug($slug)
+    {
+        return $this->doFindProductBySlug($slug);
+    }
+
     public function findMerchandiseBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return $this->doFindMerchandiseBy($criteria, $orderBy, $limit, $offset);
@@ -299,6 +304,16 @@ class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
+    public function deleteProduct(ProductInterface $product, $andPersist = true)
+    {
+        if ($andPersist) {
+            $this->doDeleteProduct($product);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function updateProduct(ProductInterface $product, $andPersist = true)
     {
         if ($andPersist) {
@@ -307,6 +322,11 @@ class ProductManager implements ProductManagerInterface
     }
 
     protected function doDeleteOptionGroup(OptionGroupInterface $merchandise)
+    {
+
+    }
+
+    protected function doFindProductBySlug($slug)
     {
 
     }
@@ -332,6 +352,11 @@ class ProductManager implements ProductManagerInterface
     }
 
     protected function doUpdateOptionGroup(OptionGroupInterface $optionGroup)
+    {
+
+    }
+
+    protected function doDeleteProduct(ProductInterface $product)
     {
 
     }

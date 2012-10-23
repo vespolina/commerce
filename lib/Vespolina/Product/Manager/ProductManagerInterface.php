@@ -188,4 +188,12 @@ interface ProductManagerInterface
      * @param Boolean $andFlush Whether to flush the changes (default true)
      */
     function updateProduct(ProductInterface $product, $andPersist = true);
+
+    /**
+     * Delete and persist the product
+     *
+     * @param \Vespolina\Entity\Product\ProductInterface $product
+     * @param Boolean $andFlush Whether to flush the changes (default true)
+     */
+    function deleteProduct(ProductInterface $product, $andPersist = true);
 }
