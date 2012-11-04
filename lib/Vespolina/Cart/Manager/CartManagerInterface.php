@@ -11,7 +11,7 @@ namespace Vespolina\Cart\Manager;
 
 use Vespolina\Entity\Order\CartInterface;
 use Vespolina\Entity\Order\ItemInterface;
-use Vespolina\Entity\ProductInterface;
+use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;
 
 interface CartManagerInterface

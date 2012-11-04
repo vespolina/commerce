@@ -5,7 +5,7 @@ use Vespolina\Cart\Gateway\CartMemoryGateway;
 use Vespolina\Cart\Manager\CartManager;
 use Vespolina\Cart\Pricing\DefaultCartPricingProvider;
 use Vespolina\Entity\Order\Cart;
-use Vespolina\Entity\Product;
+use Vespolina\Entity\Product\Product;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\EventInterface;
 
