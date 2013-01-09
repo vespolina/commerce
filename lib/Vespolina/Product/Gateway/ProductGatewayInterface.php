@@ -1,8 +1,10 @@
 <?php
-namespace Smp\Gateway;
+
+namespace Vespolina\Product\Gateway;
 
 use Gateway\QueryInterface;
 use Vespolina\Entity\ProductInterface;
+
 /**
  * @author Richard Shank <develop@zestic.com>
  */
@@ -13,7 +15,7 @@ interface ProductGatewayInterface
      * Systems that allow for a delayed flush can use the $andFlush parameter, other
      * systems would disregard the flag. The success of the process is returned.
      *
-     * @param Vespolina\Entity\ProductInterface $product
+     * @param \Vespolina\Entity\ProductInterface $product
      *
      * @param boolean $andFlush
      */
