@@ -13,8 +13,8 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "vespolina/core": "dev-master",
-        "iampersistent/gateway": "dev-master"
+        "vespolina/core": "*",
+        "iampersistent/gateway": "*"
     },
     "autoload": {
         "psr-0": { "Vespolina": "lib/" }
