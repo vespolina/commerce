@@ -14,7 +14,7 @@ interface ProductHandlerInterface
     /**
      * Return a newly created product type for the handler
      *
-     * @return \Vespolina\Entity\Product\ProductInterface
+     * @return ProductInterface
      */
     function createProduct();
 
