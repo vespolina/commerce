@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                    http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Vespolina\Entity\Order\BaseOrder">
+        <id name="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+        <field name="attributes"  type="hash" nullable="true" />
+        <field name="createdAt"  type="datetime" />
+        <field name="expiresAt"  type="datetime"   nullable="true" />
+        <field name="followUp"   type="string" nullable="true" />
+        <field name="owner"      type="string" nullable="true" />
+        <field name="pricingSet" type="array"  nullable="true" />
+        <field name="state"      type="string" />
+        <field name="updatedAt"  type="date"   nullable="true"/>
+
+        <one-to-one field="channel" target-entity="Vespolina\Entity\Channel\Channel" mapped-by="Channel">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-one>
+        <one-to-many field="items" target-entity="Vespolina\Entity\Order\Item" mapped-by="BaseOrder">
+            <cascade>
+               <cascade-all/>
+            </cascade>
+        </one-to-many>
+    </mapped-superclass>
+</doctrine-mapping>
