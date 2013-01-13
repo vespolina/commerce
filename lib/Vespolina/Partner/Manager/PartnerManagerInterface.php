@@ -6,7 +6,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\PartnerBundle\Model;
+namespace Vespolina\Partner\Manager;
 
 interface PartnerManagerInterface
 {

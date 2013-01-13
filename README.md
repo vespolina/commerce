@@ -1,7 +1,7 @@
-VespolinaPartnerBundle
-======================
+VespolinaPartner
+================
 
-The Vespolina PartnerBundle is meant to manage all actions done with your customers, clients, suppliers and so more.
+The Vespolina Partner is meant to manage all actions done with your customers, clients, suppliers and so more.
 
 
 TODO list
