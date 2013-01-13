@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Vespolina\Entity\Partner\PersonalDetails">
+        <id name="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="initials"                          type="string" />
+        <field name="firstname"                         type="string" />
+        <field name="prefix"                            type="string" />
+        <field name="lastname"                          type="string" />
+        <field name="nationalIdentificationNumber"      type="string" />
+    </entity>
+</doctrine-mapping>

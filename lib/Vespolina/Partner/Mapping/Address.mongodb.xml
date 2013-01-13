@@ -4,9 +4,16 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <!-- Embedded for now, we probably want to move this to a real document in a CommonBundle -->
-    <document name="Vespolina\PartnerBundle\Document\Address">
+    <document name="Vespolina\Entity\Partner\Address">
         <field name="id" id="true" />
-    </document>
 
+        <field name="type"          fieldName="type"            type="string" />
+        <field name="street"        fieldName="street"          type="string" />
+        <field name="number"        fieldName="number"          type="integer" />
+        <field name="numbersuffix"  fieldName="numbersuffix"    type="string" />
+        <field name="zipcode"       fieldName="zipcode"         type="string" />
+        <field name="city"          fieldName="city"            type="string" />
+        <field name="state"         fieldName="state"           type="string" />
+        <field name="country"       fieldName="country"         type="string" />
+    </document>
 </doctrine-mongo-mapping>

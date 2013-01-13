@@ -4,8 +4,11 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Vespolina\PartnerBundle\Document\OrganisationDetails">
+    <embedded-document name="Vespolina\Entity\Partner\OrganisationDetails">
         <field name="id" id="true" />
-    </embedded-document>
 
+        <field name="name"      fieldName="name"        type="string" />
+        <field name="category"  fieldName="category"    type="string" />
+        <field name="employees" fieldName="employees"    type="string" />
+    </embedded-document>
 </doctrine-mongo-mapping>

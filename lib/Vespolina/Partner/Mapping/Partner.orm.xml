@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Vespolina\Entity\Partner\Partner">
+        <id name="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="partnerId"         type="string" />
+        <field name="partnerSince"      type="datetime" />
+        <field name="name"              type="string" />
+        <field name="roles"             type="array" />
+        <field name="type"              type="string" />
+        <field name="currency"          type="string" />
+        <field name="language"          type="string" />
+        <field name="paymentTerms"      type="string" />
+
+        <one-to-one field="personalDetails" target-entity="Vespolina\Entity\Partner\PersonalDetails">
+        </one-to-one>
+        <one-to-one field="organisationDetails" target-entity="Vespolina\Entity\Partner\OrganisationDetails">
+        </one-to-one>
+
+        <one-to-one field="primaryContact" target-entity="Vespolina\Entity\Partner\Contact">
+        </one-to-one>
+        <one-to-many field="addresses" target-entity="Vespolina\Entity\Partner\Address" mapped-by="partner">
+        </one-to-many>
+    </entity>
+
+</doctrine-mapping>

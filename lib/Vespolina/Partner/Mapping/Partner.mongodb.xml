@@ -4,8 +4,24 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Vespolina\PartnerBundle\Document\Partner" collection="VespolinaPartner">
+    <document name="Vespolina\Entity\Partner\Partner" collection="VespolinaPartner">
         <field name="id" id="true" />
+
+        <field name="partnerId"         fieldName="partnerId"       type="string" />
+        <field name="partnerSince"      fieldName="partnerSince"    type="date" />
+        <field name="name"              fieldName="name"            type="string" />
+        <field name="roles"             fieldName="roles"           type="hash" />
+        <field name="type"              fieldName="type"            type="string" />
+        <field name="currency"          fieldName="currency"        type="string" />
+        <field name="language"          fieldName="language"        type="string" />
+        <field name="paymentTerms"      fieldName="paymentTerms"    type="string" />
+        <field name="paymentType"       fieldName="paymentType"     type="string" />
+
+        <embed-one field="personalDetails" target-document="Vespolina\Entity\Partner\PersonalDetails" />
+        <embed-one field="organisationDetails" target-document="Vespolina\Entity\Partner\OrganisationDetails" />
+
+        <embed-one field="primaryContact" target-document="Vespolina\Entity\Partner\Contact" />
+        <embed-many field="addresses" target-document="Vespolina\Entity\Partner\Address" />
     </document>
 
 </doctrine-mongo-mapping>

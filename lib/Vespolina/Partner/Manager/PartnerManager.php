@@ -9,6 +9,9 @@
 namespace Vespolina\Partner\Manager;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Vespolina\Entity\Partner\Address;
+use Vespolina\Entity\Partner\Partner;
+use Vespolina\Entity\Partner\PartnerInterface;
 
 /**
  * PartnerManager - handles partner creation, updating, deletion, etc

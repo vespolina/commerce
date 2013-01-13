@@ -4,8 +4,14 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Vespolina\PartnerBundle\Document\PersonalDetails">
+    <embedded-document name="Vespolina\Entity\Partner\PersonalDetails">
         <field name="id" id="true" />
+
+        <field name="initials"                          fieldName="initials"                           type="string" />
+        <field name="firstname"                         fieldName="firstname"                          type="string" />
+        <field name="prefix"                            fieldName="prefix"                             type="string" />
+        <field name="lastname"                          fieldName="lastname"                           type="string" />
+        <field name="nationalIdentificationNumber"      fieldName="nationalIdentificationNumber"       type="string" />
     </embedded-document>
 
 </doctrine-mongo-mapping>

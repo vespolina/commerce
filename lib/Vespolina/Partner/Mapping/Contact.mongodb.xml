@@ -5,8 +5,10 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <!-- Embedded for now, we probably want to move this to a real document in a CommonBundle -->
-    <embedded-document name="Vespolina\PartnerBundle\Document\Contact">
+    <embedded-document name="Vespolina\Entity\Partner\Contact">
         <field name="id" id="true" />
-    </embedded-document>
 
+        <field name="email"     fieldName="email"   type="string" />
+        <field name="phone"     fieldName="phone"   type="string" />
+    </embedded-document>
 </doctrine-mongo-mapping>
