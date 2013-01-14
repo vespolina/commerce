@@ -2,7 +2,9 @@
 
 namespace Vespolina\Partner\Gateway;
 
+use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
+use Vespolina\Exception\InvalidInterfaceException;
 
 class PartnerGateway
 {
@@ -15,8 +17,8 @@ class PartnerGateway
      */
     public function __construct(MolinoInterface $molino, $partnerClass)
     {
-        if (!in_array('Vespolina\Entity\Partner\PartnerInterface', class_implements($partnerClass))) {
-            throw new \Exception('Please have your product implement Vespolina\Entity\Partner\PartnerInterface');
+        if (!class_exists($partnerClass) || !in_array('Vespolina\Entity\Partner\PartnerInterface', class_implements($partnerClass))) {
+             throw new InvalidInterfaceException('Please have your partner class implement Vespolina\Entity\Partner\PartnerInterface');
         }
         $this->molino = $molino;
         $this->partnerClass = $partnerClass;
