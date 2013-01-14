@@ -6,16 +6,16 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Cart\Manager;
+namespace Vespolina\Order\Manager;
 
 use Gateway\Query;
 use Gateway\QueryBuilder;
 use Vespolina\Entity\Order\CartEvents;
-use Vespolina\Cart\Manager\CartManagerInterface;
-use Vespolina\Cart\Gateway\CartGatewayInterface;
+use Vespolina\Order\Manager\CartManagerInterface;
+use Vespolina\Order\Gateway\CartGatewayInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;
-use Vespolina\Entity\Order\Cart;
-use Vespolina\Entity\Order\CartInterface;
+use Vespolina\Entity\Order\Order;
+use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Product\ProductInterface;
@@ -26,14 +26,14 @@ use Vespolina\EventDispatcher\NullDispatcher;
  * @author Daniel Kucharski <daniel@xerias.be>
  * @author Richard Shank <develop@zestic.com>
  */
-class CartManager implements CartManagerInterface
+class OrderManager implements OrderManagerInterface
 {
     protected $cartClass;
     protected $cartItemClass;
     protected $eventDispatcher;
     protected $gateway;
 
-    function __construct(CartGatewayInterface $gateway, $cartClass, $cartItemClass, $cartEvents, EventDispatcherInterface $eventDispatcher = null)
+    function __construct(OrderGatewayInterface $gateway, $cartClass, $cartItemClass, $cartEvents, EventDispatcherInterface $eventDispatcher = null)
     {
         if (!$eventDispatcher) {
             $eventDispatcher = new NullDispatcher();
@@ -48,22 +48,22 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function addProductToCart(CartInterface $cart, ProductInterface $product, array $options = null, $quantity = null)
+    public function addProductToOrder(OrderInterface $cart, ProductInterface $product, array $options = null, $quantity = null)
     {
         $quantity = $quantity === null ? 1 : $quantity;
 
-        return $this->doAddProductToCart($cart, $product, $options, $quantity);
+        return $this->doAddProductToOrder($cart, $product, $options, $quantity);
     }
 
     /**
      * @inheritdoc
      */
-    public function createCart($name = 'default')
+    public function createOrder($name = 'default')
     {
         $cart = new $this->cartClass();
         $cart->setName($name);
-        $this->initCart($cart);
-        $this->gateway->persistCart($cart);
+        $this->initOrder($cart);
+        $this->gateway->persistOrder($cart);
 
         return $cart;
     }
@@ -79,17 +79,17 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function findCartsBy(Query $query)
+    public function findOrdersBy(Query $query)
     {
-        return $this->gateway->findCarts($query);
+        return $this->gateway->findOrders($query);
     }
 
     /**
      * @inheritdoc
      */
-    public function findCartById($id)
+    public function findOrderById($id)
     {
-        return $this->doFindCartById($id);
+        return $this->doFindOrderById($id);
     }
 
     /**
@@ -103,7 +103,7 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function findProductInCart(CartInterface $cart, ProductInterface $product, array $options = null)
+    public function findProductInOrder(OrderInterface $cart, ProductInterface $product, array $options = null)
     {
         if ($items = $cart->getItems()) {
             foreach ($cart->getItems() as $item) {
@@ -121,7 +121,7 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function setCartPricingSet(CartInterface $cart, PricingSetInterface $pricingSet)
+    public function setOrderPricingSet(OrderInterface $cart, PricingSetInterface $pricingSet)
     {
         $rp = new \ReflectionProperty($cart, 'pricingSet');
         $rp->setAccessible(true);
@@ -132,18 +132,18 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function removeProductFromCart(CartInterface $cart, ProductInterface $product, array $options = null, $flush = true)
+    public function removeProductFromOrder(OrderInterface $cart, ProductInterface $product, array $options = null, $flush = true)
     {
         if (!$options) {
             $options = array();
         }
-        $this->doRemoveItemFromCart($cart, $product, $options);
+        $this->doRemoveItemFromOrder($cart, $product, $options);
     }
 
     /**
      * @inheritdoc
      */
-    public function setCartItemState(ItemInterface $cartItem, $state)
+    public function setOrderItemState(ItemInterface $cartItem, $state)
     {
         $rp = new \ReflectionProperty($cartItem, 'state');
         $rp->setAccessible(true);
@@ -157,7 +157,7 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function setCartState(CartInterface $cart, $state)
+    public function setOrderState(OrderInterface $cart, $state)
     {
         $rp = new \ReflectionProperty($cart, 'state');
         $rp->setAccessible(true);
@@ -184,20 +184,20 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    public function setProductQuantity(CartInterface $cart, ProductInterface $product, array $options, $quantity)
+    public function setProductQuantity(OrderInterface $cart, ProductInterface $product, array $options, $quantity)
     {
-        $item = $this->findProductInCart($cart, $product, $options);
+        $item = $this->findProductInOrder($cart, $product, $options);
         $this->setItemQuantity($item, $quantity);
     }
 
     /**
      * @inheritdoc
      */
-    public function updateCart(CartInterface $cart, $andPersist = true)
+    public function updateOrder(OrderInterface $cart, $andPersist = true)
     {
         $cartEvents = $this->cartEvents;
         $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, $this->eventDispatcher->createEvent($cart));
-        $this->doUpdateCart($cart, $andPersist);
+        $this->doUpdateOrder($cart, $andPersist);
     }
 
     protected function createItem(ProductInterface $product, array $options = null)
@@ -215,7 +215,7 @@ class CartManager implements CartManagerInterface
             $rm->invokeArgs($item, array($options));
             $rm->setAccessible(false);
         }
-        $this->initCartItem($item);
+        $this->initOrderItem($item);
 
         return $item;
     }
@@ -240,19 +240,19 @@ class CartManager implements CartManagerInterface
         }
         $query = $qb->getQuery();
 
-        return $this->gateway->findCarts($query);
+        return $this->gateway->findOrders($query);
     }
 
     /**
      * @inheritdoc
      */
-    protected function doFindCartById($id)
+    protected function doFindOrderById($id)
     {
         $qb = new QueryBuilder();
         $qb->field('id')->equals($id);
         $query = $qb->getQuery();
 
-        return $this->gateway->findCarts($query);
+        return $this->gateway->findOrders($query);
     }
 
     protected function doOptionsMatch($itemOptions, $targetOptions)
@@ -279,27 +279,27 @@ class CartManager implements CartManagerInterface
     /**
      * @inheritdoc
      */
-    protected function doUpdateCart(CartInterface $cart, $andPersist = true)
+    protected function doUpdateOrder(OrderInterface $cart, $andPersist = true)
     {
         if ($andPersist) {
-            $this->gateway->updateCart($cart);
+            $this->gateway->updateOrder($cart);
         }
     }
 
-    protected function initCart(CartInterface $cart)
+    protected function initOrder(OrderInterface $cart)
     {
         // Set default state (for now we set it to "open"), do this last since it will persist and flush the cart
         $cartClass = $this->cartClass;
-        $this->setCartState($cart, $cartClass::STATE_OPEN);
+        $this->setOrderState($cart, $cartClass::STATE_OPEN);
 
         //Delegate further initialization of the cart to those concerned
         $cartEvents = $this->cartEvents;
         $this->eventDispatcher->dispatch($cartEvents::INIT_CART, $this->eventDispatcher->createEvent($cart));
     }
 
-    protected function doAddProductToCart(CartInterface $cart, ProductInterface $product, $options, $quantity)
+    protected function doAddProductToOrder(OrderInterface $cart, ProductInterface $product, $options, $quantity)
     {
-        if ($cartItem = $this->findProductInCart($cart, $product, $options)) {
+        if ($cartItem = $this->findProductInOrder($cart, $product, $options)) {
             $quantity = $cartItem->getQuantity() + $quantity;
             $this->setItemQuantity($cartItem, $quantity);
 
@@ -321,9 +321,9 @@ class CartManager implements CartManagerInterface
         return $cartItem;
     }
 
-    protected function doRemoveItemFromCart(CartInterface $cart, ProductInterface $product, array $options)
+    protected function doRemoveItemFromOrder(OrderInterface $cart, ProductInterface $product, array $options)
     {
-        if ($item = $this->findProductInCart($cart, $product, $options)) {
+        if ($item = $this->findProductInOrder($cart, $product, $options)) {
             $rm = new \ReflectionMethod($cart, 'removeItem');
             $rm->setAccessible(true);
             $rm->invokeArgs($cart, array($item));
@@ -331,7 +331,7 @@ class CartManager implements CartManagerInterface
         }
     }
 
-    protected function initCartItem(ItemInterface $cartItem)
+    protected function initOrderItem(ItemInterface $cartItem)
     {
         if ($product = $cartItem->getProduct()) {
             $cartItem->setName($product->getName());

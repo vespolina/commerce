@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Vespolina\CartBundle\Document\CartItem">
+    <embedded-document name="Vespolina\OrderBundle\Document\OrderItem">
 
         <field name="description"    fieldName="description"    type="string" />
         <field name="isRecurring"    fieldName="isRecurring"    type="boolean" />

@@ -1,8 +1,8 @@
 {
-    "name": "vespolina/cart",
+    "name": "vespolina/order",
     "type": "library",
-    "description": "Vespolina Cart. Cart management and more.",
-    "keywords": ["shop", "ecommerce", "cart", "item"],
+    "description": "Vespolina Order. Order and cart management and more.",
+    "keywords": ["shop", "ecommerce", "cart", "order", "item"],
     "homepage": "http://vespolina-project.org",
     "license": "MIT",
     "authors": [

@@ -1,9 +1,9 @@
 <?php
 
 use Vespolina\Entity\Order\CartEvents;
-use Vespolina\Cart\Gateway\CartMemoryGateway;
-use Vespolina\Cart\Manager\CartManager;
-use Vespolina\Cart\Pricing\DefaultCartPricingProvider;
+use Vespolina\Order\Gateway\CartMemoryGateway;
+use Vespolina\Order\Manager\CartManager;
+use Vespolina\Order\Pricing\DefaultCartPricingProvider;
 use Vespolina\Entity\Order\Cart;
 use Vespolina\Entity\Product\Product;
 use Vespolina\EventDispatcher\EventDispatcherInterface;

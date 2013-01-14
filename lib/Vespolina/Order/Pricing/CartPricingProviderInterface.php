@@ -6,10 +6,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Cart\Pricing;
+namespace Vespolina\Order\Pricing;
 
-use Vespolina\Cart\Handler\CartHandlerInterface;
-use Vespolina\Entity\Order\CartInterface;
+use Vespolina\Order\Handler\CartHandlerInterface;
+use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Pricing\PricingContextInterface;
 
@@ -17,7 +17,7 @@ use Vespolina\Entity\Pricing\PricingContextInterface;
  * @author Daniel Kucharski <daniel@xerias.be>
  * @author Richard Shank <develop@zestic.com>
  */
-interface CartPricingProviderInterface
+interface OrderPricingProviderInterface
 {
     /**
      * Create a pricing set
@@ -27,9 +27,9 @@ interface CartPricingProviderInterface
     /**
      * Add a cart handler for a product to the pricing provider
      *
-     * @param \Vespolina\Cart\Handler\CartHandlerInterface $handler
+     * @param \Vespolina\Order\Handler\OrderHandlerInterface $handler
      */
-    function addCartHandler(CartHandlerInterface $handler);
+    function addOrderHandler(OrderHandlerInterface $handler);
 
     /**
      * Create a pricing context which holds 'global variables' used while computing prices
@@ -41,17 +41,17 @@ interface CartPricingProviderInterface
     /**
      * Determine cart and (optionally) item level prices
      *
-     * @param \Vespolina\Entity\Order\CartInterface $cart
+     * @param \Vespolina\Entity\Order\OrderInterface $cart
      * @param $pricingContext
      * @param $determineItemPrices
      */
-    function determineCartPrices(CartInterface $cart, PricingContextInterface $pricingContext = null, $determineItemPrices = true);
+    function determineOrderPrices(OrderInterface $cart, PricingContextInterface $pricingContext = null, $determineItemPrices = true);
 
     /**
      *
      *
-     * @param \Vespolina\Cart\Order\ItemInterface $cartItem
+     * @param \Vespolina\Order\Order\ItemInterface $cartItem
      * @param $pricingContext
      */
-    function determineCartItemPrices(ItemInterface $cartItem, PricingContextInterface $pricingContext);
+    function determineOrderItemPrices(ItemInterface $cartItem, PricingContextInterface $pricingContext);
 }

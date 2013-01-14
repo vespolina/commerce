@@ -6,9 +6,9 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Cart\Handler;
+namespace Vespolina\Order\Handler;
 
-use Vespolina\Cart\Handler\AbstractCartHandler;
+use Vespolina\Order\Handler\AbstractCartHandler;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Order\CartInterface;
 use Vespolina\Entity\Order\OrderInterface;
@@ -83,7 +83,7 @@ class DefaultCartHandler extends  AbstractCartHandler
         return $upCharge;
     }
 
-    protected function determineCartItemTaxes(ItemInterface $cartItem, array $pricesToBeTaxed, $cartItemPricingSet, $pricingContext)
+    protected function determineOrderItemTaxes(ItemInterface $cartItem, array $pricesToBeTaxed, $cartItemPricingSet, $pricingContext)
     {
 
         $rate = 0;
@@ -107,7 +107,7 @@ class DefaultCartHandler extends  AbstractCartHandler
         $cartItemPricingSet->set('totalTax', $totalTax);
   }
 
-    protected function determineCartFulfillmentPrices(CartInterface $cart, $pricingContext)
+    protected function determineOrderFulfillmentPrices(OrderInterface $cart, $pricingContext)
     {
         //Additional fulfillment to be applied not related to cart item taxes
         // eg. fixed fulfillment fee

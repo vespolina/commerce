@@ -6,32 +6,32 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Cart\Gateway;
+namespace Vespolina\Order\Gateway;
 
 use Gateway\Query;
-use Vespolina\Cart\Gateway\CartGatewayInterface;
+use Vespolina\Order\Gateway\CartGatewayInterface;
 use Vespolina\Entity\Order\CartInterface;
 
 class CartMemoryGateway implements CartGatewayInterface
 {
     protected $carts;
-    protected $deletedCarts;
-    protected $lastCart;
+    protected $deletedOrders;
+    protected $lastOrder;
     protected $ids = array();
 
-    public function deleteCart(CartInterface $cart)
+    public function deleteOrder(OrderInterface $cart)
     {
         $cartId = $cart->getId();
         unset($this->carts);
-        $this->deletedCarts[$cartId] = $cart;
+        $this->deletedOrders[$cartId] = $cart;
     }
 
-    public function getLastCart()
+    public function getLastOrder()
     {
-        return $this->lastCart;
+        return $this->lastOrder;
     }
 
-    public function findCarts(Query $query)
+    public function findOrders(Query $query)
     {
         $criteria = $query->getCriteria();
 
@@ -50,7 +50,7 @@ class CartMemoryGateway implements CartGatewayInterface
         return (sizeof($results) === 1) ? array_pop($results) : $results;
     }
 
-    public function persistCart(CartInterface $cart)
+    public function persistOrder(OrderInterface $cart)
     {
         $cartId = $this->generateNewId();
         $rp = new \ReflectionProperty($cart, 'id');
@@ -58,17 +58,17 @@ class CartMemoryGateway implements CartGatewayInterface
         $rp->setValue($cart, $cartId);
         $rp->setAccessible(false);
         $this->carts[$cartId] = $cart;
-        $this->lastCart = $cart;
+        $this->lastOrder = $cart;
     }
 
-    public function updateCart(CartInterface $cart)
+    public function updateOrder(OrderInterface $cart)
     {
         $cartId = $cart->getId();
         if (!isset($this->carts[$cartId])) {
             throw new \Exception('This cart has not been persisted');
         }
         $this->carts[$cartId] = $cart;
-        $this->lastCart = $cart;
+        $this->lastOrder = $cart;
     }
 
     protected function generateNewId()

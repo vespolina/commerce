@@ -6,11 +6,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Cart\Pricing;
+namespace Vespolina\Order\Pricing;
 
-use Vespolina\Cart\Handler\CartHandlerInterface;
-use Vespolina\Cart\Pricing\AbstractCartPricingProvider;
-use Vespolina\Entity\Order\CartInterface;
+use Vespolina\Order\Handler\CartHandlerInterface;
+use Vespolina\Order\Pricing\AbstractCartPricingProvider;
+use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Pricing\PricingContext;
 use Vespolina\Entity\Pricing\PricingContextInterface;
@@ -20,7 +20,7 @@ use Vespolina\Entity\ProductInterface;
  * @author Daniel Kucharski <daniel@xerias.be>
  * @author Richard Shank <develop@zestic.com>
  */
-class DefaultCartPricingProvider extends AbstractCartPricingProvider
+class DefaultOrderPricingProvider extends AbstractOrderPricingProvider
 {
     protected $fulfillmentPricingEnabled;
 
@@ -34,7 +34,7 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
         return new PricingContext();
     }
 
-    public function determineCartPrices(CartInterface $cart, PricingContextInterface $pricingContext = null, $determineItemPrices = true)
+    public function determineOrderPrices(OrderInterface $cart, PricingContextInterface $pricingContext = null, $determineItemPrices = true)
     {
         if (null == $pricingContext) {
             $pricingContext = $this->createPricingContext();
@@ -52,7 +52,7 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
 
         foreach ($cart->getItems() as $cartItem) {
             if ($determineItemPrices) {
-                $this->determineCartItemPrices($cartItem, $pricingContext);
+                $this->determineOrderItemPrices($cartItem, $pricingContext);
             }
 
             // Sum item level totals into the pricing context
@@ -61,7 +61,7 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
 
         // Determine header level fulfillment costs (eg. one shot tax)
         if ($this->fulfillmentPricingEnabled) {
-            $this->determineCartFulfillmentPrices($cart, $pricingContext);
+            $this->determineOrderFulfillmentPrices($cart, $pricingContext);
         }
 
         $cartPricingSet = $cart->getPricing();
@@ -69,7 +69,7 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
 
         // Determine header level tax (eg. one shot tax)
         if ($taxationEnabled) {
-            $this->determineCartTaxes($cart, $pricingContext);
+            $this->determineOrderTaxes($cart, $pricingContext);
             $totalGross =  $pricingContext->get('totalNet') +  $pricingContext->get('totalTax');
             $cartPricingSet->set('totalTax', $pricingContext->get('totalTax'));
 
@@ -80,19 +80,19 @@ class DefaultCartPricingProvider extends AbstractCartPricingProvider
         $cart->setTotalPrice($pricingContext->get('totalNet')); //Todo: remove
     }
 
-    public function determineCartItemPrices(ItemInterface $cartItem, PricingContextInterface $pricingContext)
+    public function determineOrderItemPrices(ItemInterface $cartItem, PricingContextInterface $pricingContext)
     {
-        $handler = $this->getCartHandler($cartItem);
-        $handler->determineCartItemPrices($cartItem, $pricingContext);
+        $handler = $this->getOrderHandler($cartItem);
+        $handler->determineOrderItemPrices($cartItem, $pricingContext);
     }
 
-    protected function determineCartFulfillmentPrices(CartInterface $cart, $pricingContext)
+    protected function determineOrderFulfillmentPrices(OrderInterface $cart, $pricingContext)
     {
         //Additional fulfillment to be applied not related to cart item taxes
         // eg. fixed fulfillment fee
     }
 
-    protected function determineCartTaxes(CartInterface $cart, $pricingContext)
+    protected function determineOrderTaxes(OrderInterface $cart, $pricingContext)
     {
         //Additional taxes to be applied not related to cart item taxes
     }

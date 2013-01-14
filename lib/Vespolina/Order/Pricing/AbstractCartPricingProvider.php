@@ -6,10 +6,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Cart\Pricing;
+namespace Vespolina\Order\Pricing;
 
-use Vespolina\Cart\Handler\CartHandlerInterface;
-use Vespolina\Cart\Pricing\CartPricingProviderInterface;
+use Vespolina\Order\Handler\CartHandlerInterface;
+use Vespolina\Order\Pricing\CartPricingProviderInterface;
 use Vespolina\Entity\Pricing\PricingSet;
 use Vespolina\Entity\Order\ItemInterface;
 
@@ -17,7 +17,7 @@ use Vespolina\Entity\Order\ItemInterface;
  * @author Daniel Kucharski <daniel@xerias.be>
  * @author Richard Shank <develop@zestic.com>
  */
-abstract class AbstractCartPricingProvider implements CartPricingProviderInterface
+abstract class AbstractOrderPricingProvider implements OrderPricingProviderInterface
 {
     protected $handlers;
     protected $taxationManager;
@@ -32,7 +32,7 @@ abstract class AbstractCartPricingProvider implements CartPricingProviderInterfa
         return new PricingSet();
     }
 
-    public function addCartHandler(CartHandlerInterface $handler)
+    public function addOrderHandler(OrderHandlerInterface $handler)
     {
         $types = (array)$handler->getTypes();
         foreach ($types as $type) {
@@ -47,7 +47,7 @@ abstract class AbstractCartPricingProvider implements CartPricingProviderInterfa
         $this->taxationManager = $taxationManager;
     }
 
-    protected function getCartHandler(ItemInterface $cartItem)
+    protected function getOrderHandler(ItemInterface $cartItem)
     {
         $type = $cartItem->getProduct()->getType();
         if (!isset($this->handlers[$type])) {

@@ -6,15 +6,15 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Cart\Handler;
+namespace Vespolina\Order\Handler;
 
 use Vespolina\Entity\Order\ItemInterface;
 
-interface CartHandlerInterface
+interface OrderHandlerInterface
 {
     function createPricingSet();
 
-    function determineCartItemPrices(ItemInterface $cartItem, $pricingContext);
+    function determineOrderItemPrices(ItemInterface $cartItem, $pricingContext);
 
     function getTypes();
 }
