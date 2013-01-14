@@ -5,8 +5,12 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-if (file_exists($file = __DIR__.'/autoload.php')) {
-    require_once $file;
-} elseif (file_exists($file = __DIR__.'/autoload.php.dist')) {
-    require_once $file;
+
+if (!@include __DIR__ . '/../vendor/autoload.php') {
+    die(<<<'EOT'
+You must set up the project dependencies, run the following commands:
+wget http://getcomposer.org/composer.phar
+php composer.phar install
+EOT
+    );
 }
