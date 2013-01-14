@@ -19,7 +19,7 @@ use Vespolina\Entity\Partner\PartnerManager;
 /**
  * @author Willem-Jan Zijderveld <willemjan@beeldspraak.com>
  */
-class PartnerManagerTest
+class PartnerManagerTest extends \PHPUnit_Framework_TestCase
 {
     protected $partnerManager;
 
