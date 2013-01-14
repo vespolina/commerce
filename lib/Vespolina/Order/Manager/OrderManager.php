@@ -17,7 +17,6 @@ use Vespolina\Entity\Pricing\PricingSetInterface;
 use Vespolina\Entity\Order\Order;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
-use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\NullDispatcher;
@@ -48,11 +47,24 @@ class OrderManager implements OrderManagerInterface
     /**
      * @inheritdoc
      */
-    public function addProductToOrder(OrderInterface $cart, ProductInterface $product, array $options = null, $quantity = null)
+    public function addProductToOrder(OrderInterface $order, ProductInterface $product, array $options = null, $quantity = null)
     {
         $quantity = $quantity === null ? 1 : $quantity;
 
-        return $this->doAddProductToOrder($cart, $product, $options, $quantity);
+        return $this->doAddProductToOrder($order, $product, $options, $quantity);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createCart($name = 'default')
+    {
+        $cart = new $this->cartClass();
+        $cart->setName($name);
+        $this->initOrder($cart);
+        $this->gateway->persistCart($cart);
+
+        return $cart;
     }
 
     /**
@@ -60,12 +72,12 @@ class OrderManager implements OrderManagerInterface
      */
     public function createOrder($name = 'default')
     {
-        $cart = new $this->cartClass();
-        $cart->setName($name);
-        $this->initOrder($cart);
-        $this->gateway->persistOrder($cart);
+        $order = new $this->order();
+        $order->setName($name);
+        $this->initOrder($order);
+        $this->gateway->persistOrder($order);
 
-        return $cart;
+        return $order;
     }
 
     /**
