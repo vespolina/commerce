@@ -17,6 +17,11 @@ abstract class ProductHandler implements ProductHandlerInterface
 
     public function __construct($productClass)
     {
+        $interfaceFQCN = 'Vespolina\Entity\Product\ProductInterface';
+        if (!in_array($interfaceFQCN, class_implements($productClass))) {
+            throw new \Exception('Please have your product implement interface '.$interfaceFQCN);
+        }
+
         $this->productClass = $productClass;
     }
 

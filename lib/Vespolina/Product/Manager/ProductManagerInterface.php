@@ -26,7 +26,7 @@ interface ProductManagerInterface
      * created. Optionally, just an Option object can be passed in, without a third value parameter.
      *
      * @param \Vespolina\Entity\Product\ProductInterface $product
-     * @param $type string or Vespolina\Entity\OptionInterface
+     * @param string | \Vespolina\Entity\OptionInterface $type
      * @param $value
      */
     function addOptionToProduct(ProductInterface $product, $type, $value = null);
