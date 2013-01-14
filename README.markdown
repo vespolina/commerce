@@ -1,4 +1,4 @@
-VespolinaCart
+VespolinaOrder
 =============
 
-[![Build Status](https://secure.travis-ci.org/vespolina/VespolinaCart.png?branch=master)](http://travis-ci.org/vespolina/VespolinaCart)
+[![Build Status](https://travis-ci.org/vespolina/VespolinaOrder.png)](https://travis-ci.org/vespolina/VespolinaOrder)
