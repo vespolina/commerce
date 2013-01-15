@@ -47,9 +47,9 @@ class PartnerGateway
     /**
      * @param \Vespolina\Entity\Partner\PartnerInterface $partner
      */
-    public function deletePartner(PartnerInterface $billingAccount)
+    public function deletePartner(PartnerInterface $partner)
     {
-        $this->molino->delete($billingAccount);
+        $this->molino->delete($partner);
     }
 
     /**
@@ -62,18 +62,27 @@ class PartnerGateway
     }
 
     /**
-     * @param \Vespolina\Entity\Partner\PartnerInterface $partner
+     * @param \Molino\SelectQueryInterface $query
+     * @return \Vespolina\Entity\Partner\PartnerInterface
      */
-    public function persistPartner(PartnerInterface $billingAccount)
+    public function findPartners(SelectQueryInterface $query)
     {
-        $this->molino->save($billingAccount);
+        return $query->all();
     }
 
     /**
      * @param \Vespolina\Entity\Partner\PartnerInterface $partner
      */
-    public function updatePartner(PartnerInterface $billingAccount)
+    public function persistPartner(PartnerInterface $partner)
     {
-        $this->molino->save($billingAccount);
+        $this->molino->save($partner);
+    }
+
+    /**
+     * @param \Vespolina\Entity\Partner\PartnerInterface $partner
+     */
+    public function updatePartner(PartnerInterface $partner)
+    {
+        $this->molino->save($partner);
     }
 }
