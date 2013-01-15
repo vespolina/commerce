@@ -4,10 +4,8 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Vespolina\Entity\Product\BaseProduct">
-        <id name="id" type="integer" column="id">
-            <generator strategy="AUTO" />
-        </id>
+    <mapped-superclass name="Vespolina\Entity\Product\BaseProduct">
+
         <field name="attributes"  type="array" nullable="true" />
         <field name="createdAt"  type="datetime" />
         <field name="description"  type="string" nullable="true" />
@@ -16,5 +14,5 @@
         <field name="taxonomies"  type="array" nullable="true" />
         <field name="type"  type="string" nullable="true" />
         <field name="updatedAt"  type="datetime"   nullable="true" />
-    </entity>
+    </mapped-superclass>
 </doctrine-mapping>

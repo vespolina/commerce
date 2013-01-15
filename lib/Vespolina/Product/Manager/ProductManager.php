@@ -13,6 +13,7 @@ use Vespolina\Entity\Product\MerchandiseInterface;
 use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Identifier\IdentifierInterface;
+use Vespolina\Product\Gateway\ProductGateway;
 use Vespolina\Product\Handler\ProductHandlerInterface;
 use Vespolina\Product\Manager\ProductManagerInterface;
 
@@ -22,6 +23,7 @@ use Vespolina\Product\Manager\ProductManagerInterface;
 class ProductManager implements ProductManagerInterface
 {
     protected $attributeClass;
+    protected $gateway;
     protected $identifiers;
     protected $merchandiseClass;
     protected $optionClass;
@@ -31,7 +33,7 @@ class ProductManager implements ProductManagerInterface
     public function __construct(ProductGateway $gateway, array $classMapping)
     {
         $missingClasses = array();
-        foreach (array('Attribute', 'Merchandise', 'Option', 'Product') as $class) {
+        foreach (array('attribute', 'merchandise', 'option', 'product') as $class) {
             $class = $class . 'Class';
             if (isset($classMapping[$class])) {
 
@@ -47,6 +49,7 @@ class ProductManager implements ProductManagerInterface
         if (count($missingClasses)) {
             throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
         }
+        $this->gateway = $gateway;
 //        $this->identifiers = $identifiers;
         $this->productHandlers = array();
     }
