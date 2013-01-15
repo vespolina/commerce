@@ -2,8 +2,8 @@
 
 namespace Vespolina\Product\Gateway;
 
-use Gateway\QueryInterface;
-use Vespolina\Entity\ProductInterface;
+use Molino\SelectQueryInterface;
+use Vespolina\Entity\Product\ProductInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -28,7 +28,7 @@ interface ProductGatewayInterface
      *
      * @return an instance of Vespolina\Entity\ProductInterface or an array of instances of Vespolina\Entity\ProductInterface
      */
-    function findProduct(QueryInterface $query = null);
+    function findProduct(SelectQueryInterface $query = null);
 
     /**
      * Flush any changes to the database

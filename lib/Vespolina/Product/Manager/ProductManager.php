@@ -23,16 +23,31 @@ class ProductManager implements ProductManagerInterface
 {
     protected $attributeClass;
     protected $identifiers;
-    protected $identifierSetClass;
     protected $merchandiseClass;
+    protected $optionClass;
+    protected $productClass;
     protected $productHandlers;
 
-    public function __construct($identifiers, $identifierSetClass, $merchandiseClass, $attributeClass)
+    public function __construct(ProductGateway $gateway, array $classMapping)
     {
-        $this->attributeClass = $attributeClass;
-        $this->identifiers = $identifiers;
-        $this->identifierSetClass = $identifierSetClass;
-        $this->merchandiseClass = $merchandiseClass;
+        $missingClasses = array();
+        foreach (array('Attribute', 'Merchandise', 'Option', 'Product') as $class) {
+            $class = $class . 'Class';
+            if (isset($classMapping[$class])) {
+
+                if (!class_exists($classMapping[$class]))
+                    throw new InvalidConfigurationException(sprintf("Class '%s' not found as '%s'", $classMapping[$class], $class));
+
+                $this->{$class} = $classMapping[$class];
+                continue;
+            }
+            $missingClasses[] = $class;
+        }
+
+        if (count($missingClasses)) {
+            throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
+        }
+//        $this->identifiers = $identifiers;
         $this->productHandlers = array();
     }
 
@@ -306,9 +321,7 @@ class ProductManager implements ProductManagerInterface
      */
     public function deleteProduct(ProductInterface $product, $andPersist = true)
     {
-        if ($andPersist) {
-            $this->doDeleteProduct($product);
-        }
+        $this->gateway->deleteProduct($product);
     }
 
     /**
@@ -316,9 +329,7 @@ class ProductManager implements ProductManagerInterface
      */
     public function updateProduct(ProductInterface $product, $andPersist = true)
     {
-        if ($andPersist) {
-            $this->doUpdateProduct($product);
-        }
+        $this->gateway->updateProduct($product);
     }
 
     protected function doDeleteOptionGroup(OptionGroupInterface $merchandise)
@@ -352,16 +363,6 @@ class ProductManager implements ProductManagerInterface
     }
 
     protected function doUpdateOptionGroup(OptionGroupInterface $optionGroup)
-    {
-
-    }
-
-    protected function doDeleteProduct(ProductInterface $product)
-    {
-
-    }
-
-    protected function doUpdateProduct(ProductInterface $product)
     {
 
     }
