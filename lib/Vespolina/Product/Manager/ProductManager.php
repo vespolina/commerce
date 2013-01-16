@@ -149,9 +149,24 @@ class ProductManager implements ProductManagerInterface
         return $product;
     }
 
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    public function findProductBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        return $this->doFindBy($criteria, $orderBy, $limit, $offset);
+        $query = $this->gateway->createQuery('Select');
+        foreach ($criteria as $field => $value) {
+            $query->filterEqual($field, $value);
+        }
+        if ($orderBy) {
+            foreach ($orderBy as $field => $order)
+            $query->sort($field, $order);
+        }
+        if ($limit) {
+            $query->limit($limit);
+        }
+        if ($offset) {
+            $query->skip($offset);
+        }
+
+        return $this->gateway->findProducts($query);
     }
 
 

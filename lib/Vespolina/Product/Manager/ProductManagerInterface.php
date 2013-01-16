@@ -80,14 +80,14 @@ interface ProductManagerInterface
     /**
      * Find a collection of products by the criteria
      *
-     * @param array $criteria
-     * @param mixed $orderBy
+     * @param array $criteria [$field] = $value
+     * @param array $orderBy [$field] = $order
      * @param mixed $limit
      * @param mixed $offset
      *
      * @return array
      */
-    function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
+    function findProductBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
     function findMerchandiseBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
