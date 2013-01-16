@@ -8,11 +8,12 @@
 
 namespace Vespolina\Order\Manager;
 
+use Doctrine\ORM\QueryBuilder;
 use Gateway\Query;
-use Gateway\QueryBuilder;
+use Molino\BaseQuery;
 use Vespolina\Entity\Order\CartEvents;
-use Vespolina\Order\Manager\CartManagerInterface;
-use Vespolina\Order\Gateway\CartGatewayInterface;
+use Vespolina\Order\Gateway\OrderGatewayInterface;
+use Vespolina\Order\Manager\OrderManagerInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;
 use Vespolina\Entity\Order\Order;
 use Vespolina\Entity\Order\OrderInterface;
@@ -62,7 +63,7 @@ class OrderManager implements OrderManagerInterface
         $cart = new $this->cartClass();
         $cart->setName($name);
         $this->initOrder($cart);
-        $this->gateway->persistCart($cart);
+        $this->gateway->persistOrder($cart);
 
         return $cart;
     }
@@ -237,7 +238,10 @@ class OrderManager implements OrderManagerInterface
      */
     protected function doFindBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        $qb = new QueryBuilder();
+        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
+        $query = $this->gateway->createQuery('Select');
+        $qb = $query->getQueryBuilder();
+
         foreach($criteria as $field => $value) {
             $qb->field($field)->equals($value);
         }
