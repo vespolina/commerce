@@ -9,26 +9,28 @@ namespace Vespolina\Product\Manager;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+use Vespolina\Product\Gateway\ProductGateway;
+use Vespolina\Product\Handler\ProductHandlerInterface;
+use Vespolina\Product\Manager\ProductManagerInterface;
+
+use Vespolina\Entity\Product\AttributeInterface;
 use Vespolina\Entity\Product\MerchandiseInterface;
 use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Identifier\IdentifierInterface;
-use Vespolina\Product\Gateway\ProductGateway;
-use Vespolina\Product\Handler\ProductHandlerInterface;
-use Vespolina\Product\Manager\ProductManagerInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
  */
 class ProductManager implements ProductManagerInterface
 {
-    protected $attributeClass;
     protected $gateway;
     protected $identifiers;
+    protected $productHandlers;
+    protected $attributeClass;
     protected $merchandiseClass;
     protected $optionClass;
     protected $productClass;
-    protected $productHandlers;
 
     public function __construct(ProductGateway $gateway, array $classMapping)
     {

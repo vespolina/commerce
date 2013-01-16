@@ -192,27 +192,16 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function createProductManager()
     {
-        $mgr = $this->getMockBuilder('Vespolina\ProductBundle\Model\ProductManager')
-            ->setMethods(array(
-                '__construct',
-                'findBy',
-                'findProductById',
-                'findProductByIdentifier',
-                'getPrimaryIdentifier',
-                'getIdentifierSetClass',
-                'getOptionClass',
-                'updateProduct'
-            ))
-             ->disableOriginalConstructor()
-             ->getMock();
-        $mgr->expects($this->any())
-             ->method('getIdentifierSetClass')
-             ->will($this->returnValue('Vespolina\ProductBundle\Document\ProductIdentifierSet'));
-        $mgr->expects($this->any())
-             ->method('getOptionClass')
-             ->will($this->returnValue('Vespolina\ProductBundle\Document\Option'));
-
-        $mgr = new ProductManager(array(), 'Error', 'Vespolina\Entity\Product\Merchandise', 'Vespolina\Entity\Product\Attribute');
+        $productGateway = $this->getMockBuilder('Vespolina\Product\Gateway\ProductGateway')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        $mgr = new ProductManager($productGateway, array(
+            'merchandiseClass' => 'Vespolina\Entity\Product\Merchandise',
+            'attributeClass' => 'Vespolina\Entity\Product\Attribute',
+            'optionClass' => 'Vespolina\Entity\Product\Option',
+            'productClass' => 'Vespolina\Entity\Product\Product',
+        ));
 
         return $mgr;
     }
