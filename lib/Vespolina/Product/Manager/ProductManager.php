@@ -268,7 +268,7 @@ class ProductManager implements ProductManagerInterface
      */
     public function findOptionGroupsData(array $orderBy = null, $limit = null, $offset = null)
     {
-        $qb = $this->dm->createQueryBuilder($this->optionGroupClass);
+        $qb = $this->gateway->createQueryBuilder($this->optionGroupClass);
         $qb->hydrate(false);
         if($limit) {
             $qb->limit($limit);
