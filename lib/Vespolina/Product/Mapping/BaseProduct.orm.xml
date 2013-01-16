@@ -15,6 +15,11 @@
         <field name="optionGroups"  type="array" nullable="true" />
         <field name="taxonomies"  type="array" nullable="true" />
         <field name="type"  type="string" nullable="true" />
-        <field name="updatedAt"  type="datetime"   nullable="true" />
+        <field name="updatedAt"  type="datetime" />
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />
+            <lifecycle-callback type="preUpdate" method="autoSetUpdatedAt" />
+        </lifecycle-callbacks>
     </mapped-superclass>
 </doctrine-mapping>
