@@ -8,6 +8,7 @@
 
 namespace Vespolina\Partner\Manager;
 
+use Vespolina\Entity\Partner\PersonalDetails;
 use Vespolina\Partner\Gateway\PartnerGateway;
 use Vespolina\Entity\Partner\Address;
 use Vespolina\Entity\Partner\Partner;
@@ -40,7 +41,7 @@ class PartnerManager implements PartnerManagerInterface
     /**
      * Constructor to setup the partner manager
      *
-     * @param
+     * @param \Vespolina\Partner\Gateway\PartnerGateway $gateway
      * @param array $classMapping - mapping for the partner class and his embedded classes
      * @param array $partnerRoles - array with available partner roles
      */

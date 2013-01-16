@@ -6,6 +6,7 @@
  * with this source code in the file LICENSE.
  */
 
+use Molino\Doctrine\ORM\Molino;
 use Vespolina\Entity\Partner\PersonalDetails;
 
 use Vespolina\Entity\Partner\AddressInterface;
@@ -15,6 +16,7 @@ use Vespolina\Entity\Partner\OrganisationPartner;
 use Vespolina\Entity\Partner\Partner;
 use Vespolina\Entity\Partner\Role;
 use Vespolina\Entity\Partner\PartnerManager;
+use Vespolina\Partner\Gateway\PartnerGateway;
 
 /**
  * @author Willem-Jan Zijderveld <willemjan@beeldspraak.com>
@@ -55,9 +57,16 @@ class PartnerManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function getManager()
     {
+        $partnerGateway = $this->getMockBuilder('Vespolina\Partner\Gateway\PartnerGateway')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
         if (!$this->partnerManager) {
-            $this->partnerManager = $this->getMockForAbstractClass('Vespolina\Partner\Manager\PartnerManager',
+            $this->partnerManager = $this->getMock('Vespolina\Partner\Manager\PartnerManager',
+                null,
                 array(
+                    $partnerGateway,
                     array(
                         'partnerClass'                    => 'Vespolina\Entity\Partner\Partner',
                         'partnerAddressClass'             => 'Vespolina\Entity\Partner\Address',
