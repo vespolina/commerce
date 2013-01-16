@@ -9,10 +9,10 @@
 namespace Vespolina\Order\Gateway;
 
 use Gateway\Query;
-use Vespolina\Order\Gateway\CartGatewayInterface;
-use Vespolina\Entity\Order\CartInterface;
+use Vespolina\Order\Gateway\OrderGatewayInterface;
+use Vespolina\Entity\Order\OrderInterface;
 
-class CartMemoryGateway implements CartGatewayInterface
+class OrderMemoryGateway implements OrderGatewayInterface
 {
     protected $carts;
     protected $deletedOrders;

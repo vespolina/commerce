@@ -1,8 +1,8 @@
 <?php
 
 use Vespolina\Entity\Order\CartEvents;
-use Vespolina\Order\Gateway\CartMemoryGateway;
-use Vespolina\Order\Manager\CartManager;
+use Vespolina\Order\Gateway\OrderMemoryGateway;
+use Vespolina\Order\Manager\OrderManager;
 use Vespolina\Order\Pricing\DefaultCartPricingProvider;
 use Vespolina\Entity\Order\Cart;
 use Vespolina\Entity\Product\Product;
@@ -16,7 +16,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
     public function __construct()
     {
         if (!self::$gateway) {
-            self::$gateway = new CartMemoryGateway();
+            self::$gateway = new OrderMemoryGateway();
         }
     }
 
@@ -54,7 +54,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
 
         $cartId = $cart1->getId();
 
-        $loadedCart = $mgr->findCartById($cartId);
+        $loadedCart = $mgr->findOrderById($cartId);
 
         $this->assertInstanceOf('Vespolina\Entity\Order\Cart', $loadedCart);
         $this->assertSame($cart1, $loadedCart);
@@ -296,7 +296,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
             $eventDispatcher = null;
         }
 
-        return new CartManager($gateway, $cartClass, $cartItemClass, $cartEvents, $eventDispatcher);
+        return new OrderManager($gateway, $cartClass, $cartItemClass, $cartEvents, $eventDispatcher);
     }
 
     protected function verifyPersistence($cart)
