@@ -40,17 +40,17 @@ class ProductGateway
         $queryFunction = 'create' . $type . 'Query';
 
         if (!$queryClass) {
-            $queryClass = $this->partnerClass;
+            $queryClass = $this->productClass;
         }
         return $this->molino->$queryFunction($queryClass);
     }
 
     /**
-     * @param \Vespolina\Entity\Product\ProductInterface $partner
+     * @param \Vespolina\Entity\Product\ProductInterface $product
      */
-    public function deleteProduct(ProductInterface $partner)
+    public function deleteProduct(ProductInterface $product)
     {
-        $this->molino->delete($partner);
+        $this->molino->delete($product);
     }
 
     /**
@@ -72,18 +72,18 @@ class ProductGateway
     }
 
     /**
-     * @param \Vespolina\Entity\Product\ProductInterface $partner
+     * @param \Vespolina\Entity\Product\ProductInterface $product
      */
-    public function persistProduct(ProductInterface $partner)
+    public function persistProduct(ProductInterface $product)
     {
-        $this->molino->save($partner);
+        $this->molino->save($product);
     }
 
     /**
-     * @param \Vespolina\Entity\Product\ProductInterface $partner
+     * @param \Vespolina\Entity\Product\ProductInterface $product
      */
-    public function updateProduct(ProductInterface $partner)
+    public function updateProduct(ProductInterface $product)
     {
-        $this->molino->save($partner);
+        $this->molino->save($product);
     }
 }
