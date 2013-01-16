@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2012-2013 Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -8,26 +8,28 @@
 
 namespace Vespolina\Partner\Manager;
 
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Vespolina\Partner\Gateway\PartnerGateway;
 use Vespolina\Entity\Partner\Address;
 use Vespolina\Entity\Partner\Partner;
 use Vespolina\Entity\Partner\PartnerInterface;
+use Vespolina\Exception\InvalidConfigurationException;
 
 /**
  * PartnerManager - handles partner creation, updating, deletion, etc
  * 
  * @author Willem-Jan Zijderveld <willemjan@beeldspraak.com>
  */
-abstract class PartnerManager implements PartnerManagerInterface
+class PartnerManager implements PartnerManagerInterface
 {
     /**
      * Configurable partner classes
      * @var string
      */
-    protected $partnerClass,
-              $partnerAddressClass,
-              $partnerContactClass,
-              $partnerPersonalDetailsClass;
+    protected $gateway;
+    protected $partnerAddressClass;
+    protected $partnerClass;
+    protected $partnerContactClass;
+    protected $partnerPersonalDetailsClass;
     
     /**
      * Array with available partnerRoles
@@ -37,12 +39,14 @@ abstract class PartnerManager implements PartnerManagerInterface
     
     /**
      * Constructor to setup the partner manager
-     * 
+     *
+     * @param
      * @param array $classMapping - mapping for the partner class and his embedded classes
      * @param array $partnerRoles - array with available partner roles
      */
-    public function __construct(array $classMapping, array $partnerRoles)
+    public function __construct(PartnerGateway $gateway, array $classMapping, array $partnerRoles)
     {
+        $this->gateway = $gateway;
         $missingClasses = array();
         foreach (array('', 'Address', 'Contact', 'PersonalDetails', 'OrganisationDetails') as $class) {
             $class = 'partner' . $class . 'Class';
@@ -61,7 +65,7 @@ abstract class PartnerManager implements PartnerManagerInterface
             throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
         }
         
-        $this->partnerRoles            = $partnerRoles;
+        $this->partnerRoles = $partnerRoles;
     }
     
     /**
@@ -130,16 +134,58 @@ abstract class PartnerManager implements PartnerManagerInterface
         
         return $organisationDetails;
     }
-    
+
     /**
-     * Returns if the given Role is valid.
-     * @param string $role
+     * {@inheritdoc}
      */
-    public function isValidRole($role)
+    public function deletePartner(PartnerInterface $partner, $andFlush = true)
     {
-        return in_array($role, $this->partnerRoles);
+        $this->gateway->deletePartner($partner);
     }
-    
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find($id)
+    {
+        $query = $this->gateway->createQuery('Select');
+        $query->filterEqual('id', $id);
+
+        return $this->gateway->findPartner($query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findOneByPartnerId($partnerId)
+    {
+        $query = $this->gateway->createQuery('Select');
+        $query->filterEqual('partnerId', $partnerId);
+
+        return $this->gateway->findPartner($query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAll()
+    {
+        $query = $this->gateway->createQuery('Select');
+
+        return $this->gateway->findPartners($query);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findAllByRole($role)
+    {
+        $query = $this->gateway->createQuery('Select');
+        $query->filterEqual('roles', $role);
+
+        return $this->gateway->findPartners($query);
+    }
+
     /**
      * Generates and returns the name of the partner
      * @return string
@@ -151,8 +197,24 @@ abstract class PartnerManager implements PartnerManagerInterface
             if ('' !== ($value = (string)$personalDetails->{'get'.ucfirst($part)}()))
                 $parts[] = $value;
         }
-        
+
         return join(' ', $parts);
     }
-    
+
+    /**
+     * Returns if the given Role is valid.
+     * @param string $role
+     */
+    public function isValidRole($role)
+    {
+        return in_array($role, $this->partnerRoles);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updatePartner(PartnerInterface $partner, $andFlush = true)
+    {
+        $this->gateway->updatePartner($partner);
+    }
 }

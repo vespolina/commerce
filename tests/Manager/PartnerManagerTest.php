@@ -6,24 +6,23 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\PartnerBundle\Tests\Model;
+use Vespolina\Entity\Partner\PersonalDetails;
 
-use Vespolina\PartnerBundle\Model\PersonalDetails;
+use Vespolina\Entity\Partner\AddressInterface;
 
-use Vespolina\PartnerBundle\Model\AddressInterface;
-
-use Vespolina\PartnerBundle\Model\IndividualPartner;
-use Vespolina\PartnerBundle\Model\OrganisationPartner;
-use Vespolina\PartnerBundle\Model\Partner;
-use Vespolina\PartnerBundle\Model\Role;
-use Vespolina\PartnerBundle\Model\PartnerManager;
-use Vespolina\PartnerBundle\Tests\PartnerTestCommon;
+use Vespolina\Entity\Partner\IndividualPartner;
+use Vespolina\Entity\Partner\OrganisationPartner;
+use Vespolina\Entity\Partner\Partner;
+use Vespolina\Entity\Partner\Role;
+use Vespolina\Entity\Partner\PartnerManager;
 
 /**
  * @author Willem-Jan Zijderveld <willemjan@beeldspraak.com>
  */
-class PartnerManagerTest extends PartnerTestCommon
+class PartnerManagerTest extends \PHPUnit_Framework_TestCase
 {
+    protected $partnerManager;
+
     public function testCreatePartner()
     {
         $partner = $this->getManager()->createPartner(Partner::ROLE_CUSTOMER, Partner::INDIVIDUAL);
@@ -52,5 +51,25 @@ class PartnerManagerTest extends PartnerTestCommon
         $personalDetails->setLastname('Lastname');
         
         $this->assertEquals('W the Lastname', $this->getManager()->generatePartnerName($personalDetails));
+    }
+
+    protected function getManager()
+    {
+        if (!$this->partnerManager) {
+            $this->partnerManager = $this->getMockForAbstractClass('Vespolina\Partner\Manager\PartnerManager',
+                array(
+                    array(
+                        'partnerClass'                    => 'Vespolina\Entity\Partner\Partner',
+                        'partnerAddressClass'             => 'Vespolina\Entity\Partner\Address',
+                        'partnerContactClass'             => 'Vespolina\Entity\Partner\Contact',
+                        'partnerPersonalDetailsClass'     => 'Vespolina\Entity\Partner\PersonalDetails',
+                        'partnerOrganisationDetailsClass' => 'Vespolina\Entity\Partner\OrganisationDetails',
+                    ),
+                    array(Partner::ROLE_CUSTOMER)
+                )
+            );
+        }
+
+        return $this->partnerManager;
     }
 }

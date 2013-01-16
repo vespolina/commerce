@@ -38,13 +38,13 @@ class PartnerManagerTest extends TestCase
      * @var \Doctrine\ODM\MongoDB\DocumentManager
      */
     protected $dm;
-    
+
     public function testCreatePartner()
     {
         $partner = $this->partnerMgr->createPartner();
         $partner->setPartnerId('TEST12345');
         $partner->addRole(Partner::ROLE_EMPLOYEE);
-        
+
         $this->assertEquals(Partner::INDIVIDUAL, $partner->getType());
         $this->assertEquals($partner->getPartnerId(), 'TEST12345');
         $this->assertEquals(array(Partner::ROLE_CUSTOMER, Partner::ROLE_EMPLOYEE), $partner->getRoles());
