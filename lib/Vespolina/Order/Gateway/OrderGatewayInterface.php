@@ -8,11 +8,18 @@
 
 namespace Vespolina\Order\Gateway;
 
-use Gateway\Query;
+use Molino\SelectQueryInterface;
 use Vespolina\Entity\Order\OrderInterface;
 
 interface OrderGatewayInterface
 {
+    /**
+     * @param $type
+     * @param null $queryClass
+     * @return mixed
+     */
+    function createQuery($type, $queryClass = null);
+
     /**
      * Delete a Cart that has been persisted. The Order will be immediately flushed in the database
      *
@@ -23,11 +30,11 @@ interface OrderGatewayInterface
     /**
      * Find a Order by the value in a field or combination of fields
      *
-     * @param \Gateway\Query $query
+     * @param \Molino\SelectQueryInterface $query
      *
      * @return \Vespolina\Entity\Order\OrderInterface|[]
      */
-    function findOrders(Query $query);
+    function findOrders(SelectQueryInterface $query);
 
     /**
      * Persist a Order that has been created.  The Order will be immediately flushed in the database

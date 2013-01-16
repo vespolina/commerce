@@ -9,15 +9,50 @@
 namespace Vespolina\Order\Gateway;
 
 use Gateway\Query;
+use ImmersiveLabs\CaraCore\Exception\InvalidArgumentException;
+use Molino\MolinoInterface;
+use Vespolina\Exception\InvalidInterfaceException;
 use Vespolina\Order\Gateway\OrderGatewayInterface;
 use Vespolina\Entity\Order\OrderInterface;
 
 class OrderMemoryGateway implements OrderGatewayInterface
 {
+    protected $molino;
+    protected $orderClass;
+
     protected $carts;
     protected $deletedOrders;
     protected $lastOrder;
     protected $ids = array();
+
+    /**
+     * @param \Molino\MolinoInterface $molino
+     * @param $orderClass
+     * @throws \Vespolina\Exception\InvalidInterfaceException
+     */
+    public function __construct(MolinoInterface $molino, $orderClass)
+    {
+        if (!class_exists($orderClass) || !in_array('Vespolina\Entity\Order\OrderInterface', class_implements($orderClass))) {
+            throw new InvalidInterfaceException('Please have your order class implement Vespolina\Entity\Order\OrderInterface');
+        }
+        $this->molino = $molino;
+        $this->orderClass = $orderClass;
+    }
+
+    public function createQuery($type, $queryClass = null)
+    {
+        $type = ucfirst(strtolower($type));
+        if (!in_array($type, array('Delete', 'Select', 'Update'))) {
+            throw new InvalidArgumentException($type . ' is not a valid Query type');
+        }
+        $queryFunction = 'create' . $type . 'Query';
+
+        if (!$queryClass) {
+            $queryClass = $this->orderClass;
+        }
+
+        return $this->molino->$queryFunction($queryClass);
+    }
 
     public function deleteOrder(OrderInterface $cart)
     {

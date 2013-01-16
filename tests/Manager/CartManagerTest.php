@@ -60,7 +60,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($cart1, $loadedCart);
     }
 
-    public function testFindProductInCart()
+    public function testfindProductInOrder()
     {
         $mgr = $this->createCartManager();
         $cart = $mgr->createCart('test');
@@ -75,7 +75,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $testItem = $createItem->invokeArgs($mgr, array($product));
         $addItem->invokeArgs($cart, array($testItem));
 
-        $item = $mgr->findProductInCart($cart, $product);
+        $item = $mgr->findProductInOrder($cart, $product);
         $this->assertSame($product, $item->getProduct(), 'find the item that contains the product');
 
         $newProduct = new Product();
@@ -84,7 +84,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $blueItem = $createItem->invokeArgs($mgr, array($newProduct, $optionsBlue));
         $addItem->invokeArgs($cart, array($blueItem));
 
-        $foundBlueItem = $mgr->findProductInCart($cart, $newProduct, $optionsBlue);
+        $foundBlueItem = $mgr->findProductInOrder($cart, $newProduct, $optionsBlue);
         $this->assertSame($newProduct, $foundBlueItem->getProduct(), 'find the item that contains the product with the options');
         $this->assertSame($optionsBlue, $foundBlueItem->getOptions(), 'find the item that contains the product with the options');
 
@@ -92,17 +92,17 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $redItem = $createItem->invokeArgs($mgr, array($newProduct, $optionsRed));
         $addItem->invokeArgs($cart, array($redItem));
 
-        $foundRedItem = $mgr->findProductInCart($cart, $newProduct, array('size' => 'large', 'color' => 'red'));
+        $foundRedItem = $mgr->findProductInOrder($cart, $newProduct, array('size' => 'large', 'color' => 'red'));
         $this->assertNotSame($redItem, $blueItem);
         $this->assertSame($newProduct, $foundRedItem->getProduct(), 'find the item that contains the product with the options');
         $this->assertSame($optionsRed, $foundRedItem->getOptions(), 'find the item that contains the product with the options');
 
-        $this->assertNull($mgr->findProductInCart($cart, $product, $optionsRed), "product and options don't match, nothing returned");
-        $this->assertNull($mgr->findProductInCart($cart, $newProduct), 'this item has options, so nothing returned');
-        $this->assertNull($mgr->findProductInCart($cart, $newProduct, array('color' => 'yellow')), 'no yellow options set');
+        $this->assertNull($mgr->findProductInOrder($cart, $product, $optionsRed), "product and options don't match, nothing returned");
+        $this->assertNull($mgr->findProductInOrder($cart, $newProduct), 'this item has options, so nothing returned');
+        $this->assertNull($mgr->findProductInOrder($cart, $newProduct, array('color' => 'yellow')), 'no yellow options set');
     }
 
-    public function testAddProductToCart()
+    public function testaddProductToOrder()
     {
         $mgr = $this->createCartManager();
         $cart = $mgr->createCart('test');
@@ -110,7 +110,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $product = new Product();
         $product->setName('test product');
 
-        $mgr->addProductToCart($cart, $product);
+        $mgr->addProductToOrder($cart, $product);
 
         $items = $cart->getItems();
         $this->assertSame(1, count($items));
@@ -120,7 +120,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test product', $item->getName());
 
         // add the same product again to increase the quantity
-        $existingItem = $mgr->addProductToCart($cart, $product);
+        $existingItem = $mgr->addProductToOrder($cart, $product);
         $this->assertSame($existingItem, $item);
         $items = $cart->getItems();
         $this->assertSame(1, count($items));
@@ -131,7 +131,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
 
         // specifiy the quantity when adding a product to the cart
-        $mgr->addProductToCart($cart, $product, array(), 2);
+        $mgr->addProductToOrder($cart, $product, array(), 2);
         $this->assertSame(4, $existingItem->getQuantity(), 'passing the quantity should add to the existing quantity');
 
         $this->assertSame(CartEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM event should be triggered');
@@ -141,12 +141,12 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $optionSet1 = array('color' => 'blue', 'size' => 'small');
         $optionSet2 = array('color' => 'red', 'size' => 'small');
 
-        $option1Item = $mgr->addProductToCart($cart, $product, $optionSet1);
+        $option1Item = $mgr->addProductToOrder($cart, $product, $optionSet1);
         $this->assertNotSame($option1Item, $existingItem, 'different options for the same product should be different items');
         $items = $cart->getItems();
         $this->assertSame(2, count($items));
 
-        $option2Item = $mgr->addProductToCart($cart, $product, $optionSet2, 3);
+        $option2Item = $mgr->addProductToOrder($cart, $product, $optionSet2, 3);
         $this->assertNotSame($option1Item, $option2Item, 'different options for the same product should be different items');
         $items = $cart->getItems();
         $this->assertSame(3, count($items));
@@ -157,7 +157,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
     }
 
-    public function testRemoveProductFromCart()
+    public function testremoveProductFromOrder()
     {
         $mgr = $this->createCartManager();
         $cart = $mgr->createCart();
@@ -165,35 +165,35 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $product = new Product();
         $options = array('size' => 'large');
 
-        $item = $mgr->addProductToCart($cart, $product);
+        $item = $mgr->addProductToOrder($cart, $product);
         $this->assertCount(1, $cart->getItems(), 'verify item is in cart');
-        $mgr->removeProductFromCart($cart, $product, $options);
+        $mgr->removeProductFromOrder($cart, $product, $options);
         $this->assertContains($item, $cart->getItems(), "the items should still be in the cart since the item didn't have options");
-        $mgr->removeProductFromCart($cart, $product);
+        $mgr->removeProductFromOrder($cart, $product);
         $this->assertEmpty($cart->getItems(), 'the cart should be empty again');
 
-        $mgr->addProductToCart($cart, $product, $options);
-        $mgr->removeProductFromCart($cart, $product, $options);
+        $mgr->addProductToOrder($cart, $product, $options);
+        $mgr->removeProductFromOrder($cart, $product, $options);
         $this->assertEmpty($cart->getItems(), 'removing product with options');
 
-        $item = $mgr->addProductToCart($cart, $product, $options);
-        $mgr->removeProductFromCart($cart, $product);
+        $item = $mgr->addProductToOrder($cart, $product, $options);
+        $mgr->removeProductFromOrder($cart, $product);
         $this->assertContains($item, $cart->getItems(), 'the items should still be in the cart since options were not passed');
-        $mgr->removeProductFromCart($cart, $product, array('size' => 'small'));
+        $mgr->removeProductFromOrder($cart, $product, array('size' => 'small'));
         $this->assertContains($item, $cart->getItems(), 'the items should still be in the cart since the wrong options were passed');
 
     }
 
-    public function testSetCartItemState()
+    public function testsetOrderItemState()
     {
         $mgr = $this->createCartManager();
         $cart = $mgr->createCart();
         $product = new Product();
 
-        $item = $mgr->addProductToCart($cart, $product);
+        $item = $mgr->addProductToOrder($cart, $product);
 
         $this->assertNotSame('test', $item->getState(), "make sure the state isn't set to test");
-        $mgr->setCartItemState($item, 'test');
+        $mgr->setOrderItemState($item, 'test');
         $this->assertSame('test', $item->getState(), "the state should now be set to test");
 
         $this->assertSame(CartEvents::UPDATE_ITEM_STATE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_ITEM_STATE event should be triggered');
@@ -201,13 +201,13 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
     }
 
-    public function testSetCartState()
+    public function testsetOrderState()
     {
         $mgr = $this->createCartManager();
         $cart = $mgr->createCart();
 
         $this->assertNotSame('test', $cart->getState(), "make sure the state isn't set to test");
-        $mgr->setCartState($cart, 'test');
+        $mgr->setOrderState($cart, 'test');
         $this->assertSame('test', $cart->getState(), "the state should now be set to test");
 
         $this->assertSame(CartEvents::UPDATE_CART_STATE, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART_STATE event should be triggered');
@@ -221,7 +221,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $cart = $mgr->createCart();
 
         $product = new Product();
-        $item = $mgr->addProductToCart($cart, $product);
+        $item = $mgr->addProductToOrder($cart, $product);
 
         $mgr->setItemQuantity($item, 5);
         $this->assertSame(5, $item->getQuantity(), 'the quantity should be updated');
@@ -237,12 +237,12 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $cart = $mgr->createCart();
 
         $product = new Product();
-        $item = $mgr->addProductToCart($cart, $product);
+        $item = $mgr->addProductToOrder($cart, $product);
         $mgr->setProductQuantity($cart, $product, array(), 5);
         $this->assertSame(5, $item->getQuantity(), 'the quantity should be updated');
 
         $options = array('size' => 'large');
-        $optionItem = $mgr->addProductToCart($cart, $product, $options);
+        $optionItem = $mgr->addProductToOrder($cart, $product, $options);
         $mgr->setProductQuantity($cart, $product, $options, 5);
         $this->assertSame(5, $optionItem->getQuantity(), 'the quantity should be updated');
 
@@ -251,13 +251,13 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
     }
 
-    public function testUpdateCart()
+    public function testupdateOrder()
     {
         $mgr = $this->createCartManager();
-        $cart = $mgr->createCart('testUpdateCart');
-        $dummyCart = $mgr->createCart('toMakeSureTestUpdateCartIsNotLastCart');
+        $cart = $mgr->createCart('testupdateOrder');
+        $dummyCart = $mgr->createCart('toMakeSureTestupdateOrderIsNotLastCart');
 
-        $mgr->updateCart($cart, false);
+        $mgr->updateOrder($cart, false);
 
         $this->assertSame(CartEvents::UPDATE_CART, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART event should be triggered');
         $event = $mgr->getEventDispatcher()->getLastEvent();
@@ -267,7 +267,7 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
 
        $mgr->createCart('toMakeSureLastEventIsCreate');
 
-        $mgr->updateCart($cart);
+        $mgr->updateOrder($cart);
         $this->assertSame(CartEvents::UPDATE_CART, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::UPDATE_CART event should be triggered');
         $event = $mgr->getEventDispatcher()->getLastEvent();
         $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
