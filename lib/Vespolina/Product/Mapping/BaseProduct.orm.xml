@@ -5,7 +5,9 @@
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <mapped-superclass name="Vespolina\Entity\Product\BaseProduct">
-
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO" />
+        </id>
         <field name="attributes"  type="array" nullable="true" />
         <field name="createdAt"  type="datetime" />
         <field name="description"  type="string" nullable="true" />
