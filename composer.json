@@ -7,7 +7,7 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3.2",
-        "vespolina/entity": "master-dev",
+        "vespolina/core": "*",
         "behat/behat": ">=2.2.2"
     },
     "autoload": {
