@@ -9,16 +9,8 @@ use Vespolina\Entity\Product\Product;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\EventInterface;
 
-class CartManagerTest extends \PHPUnit_Framework_TestCase
+class OrderManagerTest extends \PHPUnit_Framework_TestCase
 {
-    static protected $gateway;
-
-    public function __construct()
-    {
-        if (!self::$gateway) {
-            self::$gateway = new OrderMemoryGateway();
-        }
-    }
 
     public function testConstructDistpatcher()
     {
@@ -102,6 +94,77 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($mgr->findProductInOrder($cart, $newProduct, array('color' => 'yellow')), 'no yellow options set');
     }
 
+
+    public function testFindOpenCartByOwner()
+    {
+        $owner = new Person('person');
+
+        $this->dm->persist($owner);
+        $this->dm->flush();
+
+        $cart = $this->cartMgr->createCart();
+        $cart->setOwner($owner);
+        $this->cartMgr->updateCart($cart);
+
+        $ownersCart = $this->cartMgr->findOpenCartByOwner($owner);
+        $this->assertSame($cart->getId(), $ownersCart->getId());
+
+        $this->cartMgr->setCartState($cart, Cart::STATE_CLOSED);
+        $this->assertNull($this->cartMgr->findOpenCartByOwner($owner));
+
+        return $cart;
+    }
+
+    public function testGetActiveCartForOwner()
+    {
+        $owner = new Person('person');
+
+        $this->dm->persist($owner);
+        $this->dm->flush();
+
+        $session = $this->container->get('session');
+        // not really a test, but it does make sure we start empty
+        $this->assertNull($session->get('vespolina_cart'));
+
+        $firstPassCart = $this->cartMgr->getActiveCart($owner);
+        $persistedCarts = $this->cartMgr->findBy(array());
+        $this->assertSame(1, $persistedCarts->count(), 'there should only be one cart in the db');
+        $this->assertSame($firstPassCart, $session->get('vespolina_cart'), 'the new cart should have been set for the session');
+
+        $secondPassCart = $this->cartMgr->getActiveCart($owner);
+        $this->assertSame($firstPassCart->getId(), $secondPassCart->getId());
+        $this->assertSame(1, $persistedCarts->count(), 'there should only be one cart in the db');
+
+        $session->clear('vespolina_cart');
+        $thirdPassCart = $this->cartMgr->getActiveCart($owner);
+        $this->assertSame($firstPassCart->getId(), $thirdPassCart->getId());
+        $this->assertSame(1, $persistedCarts->count(), 'there should only be one cart in the db');
+        $this->assertSame($thirdPassCart, $session->get('vespolina_cart'), 'the new cart should have been set for the session');
+    }
+
+
+    public function testGetActiveCartWithoutOwner()
+    {
+        $session = $this->container->get('session');
+        // not really a test, but it does make sure we start empty
+        $this->assertNull($session->get('vespolina_cart'));
+
+        $firstPassCart = $this->cartMgr->getActiveCart();
+        $persistedCarts = $this->cartMgr->findBy(array());
+        $this->assertSame(1, $persistedCarts->count(), 'there should only be one cart in the db');
+        $this->assertSame($firstPassCart, $session->get('vespolina_cart'), 'the new cart should have been set for the session');
+
+        $secondPassCart = $this->cartMgr->getActiveCart();
+        $this->assertSame($firstPassCart->getId(), $secondPassCart->getId());
+        $this->assertSame(1, $persistedCarts->count(), 'there should only be one cart in the db');
+
+        $session->clear('vespolina_cart');
+        $thirdPassCart = $this->cartMgr->getActiveCart();
+        $this->assertNotSame($firstPassCart->getId(), $thirdPassCart->getId());
+        $this->assertSame(2, $persistedCarts->count(), 'there is a left over cart, this should probably be handled');
+        $this->assertSame($thirdPassCart, $session->get('vespolina_cart'), 'the new cart should have been set for the session');
+    }
+
     public function testaddProductToOrder()
     {
         $mgr = $this->createCartManager();
@@ -157,6 +220,29 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
     }
 
+    public function testFindItemInCart()
+    {
+        $cart = $this->persistNewCart();
+        $cartable = $this->persistNewCartable('product');
+        $addedItem = $this->cartMgr->addItemToCart($cart, $cartable);
+
+        $item = $this->cartMgr->findItemInCart($cart, $cartable);
+
+        $this->assertSame($item, $addedItem);
+    }
+
+
+    public function testRemoveItemFromCart()
+    {
+        $cart = $this->persistNewCart();
+        $cartable = $this->persistNewCartable('product');
+        $this->cartMgr->addItemToCart($cart, $cartable);
+        $this->cartMgr->removeItemFromCart($cart, $cartable);
+
+        $items = $cart->getItems();
+        $this->assertSame(0, $items->count());
+    }
+
     public function testremoveProductFromOrder()
     {
         $mgr = $this->createCartManager();
@@ -182,6 +268,17 @@ class CartManagerTest extends \PHPUnit_Framework_TestCase
         $mgr->removeProductFromOrder($cart, $product, array('size' => 'small'));
         $this->assertContains($item, $cart->getItems(), 'the items should still be in the cart since the wrong options were passed');
 
+    }
+    public function testSetCartState()
+    {
+        $cart = $this->persistNewCart();
+
+        $persistedCart = $this->cartMgr->findCartById($cart->getId());
+        $this->assertSame(Cart::STATE_OPEN, $persistedCart->getState(), 'the cart should start in an open state');
+
+        $this->cartMgr->setCartState($cart, 'close');
+        $persistedCart = $this->cartMgr->findCartById($cart->getId());
+        $this->assertSame('close', $persistedCart->getState());
     }
 
     public function testsetOrderItemState()
