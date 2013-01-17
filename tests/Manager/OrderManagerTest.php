@@ -8,9 +8,11 @@ use Vespolina\Entity\Order\Cart;
 use Vespolina\Entity\Product\Product;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\EventInterface;
+use Vespolina\Entity\Partner\Partner;
 
 class OrderManagerTest extends \PHPUnit_Framework_TestCase
 {
+    static $gateway;
 
     public function testConstructDistpatcher()
     {
@@ -97,7 +99,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testFindOpenCartByOwner()
     {
-        $owner = new Person('person');
+        $owner = new Partner('person');
 
         $this->dm->persist($owner);
         $this->dm->flush();
@@ -117,7 +119,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetActiveCartForOwner()
     {
-        $owner = new Person('person');
+        $owner = new Partner('person');
 
         $this->dm->persist($owner);
         $this->dm->flush();
