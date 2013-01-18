@@ -39,7 +39,7 @@ class OrderManager implements OrderManagerInterface
     function __construct(OrderGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
     {
         $missingClasses = array();
-        foreach (array('order', 'events', 'item', 'order') as $class) {
+        foreach (array('cart', 'events', 'item', 'order') as $class) {
             $class = $class . 'Class';
             if (isset($classMapping[$class])) {
 

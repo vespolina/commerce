@@ -8,12 +8,5 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO" />
         </id>
-        <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\Partner" inversed-by="order">
-        </many-to-one>
-        <one-to-many field="items" target-entity="Vespolina\Entity\Order\Item" mapped-by="order">
-            <cascade>
-                <cascade-all/>
-            </cascade>
-        </one-to-many>
     </entity>
 </doctrine-mapping>
