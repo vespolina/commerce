@@ -10,14 +10,12 @@
         </id>
 
         <field name="name"       type="string"   nullable="true"/>
-        <field name="options"        type="array"    nullable="true"/>
+        <field name="options"    type="array"    nullable="true"/>
         <field name="pricingSet" type="array"    nullable="true"/>
-        <field name="quantity"       type="string" />
-        <field name="state"          type="string"   nullable="true"/>
+        <field name="quantity"   type="string" />
+        <field name="state"      type="string"   nullable="true"/>
 
-        <one-to-one field="product" target-entity="Vespolina\Entity\Product\Product" mapped-by="Items">
-        </one-to-one>
-        <many-to-one field="parent" target-entity="Vespolina\Entity\Order\BaseOrder" inversed-by="Items">
-        </many-to-one>
+        <one-to-one field="product" target-entity="Vespolina\Entity\Product\ProductInterface" />
+        <many-to-one field="parent" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="items" />
     </entity>
 </doctrine-mapping>

@@ -9,6 +9,7 @@
 namespace Vespolina\Order\Manager;
 
 use Doctrine\ORM\QueryBuilder;
+use Vespolina\Exception\InvalidConfigurationException;
 use Gateway\Query;
 use Molino\BaseQuery;
 use Vespolina\Entity\Order\CartEvents;
@@ -29,18 +30,36 @@ use Vespolina\EventDispatcher\NullDispatcher;
 class OrderManager implements OrderManagerInterface
 {
     protected $cartClass;
-    protected $cartItemClass;
     protected $eventDispatcher;
+    protected $eventsClass;
     protected $gateway;
+    protected $itemClass;
+    protected $orderClass;
 
-    function __construct(OrderGatewayInterface $gateway, $cartClass, $cartItemClass, $cartEvents, EventDispatcherInterface $eventDispatcher = null)
+    function __construct(OrderGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
     {
+        $missingClasses = array();
+        foreach (array('cart', 'events', 'item', 'order') as $class) {
+            $class = $class . 'Class';
+            if (isset($classMapping[$class])) {
+
+                if (!class_exists($classMapping[$class]))
+                    throw new InvalidConfigurationException(sprintf("Class '%s' not found as '%s'", $classMapping[$class], $class));
+
+                $this->{$class} = $classMapping[$class];
+                continue;
+            }
+            $missingClasses[] = $class;
+        }
+
+        if (count($missingClasses)) {
+            throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
+        }
+
         if (!$eventDispatcher) {
             $eventDispatcher = new NullDispatcher();
         }
-        $this->cartClass = $cartClass;
-        $this->cartEvents = $cartEvents;
-        $this->cartItemClass = $cartItemClass;
+
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
     }
@@ -73,7 +92,7 @@ class OrderManager implements OrderManagerInterface
      */
     public function createOrder($name = 'default')
     {
-        $order = new $this->order();
+        $order = new $this->orderClass();
         $order->setName($name);
         $this->initOrder($order);
         $this->gateway->persistOrder($order);
@@ -184,13 +203,12 @@ class OrderManager implements OrderManagerInterface
     public function setItemQuantity(ItemInterface $item, $quantity)
     {
         // todo: trigger events
-
         $rm = new \ReflectionMethod($item, 'setQuantity');
         $rm->setAccessible(true);
         $rm->invokeArgs($item, array($quantity));
         $rm->setAccessible(false);
 
-        $cartEvents = $this->cartEvents;
+        $cartEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM, $this->eventDispatcher->createEvent($item));
     }
 
@@ -215,7 +233,8 @@ class OrderManager implements OrderManagerInterface
 
     protected function createItem(ProductInterface $product, array $options = null)
     {
-        $item = new $this->cartItemClass();
+        $className = $this->itemClass;
+        $item = new $className();
 
         $rm = new \ReflectionMethod($item, 'setProduct');
         $rm->setAccessible(true);
@@ -331,7 +350,7 @@ class OrderManager implements OrderManagerInterface
         $rm->invokeArgs($cart, array($cartItem));
         $rm->setAccessible(false);
 
-        $cartEvents = $this->cartEvents;
+        $cartEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($cartEvents::INIT_ITEM, $this->eventDispatcher->createEvent($cartItem));
 
         return $cartItem;

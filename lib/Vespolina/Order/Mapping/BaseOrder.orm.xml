@@ -5,10 +5,7 @@
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <mapped-superclass name="Vespolina\Entity\Order\BaseOrder">
-        <id name="id" type="integer">
-            <generator strategy="AUTO" />
-        </id>
-        <field name="attributes"  type="hash" nullable="true" />
+        <field name="attributes"  type="array" nullable="true" />
         <field name="createdAt"  type="datetime" />
         <field name="expiresAt"  type="datetime"   nullable="true" />
         <field name="owner"      type="string" nullable="true" />
@@ -16,14 +13,11 @@
         <field name="state"      type="string" />
         <field name="updatedAt"  type="date"   nullable="true"/>
 
-        <one-to-one field="channel" target-entity="Vespolina\Entity\Channel\Channel" mapped-by="BaseOrder">
+        <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface" inversed-by="order">
+        </many-to-one>
+        <one-to-many field="items" target-entity="Vespolina\Entity\Order\ItemInterface" mapped-by="order">
             <cascade>
-                <cascade-persist />
-            </cascade>
-        </one-to-one>
-        <one-to-many field="items" target-entity="Vespolina\Entity\Order\Item" mapped-by="BaseOrder">
-            <cascade>
-               <cascade-all/>
+                <cascade-all/>
             </cascade>
         </one-to-many>
     </mapped-superclass>
