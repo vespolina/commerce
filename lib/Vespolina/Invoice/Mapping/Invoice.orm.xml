@@ -18,7 +18,7 @@
         <one-to-one field="partner" target-entity="Vespolina\Entity\Partner\Partner">
             <join-column name="partner_id" referenced-column-name="id" />
         </one-to-one>
-        <many-to-one field="orders" target-entity="Vespolina\Entity\Order\BaseOrder">
+        <many-to-one field="orders" target-entity="Vespolina\Entity\Order\OrderInterface">
             <join-column name="order_id" referenced-column-name="id" />
         </many-to-one>
         <one-to-one field="previousInvoice" target-entity="Vespolina\Entity\Invoice\Invoice">
