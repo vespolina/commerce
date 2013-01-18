@@ -29,18 +29,35 @@ use Vespolina\EventDispatcher\NullDispatcher;
 class OrderManager implements OrderManagerInterface
 {
     protected $cartClass;
-    protected $cartItemClass;
     protected $eventDispatcher;
+    protected $eventsClass;
     protected $gateway;
+    protected $itemClass;
+    protected $orderClass;
 
-    function __construct(OrderGatewayInterface $gateway, $cartClass, $cartItemClass, $cartEvents, EventDispatcherInterface $eventDispatcher = null)
+    function __construct(OrderGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
     {
+        $missingClasses = array();
+        foreach (array('cart', 'events', 'item', 'order') as $class) {
+            $class = $class . 'Class';
+            if (isset($classMapping[$class])) {
+
+                if (!class_exists($classMapping[$class]))
+                    throw new InvalidConfigurationException(sprintf("Class '%s' not found as '%s'", $classMapping[$class], $class));
+
+                $this->{$class} = $classMapping[$class];
+                continue;
+            }
+            $missingClasses[] = $class;
+        }
+
+        if (count($missingClasses)) {
+            throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
+        }
+
         if (!$eventDispatcher) {
             $eventDispatcher = new NullDispatcher();
         }
-        $this->cartClass = $cartClass;
-        $this->cartEvents = $cartEvents;
-        $this->cartItemClass = $cartItemClass;
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
     }
