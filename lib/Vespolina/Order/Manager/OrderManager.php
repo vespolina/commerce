@@ -9,6 +9,7 @@
 namespace Vespolina\Order\Manager;
 
 use Doctrine\ORM\QueryBuilder;
+use Vespolina\Exception\InvalidConfigurationException;
 use Gateway\Query;
 use Molino\BaseQuery;
 use Vespolina\Entity\Order\CartEvents;
@@ -58,6 +59,7 @@ class OrderManager implements OrderManagerInterface
         if (!$eventDispatcher) {
             $eventDispatcher = new NullDispatcher();
         }
+
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
     }
@@ -201,13 +203,12 @@ class OrderManager implements OrderManagerInterface
     public function setItemQuantity(ItemInterface $item, $quantity)
     {
         // todo: trigger events
-
         $rm = new \ReflectionMethod($item, 'setQuantity');
         $rm->setAccessible(true);
         $rm->invokeArgs($item, array($quantity));
         $rm->setAccessible(false);
 
-        $cartEvents = $this->cartEvents;
+        $cartEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM, $this->eventDispatcher->createEvent($item));
     }
 
@@ -232,7 +233,8 @@ class OrderManager implements OrderManagerInterface
 
     protected function createItem(ProductInterface $product, array $options = null)
     {
-        $item = new $this->cartItemClass();
+        $className = $this->itemClass;
+        $item = new $className();
 
         $rm = new \ReflectionMethod($item, 'setProduct');
         $rm->setAccessible(true);
@@ -348,7 +350,7 @@ class OrderManager implements OrderManagerInterface
         $rm->invokeArgs($cart, array($cartItem));
         $rm->setAccessible(false);
 
-        $cartEvents = $this->cartEvents;
+        $cartEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($cartEvents::INIT_ITEM, $this->eventDispatcher->createEvent($cartItem));
 
         return $cartItem;
