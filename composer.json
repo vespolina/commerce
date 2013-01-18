@@ -12,6 +12,7 @@
     "require-dev": {
         "behat/behat": "*"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-0": { "Vespolina\\Invoice": "lib/" }
     }
