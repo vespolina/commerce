@@ -1,6 +1,6 @@
 {
     "name": "vespolina/invoice",
-    "type": "system",
+    "type": "library",
     "description": "system for handling invoices",
     "keywords": ["ecommerce", "invoice", "vespolina"],
     "homepage": "https://github.com/vespolina/VespolinaInvoice",
