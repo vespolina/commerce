@@ -2,16 +2,30 @@
 
 namespace Vespolina\Order\Gateway;
 
+use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
 use InvalidArgumentException;
 use Vespolina\Entity\Order\OrderInterface;
+use Vespolina\Exception\InvalidInterfaceException;
 
 class OrderGateway implements OrderGatewayInterface
 {
-    protected $orderClass = 'Vespolina\Entity\Order\Order'; // used in base class
-
-    /** @var \Molino\MolinoInterface */
     protected $molino;
+    protected $orderClass;
+
+    /**
+     * @param \Molino\MolinoInterface $molino
+     * @param string $orderClass
+     * @throws \Vespolina\Exception\InvalidInterfaceException
+     */
+    public function __construct(MolinoInterface $molino, $orderClass)
+    {
+        if (!class_exists($orderClass) || !in_array('Vespolina\Entity\Order\OrderInterface', class_implements($orderClass))) {
+            throw new InvalidInterfaceException('Please have your order class implement Vespolina\Entity\Product\ProductInterface');
+        }
+        $this->molino = $molino;
+        $this->orderClass = $orderClass;
+    }
 
     /**
      * @param \Molino\SelectQueryInterface $query

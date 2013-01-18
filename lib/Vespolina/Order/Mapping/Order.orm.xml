@@ -4,7 +4,7 @@
       xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Vespolina\Entity\Order\Order" table="vespolina_orders">
+    <entity name="Vespolina\Entity\Order\OrderInterface" table="vespolina_orders">
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO" />
         </id>
