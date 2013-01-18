@@ -6,7 +6,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Invoice;
+namespace Vespolina\Invoice\Manager;
 
 use Vespolina\Entity\InvoiceInterface;
 use Vespolina\Entity\OrderInterface;
@@ -22,6 +22,10 @@ class InvoiceManager implements InvoiceManagerInterface
 
     public function __construct(InvoiceGateway $gateway, $invoiceClass)
     {
+        if (!class_exists($invoiceClass)) {
+            throw new InvalidConfigurationException(sprintf("Class '%s' not found", $invoiceClass));
+        }
+
         $this->gateway = $gateway;
         $this->invoiceClass = $invoiceClass;
     }
@@ -33,6 +37,23 @@ class InvoiceManager implements InvoiceManagerInterface
         return $invoice;
     }
 
+    public function findById($id)
+    {
+        return $this->createSelectQuery()
+            ->filterEqual('id', $id)
+            ->one()
+        ;
+    }
+
+    public function findAllInvoicesByPartner($partner)
+    {
+        $query = $this->gateway->createQuery('Select');
+        $query->filterEqual('partner', $partner)
+            ->sort('periodEnd', 'desc')
+            ->all()
+        ;
+    }
+
     public function findInvoiceByPartnerAndBillingPeriod($partner, $periodStart, $periodEnd)
     {
         $query = $this->gateway->createQuery('Select');
@@ -42,10 +63,4 @@ class InvoiceManager implements InvoiceManagerInterface
             ->one()
         ;
     }
-
-    public function findAllInvoicesByPartner($partner)
-    {
-
-    }
-
 }
