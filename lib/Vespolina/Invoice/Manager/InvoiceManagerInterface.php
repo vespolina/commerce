@@ -22,4 +22,8 @@ interface InvoiceManagerInterface
      * @return Vespolina\Entity\InvoiceInterface;
      */
     function createInvoice();
+
+    function findInvoiceByPartnerAndBillingPeriod($partner, $periodStart, $periodEnd);
+
+    function findAllInvoicesByPartner($partner);
 }

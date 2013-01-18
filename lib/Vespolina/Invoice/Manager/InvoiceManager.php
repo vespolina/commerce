@@ -10,6 +10,7 @@ namespace Vespolina\Invoice;
 
 use Vespolina\Entity\InvoiceInterface;
 use Vespolina\Entity\OrderInterface;
+use Vespolina\Invoice\Gateway\InvoiceGateway;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -17,9 +18,11 @@ use Vespolina\Entity\OrderInterface;
 class InvoiceManager implements InvoiceManagerInterface
 {
     private $invoiceClass;
+    protected $gateway;
 
-    public function __construct($invoiceClass)
+    public function __construct(InvoiceGateway $gateway, $invoiceClass)
     {
+        $this->gateway = $gateway;
         $this->invoiceClass = $invoiceClass;
     }
 
@@ -29,4 +32,20 @@ class InvoiceManager implements InvoiceManagerInterface
 
         return $invoice;
     }
+
+    public function findInvoiceByPartnerAndBillingPeriod($partner, $periodStart, $periodEnd)
+    {
+        $query = $this->gateway->createQuery('Select');
+        $query->filterEqual('partner', $partner)
+            ->filterEqual('periodStart', $periodStart)
+            ->filterEqual('periodEnd', $periodEnd)
+            ->one()
+        ;
+    }
+
+    public function findAllInvoicesByPartner($partner)
+    {
+
+    }
+
 }
