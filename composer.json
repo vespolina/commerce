@@ -10,7 +10,7 @@
         "vespolina/core": "*"
     },
     "require-dev": {
-        "behat/behat": ">=2.2.2"
+        "behat/behat": "*"
     },
     "autoload": {
         "psr-0": { "Vespolina\\Invoice": "lib/" }
