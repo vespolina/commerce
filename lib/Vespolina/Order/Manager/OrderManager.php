@@ -39,7 +39,7 @@ class OrderManager implements OrderManagerInterface
     function __construct(OrderGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
     {
         $missingClasses = array();
-        foreach (array('cart', 'events', 'item', 'order') as $class) {
+        foreach (array('order', 'events', 'item', 'order') as $class) {
             $class = $class . 'Class';
             if (isset($classMapping[$class])) {
 
@@ -92,7 +92,7 @@ class OrderManager implements OrderManagerInterface
      */
     public function createOrder($name = 'default')
     {
-        $order = new $this->order();
+        $order = new $this->orderClass();
         $order->setName($name);
         $this->initOrder($order);
         $this->gateway->persistOrder($order);
