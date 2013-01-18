@@ -13,10 +13,12 @@
         <field name="state"      type="string" />
         <field name="updatedAt"  type="date"   nullable="true"/>
 
-        <!--<one-to-one field="channel" target-entity="Vespolina\Entity\Channel\Channel" mapped-by="order">-->
-            <!--<cascade>-->
-                <!--<cascade-persist />-->
-            <!--</cascade>-->
-        <!--</one-to-one>-->
+        <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface" inversed-by="order">
+        </many-to-one>
+        <one-to-many field="items" target-entity="Vespolina\Entity\Order\ItemInterface" mapped-by="order">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
     </mapped-superclass>
 </doctrine-mapping>
