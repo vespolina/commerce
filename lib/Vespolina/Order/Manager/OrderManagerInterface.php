@@ -11,6 +11,7 @@ namespace Vespolina\Order\Manager;
 
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
+use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;
 
@@ -68,6 +69,12 @@ interface OrderManagerInterface
      * @return \Vespolina\Entity\Order\ItemInterface|null
      */
     function findProductInOrder(OrderInterface $cart, ProductInterface $product, array $options = null);
+
+    /**
+     * @param \Vespolina\Entity\Partner\PartnerInterface $partner
+     * @return mixed
+     */
+    function findOpenOrderByOwner(PartnerInterface $partner);
 
     /**
      * Return the EventDistpatcher for this manager

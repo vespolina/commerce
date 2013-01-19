@@ -9,6 +9,7 @@
 namespace Vespolina\Order\Manager;
 
 use Doctrine\ORM\QueryBuilder;
+use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Exception\InvalidConfigurationException;
 use Gateway\Query;
 use Molino\BaseQuery;
@@ -182,7 +183,7 @@ class OrderManager implements OrderManagerInterface
         $rp->setValue($cartItem, $state);
         $rp->setAccessible(false);
 
-        $cartEvents = $this->cartEvents;
+        $cartEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM_STATE, $this->eventDispatcher->createEvent($cartItem));
     }
 
@@ -196,7 +197,7 @@ class OrderManager implements OrderManagerInterface
         $rp->setValue($cart, $state);
         $rp->setAccessible(false);
 
-        $cartEvents = $this->cartEvents;
+        $cartEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_STATE, $this->eventDispatcher->createEvent($cart));
     }
 
@@ -226,7 +227,7 @@ class OrderManager implements OrderManagerInterface
      */
     public function updateOrder(OrderInterface $cart, $andPersist = true)
     {
-        $cartEvents = $this->cartEvents;
+        $cartEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, $this->eventDispatcher->createEvent($cart));
         $this->doUpdateOrder($cart, $andPersist);
     }
@@ -328,7 +329,7 @@ class OrderManager implements OrderManagerInterface
         $this->setOrderState($cart, $cartClass::STATE_OPEN);
 
         //Delegate further initialization of the cart to those concerned
-        $cartEvents = $this->cartEvents;
+        $cartEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($cartEvents::INIT_CART, $this->eventDispatcher->createEvent($cart));
     }
 
@@ -371,5 +372,18 @@ class OrderManager implements OrderManagerInterface
         if ($product = $cartItem->getProduct()) {
             $cartItem->setName($product->getName());
         }
+    }
+
+    /**
+     * @param PartnerInterface $partner
+     * @return int|mixed
+     */
+    public function findOpenOrderByOwner(PartnerInterface $partner)
+    {
+        return $this->gateway->createQuery('Select')
+            ->filterEqual('partner', $partner->getPartnerId())
+            //->filterEqual('status', Order::STATE_OPEN)
+            ->one()
+        ;
     }
 }
