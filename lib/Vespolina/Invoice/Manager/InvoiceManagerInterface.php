@@ -11,6 +11,8 @@ namespace Vespolina\Invoice\Manager;
 /**
  * @author Richard Shank <develop@zestic.com>
  */
+use Vespolina\Entity\Partner\PartnerInterface;
+
 interface InvoiceManagerInterface
 {
     /**
@@ -28,7 +30,7 @@ interface InvoiceManagerInterface
      * @param \Vespolina\Entity\Partner\Partner $partner
      * @return array
      */
-    function findAllInvoicesByPartner($partner);
+    function findAllInvoicesByPartner(PartnerInterface $partner);
 
     /**
      * @param \Vespolina\Entity\Partner\Partner $partner
@@ -36,5 +38,5 @@ interface InvoiceManagerInterface
      * @param \DateTime $periodEnd
      * @return array
      */
-    function findInvoiceByPartnerAndBillingPeriod($partner, $periodStart, $periodEnd);
+    function findInvoicesByPartnerAndPeriod($partner, $periodStart, $periodEnd);
 }
