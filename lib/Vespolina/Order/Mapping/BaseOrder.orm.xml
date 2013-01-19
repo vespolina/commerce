@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <mapped-superclass name="Vespolina\Entity\Order\BaseOrder">
         <field name="attributes"  type="array" nullable="true" />
-        <field name="createdAt"  type="datetime" nullable="true" />
-        <field name="expiresAt"  type="datetime" nullable="true" />
         <field name="owner"      type="string" nullable="true" />
         <field name="pricingSet" type="array"  nullable="true" />
         <field name="state"      type="string" />
+        <field name="createdAt"  type="datetime" nullable="true"/>
+        <field name="expiresAt"  type="datetime"   nullable="true" />
         <field name="updatedAt"  type="date"   nullable="true"/>
 
         <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface" inversed-by="order">
-            <!--@todo ensure this cascade does not impact the project -->
             <cascade>
                 <cascade-persist/>
             </cascade>
-            <!--@todo ensure this cascade does not impact the project -->
         </many-to-one>
     </mapped-superclass>
 </doctrine-mapping>

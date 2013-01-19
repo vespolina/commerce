@@ -9,6 +9,7 @@
 namespace Vespolina\Order\Manager;
 
 use Doctrine\ORM\QueryBuilder;
+use Vespolina\Entity\Order\Item;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Exception\InvalidConfigurationException;
 use Gateway\Query;
@@ -197,8 +198,8 @@ class OrderManager implements OrderManagerInterface
         $rp->setValue($cart, $state);
         $rp->setAccessible(false);
 
-        $cartEvents = $this->eventsClass;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART_STATE, $this->eventDispatcher->createEvent($cart));
+        $eventsClass = $this->eventsClass;
+        $this->eventDispatcher->dispatch($eventsClass::UPDATE_CART_STATE, $this->eventDispatcher->createEvent($cart));
     }
 
     public function setItemQuantity(ItemInterface $item, $quantity)
@@ -209,8 +210,8 @@ class OrderManager implements OrderManagerInterface
         $rm->invokeArgs($item, array($quantity));
         $rm->setAccessible(false);
 
-        $cartEvents = $this->eventsClass;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM, $this->eventDispatcher->createEvent($item));
+        $eventsClass = $this->eventsClass;
+        $this->eventDispatcher->dispatch($eventsClass::UPDATE_ITEM, $this->eventDispatcher->createEvent($item));
     }
 
     /**
@@ -329,8 +330,8 @@ class OrderManager implements OrderManagerInterface
         $this->setOrderState($cart, $cartClass::STATE_OPEN);
 
         //Delegate further initialization of the cart to those concerned
-        $cartEvents = $this->eventsClass;
-        $this->eventDispatcher->dispatch($cartEvents::INIT_CART, $this->eventDispatcher->createEvent($cart));
+        $eventsClass = $this->eventsClass;
+        $this->eventDispatcher->dispatch($eventsClass::INIT_CART, $this->eventDispatcher->createEvent($cart));
     }
 
     protected function doAddProductToOrder(OrderInterface $cart, ProductInterface $product, $options, $quantity)
@@ -351,8 +352,8 @@ class OrderManager implements OrderManagerInterface
         $rm->invokeArgs($cart, array($cartItem));
         $rm->setAccessible(false);
 
-        $cartEvents = $this->eventsClass;
-        $this->eventDispatcher->dispatch($cartEvents::INIT_ITEM, $this->eventDispatcher->createEvent($cartItem));
+        $eventsClass = $this->eventsClass;
+        $this->eventDispatcher->dispatch($eventsClass::INIT_ITEM, $this->eventDispatcher->createEvent($cartItem));
 
         return $cartItem;
     }
@@ -374,16 +375,21 @@ class OrderManager implements OrderManagerInterface
         }
     }
 
-    /**
-     * @param PartnerInterface $partner
-     * @return int|mixed
-     */
+    public function persistOrder(OrderInterface $order)
+    {
+        $this->gateway->persistOrder($order);
+    }
+
     public function findOpenOrderByOwner(PartnerInterface $partner)
     {
-        return $this->gateway->createQuery('Select')
-            ->filterEqual('partner', $partner->getPartnerId())
-            //->filterEqual('status', Order::STATE_OPEN)
+        $orderClass = $this->orderClass;
+
+        return $this->gateway
+            ->createQuery('Select')
+            ->filterEqual('partner', $partner->getId())
+            ->filterEqual('state', $orderClass::STATE_OPEN)
             ->one()
         ;
     }
+
 }

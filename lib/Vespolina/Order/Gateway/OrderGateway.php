@@ -72,7 +72,7 @@ class OrderGateway implements OrderGatewayInterface
     /**
      * @param string $type
      * @param type $queryClass
-     * @return type
+     * @return \Molino\Doctrine\ORM\BaseQuery
      * @throws InvalidArgumentException
      */
     public function createQuery($type, $queryClass = null)
