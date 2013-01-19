@@ -394,7 +394,6 @@ class OrderManager implements OrderManagerInterface
 
     public function clearOrder(OrderInterface $order)
     {
-        $order->setOwner(null);
         $order->clearAttributes();
         $order->clearItems();
     }
