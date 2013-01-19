@@ -6,9 +6,8 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Invoice;
+namespace Vespolina\Invoice\Manager;
 
-use Vespolina\Entity\OrderInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
  */
@@ -16,14 +15,26 @@ interface InvoiceManagerInterface
 {
     /**
      * Create a new invoice from a customer order
-     *
-     * @param \Vespolina\Entity\OrderInterface $order
-     *
-     * @return Vespolina\Entity\InvoiceInterface;
      */
     function createInvoice();
 
-    function findInvoiceByPartnerAndBillingPeriod($partner, $periodStart, $periodEnd);
+    /**
+     * @param $id
+     * @return \Vespolina\Entity\Invoice\InvoiceInterface
+     */
+    function findById($id);
 
+    /**
+     * @param \Vespolina\Entity\Partner\Partner $partner
+     * @return array
+     */
     function findAllInvoicesByPartner($partner);
+
+    /**
+     * @param \Vespolina\Entity\Partner\Partner $partner
+     * @param \DateTime $periodStart
+     * @param \DateTime $periodEnd
+     * @return array
+     */
+    function findInvoiceByPartnerAndBillingPeriod($partner, $periodStart, $periodEnd);
 }

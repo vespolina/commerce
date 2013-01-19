@@ -9,7 +9,6 @@
 namespace Vespolina\Invoice\Manager;
 
 use Vespolina\Entity\InvoiceInterface;
-use Vespolina\Entity\OrderInterface;
 use Vespolina\Invoice\Gateway\InvoiceGateway;
 
 /**
@@ -30,6 +29,9 @@ class InvoiceManager implements InvoiceManagerInterface
         $this->invoiceClass = $invoiceClass;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function createInvoice()
     {
         $invoice = new $this->invoiceClass();
@@ -37,6 +39,9 @@ class InvoiceManager implements InvoiceManagerInterface
         return $invoice;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function findById($id)
     {
         return $this->createSelectQuery()
@@ -45,6 +50,9 @@ class InvoiceManager implements InvoiceManagerInterface
         ;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function findAllInvoicesByPartner($partner)
     {
         $query = $this->gateway->createQuery('Select');
@@ -54,6 +62,9 @@ class InvoiceManager implements InvoiceManagerInterface
         ;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function findInvoiceByPartnerAndBillingPeriod($partner, $periodStart, $periodEnd)
     {
         $query = $this->gateway->createQuery('Select');
