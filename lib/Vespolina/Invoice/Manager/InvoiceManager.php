@@ -9,6 +9,7 @@
 namespace Vespolina\Invoice\Manager;
 
 use Vespolina\Entity\InvoiceInterface;
+use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Invoice\Gateway\InvoiceGateway;
 
 /**
@@ -53,7 +54,7 @@ class InvoiceManager implements InvoiceManagerInterface
     /**
      * @inheritdoc
      */
-    public function findAllInvoicesByPartner($partner)
+    public function findAllInvoicesByPartner(PartnerInterface $partner)
     {
         $query = $this->gateway->createQuery('Select');
         $query->filterEqual('partner', $partner)
@@ -65,7 +66,7 @@ class InvoiceManager implements InvoiceManagerInterface
     /**
      * @inheritdoc
      */
-    public function findInvoiceByPartnerAndBillingPeriod($partner, $periodStart, $periodEnd)
+    public function findInvoicesByPartnerAndPeriod($partner, $periodStart, $periodEnd)
     {
         $query = $this->gateway->createQuery('Select');
         $query->filterEqual('partner', $partner)
