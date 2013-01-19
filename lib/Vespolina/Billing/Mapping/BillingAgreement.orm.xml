@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                    http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Vespolina\Entity\Billing\BillingAgreement">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="dueDate" type="datetime" />
+        <field name="issuedDate" type="datetime" />
+        <field name="payment" type="float" />
+        <field name="periodEnd" type="datetime" />
+        <field name="periodStart" type="datetime" />
+    </entity>
+</doctrine-mapping>
