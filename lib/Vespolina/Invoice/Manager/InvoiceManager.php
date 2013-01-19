@@ -72,7 +72,7 @@ class InvoiceManager implements InvoiceManagerInterface
         $query->filterEqual('partner', $partner)
             ->filterEqual('periodStart', $periodStart)
             ->filterEqual('periodEnd', $periodEnd)
-            ->one()
+            ->all()
         ;
     }
 }
