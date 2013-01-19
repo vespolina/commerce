@@ -16,6 +16,6 @@
         <field name="state"      type="string"   nullable="true"/>
 
         <one-to-one field="product" target-entity="Vespolina\Entity\Product\ProductInterface" />
-        <many-to-one field="order" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="items" />
+        <many-to-one field="parent" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="items" />
     </entity>
 </doctrine-mapping>

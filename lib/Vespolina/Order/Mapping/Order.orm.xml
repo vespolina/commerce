@@ -8,7 +8,7 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO" />
         </id>
-        <one-to-many field="items" target-entity="Vespolina\Entity\Order\ItemInterface" mapped-by="order">
+        <one-to-many field="items" target-entity="Vespolina\Entity\Order\ItemInterface" mapped-by="parent">
             <cascade>
                 <cascade-all/>
             </cascade>
