@@ -9,10 +9,10 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="initials"                          type="string" />
-        <field name="firstname"                         type="string" />
-        <field name="prefix"                            type="string" />
-        <field name="lastname"                          type="string" />
-        <field name="nationalIdentificationNumber"      type="string" />
+        <field name="initials"                          type="string" nullable="true" />
+        <field name="firstname"                         type="string" nullable="true" />
+        <field name="prefix"                            type="string" nullable="true" />
+        <field name="lastname"                          type="string" nullable="true" />
+        <field name="nationalIdentificationNumber"      type="string" nullable="true" />
     </entity>
 </doctrine-mapping>
