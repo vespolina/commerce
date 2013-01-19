@@ -15,10 +15,5 @@
 
         <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface" inversed-by="order">
         </many-to-one>
-        <one-to-many field="items" target-entity="Vespolina\Entity\Order\ItemInterface" mapped-by="order">
-            <cascade>
-                <cascade-all/>
-            </cascade>
-        </one-to-many>
     </mapped-superclass>
 </doctrine-mapping>
