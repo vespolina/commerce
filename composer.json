@@ -1,6 +1,6 @@
 {
     "name": "vespolina/invoice",
-    "type": "system",
+    "type": "library",
     "description": "system for handling invoices",
     "keywords": ["ecommerce", "invoice", "vespolina"],
     "homepage": "https://github.com/vespolina/VespolinaInvoice",
@@ -10,7 +10,7 @@
         "vespolina/core": "*"
     },
     "require-dev": {
-        "behat/behat": ">=2.2.2"
+        "behat/behat": "*"
     },
     "autoload": {
         "psr-0": { "Vespolina\\Invoice": "lib/" }
