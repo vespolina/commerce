@@ -15,7 +15,7 @@
         <field name="periodEnd" type="datetime" />
         <field name="periodStart" type="datetime" />
 
-        <one-to-one field="partner" target-entity="Vespolina\Entity\Partner\Partner">
+        <one-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
             <join-column name="partner_id" referenced-column-name="id" />
         </one-to-one>
         <many-to-one field="orders" target-entity="Vespolina\Entity\Order\OrderInterface">
