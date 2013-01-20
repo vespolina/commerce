@@ -15,6 +15,11 @@
         <field name="initialBillingDate" type="datetime" />
         <field name="paymentGateway" type="string" />
 
-
+        <one-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
+            <join-column name="partner_id" referenced-column-name="id" />
+        </one-to-one>
+        <many-to-one field="orders" target-entity="Vespolina\Entity\Order\OrderInterface">
+            <join-column name="order_id" referenced-column-name="id" />
+        </many-to-one>
     </entity>
 </doctrine-mapping>
