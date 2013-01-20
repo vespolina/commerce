@@ -11,5 +11,8 @@
         <field name="name"      type="string" />
         <field name="category"  type="string" />
         <field name="employees" type="string" />
+
+        <one-to-one field="partner" target-entity="Vespolina\Entity\Partner\Partner" inversed-by="organisationDetails">
+        </one-to-one>
     </entity>
 </doctrine-mapping>
