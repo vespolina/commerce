@@ -40,8 +40,8 @@ class DefaultOrderPricingProvider extends AbstractOrderPricingProvider
             $pricingContext = $this->createPricingContext();
             $pricingContext->set('totalNet', 0);
             $pricingContext->set('totalGross', 0);
-
         }
+
         //Check if the cart has taxation enabled
         $taxationEnabled = $cart->getAttribute('taxation_enabled');
 

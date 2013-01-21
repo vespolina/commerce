@@ -39,12 +39,11 @@ class DefaultCartHandler extends  AbstractCartHandler
 
         //Calculate fulfillment costs (eg. shipping, packaging cost)
         if ($this->fulfillmentPricingEnabled) {
-
             //$this->determineCartItemFulfillmentPrices($cartItem, $pricingContext);
         }
 
         $totalNet = ( $cartItem->getQuantity() * $unitNet ) + $upChargeNet;
-        $pricingSet->set('upchargeNett', $upChargeNet);
+        $pricingSet->set('upChargeNet', $upChargeNet);
         $pricingSet->set('totalNet', $totalNet);
 
         //Determine item level taxes
@@ -60,8 +59,6 @@ class DefaultCartHandler extends  AbstractCartHandler
         }
 
         $pricingSet->set('totalGross', $pricingContext['totalNet'] + $pricingContext['totalTax']);
-        // set the total price in the cart item
-        $cartItem->setTotalPrice($totalNet);   //Todo: remove
     }
 
     public function getTypes()
