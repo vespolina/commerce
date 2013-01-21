@@ -10,7 +10,8 @@
         </id>
         <one-to-many field="items" target-entity="Vespolina\Entity\Order\ItemInterface" mapped-by="parent">
             <cascade>
-                <cascade-all/>
+                <cascade-persist/>
+                <cascade-remove/>
             </cascade>
         </one-to-many>
     </entity>

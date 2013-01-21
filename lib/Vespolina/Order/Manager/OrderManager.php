@@ -73,7 +73,10 @@ class OrderManager implements OrderManagerInterface
     {
         $quantity = $quantity === null ? 1 : $quantity;
 
-        return $this->doAddProductToOrder($order, $product, $options, $quantity);
+        $item = $this->doAddProductToOrder($order, $product, $options, $quantity);
+        $order->addItem($item);
+
+        return $item;
     }
 
     /**
@@ -375,11 +378,18 @@ class OrderManager implements OrderManagerInterface
         }
     }
 
+    /**
+     * @param \Vespolina\Entity\Order\OrderInterface $order
+     */
     public function persistOrder(OrderInterface $order)
     {
         $this->gateway->persistOrder($order);
     }
 
+    /**
+     * @param \Vespolina\Entity\Partner\PartnerInterface $partner
+     * @return \Vespolina\Entity\Order\Order
+     */
     public function findOpenOrderByOwner(PartnerInterface $partner)
     {
         $orderClass = $this->orderClass;
