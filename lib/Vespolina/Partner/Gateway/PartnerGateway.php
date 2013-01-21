@@ -6,7 +6,6 @@ use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Exception\InvalidInterfaceException;
-use Vespolina\Entity\Partner\PartnerInterface;
 
 class PartnerGateway
 {
