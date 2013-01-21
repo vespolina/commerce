@@ -64,7 +64,7 @@ class PartnerManager implements PartnerManagerInterface
             } 
             $missingClasses[] = $class;
         }
-        
+
         if (count($missingClasses)) {
             throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
         }
