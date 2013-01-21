@@ -146,5 +146,5 @@ interface OrderManagerInterface
      * @param \Vespolina\Entity\Order\OrderInterface $cart
      * @param boolean $andPersist defaults to true
      */
-    function updateOrder(OrderInterface $cart, $andPersist = true);
+    function updateOrder(OrderInterface $cart);
 }

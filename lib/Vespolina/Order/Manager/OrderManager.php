@@ -229,11 +229,11 @@ class OrderManager implements OrderManagerInterface
     /**
      * @inheritdoc
      */
-    public function updateOrder(OrderInterface $cart, $andPersist = true)
+    public function updateOrder(OrderInterface $order)
     {
         $cartEvents = $this->eventsClass;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, $this->eventDispatcher->createEvent($cart));
-        $this->doUpdateOrder($cart, $andPersist);
+        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, $this->eventDispatcher->createEvent($order));
+        $this->gateway->updateOrder($order);
     }
 
     protected function createItem(ProductInterface $product, array $options = null)
@@ -319,11 +319,9 @@ class OrderManager implements OrderManagerInterface
     /**
      * @inheritdoc
      */
-    protected function doUpdateOrder(OrderInterface $cart, $andPersist = true)
+    protected function doUpdateOrder(OrderInterface $order, $andPersist = true)
     {
-        if ($andPersist) {
-            $this->gateway->updateOrder($cart);
-        }
+        $this->gateway->updateOrder($order);
     }
 
     protected function initOrder(OrderInterface $cart)
