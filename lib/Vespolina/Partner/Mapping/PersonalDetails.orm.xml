@@ -14,8 +14,5 @@
         <field name="prefix"                            type="string" nullable="true" />
         <field name="lastname"                          type="string" nullable="true" />
         <field name="nationalIdentificationNumber"      type="string" nullable="true" />
-
-        <one-to-one field="partner" target-entity="Vespolina\Entity\Partner\Partner" inversed-by="personalDetails">
-        </one-to-one>
     </entity>
 </doctrine-mapping>
