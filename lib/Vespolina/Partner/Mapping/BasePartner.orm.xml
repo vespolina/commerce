@@ -31,5 +31,4 @@
             </cascade>
         </one-to-one>
     </mapped-superclass>
-
 </doctrine-mapping>
