@@ -13,8 +13,8 @@
         <field name="options"    type="array"    nullable="true"/>
         <field name="quantity"   type="string" />
         <field name="state"      type="string"   nullable="true"/>
-
         <field name="pricingSet" type="array"    nullable="true"/>
+
         <many-to-one field="product" target-entity="Vespolina\Entity\Product\ProductInterface" />
         <many-to-one field="parent" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="items" />
     </entity>
