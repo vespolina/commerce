@@ -12,6 +12,7 @@ use Vespolina\Order\Handler\CartHandlerInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Pricing\PricingContextInterface;
+use Vespolina\Order\Handler\OrderHandlerInterface;
 
 /**
  * @author Daniel Kucharski <daniel@xerias.be>
@@ -32,20 +33,13 @@ interface OrderPricingProviderInterface
     function addOrderHandler(OrderHandlerInterface $handler);
 
     /**
-     * Create a pricing context which holds 'global variables' used while computing prices
-     *
-     * @return
-     */
-    function createPricingContext();
-
-    /**
      * Determine cart and (optionally) item level prices
      *
      * @param \Vespolina\Entity\Order\OrderInterface $cart
      * @param $pricingContext
      * @param $determineItemPrices
      */
-    function determineOrderPrices(OrderInterface $cart, PricingContextInterface $pricingContext = null, $determineItemPrices = true);
+    function determineOrderPrices(OrderInterface $order, PricingContextInterface $pricingContext = null);
 
     /**
      *
