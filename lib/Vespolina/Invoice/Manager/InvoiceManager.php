@@ -57,7 +57,7 @@ class InvoiceManager implements InvoiceManagerInterface
     public function findAllInvoicesByPartner(PartnerInterface $partner)
     {
         $query = $this->gateway->createQuery('Select');
-        $query->filterEqual('partner', $partner)
+        return $query->filterEqual('partner', $partner)
             ->sort('periodEnd', 'desc')
             ->all()
         ;
@@ -69,7 +69,7 @@ class InvoiceManager implements InvoiceManagerInterface
     public function findInvoicesByPartnerAndPeriod(PartnerInterface $partner, $periodStart, $periodEnd)
     {
         $query = $this->gateway->createQuery('Select');
-        $query->filterEqual('partner', $partner)
+        return $query->filterEqual('partner', $partner)
             ->filterEqual('periodStart', $periodStart)
             ->filterEqual('periodEnd', $periodEnd)
             ->all()
