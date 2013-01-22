@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Vespolina\Entity\Partner\PersonalDetails">
+    <entity name="Vespolina\Entity\Partner\PersonalDetails" table="vespolina_personal_details">
         <id name="id" type="integer">
             <generator strategy="AUTO" />
         </id>

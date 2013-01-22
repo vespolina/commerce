@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <mapped-superclass name="Vespolina\Entity\Partner\BasePartner">
+    <mapped-superclass name="Vespolina\Entity\Partner\BasePartner" table="vespolina_base_partner">
 
         <field name="partnerId"    type="string"   nullable="true" />
         <field name="partnerSince" type="datetime" nullable="true" />
