@@ -12,6 +12,7 @@ namespace Vespolina\Invoice\Manager;
  * @author Richard Shank <develop@zestic.com>
  */
 use Vespolina\Entity\Partner\PartnerInterface;
+use Vespolina\Entity\Invoice\InvoiceInterface;
 
 interface InvoiceManagerInterface
 {
@@ -38,5 +39,13 @@ interface InvoiceManagerInterface
      * @param \DateTime $periodEnd
      * @return array
      */
-    function findInvoicesByPartnerAndPeriod($partner, $periodStart, $periodEnd);
+    function findInvoicesByPartnerAndPeriod(PartnerInterface $partner, $periodStart, $periodEnd);
+
+    /**
+     * Update and persist the invoice
+     *
+     * @param \Vespolina\Entity\Invoice\InvoiceInterface $invoice
+     * @param Boolean $andFlush Whether to flush the changes (default true)
+     */
+    function updateInvoice(InvoiceInterface $invoice, $andPersist = true);
 }
