@@ -19,7 +19,7 @@
             <join-column name="partner_id" referenced-column-name="id" />
         </one-to-one>
         <many-to-many field="orders" target-entity="Vespolina\Entity\Order\OrderInterface">
-            <join-table name="invoice_orders">
+            <join-table name="vespolina_invoice_orders">
                 <join-columns>
                     <join-column name="invoice_id" referenced-column-name="id" />
                 </join-columns>
