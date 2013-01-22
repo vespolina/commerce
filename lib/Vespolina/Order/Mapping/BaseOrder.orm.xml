@@ -7,12 +7,17 @@
     <mapped-superclass name="Vespolina\Entity\Order\BaseOrder" table="vespolina_base_order">
         <field name="attributes"  type="array" nullable="true" />
         <field name="owner"      type="string" nullable="true" />
-        <field name="pricingSet" type="array"  nullable="true" />
         <field name="state"      type="string" />
         <field name="createdAt"  type="datetime" nullable="true"/>
         <field name="expiresAt"  type="datetime"   nullable="true" />
         <field name="updatedAt"  type="date"   nullable="true"/>
 
+        <one-to-one field="pricingSet" target-entity="Vespolina\Entity\Pricing\PricingSetInterface">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-one>
         <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface" inversed-by="order">
             <cascade>
                 <cascade-persist/>
