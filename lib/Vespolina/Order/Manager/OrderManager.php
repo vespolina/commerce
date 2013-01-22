@@ -231,9 +231,11 @@ class OrderManager implements OrderManagerInterface
      */
     public function updateOrder(OrderInterface $order)
     {
+        ladybug_dump($order->getItems());
         $cartEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, $this->eventDispatcher->createEvent($order));
         $this->gateway->updateOrder($order);
+        ladybug_dump($order->getItems()->toArray());
     }
 
     protected function createItem(ProductInterface $product, array $options = null)
