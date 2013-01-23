@@ -13,11 +13,15 @@ use Vespolina\Entity\Partner\PartnerInterface;
 
 class BillingManager implements BillingManagerInterface
 {
-    public function processOrder($order)
+    public function processOrder(OrderInterface $order)
     {
-        // find current bill
+        // order should already be processed, todo: add a flag to make sure?
+        $items = $order->getItems();
+        foreach ($items as $item) {
 
-    }
+        }
+     }
+
 
     public function createBillingAgreement(OrderInterface $order)
     {
