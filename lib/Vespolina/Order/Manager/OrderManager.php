@@ -203,7 +203,7 @@ class OrderManager implements OrderManagerInterface
         $rp->setAccessible(false);
 
         $eventsClass = $this->eventsClass;
-        $this->eventDispatcher->dispatch($eventsClass::UPDATE_ORDERR_STATE, $this->eventDispatcher->createEvent($cart));
+        $this->eventDispatcher->dispatch($eventsClass::UPDATE_ORDER_STATE, $this->eventDispatcher->createEvent($cart));
     }
 
     public function setItemQuantity(ItemInterface $item, $quantity)
