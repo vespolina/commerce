@@ -58,7 +58,6 @@ class OrderGateway implements OrderGatewayInterface
      */
     public function updateOrder(OrderInterface $order)
     {
-        $this->molino->refresh($order);
         $this->molino->save($order);
     }
 
