@@ -69,11 +69,11 @@ class OrderManager implements OrderManagerInterface
     /**
      * @inheritdoc
      */
-    public function addProductToOrder(OrderInterface $order, ProductInterface $product, array $options = null, $quantity = null)
+    public function addProductToOrder(OrderInterface $order, ProductInterface $product, array $options = null, $quantity = null, $combine = true)
     {
         $quantity = $quantity === null ? 1 : $quantity;
 
-        $item = $this->doAddProductToOrder($order, $product, $options, $quantity);
+        $item = $this->doAddProductToOrder($order, $product, $options, $quantity, $combine);
         $order->addItem($item);
 
         return $item;
@@ -335,9 +335,9 @@ class OrderManager implements OrderManagerInterface
         $this->eventDispatcher->dispatch($eventsClass::INIT_CART, $this->eventDispatcher->createEvent($cart));
     }
 
-    protected function doAddProductToOrder(OrderInterface $cart, ProductInterface $product, $options, $quantity)
+    protected function doAddProductToOrder(OrderInterface $cart, ProductInterface $product, $options, $quantity, $combine = true)
     {
-        if ($cartItem = $this->findProductInOrder($cart, $product, $options)) {
+        if ($combine && $cartItem = $this->findProductInOrder($cart, $product, $options)) {
             $quantity = $cartItem->getQuantity() + $quantity;
             $this->setItemQuantity($cartItem, $quantity);
 
