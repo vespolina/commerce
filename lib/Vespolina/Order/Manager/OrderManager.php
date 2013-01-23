@@ -9,6 +9,7 @@
 namespace Vespolina\Order\Manager;
 
 use Doctrine\ORM\QueryBuilder;
+use Vespolina\Entity\Pricing\PricingContextInterface;
 use Vespolina\Entity\Order\Item;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Exception\InvalidConfigurationException;
@@ -187,8 +188,8 @@ class OrderManager implements OrderManagerInterface
         $rp->setValue($cartItem, $state);
         $rp->setAccessible(false);
 
-        $cartEvents = $this->eventsClass;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_ITEM_STATE, $this->eventDispatcher->createEvent($cartItem));
+        $orderEvents = $this->eventsClass;
+        $this->eventDispatcher->dispatch($orderEvents::UPDATE_ITEM_STATE, $this->eventDispatcher->createEvent($cartItem));
     }
 
     /**
@@ -202,7 +203,7 @@ class OrderManager implements OrderManagerInterface
         $rp->setAccessible(false);
 
         $eventsClass = $this->eventsClass;
-        $this->eventDispatcher->dispatch($eventsClass::UPDATE_CART_STATE, $this->eventDispatcher->createEvent($cart));
+        $this->eventDispatcher->dispatch($eventsClass::UPDATE_ORDERR_STATE, $this->eventDispatcher->createEvent($cart));
     }
 
     public function setItemQuantity(ItemInterface $item, $quantity)
@@ -231,9 +232,18 @@ class OrderManager implements OrderManagerInterface
      */
     public function updateOrder(OrderInterface $order)
     {
-        $cartEvents = $this->eventsClass;
-        $this->eventDispatcher->dispatch($cartEvents::UPDATE_CART, $this->eventDispatcher->createEvent($order));
+        $orderEvents = $this->eventsClass;
+        $this->eventDispatcher->dispatch($orderEvents::UPDATE_ORDER, $this->eventDispatcher->createEvent($order));
         $this->gateway->updateOrder($order);
+    }
+
+    public function updateOrderPricing(OrderInterface $order, PricingContextInterface $context = null)
+    {
+        $orderEvents = $this->eventsClass;
+        $this->eventDispatcher->dispatch(
+            $orderEvents::UPDATE_ORDER_PRICE,
+            $this->eventDispatcher->createEvent(array($order, $context))
+        );
     }
 
     protected function createItem(ProductInterface $product, array $options = null)
@@ -332,7 +342,7 @@ class OrderManager implements OrderManagerInterface
 
         //Delegate further initialization of the cart to those concerned
         $eventsClass = $this->eventsClass;
-        $this->eventDispatcher->dispatch($eventsClass::INIT_CART, $this->eventDispatcher->createEvent($cart));
+        $this->eventDispatcher->dispatch($eventsClass::INIT_ORDER, $this->eventDispatcher->createEvent($cart));
     }
 
     protected function doAddProductToOrder(OrderInterface $cart, ProductInterface $product, $options, $quantity, $combine = true)

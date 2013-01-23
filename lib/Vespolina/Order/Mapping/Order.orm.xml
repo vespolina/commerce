@@ -8,6 +8,12 @@
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO" />
         </id>
+        <one-to-one field="paymentInstruction" target-entity="JMS\Payment\CoreBundle\Entity\PaymentInstruction">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-one>
         <one-to-many field="items" target-entity="Vespolina\Entity\Order\ItemInterface" mapped-by="parent">
             <cascade>
                 <cascade-persist/>
