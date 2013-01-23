@@ -13,6 +13,12 @@ use Vespolina\Entity\Partner\PartnerInterface;
 
 class BillingManager implements BillingManagerInterface
 {
+    public function processOrder($order)
+    {
+        // find current bill
+
+    }
+
     public function createBillingAgreement(OrderInterface $order)
     {
 
