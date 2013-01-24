@@ -20,5 +20,11 @@
                 <cascade-remove/>
             </cascade>
         </one-to-many>
+        <one-to-many field="billingAgreements" target-entity="Vespolina\Entity\Billing\BillingAgreement" mapped-by="order">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>
