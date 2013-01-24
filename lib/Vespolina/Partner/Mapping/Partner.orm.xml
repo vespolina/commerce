@@ -17,6 +17,7 @@
         <field name="currency"     type="string"   nullable="true" />
         <field name="language"     type="string"   nullable="true" />
         <field name="paymentTerms" type="string"   nullable="true" />
+        <field name="payByCreditCard" type="boolean" />
 
         <one-to-one field="personalDetails" target-entity="Vespolina\Entity\Partner\PersonalDetails">
             <cascade>
