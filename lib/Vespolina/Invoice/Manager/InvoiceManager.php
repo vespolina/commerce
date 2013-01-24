@@ -45,10 +45,21 @@ class InvoiceManager implements InvoiceManagerInterface
      */
     public function findById($id)
     {
-        return $this->createSelectQuery()
+        return $this->gateway->createQuery('Select')
             ->filterEqual('id', $id)
             ->one()
         ;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findAll()
+    {
+        $query = $this->gateway->createQuery('Select');
+        return $query->sort('periodEnd', 'desc')
+            ->all()
+            ;
     }
 
     /**

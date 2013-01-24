@@ -27,6 +27,8 @@ interface InvoiceManagerInterface
      */
     function findById($id);
 
+    function findAll();
+
     /**
      * @param \Vespolina\Entity\Partner\Partner $partner
      * @return array
