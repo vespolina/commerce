@@ -149,7 +149,7 @@ class OrderManager implements OrderManagerInterface
                     if ($this->doOptionsMatch($item->getOptions(), $options)) {
                         return $item;
                     }
-                };
+                }
             }
         }
 
