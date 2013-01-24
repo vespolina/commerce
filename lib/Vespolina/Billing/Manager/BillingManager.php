@@ -37,7 +37,6 @@ class BillingManager implements BillingManagerInterface
 
         // process further
 
-
         return true;
      }
 

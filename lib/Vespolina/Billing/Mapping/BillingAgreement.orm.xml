@@ -11,7 +11,7 @@
 
         <field name="billingAmount" type="float" />
         <field name="billingCycles" type="integer" />
-        <field name="billingInterval" type="integer" />
+        <field name="billingInterval" type="string" />
         <field name="initialBillingDate" type="datetime" />
         <field name="paymentGateway" type="string" />
 
