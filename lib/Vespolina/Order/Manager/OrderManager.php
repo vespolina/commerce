@@ -298,9 +298,10 @@ class OrderManager implements OrderManagerInterface
      */
     protected function doFindOrderById($id)
     {
-        $qb = new QueryBuilder();
-        $qb->field('id')->equals($id);
-        $query = $qb->getQuery();
+        $query = $this->gateway
+            ->createQuery('Select')
+            ->filterEqual('id', $id)
+        ;
 
         return $this->gateway->findOrders($query);
     }
