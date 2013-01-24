@@ -208,6 +208,7 @@ class PartnerManager implements PartnerManagerInterface
     /**
      * Returns if the given Role is valid.
      * @param string $role
+     * @return boolean
      */
     public function isValidRole($role)
     {

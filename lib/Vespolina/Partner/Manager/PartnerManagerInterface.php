@@ -8,13 +8,15 @@
 
 namespace Vespolina\Partner\Manager;
 
+use Vespolina\Entity\Partner\Partner;
 use Vespolina\Entity\Partner\PartnerInterface;
 
 interface PartnerManagerInterface
 {
     /**
      * Returns a new instance of given partner type
-     * @param string $partnerType
+     * @param string $role
+     * @param string $type
      * @return \Vespolina\Entity\Partner\PartnerInterface
      */
     function createPartner($role = Partner::ROLE_CUSTOMER, $type = Partner::INDIVIDUAL);
@@ -31,7 +33,7 @@ interface PartnerManagerInterface
      * Removes a partner
      * 
      * @param \Vespolina\Entity\Partner\PartnerInterface $partner
-     * @param Boolean $andFlush Wheter to flush the changes (default true)
+     * @param Boolean $andFlush Whether to flush the changes (default true)
      */
     function deletePartner(PartnerInterface $partner, $andFlush = true);
     
