@@ -26,10 +26,7 @@ class BillingAgreementGateway implements BillingAgreementGatewayInterface
     }
 
     /**
-     * @param string $type
-     * @param type $queryClass
-     * @return type
-     * @throws InvalidArgumentException
+     * @inheritdoc
      */
     public function createQuery($type, $queryClass = null)
     {
@@ -46,7 +43,7 @@ class BillingAgreementGateway implements BillingAgreementGatewayInterface
     }
 
     /**
-     * @param \Vespolina\Entity\Billing\BillingAgreementInterface $billingAgreement
+     * @inheritdoc
      */
     public function deleteBillingAgreement(BillingAgreementInterface $billingAgreement)
     {
@@ -54,8 +51,7 @@ class BillingAgreementGateway implements BillingAgreementGatewayInterface
     }
 
     /**
-     * @param \Molino\SelectQueryInterface $query
-     * @return \Vespolina\Entity\Billing\BillingAgreementInterface
+     * @inheritdoc
      */
     public function findBillingAgreement(SelectQueryInterface $query)
     {
@@ -63,8 +59,7 @@ class BillingAgreementGateway implements BillingAgreementGatewayInterface
     }
 
     /**
-     * @param \Molino\SelectQueryInterface $query
-     * @return \Vespolina\Entity\Billing\BillingAgreementInterface
+     * @inheritdoc
      */
     public function findBillingAgreements(SelectQueryInterface $query)
     {
@@ -72,7 +67,7 @@ class BillingAgreementGateway implements BillingAgreementGatewayInterface
     }
 
     /**
-     * @param \Vespolina\Entity\Billing\BillingAgreementInterface $billingAgreement
+     * @inheritdoc
      */
     public function persistBillingAgreement(BillingAgreementInterface $billingAgreement)
     {
@@ -80,7 +75,7 @@ class BillingAgreementGateway implements BillingAgreementGatewayInterface
     }
 
     /**
-     * @param \Vespolina\Entity\Billing\BillingAgreementInterface $billingAgreement
+     * @inheritdoc
      */
     public function updateBillingAgreement(BillingAgreementInterface $billingAgreement)
     {

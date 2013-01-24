@@ -12,7 +12,7 @@ use Vespolina\Entity\Billing\BillingAgreement;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Order\Manager\OrderManager;
-use Vespolina\Billing\Gateway\BillingAgreementGateway;
+use Vespolina\Billing\Gateway\BillingAgreementGatewayInterface;
 
 class BillingManager implements BillingManagerInterface
 {
@@ -26,8 +26,7 @@ class BillingManager implements BillingManagerInterface
     }
 
     /**
-     * @param \Vespolina\Entity\Order\OrderInterface $order
-     * @return boolean
+     * @inheritdoc
      */
     public function processOrder(OrderInterface $order)
     {
@@ -44,8 +43,7 @@ class BillingManager implements BillingManagerInterface
      }
 
     /**
-     * @param \Vespolina\Entity\Order\OrderInterface $order
-     * @return array
+     * @inheritdoc
      */
     public function createBillingAgreements(OrderInterface $order)
     {
@@ -69,12 +67,45 @@ class BillingManager implements BillingManagerInterface
     }
 
     /**
-     * @param \Vespolina\Entity\Partner\PartnerInterface $partner
-     * @return \Vespolina\Entity\Billing\BillingRequestInterface|void
+     * @inheritdoc
      */
     function createBillingRequest(PartnerInterface $partner)
     {
         $orderArray = $this->orderManager->findClosedOrdersByOwner($partner);
         //$orderArray->toArray();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->doFindBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function doFindBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
+        $query = $this->gateway->createQuery('Select');
+        $qb = $query->getQueryBuilder();
+
+        foreach($criteria as $field => $value) {
+            $qb->field($field)->equals($value);
+        }
+        if ($orderBy) {
+            $qb->orderBy($orderBy);
+        }
+        if ($limit) {
+            $qb->limit($limit);
+        }
+        if ($offset) {
+            $qb->offset($offset);
+        }
+        $query = $qb->getQuery();
+
+        return $this->gateway->findOrders($query);
     }
 }

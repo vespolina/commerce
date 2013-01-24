@@ -20,6 +20,12 @@ interface BillingManagerInterface
 {
     /**
      * @param \Vespolina\Entity\Order\OrderInterface $order
+     * @return boolean
+     */
+    function processOrder(OrderInterface $order);
+
+    /**
+     * @param \Vespolina\Entity\Order\OrderInterface $order
      * @return array
      */
     function createBillingAgreements(OrderInterface $order);
@@ -31,4 +37,16 @@ interface BillingManagerInterface
      * @return \Vespolina\Entity\Billing\BillingRequestInterface
      */
     function createBillingRequest(PartnerInterface $partner);
+
+    /**
+     * Find billing agreements by specified fields and values
+     *
+     * @param array $criteria
+     * @param array $orderBy
+     * @param null $limit
+     * @param null $offset
+     *
+     * @return array|\Vespolina\Entity\Order\OrderInterface|null
+     */
+    function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 }
