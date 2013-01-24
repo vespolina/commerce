@@ -411,6 +411,22 @@ class OrderManager implements OrderManagerInterface
         ;
     }
 
+    /**
+     * @param \Vespolina\Entity\Partner\PartnerInterface $partner
+     * @return \Vespolina\Entity\Order\Order
+     */
+    public function findClosedOrdersByOwner(PartnerInterface $partner)
+    {
+        $orderClass = $this->orderClass;
+
+        return $this->gateway
+            ->createQuery('Select')
+            ->filterEqual('partner', $partner->getId())
+            ->filterEqual('state', $orderClass::STATE_CLOSED)
+            ->all()
+        ;
+    }
+
     public function clearOrder(OrderInterface $order)
     {
         $order->clearAttributes();
