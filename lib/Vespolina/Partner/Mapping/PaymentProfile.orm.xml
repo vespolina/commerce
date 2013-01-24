@@ -9,7 +9,7 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="reference" type="string" />
-        <field name="last4digits" type="string" />
+        <field name="reference" type="string" nullable="true"/>
+        <field name="last4digits" type="string" nullable="true"/>
     </entity>
 </doctrine-mapping>

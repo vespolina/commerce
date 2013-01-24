@@ -44,6 +44,10 @@
             </cascade>
         </many-to-many>
         <one-to-one field="paymentProfile" target-entity="Vespolina\Entity\Partner\PaymentProfile">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
         </one-to-one>
     </entity>
 </doctrine-mapping>
