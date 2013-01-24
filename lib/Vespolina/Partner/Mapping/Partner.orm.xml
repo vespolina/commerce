@@ -22,22 +22,28 @@
         <one-to-one field="personalDetails" target-entity="Vespolina\Entity\Partner\PersonalDetails">
             <cascade>
                 <cascade-persist />
+                <cascade-remove />
             </cascade>
         </one-to-one>
         <one-to-one field="organisationDetails" target-entity="Vespolina\Entity\Partner\OrganisationDetails">
             <cascade>
                 <cascade-persist />
+                <cascade-remove/>
             </cascade>
         </one-to-one>
         <one-to-one field="primaryContact" target-entity="Vespolina\Entity\Partner\Contact">
             <cascade>
                 <cascade-persist />
+                <cascade-remove/>
             </cascade>
         </one-to-one>
         <many-to-many field="addresses" target-entity="Vespolina\Entity\Partner\Address">
             <cascade>
                 <cascade-persist />
+                <cascade-remove/>
             </cascade>
         </many-to-many>
+        <one-to-one field="paymentProfile" target-entity="Vespolina\Entity\Partner\PaymentProfile">
+        </one-to-one>
     </entity>
 </doctrine-mapping>
