@@ -53,7 +53,6 @@ class BillingManager implements BillingManagerInterface
         foreach ($order->getItems() as $item) {
 
             $pricingSet = $item->getPricing();
-            if ($pricingSet->get)
             $startDate = new \DateTime('now');
 
             $billingAgreement = new BillingAgreement();
@@ -61,7 +60,7 @@ class BillingManager implements BillingManagerInterface
                 ->setPaymentGateway($order->getAttribute('payment_gateway'))
                 ->setPartner($order->getOwner())
                 ->setInitialBillingDate(new \DateTime('now'))
-                ->setBillingAmount()
+                ->setBillingAmount($recurringValue)
                 ->setOrderItem($item)
             ;
         }

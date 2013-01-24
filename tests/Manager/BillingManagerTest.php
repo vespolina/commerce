@@ -17,7 +17,6 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateBillingAgreements()
     {
-        $this->
         $this->markTestIncomplete('test for non-recurring items in order');
     }
 }
