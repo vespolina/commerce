@@ -15,7 +15,7 @@ use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Exception\InvalidConfigurationException;
 use Gateway\Query;
 use Molino\BaseQuery;
-use Vespolina\Entity\Order\CartEvents;
+use Vespolina\Entity\Order\OrderEvents;
 use Vespolina\Order\Gateway\OrderGatewayInterface;
 use Vespolina\Order\Manager\OrderManagerInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;
