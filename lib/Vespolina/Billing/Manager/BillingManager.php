@@ -12,13 +12,16 @@ use Vespolina\Entity\Billing\BillingAgreement;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Order\Manager\OrderManager;
+use Vespolina\Billing\Gateway\BillingAgreementGateway;
 
 class BillingManager implements BillingManagerInterface
 {
+    protected $gateway;
     protected $orderManager;
 
-    public function __construct(OrderManager $orderManager)
+    public function __construct(BillingAgreementGatewayInterface $gateway, OrderManager $orderManager)
     {
+        $this->gateway = $gateway;
         $this->orderManager = $orderManager;
     }
 

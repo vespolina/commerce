@@ -1,13 +1,13 @@
 <?php
 
-namespace Vespolina\BillingAgreement\Gateway;
+namespace Vespolina\Billing\Gateway;
 
 use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 
-class BillingAgreementGateway
+class BillingAgreementGateway implements BillingAgreementGatewayInterface
 {
     protected $molino;
     protected $billingAgreementClass;
