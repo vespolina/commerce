@@ -14,4 +14,10 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
         // submit current bill to CC
         // create licenses when CC is approved
     }
+
+    public function testCreateBillingAgreements()
+    {
+        $this->
+        $this->markTestIncomplete('test for non-recurring items in order');
+    }
 }

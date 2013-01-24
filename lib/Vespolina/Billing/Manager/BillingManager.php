@@ -51,27 +51,19 @@ class BillingManager implements BillingManagerInterface
     {
         /** @var $item */
         foreach ($order->getItems() as $item) {
+
+            $pricingSet = $item->getPricing();
+            if ($pricingSet->get)
+            $startDate = new \DateTime('now');
+
             $billingAgreement = new BillingAgreement();
             $billingAgreement
                 ->setPaymentGateway($order->getAttribute('payment_gateway'))
                 ->setPartner($order->getOwner())
                 ->setInitialBillingDate(new \DateTime('now'))
-                ->setBillingAmount($item->getNetValue())
-                ->setOrder($order)
+                ->setBillingAmount()
+                ->setOrderItem($item)
             ;
-
-            // buying a monthly license
-            if ($item->getAttribute('type_of_product')) {
-                $billingAgreement
-                    ->setBillingCycles(30)
-                    ->setNextBillingDate(new \DateTime('next month'))
-                ;
-            } else { // case of the upgrade to pro account
-                $billingAgreement
-                    ->setBillingCycles(365)
-                    ->setNextBillingDate(new \DateTime('next year'))
-                ;
-            }
         }
 
         return array();

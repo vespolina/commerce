@@ -9,11 +9,16 @@
             <generator strategy="AUTO" />
         </id>
 
+        <field name="active" type="boolean" />
         <field name="billingAmount" type="float" />
         <field name="billingCycles" type="integer" />
         <field name="billingInterval" type="string" />
+        <field name="createdAt" type="datetime" />
         <field name="initialBillingDate" type="datetime" />
+        <field name="nextBillingDate" type="datetime" />
         <field name="paymentGateway" type="string" />
+        <field name="processedCycles" type="integer" />
+        <field name="updatedAt" type="datetime" />
 
         <one-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
             <join-column name="partner_id" referenced-column-name="id" />
@@ -21,5 +26,12 @@
         <many-to-one field="order" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="billingAgreements">
             <join-column name="order_id" referenced-column-name="id" />
         </many-to-one>
+        <one-to-one field="orderItem" target-entity="Vespolina\Entity\Order\ItemInterface">
+        </one-to-one>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />
+            <lifecycle-callback type="preUpdate" method="autoSetUpdatedAt" />
+        </lifecycle-callbacks>
     </entity>
 </doctrine-mapping>
