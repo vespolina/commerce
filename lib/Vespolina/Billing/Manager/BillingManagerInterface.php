@@ -18,8 +18,11 @@ use Vespolina\Entity\Partner\PartnerInterface;
  */
 interface BillingManagerInterface
 {
-
-    function createBillingAgreement(OrderInterface $order);
+    /**
+     * @param \Vespolina\Entity\Order\OrderInterface $order
+     * @return array
+     */
+    function createBillingAgreements(OrderInterface $order);
 
     /**
      * Create a new billing request
@@ -28,5 +31,4 @@ interface BillingManagerInterface
      * @return \Vespolina\Entity\Billing\BillingRequestInterface
      */
     function createBillingRequest(PartnerInterface $partner);
-
 }
