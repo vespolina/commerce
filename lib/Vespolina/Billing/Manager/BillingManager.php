@@ -76,7 +76,7 @@ class BillingManager implements BillingManagerInterface
         foreach ($order->getItems() as $item) {
 
             $pricingSet = $item->getPricing();
-            $startDate = new \DateTime('now');
+            $startDate = new \DateTime('today');
 
             $billingAgreement = new BillingAgreement();
             $billingAgreement

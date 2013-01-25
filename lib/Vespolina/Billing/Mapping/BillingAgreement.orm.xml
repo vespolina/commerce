@@ -16,8 +16,8 @@
         <field name="createdAt" type="datetime" />
         <field name="initialBillingDate" type="datetime" />
         <field name="nextBillingDate" type="datetime" />
+        <field name="numberCyclesBilled" type="integer" />
         <field name="paymentGateway" type="string" />
-        <field name="processedCycles" type="integer" />
         <field name="updatedAt" type="datetime" />
 
         <one-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
