@@ -84,6 +84,45 @@ class BillingManager implements BillingManagerInterface
     }
 
     /**
+     * Finds billing agreements that are due
+     *
+     * @return array
+     */
+    public function findEligibleBillingAgreements($limit, $page = 1)
+    {
+        $offset = ($page - 1) * $limit;
+
+        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
+        $query = $this->gateway->createQuery('select');
+        $qb = $query->getQueryBuilder();
+
+        $now = new \DateTime();
+
+        return $qb
+            ->andWhere('m.active = ?1')
+            ->andWhere('m.nextBillingDate <= ?2')
+            ->setParameters(array(
+                    1 => 1,
+                    2 => $now->format('Y-m-d H:i:s')
+                ))
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @todo add implementation, please don't forget to call $em->clear() after each batch
+     * @param array $billingAgreements
+     */
+    public function processEligibleBillingAgreements(array $billingAgreements)
+    {
+
+    }
+
+
+    /**
      * @inheritdoc
      */
     protected function doFindBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
