@@ -8,21 +8,46 @@
 
 namespace Vespolina\Billing\Manager;
 
+use Vespolina\Billing\Gateway\BillingGatewayInterface;
 use Vespolina\Entity\Billing\BillingAgreement;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
-use Vespolina\Order\Manager\OrderManager;
-use Vespolina\Billing\Gateway\BillingAgreementGatewayInterface;
+use Vespolina\EventDispatcher\EventDispatcherInterface;
+use Vespolina\EventDispatcher\NullDispatcher;
+use Vespolina\Exception\InvalidConfigurationException;
 
 class BillingManager implements BillingManagerInterface
 {
+    protected $cartClass;
+    protected $eventDispatcher;
     protected $gateway;
-    protected $orderManager;
 
-    public function __construct(BillingAgreementGatewayInterface $gateway, OrderManager $orderManager)
+    public function __construct(BillingGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
     {
+        $missingClasses = array();
+        foreach (array('billingAgreement', 'billingRequest') as $class) {
+            $class = $class . 'Class';
+            if (isset($classMapping[$class])) {
+
+                if (!class_exists($classMapping[$class]))
+                    throw new InvalidConfigurationException(sprintf("Class '%s' not found as '%s'", $classMapping[$class], $class));
+
+                $this->{$class} = $classMapping[$class];
+                continue;
+            }
+            $missingClasses[] = $class;
+        }
+
+        if (count($missingClasses)) {
+            throw new InvalidConfigurationException(sprintf("The following billing classes are missing from configuration: %s", join(', ', $missingClasses)));
+        }
+
+        if (!$eventDispatcher) {
+            $eventDispatcher = new NullDispatcher();
+        }
+
+        $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
-        $this->orderManager = $orderManager;
     }
 
     /**
