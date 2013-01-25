@@ -37,6 +37,12 @@ interface InvoiceManagerInterface
 
     /**
      * @param \Vespolina\Entity\Partner\Partner $partner
+     * @return InvoiceInterface
+     */
+    function findLastInvoiceByPartner(PartnerInterface $partner);
+
+    /**
+     * @param \Vespolina\Entity\Partner\Partner $partner
      * @param \DateTime $periodStart
      * @param \DateTime $periodEnd
      * @return array

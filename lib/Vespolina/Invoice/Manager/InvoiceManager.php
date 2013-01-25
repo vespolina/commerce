@@ -77,6 +77,18 @@ class InvoiceManager implements InvoiceManagerInterface
     /**
      * @inheritdoc
      */
+    public function findLastInvoiceByPartner(PartnerInterface $partner)
+    {
+        $query = $this->gateway->createQuery('Select');
+        return $query->filterEqual('partner', $partner)
+            ->sort('periodEnd', 'desc')
+            ->one()
+            ;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function findInvoicesByPartnerAndPeriod(PartnerInterface $partner, $periodStart, $periodEnd)
     {
         $query = $this->gateway->createQuery('Select');
