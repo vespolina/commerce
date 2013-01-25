@@ -7,7 +7,7 @@ use Molino\SelectQueryInterface;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 
-class BillingAgreementGateway implements BillingAgreementGatewayInterface
+class BillingGateway implements BillingGatewayInterface
 {
     protected $molino;
     protected $billingAgreementClass;
@@ -80,5 +80,47 @@ class BillingAgreementGateway implements BillingAgreementGatewayInterface
     public function updateBillingAgreement(BillingAgreementInterface $billingAgreement)
     {
         $this->molino->save($billingAgreement);
+    }
+
+    /**
+     * @param \Vespolina\Entity\Billing\BillingRequestInterface $billingRequest
+     */
+    public function deleteBillingRequest(BillingRequestInterface $billingRequest)
+    {
+        $this->molino->delete($billingRequest);
+    }
+
+    /**
+     * @param \Molino\SelectQueryInterface $query
+     * @return \Vespolina\Entity\Billing\BillingRequestInterface
+     */
+    public function findBillingRequest(SelectQueryInterface $query)
+    {
+        return $query->one();
+    }
+
+    /**
+     * @param \Molino\SelectQueryInterface $query
+     * @return \Vespolina\Entity\Billing\BillingRequestInterface
+     */
+    public function findBillingRequests(SelectQueryInterface $query)
+    {
+        return $query->all();
+    }
+
+    /**
+     * @param \Vespolina\Entity\Billing\BillingRequestInterface $billingRequest
+     */
+    public function persistBillingRequest(BillingRequestInterface $billingRequest)
+    {
+        $this->molino->save($billingRequest);
+    }
+
+    /**
+     * @param \Vespolina\Entity\Billing\BillingRequestInterface $billingRequest
+     */
+    public function updateBillingRequest(BillingRequestInterface $billingRequest)
+    {
+        $this->molino->save($billingRequest);
     }
 }

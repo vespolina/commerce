@@ -7,7 +7,7 @@ use Molino\SelectQueryInterface;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 
-interface BillingAgreementGatewayInterface
+interface BillingGatewayInterface
 {
     /**
      * @param string $type
@@ -43,4 +43,31 @@ interface BillingAgreementGatewayInterface
      * @param \Vespolina\Entity\Billing\BillingAgreementInterface $billingAgreement
      */
     function updateBillingAgreement(BillingAgreementInterface $billingAgreement);
+
+    /**
+     * @param \Vespolina\Entity\Billing\BillingRequestInterface $billingRequest
+     */
+    function deleteBillingRequest(BillingRequestInterface $billingRequest);
+
+    /**
+     * @param \Molino\SelectQueryInterface $query
+     * @return \Vespolina\Entity\Billing\BillingRequestInterface
+     */
+    function findBillingRequest(SelectQueryInterface $query);
+
+    /**
+     * @param \Molino\SelectQueryInterface $query
+     * @return \Vespolina\Entity\Billing\BillingRequestInterface
+     */
+    function findBillingRequests(SelectQueryInterface $query);
+
+    /**
+     * @param \Vespolina\Entity\Billing\BillingRequestInterface $billingRequest
+     */
+    function persistBillingRequest(BillingRequestInterface $billingRequest);
+
+    /**
+     * @param \Vespolina\Entity\Billing\BillingRequestInterface $billingRequest
+     */
+    function updateBillingRequest(BillingRequestInterface $billingRequest);
 }
