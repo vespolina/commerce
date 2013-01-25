@@ -18,8 +18,8 @@ class BillingGateway implements BillingGatewayInterface
      */
     public function __construct(MolinoInterface $molino, $billingAgreementClass)
     {
-        if (!class_exists($billingAgreementClass) || !in_array('Vespolina\Entity\BillingAgreement\BillingAgreementInterface', class_implements($billingAgreementClass))) {
-            throw new InvalidInterfaceException('Please have your billingAgreement class implement Vespolina\Entity\BillingAgreement\BillingAgreementInterface');
+        if (!class_exists($billingAgreementClass) || !in_array('Vespolina\Entity\Billing\BillingAgreementInterface', class_implements($billingAgreementClass))) {
+            throw new InvalidInterfaceException('Please have your billingAgreement class implement Vespolina\Entity\Billing\BillingAgreementInterface');
         }
         $this->molino = $molino;
         $this->billingAgreementClass = $billingAgreementClass;
