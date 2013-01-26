@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <mapped-superclass name="Vespolina\ProductBundle\Document\BaseProduct" collection="vespolina_products">
+    <mapped-superclass name="Vespolina\Entity\Product\BaseProduct" collection="vespolina_products">
         <field name="id" id="true" />
 
 
