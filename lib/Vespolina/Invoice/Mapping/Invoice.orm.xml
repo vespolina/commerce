@@ -15,21 +15,11 @@
         <field name="periodEnd" type="datetime" />
         <field name="periodStart" type="datetime" />
 
+        <one-to-one field="previousInvoice" target-entity="Vespolina\Entity\Invoice\Invoice">
+        </one-to-one>
         <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
-            <join-column name="partner_id" referenced-column-name="id" />
         </many-to-one>
         <many-to-many field="orders" target-entity="Vespolina\Entity\Order\OrderInterface">
-            <join-table name="vespolina_invoice_orders">
-                <join-columns>
-                    <join-column name="invoice_id" referenced-column-name="id" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="order_id" referenced-column-name="id" unique="true" />
-                </inverse-join-columns>
-            </join-table>
         </many-to-many>
-        <one-to-one field="previousInvoice" target-entity="Vespolina\Entity\Invoice\Invoice">
-            <join-column name="previous_invoice_id" referenced-column-name="id" nullable="true" />
-        </one-to-one>
     </entity>
 </doctrine-mapping>
