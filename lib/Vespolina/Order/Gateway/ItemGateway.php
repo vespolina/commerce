@@ -5,33 +5,33 @@ namespace Vespolina\Order\Gateway;
 use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
 use InvalidArgumentException;
-use Vespolina\Entity\Order\OrderInterface;
+use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 
-class OrderGateway implements OrderGatewayInterface
+class ItemGateway implements ItemGatewayInterface
 {
     protected $molino;
-    protected $orderClass;
+    protected $itemClass;
 
     /**
      * @param \Molino\MolinoInterface $molino
-     * @param string $orderClass
+     * @param string $itemClass
      * @throws \Vespolina\Exception\InvalidInterfaceException
      */
-    public function __construct(MolinoInterface $molino, $orderClass)
+    public function __construct(MolinoInterface $molino, $itemClass)
     {
-        if (!class_exists($orderClass) || !in_array('Vespolina\Entity\Order\OrderInterface', class_implements($orderClass))) {
-            throw new InvalidInterfaceException('Please have your order class implement Vespolina\Entity\Order\OrderInterface');
+        if (!class_exists($itemClass) || !in_array('Vespolina\Entity\Order\ItemInterface', class_implements($itemClass))) {
+            throw new InvalidInterfaceException('Please have your order class implement Vespolina\Entity\Order\ItemInterface');
         }
         $this->molino = $molino;
-        $this->orderClass = $orderClass;
+        $this->orderClass = $itemClass;
     }
 
     /**
      * @param \Molino\SelectQueryInterface $query
      * @return array
      */
-    public function findOrders(SelectQueryInterface $query)
+    public function findItems(SelectQueryInterface $query)
     {
         return $query->all();
     }
@@ -40,33 +40,33 @@ class OrderGateway implements OrderGatewayInterface
      * @param \Molino\SelectQueryInterface $query
      * @return type
      */
-    public function findOrder(SelectQueryInterface $query)
+    public function findItem(SelectQueryInterface $query)
     {
         return $query->one();
     }
 
     /**
-     * @param \Vespolina\Entity\Order\OrderInterface $order
+     * @param \Vespolina\Entity\Item\ItemInterface $item
      */
-    public function persistOrder(OrderInterface $order)
+    public function persistItem(ItemInterface $item)
     {
-        $this->molino->save($order);
+        $this->molino->save($item);
     }
 
     /**
-     * @param \Vespolina\Entity\Order\OrderInterface $order
+     * @param \Vespolina\Entity\Item\ItemInterface $item
      */
-    public function updateOrder(OrderInterface $order)
+    public function updateItem(ItemInterface $item)
     {
-        $this->molino->save($order);
+        $this->molino->save($item);
     }
 
     /**
-     * @param \Vespolina\Entity\Order\OrderInterface $order
+     * @param \Vespolina\Entity\Item\ItemInterface $item
      */
-    public function deleteOrder(OrderInterface $order)
+    public function deleteItem(ItemInterface $item)
     {
-        $this->molino->delete($order);
+        $this->molino->delete($item);
     }
 
     /**

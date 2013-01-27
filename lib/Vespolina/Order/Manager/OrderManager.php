@@ -17,6 +17,7 @@ use Gateway\Query;
 use Molino\BaseQuery;
 use Vespolina\Entity\Order\OrderEvents;
 use Vespolina\Order\Gateway\OrderGatewayInterface;
+use Vespolina\Order\Gateway\ItemGatewayInterface;
 use Vespolina\Order\Manager\OrderManagerInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;
 use Vespolina\Entity\Order\Order;
@@ -36,10 +37,11 @@ class OrderManager implements OrderManagerInterface
     protected $eventDispatcher;
     protected $eventsClass;
     protected $gateway;
+    protected $itemGateway;
     protected $itemClass;
     protected $orderClass;
 
-    function __construct(OrderGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
+    function __construct(OrderGatewayInterface $gateway, ItemGatewayInterface $itemGateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
     {
         $missingClasses = array();
         foreach (array('cart', 'events', 'item', 'order') as $class) {
@@ -65,6 +67,7 @@ class OrderManager implements OrderManagerInterface
 
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
+        $this->itemGateway = $itemGateway;
     }
 
     /**
@@ -235,6 +238,10 @@ class OrderManager implements OrderManagerInterface
         $orderEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($orderEvents::UPDATE_ORDER, $this->eventDispatcher->createEvent($order));
         $this->gateway->updateOrder($order);
+
+        foreach ($order->getItems() as $item) {
+            $this->itemGateway->updateItem($item);
+        }
     }
 
     public function updateOrderPricing(OrderInterface $order, PricingContextInterface $context = null)
@@ -430,7 +437,9 @@ class OrderManager implements OrderManagerInterface
     public function clearOrder(OrderInterface $order)
     {
         $order->clearAttributes();
-        $order->clearItems();
+        foreach ($order->getItems() as $item) {
+            $this->itemGateway->deleteItem($item);
+        }
     }
 
 }
