@@ -23,11 +23,11 @@
         <one-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
             <join-column name="partner_id" referenced-column-name="id" />
         </one-to-one>
+        <one-to-one field="orderItem" target-entity="Vespolina\Entity\Order\ItemInterface">
+        </one-to-one>
         <many-to-one field="order" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="billingAgreements">
             <join-column name="order_id" referenced-column-name="id" />
         </many-to-one>
-        <one-to-one field="orderItem" target-entity="Vespolina\Entity\Order\ItemInterface">
-        </one-to-one>
 
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />

@@ -15,6 +15,7 @@ use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\NullDispatcher;
 use Vespolina\Exception\InvalidConfigurationException;
+use Vespolina\Entity\Order\OrderEvents;
 
 class BillingManager implements BillingManagerInterface
 {
@@ -57,12 +58,15 @@ class BillingManager implements BillingManagerInterface
     {
         $billingAgreements = $this->createBillingAgreements($order);
 
+        ladybug_dump_die($billingAgreements);
+
+        $event = $this->eventDispatcher->createEvent($order);
+        $this->eventDispatcher->dispatch(OrderEvents::ACTIVATE_OR_RENEW_ITEMS, $event);
+
         // order already processed
         if (count($billingAgreements) == 0) {
             return false;
         }
-
-        // process further
 
         return true;
      }
@@ -74,9 +78,10 @@ class BillingManager implements BillingManagerInterface
     {
         /** @var $item */
         foreach ($order->getItems() as $item) {
-
             $pricingSet = $item->getPricing();
             $recurringCharge = $pricingSet->get('recurringCharge');
+
+            // Theo: starts in and interval at PricingSet level ?!?!
             $startOn = '+' . $pricingSet->get('startsIn') . ' ' . $pricingSet->get('interval');
             $startDate = new \DateTime($startOn);
 
@@ -112,6 +117,8 @@ class BillingManager implements BillingManagerInterface
     /**
      * Finds billing agreements that are due
      *
+     * @param $limit
+     * @param int $page
      * @return array
      */
     public function findEligibleBillingAgreements($limit, $page = 1)
@@ -144,9 +151,7 @@ class BillingManager implements BillingManagerInterface
      */
     public function processEligibleBillingAgreements(array $billingAgreements)
     {
-
     }
-
 
     /**
      * @inheritdoc
@@ -172,5 +177,10 @@ class BillingManager implements BillingManagerInterface
         $query = $qb->getQuery();
 
         return $this->gateway->findOrders($query);
+    }
+
+    public function findBillingAgreementForItem($orderItem)
+    {
+        $this->doFindBy(array('orderItem' => $orderItem));
     }
 }
