@@ -76,9 +76,14 @@ class BillingManager implements BillingManagerInterface
      */
     public function createBillingAgreements(OrderInterface $order)
     {
-        /** @var $item */
+        /** @var $item \Vespolina\Entity\Order\ItemInterface */
         foreach ($order->getItems() as $item) {
             $pricingSet = $item->getPricing();
+
+            // hack to initialize the entity and retrieve it from database
+            $pricingSet->getProcessed();
+
+            // @iampersistant: at this point I am stuck: what is recurringCharge? where do we set it it at item level, in processed() method ?
             $recurringCharge = $pricingSet->get('recurringCharge');
 
             // Theo: starts in and interval at PricingSet level ?!?!
