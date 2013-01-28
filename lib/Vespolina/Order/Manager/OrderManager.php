@@ -130,7 +130,12 @@ class OrderManager implements OrderManagerInterface
      */
     public function findOrderById($id)
     {
-        return $this->doFindOrderById($id);
+        $query = $this->gateway
+            ->createQuery('Select')
+            ->filterEqual('id', $id)
+        ;
+
+        return $this->gateway->findOrder($query);
     }
 
     /**
@@ -244,6 +249,11 @@ class OrderManager implements OrderManagerInterface
         }
     }
 
+    public function updateItem(ItemInterface $item)
+    {
+        $this->itemGateway->updateItem($item);
+    }
+
     public function updateOrderPricing(OrderInterface $order, PricingContextInterface $context = null)
     {
         $orderEvents = $this->eventsClass;
@@ -300,17 +310,8 @@ class OrderManager implements OrderManagerInterface
         return $this->gateway->findOrders($query);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function doFindOrderById($id)
     {
-        $query = $this->gateway
-            ->createQuery('Select')
-            ->filterEqual('id', $id)
-        ;
-
-        return $this->gateway->findOrders($query);
     }
 
     protected function doOptionsMatch($itemOptions, $targetOptions)
