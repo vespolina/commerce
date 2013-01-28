@@ -58,8 +58,6 @@ class BillingManager implements BillingManagerInterface
     {
         $billingAgreements = $this->createBillingAgreements($order);
 
-        ladybug_dump_die($billingAgreements);
-
         $event = $this->eventDispatcher->createEvent($order);
         $this->eventDispatcher->dispatch(OrderEvents::ACTIVATE_OR_RENEW_ITEMS, $event);
 
@@ -76,6 +74,8 @@ class BillingManager implements BillingManagerInterface
      */
     public function createBillingAgreements(OrderInterface $order)
     {
+        $billingAgreements = array();
+
         /** @var $item \Vespolina\Entity\Order\ItemInterface */
         foreach ($order->getItems() as $item) {
             $pricingSet = $item->getPricing();
@@ -87,19 +87,22 @@ class BillingManager implements BillingManagerInterface
             $recurringCharge = $pricingSet->get('recurringCharge');
 
             // Theo: starts in and interval at PricingSet level ?!?!
-            $startOn = '+' . $pricingSet->get('startsIn') . ' ' . $pricingSet->get('interval');
+            $startOn = '+1 ' . $pricingSet->get('interval');
             $startDate = new \DateTime($startOn);
 
             $billingAgreement = new BillingAgreement();
             $billingAgreement
                 ->setPaymentGateway($order->getAttribute('payment_gateway'))
-                ->setPartner($order->getOwner())
-                ->setInitialBillingDate($startDate)
+                ->setPartner($order->getPartner())
+                ->setInitialBillingDate(new \DateTime('now'))
                 ->setNextBillingDate($startDate)
                 ->setBillingAmount($recurringCharge)
                 ->setOrderItem($item)
             ;
+            $billingAgreements[] = $billingAgreement;
         }
+
+        return $billingAgreements;
     }
 
     /**
@@ -168,20 +171,20 @@ class BillingManager implements BillingManagerInterface
         $qb = $query->getQueryBuilder();
 
         foreach($criteria as $field => $value) {
-            $qb->field($field)->equals($value);
+            $qb->andWhere("m.$field = :$field");
+            $qb->setParameter("$field", $value);
         }
         if ($orderBy) {
             $qb->orderBy($orderBy);
         }
         if ($limit) {
-            $qb->limit($limit);
+            $qb->setMaxResults($limit);
         }
         if ($offset) {
-            $qb->offset($offset);
+            $qb->setFirstResult($offset);
         }
-        $query = $qb->getQuery();
 
-        return $this->gateway->findOrders($query);
+        return $qb->getQuery()->getResult();
     }
 
     public function findBillingAgreementForItem($orderItem)
