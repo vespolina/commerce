@@ -194,6 +194,6 @@ class BillingManager implements BillingManagerInterface
 
     public function findBillingAgreementForItem($orderItem)
     {
-        $this->doFindBy(array('orderItem' => $orderItem));
+        return $this->doFindBy(array('orderItem' => $orderItem));
     }
 }
