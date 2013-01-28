@@ -192,8 +192,22 @@ class BillingManager implements BillingManagerInterface
         return $qb->getQuery()->getResult();
     }
 
+    public function doFindOneBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $result = $this->doFindOneBy($criteria, $orderBy, $limit, $offset);
+        if (count($result)) {
+            return $result[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $orderItem
+     * @return BillingAgreement
+     */
     public function findBillingAgreementForItem($orderItem)
     {
-        return $this->doFindBy(array('orderItem' => $orderItem));
+        return $this->doFindOneBy(array('orderItem' => $orderItem));
     }
 }
