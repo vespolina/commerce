@@ -97,8 +97,13 @@ class BillingManager implements BillingManagerInterface
                 ->setInitialBillingDate(new \DateTime('now'))
                 ->setNextBillingDate($startDate)
                 ->setBillingAmount($recurringCharge)
+                ->setBillingCycles($pricingSet->get('cycles'))
+                ->setBillingInterval($pricingSet->get('interval'))
                 ->setOrderItem($item)
             ;
+
+            $this->gateway->persistBillingAgreement($billingAgreement);
+
             $billingAgreements[] = $billingAgreement;
         }
 
