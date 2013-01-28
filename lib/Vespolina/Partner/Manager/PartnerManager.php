@@ -12,6 +12,7 @@ use Vespolina\Entity\Partner\PersonalDetails;
 use Vespolina\Entity\Partner\Address;
 use Vespolina\Entity\Partner\Contact;
 use Vespolina\Entity\Partner\Partner;
+use Vespolina\Entity\Partner\PaymentProfile;
 use Vespolina\Entity\Partner\OrganisationDetails;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Partner\Gateway\PartnerGateway;
@@ -34,6 +35,7 @@ class PartnerManager implements PartnerManagerInterface
     protected $partnerContactClass;
     protected $partnerPersonalDetailsClass;
     protected $partnerOrganisationDetailsClass;
+    protected $partnerPaymentProfileClass;
     
     /**
      * Array with available partnerRoles
@@ -221,5 +223,20 @@ class PartnerManager implements PartnerManagerInterface
     public function updatePartner(PartnerInterface $partner, $andFlush = true)
     {
         $this->gateway->updatePartner($partner);
+    }
+
+    public function createPaymentProfile($type)
+    {
+        if (!in_array($type, PaymentProfile::$validTypes)) {
+            throw new InvalidConfigurationException(sprintf("'%s' is not a valid Payment Profile type", $type));
+        }
+
+        $childClass = 'Vespolina\\Entity\\Partner\\PaymentProfileType\\'.str_replace(' ', '', $type);
+
+        if (!class_exists($childClass)) {
+            throw new InvalidConfigurationException(sprintf("Sorry class '%s' was not found", $childClass));
+        }
+
+        return new $childClass;
     }
 }

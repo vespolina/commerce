@@ -17,7 +17,7 @@
         <field name="currency"     type="string"   nullable="true" />
         <field name="language"     type="string"   nullable="true" />
         <field name="paymentTerms" type="string"   nullable="true" />
-        <field name="payByCreditCard" type="boolean" />
+        <field name="paymentProfileType" type="string"   nullable="true" />
 
         <one-to-one field="personalDetails" target-entity="Vespolina\Entity\Partner\PersonalDetails">
             <cascade>
@@ -44,10 +44,12 @@
             </cascade>
         </many-to-many>
         <one-to-one field="paymentProfile" target-entity="Vespolina\Entity\Partner\PaymentProfile">
+            <join-column name="paymentProfile_id" referenced-column-name="id" nullable="true"/>
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
             </cascade>
         </one-to-one>
+
     </entity>
 </doctrine-mapping>
