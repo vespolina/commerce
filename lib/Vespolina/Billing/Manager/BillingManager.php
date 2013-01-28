@@ -194,7 +194,7 @@ class BillingManager implements BillingManagerInterface
 
     public function doFindOneBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        $result = $this->doFindOneBy($criteria, $orderBy, $limit, $offset);
+        $result = $this->doFindBy($criteria, $orderBy, $limit, $offset);
         if (count($result)) {
             return $result[0];
         }
