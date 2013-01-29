@@ -4,15 +4,15 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Vespolina\Entity\Partner\PersonalDetails">
+    <entity name="Vespolina\Entity\Partner\PersonalDetails" table="vespolina_personal_details">
         <id name="id" type="integer">
             <generator strategy="AUTO" />
         </id>
 
-        <field name="initials"                          type="string" />
-        <field name="firstname"                         type="string" />
-        <field name="prefix"                            type="string" />
-        <field name="lastname"                          type="string" />
-        <field name="nationalIdentificationNumber"      type="string" />
+        <field name="initials"                          type="string" nullable="true" />
+        <field name="firstname"                         type="string" nullable="true" />
+        <field name="prefix"                            type="string" nullable="true" />
+        <field name="lastname"                          type="string" nullable="true" />
+        <field name="nationalIdentificationNumber"      type="string" nullable="true" />
     </entity>
 </doctrine-mapping>

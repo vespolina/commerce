@@ -4,10 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Vespolina\Entity\Partner\Partner" table="vespolina_partner">
-        <id name="id" type="integer">
-            <generator strategy="AUTO" />
-        </id>
+    <mapped-superclass name="Vespolina\Entity\Partner\BasePartner" table="vespolina_base_partner">
 
         <field name="partnerId"    type="string"   nullable="true" />
         <field name="partnerSince" type="datetime" nullable="true" />
@@ -17,39 +14,21 @@
         <field name="currency"     type="string"   nullable="true" />
         <field name="language"     type="string"   nullable="true" />
         <field name="paymentTerms" type="string"   nullable="true" />
-        <field name="paymentProfileType" type="string"   nullable="true" />
 
-        <one-to-one field="personalDetails" target-entity="Vespolina\Entity\Partner\PersonalDetails">
+        <one-to-one field="personalDetails" target-entity="Vespolina\Entity\Partner\PersonalDetails" mapped-by="partner">
             <cascade>
                 <cascade-persist />
-                <cascade-remove />
             </cascade>
         </one-to-one>
-        <one-to-one field="organisationDetails" target-entity="Vespolina\Entity\Partner\OrganisationDetails">
+        <one-to-one field="organisationDetails" target-entity="Vespolina\Entity\Partner\OrganisationDetails" mapped-by="partner">
             <cascade>
                 <cascade-persist />
-                <cascade-remove/>
             </cascade>
         </one-to-one>
-        <one-to-one field="primaryContact" target-entity="Vespolina\Entity\Partner\Contact">
+        <one-to-one field="primaryContact" target-entity="Vespolina\Entity\Partner\Contact" mapped-by="partner">
             <cascade>
                 <cascade-persist />
-                <cascade-remove/>
             </cascade>
         </one-to-one>
-        <many-to-many field="addresses" target-entity="Vespolina\Entity\Partner\Address">
-            <cascade>
-                <cascade-persist />
-                <cascade-remove/>
-            </cascade>
-        </many-to-many>
-        <one-to-one field="paymentProfile" target-entity="Vespolina\Entity\Partner\PaymentProfile">
-            <join-column name="paymentProfile_id" referenced-column-name="id" nullable="true"/>
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-one>
-
-    </entity>
+    </mapped-superclass>
 </doctrine-mapping>

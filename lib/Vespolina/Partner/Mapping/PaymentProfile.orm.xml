@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Vespolina\Entity\Partner\PaymentProfile" inheritance-type="SINGLE_TABLE"
+            table="vespolina_payment_profile">
+        <discriminator-column name="paymentProfileType" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="creditCard" class="Vespolina\Entity\Partner\PaymentProfileType\CreditCard"/>
+            <discriminator-mapping value="invoice" class="Vespolina\Entity\Partner\PaymentProfileType\Invoice"/>
+        </discriminator-map>
+
+        <id name="id" type="integer">
+            <generator strategy="AUTO"/>
+        </id>
+        <field name="reference" type="string" nullable="true"/>
+
+        <field name="billingAddress"      type="string" nullable="true"/>
+        <field name="billingZipCode"      type="string" nullable="true"/>
+        <field name="billingCity"         type="string" nullable="true"/>
+        <field name="billingState"        type="string" nullable="true"/>
+        <field name="billingCountry"      type="string" nullable="true"/>
+        <field name="billingPhone"        type="string" nullable="true"/>
+
+    </entity>
+</doctrine-mapping>

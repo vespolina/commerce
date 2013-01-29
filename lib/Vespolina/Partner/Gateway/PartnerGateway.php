@@ -4,6 +4,7 @@ namespace Vespolina\Partner\Gateway;
 
 use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
+use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 
 class PartnerGateway
