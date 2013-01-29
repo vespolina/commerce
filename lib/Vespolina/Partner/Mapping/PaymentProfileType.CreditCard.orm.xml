@@ -8,6 +8,5 @@
         <field name="cardType" type="string" nullable="true" />
         <field name="persistedCardNumber" type="string" length="16" nullable="true" />
         <field name="expiration" type="datetime" nullable="true" />
-        <field name="address" type="string" nullable="true" />
     </entity>
 </doctrine-mapping>

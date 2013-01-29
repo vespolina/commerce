@@ -17,5 +17,12 @@
         </id>
         <field name="reference" type="string" nullable="true"/>
 
+        <field name="billingAddress"      type="string" nullable="true"/>
+        <field name="billingZipCode"      type="string" nullable="true"/>
+        <field name="billingCity"         type="string" nullable="true"/>
+        <field name="billingState"        type="string" nullable="true"/>
+        <field name="billingCountry"      type="string" nullable="true"/>
+        <field name="billingPhone"        type="string" nullable="true"/>
+
     </entity>
 </doctrine-mapping>
