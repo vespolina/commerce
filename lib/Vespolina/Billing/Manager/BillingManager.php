@@ -10,6 +10,7 @@ namespace Vespolina\Billing\Manager;
 
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
 use Vespolina\Entity\Billing\BillingAgreement;
+use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
@@ -76,6 +77,7 @@ class BillingManager implements BillingManagerInterface
     {
         $billingAgreements = array();
 
+        $recurring = array();
         /** @var $item \Vespolina\Entity\Order\ItemInterface */
         foreach ($order->getItems() as $item) {
             $pricingSet = $item->getPricing();
@@ -83,31 +85,52 @@ class BillingManager implements BillingManagerInterface
             // hack to initialize the entity and retrieve it from database
             $pricingSet->getProcessed();
 
-            // @iampersistant: at this point I am stuck: what is recurringCharge? where do we set it it at item level, in processed() method ?
-            $recurringCharge = $pricingSet->get('recurringCharge');
-
-            // Theo: starts in and interval at PricingSet level ?!?!
-            $startOn = '+1 ' . $pricingSet->get('interval');
-            $startDate = new \DateTime($startOn);
-
-            $billingAgreement = new BillingAgreement();
-            $billingAgreement
-                ->setPaymentGateway($order->getAttribute('payment_gateway'))
-                ->setPartner($order->getPartner())
-                ->setInitialBillingDate(new \DateTime('now'))
-                ->setNextBillingDate($startDate)
-                ->setBillingAmount($recurringCharge)
-                ->setBillingCycles($pricingSet->get('cycles'))
-                ->setBillingInterval($pricingSet->get('interval'))
-                ->setOrderItem($item)
-            ;
-
-            $this->gateway->persistBillingAgreement($billingAgreement);
-
-            $billingAgreements[] = $billingAgreement;
+            if ($recurringCharge = $pricingSet->get('recurringCharge')) {
+                $agreement = $this->addItemToAgreements($item, $billingAgreements);
+                $agreement
+                    ->setPaymentGateway($order->getAttribute('payment_gateway'))
+                    ->setPartner($order->getPartner());
+            }
         }
 
         return $billingAgreements;
+    }
+
+    protected function addItemToAgreements(ItemInterface $item, array $agreements)
+    {
+        $pricingSet = $item->getPricing();
+        $interval = $pricingSet->get('interval');
+        $cycles = $pricingSet->get('cycles');
+        $startsOn = $pricingSet->get('startsOn');
+
+        $activeAgreement = null;
+        foreach ($agreements as $agreement) {
+            if ($agreement->getBillingInterval() == $interval &&
+                $agreement->getBillingCycles() == $cycles &&
+                $agreement->getBillingInterval() == $startsOn->getTimestamp()) {
+                $activeAgreement = $agreement;
+            }
+        }
+
+        if (!$activeAgreement) {
+            $activeAgreement = new BillingAgreement();
+            $activeAgreement
+                ->setInitialBillingDate($startsOn)
+                ->setNextBillingDate($startsOn)
+                ->setBillingCycles($pricingSet->get('cycles'))
+                ->setBillingInterval($pricingSet->get('interval'));
+            ;
+            $agreements[] = $activeAgreement;
+        }
+
+        $activeAgreement->addOrderItem($item);
+        $curAmount = $activeAgreement->getBillingAmount();
+        $curAmount += $pricingSet->getNetValue();
+        $activeAgreement->setBillingAmount($curAmount);
+
+        $this->gateway->persistBillingAgreement($activeAgreement);
+
+        return $activeAgreement;
     }
 
     /**
@@ -164,6 +187,7 @@ class BillingManager implements BillingManagerInterface
      */
     public function processEligibleBillingAgreements(array $billingAgreements)
     {
+
     }
 
     /**
