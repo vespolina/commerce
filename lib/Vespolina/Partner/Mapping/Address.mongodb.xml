@@ -9,7 +9,7 @@
 
         <field name="type"          fieldName="type"            type="string" />
         <field name="street"        fieldName="street"          type="string" />
-        <field name="number"        fieldName="number"          type="integer" />
+        <field name="number"        fieldName="number"          type="int" />
         <field name="numbersuffix"  fieldName="numbersuffix"    type="string" />
         <field name="zipcode"       fieldName="zipcode"         type="string" />
         <field name="city"          fieldName="city"            type="string" />
