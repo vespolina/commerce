@@ -4,9 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Vespolina\ProductBundle\Document\Feature">
-        <field name="name" fieldName="name" type="string" />
-        <field name="type" fieldName="type" type="string" />
-        <field name="searchTerm" fieldName="searchTerm" type="string" />
-    </embedded-document>
+    <document name="Vespolina\Entity\Product\Product">
+
+    </document>
 </doctrine-mongo-mapping>

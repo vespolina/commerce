@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Application\Vespolina\ProductBundle\Document\OptionGroup">
+    <embedded-document name="Vespolina\Entity\Product\OptionGroup">
         <field name="id" id="true" />
         <field name="name" fieldName="name" type="string" />
         <field name="display" fieldName="display" type="string" />
