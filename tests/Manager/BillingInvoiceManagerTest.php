@@ -4,6 +4,8 @@ use ImmersiveLabs\CaraCore\Tests\TestBaseManager;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Product\ProductInterface;
+use ImmersiveLabs\Pricing\Entity\PricingContext;
+use Vespolina\Entity\Billing\BillingRequest;
 /**
  * @group billing-invoice-manager
  */
@@ -14,7 +16,44 @@ class BillingInvoiceManagerTest extends TestBaseManager
     public function testCreateInvoice()
     {
         $user = $this->createUser();
-        $order = $this->createOrder();
+        $order = $this->createOrder($user->getPartner());
+
+        $invoice = $this->getBillingInvoiceManager()->createInvoice($user->getPartner(), $order->getPricing());
+        $this->assertNotNull($invoice->getId());
+        $this->assertEquals($invoice->getAmountDue(), $order->getPricing()->get('totalValue'));
+    }
+
+    public function testTagAsCompleted()
+    {
+        $user = $this->createUser();
+        $order = $this->createOrder($user->getPartner());
+
+        $invoice = $this->getBillingInvoiceManager()->createInvoice($user->getPartner(), $order->getPricing());
+        $this->getBillingInvoiceManager()->tagAsPaid($invoice);
+
+        $this->assertNotNull($invoice->getInvoice());
+        $this->assertEquals($invoice->getStatus(), BillingRequest::STATUS_PAID);
+    }
+
+    public function testEmailNotification()
+    {
+        $user = $this->createUser();
+        $user
+            ->setEmail('test@gmail.com')
+            ->setUsername('test@gmail.com')
+            ->setFirstName('testuser')
+            ->setLastName('testuser')
+            ->setPlainPassword(uniqid('test'))
+        ;
+        $this->getUserManager()->persistUser($user);
+
+        $order = $this->createOrder($user->getPartner());
+
+        $invoice = $this->getBillingInvoiceManager()->createInvoice($user->getPartner(), $order->getPricing());
+
+        $this->getBillingInvoiceManager()->sendNotification($user, $invoice);
+
+        $this->assertQueueContents();
     }
 
     /**
@@ -29,16 +68,19 @@ class BillingInvoiceManagerTest extends TestBaseManager
     /**
      * @return Vespolina\Entity\Order\OrderInterface
      */
-    private function createOrder()
+    private function createOrder(PartnerInterface $partner)
     {
         /** @var ProductInterface $product  */
         $product = $this->getProductManager()->findProductBy(array('name' => self::PRODUCT_ID));
         $order = $this->getOrderManager()->createOrder();
+        $order->setPartner($partner);
         /** @var ItemInterface $item  */
         $item = $this->getOrderManager()->addProductToOrder($order, $product);
-        $item->setPricing($product->getPricing());
-        $order->setPricing($product->getPricing());
-//        $order->setTotalPrice($product->getPricing()->getNetValue());
+
+        $context = new PricingContext();
+        $context->set('partner', $order->getPartner());
+
+        $this->getOrderManager()->updateOrderPricing($order, $context);
         $this->getOrderManager()->updateOrder($order);
 
         return $order;

@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Vespolina\Entity\Billing\BillingInvoice" table="vespolina_billing_invoice">
+    <entity name="Vespolina\Entity\Billing\BillingRequest" table="vespolina_billing_request">
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO" />
         </id>
@@ -14,13 +14,17 @@
         <field name="amountDue" type="float" />
         <field name="status" type="string" />
 
-        <one-to-one field="order" target-entity="Vespolina\Entity\Order\Order">
-            <join-column name="order_id" referenced-column-name="id" />
+        <one-to-one field="pricingSet" target-entity="ImmersiveLabs\Pricing\Entity\PricingSet">
+            <join-column name="pricing_set_id" referenced-column-name="id" />
         </one-to-one>
 
         <one-to-one field="invoice" target-entity="Vespolina\Entity\Invoice\Invoice">
             <join-column name="invoice_id" referenced-column-name="id" />
         </one-to-one>
+
+        <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\Partner">
+            <join-column name="partner_id" referenced-column-name="id" />
+        </many-to-one>
 
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />

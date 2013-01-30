@@ -6,6 +6,7 @@ use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Exception\InvalidInterfaceException;
+use Vespolina\Entity\Billing\BillingRequestInterface;
 
 class BillingGateway implements BillingGatewayInterface
 {
@@ -16,11 +17,11 @@ class BillingGateway implements BillingGatewayInterface
      * @param \Molino\MolinoInterface $molino
      * @param string $managedClass
      */
-    public function __construct(MolinoInterface $molino, $billingAgreementClass)
+    public function __construct(MolinoInterface $molino, $billingAgreementClass, $billingRequestClass)
     {
         if (!class_exists($billingAgreementClass) ||
             !in_array('Vespolina\Entity\Billing\BillingAgreementInterface', class_implements($billingAgreementClass))) {
-            throw new InvalidInterfaceException('Please have your billingAgreement class implement Vespolina\Entity\Billing\BillingAgreementInterface');
+            throw new InvalidInterfaceException('Please have your BillingAgreement class implement Vespolina\Entity\Billing\BillingAgreementInterface');
         }
         $this->molino = $molino;
         $this->billingAgreementClass = $billingAgreementClass;
