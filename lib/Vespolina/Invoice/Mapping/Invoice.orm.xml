@@ -14,6 +14,7 @@
         <field name="payment" type="float" />
         <field name="periodEnd" type="datetime" />
         <field name="periodStart" type="datetime" />
+        <field name="paid" type="boolean" />
 
         <one-to-one field="previousInvoice" target-entity="Vespolina\Entity\Invoice\Invoice">
         </one-to-one>
