@@ -4,22 +4,20 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Vespolina\OrderBundle\Document\Order" collection="vespolina_cart">
+    <mapped-superclass name="Vespolina\Entity\Order\BaseOrder" collection="vespolina_cart">
         <field name="id" id="true" />
 
         <field name="createdAt"      fieldName="createdAt"      type="date" />
         <field name="expiresAt"      fieldName="expiresAt"      type="date" />
-        <field name="owner"          fieldName="owner"          type="string" />
-        <field name="pricingSetData" fieldName="pricingSetData" type="array" />
+        <field name="pricingSetData" fieldName="pricingSetData" type="hash" />
         <field name="state"          fieldName="state"          type="string" />
         <field name="totalPrice"     fieldName="totalPrice"     type="string" />
         <field name="updatedAt"      fieldName="updatedAt"      type="date" />
-        <field name="attributes"      fieldName="attributes"    type="array" strategy="set" />
+        <field name="attributes"      fieldName="attributes"    type="hash" strategy="set" />
 
-        <!--
+        <reference-one field="owner" fieldName="owner"  />
         <embed-many field="items"
-                    target-document="Application\Vespolina\OrderBundle\Document\OrderItem"
-        />
--->
-    </document>
+                    target-document="Vespolina\Entity\Order\Item"/>
+
+    </mapped-superclass>
 </doctrine-mongo-mapping>

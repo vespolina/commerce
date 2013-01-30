@@ -4,16 +4,16 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <embedded-document name="Vespolina\OrderBundle\Document\OrderItem">
+    <embedded-document name="Vespolina\Entity\Order\Item">
 
-        <field name="description"    fieldName="description"    type="string" />
-        <field name="isRecurring"    fieldName="isRecurring"    type="boolean" />
+       <!-- <field name="description"    fieldName="description"    type="string" /> -->
+       <!-- <field name="isRecurring"    fieldName="isRecurring"    type="boolean" />-->
         <field name="name"           fieldName="name"           type="string" />
         <field name="options"        fieldName="options"        type="hash" />
-        <field name="pricingSetData" fieldName="pricingSetData" type="hash" />
+        <field name="pricingSet"     fieldName="pricingSet"     type="hash" />
         <field name="quantity"       fieldName="quantity"       type="string" />
         <field name="state"          fieldName="state"          type="string" />
-        <field name="totalPrice"     fieldName="totalPrice"     type="string" />
+        <!--<field name="totalPrice"     fieldName="totalPrice"     type="string" /> -->
        <!-- <reference-one fieldName="product" field="product" /> -->
 
     </embedded-document>
