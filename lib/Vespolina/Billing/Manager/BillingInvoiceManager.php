@@ -2,26 +2,25 @@
 
 namespace Vespolina\Billing\Manager;
 
-use Vespolina\Entity\Billing\BillingInvoiceInterface;
-use Vespolina\Billing\Gateway\BillingInvoiceGatewayInterface;
+use Vespolina\Entity\Billing\BillingRequestInterface;
+use Vespolina\Billing\Gateway\BillingGatewayInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Molino\QueryInterface;
 use ImmersiveLabs\DefaultBundle\Service\EmailService;
 use Vespolina\Invoice\Manager\InvoiceManagerInterface;
-use Vespolina\Entity\Billing\BillingInvoice;
+use Vespolina\Entity\Billing\BillingRequest;
 use Vespolina\Entity\Invoice\Invoice;
 use Vespolina\Entity\Order\OrderEvents;
 use ImmersiveLabs\CaraCore\Entity\User;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
+use ImmersiveLabs\Pricing\Entity\PricingSet;
+use Vespolina\Entity\Partner\PartnerInterface;
 
 class BillingInvoiceManager implements BillingInvoiceManagerInterface
 {
-    /** @var BillingInvoiceGatewayInterface */
+    /** @var BillingGatewayInterface */
     protected $gateway;
-
-    /** @var EventDispatcherInterface */
-    protected $eventDispatcher;
 
     /** @var EmailService */
     protected $emailService;
@@ -44,45 +43,41 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
     }
 
     /**
-     * @param BillingInvoiceInterface $invoice
+     * @param BillingRequestInterface $invoice
      */
-    public function sendNotification(User $user, BillingInvoiceInterface $invoice)
+    public function sendNotification(User $user, BillingRequestInterface $invoice)
     {
-        $this->emailService->sendInvoicePaid($user, $invoice);
+        $this->emailService->sendInvoicePending($user, $invoice);
     }
 
     /**
-     * @param OrderInterface $order
-     * @return BillingInvoiceInterface
+     * @param PartnerInterface $partner
+     * @param PricingSet $pricingSet
+     * @return BillingRequestInterface
      */
-    public function createInvoice(OrderInterface $order)
+    public function createInvoice(PartnerInterface $partner, PricingSet $pricingSet)
     {
-        $amountDue = 0;
+        $amountDue = $pricingSet->get('totalValue');
 
-        foreach ($order->getItems() as $item) {
-            /** @var ItemInterface $item */
-
-            $amountDue += $item->getPricing()->getTotalValue();
-        }
-
-        $invoice = new BillingInvoice();
+        $invoice = new BillingRequest();
         $invoice
             ->setDueDate(new \DateTime($this->getDuration()))
-            ->setOrder($order)
+            ->setPricingSet($pricingSet)
             ->setAmountDue($amountDue)
-            ->setStatus(BillingInvoice::STATUS_PENDING)
+            ->setPartner($partner)
+            ->setStatus(BillingRequest::STATUS_PENDING)
         ;
-        $this->gateway->persistBillingInvoice($invoice);
+        $this->gateway->persistBillingRequest($invoice);
 
         return $invoice;
     }
 
     /**
-     * @param BillingInvoiceInterface $invoice
+     * @param BillingRequestInterface $invoice
      */
-    public function tagAsPaid(BillingInvoiceInterface $invoice)
+    public function tagAsPaid(BillingRequestInterface $invoice)
     {
-        $partner = $invoice->getOrder()->getPartner();
+        $partner = $invoice->getPartner();
 
         $logInvoice = new Invoice();
         $logInvoice
@@ -94,23 +89,18 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
             ->setPeriodEnd(new \DateTime())
         ;
 
-        $logInvoice->getOrders()->add($invoice->getOrder());
-
         $this->getInvoiceManager()->updateInvoice($logInvoice);
 
         $invoice
             ->setInvoice($logInvoice)
-            ->setStatus(BillingInvoice::STATUS_PAID)
+            ->setStatus(BillingRequest::STATUS_PAID)
         ;
 
-        $this->gateway->updateBillingInvoice($invoice);
-
-        $event = $this->eventDispatcher->createEvent($invoice->getOrder());
-        $this->eventDispatcher->dispatch(OrderEvents::FINISHED, $event);
+        $this->gateway->updateBillingRequest($invoice);
     }
 
     /**
-     * @return \Vespolina\Billing\Gateway\BillingInvoiceGatewayInterface
+     * @return \Vespolina\Billing\Gateway\BillingGatewayInterface
      */
     public function getGateway()
     {
@@ -118,29 +108,11 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
     }
 
     /**
-     * @param \Vespolina\Billing\Gateway\BillingInvoiceGatewayInterface $gateway
+     * @param \Vespolina\Billing\Gateway\BillingGatewayInterface $gateway
      */
     public function setGateway($gateway)
     {
         $this->gateway = $gateway;
-
-        return $this;
-    }
-
-    /**
-     * @return \Vespolina\EventDispatcher\EventDispatcherInterface
-     */
-    public function getEventDispatcher()
-    {
-        return $this->eventDispatcher;
-    }
-
-    /**
-     * @param \Vespolina\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
-    public function setEventDispatcher($eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
 
         return $this;
     }

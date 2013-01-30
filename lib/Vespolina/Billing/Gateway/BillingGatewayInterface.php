@@ -6,6 +6,7 @@ use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Exception\InvalidInterfaceException;
+use Vespolina\Entity\Billing\BillingRequestInterface;
 
 interface BillingGatewayInterface
 {

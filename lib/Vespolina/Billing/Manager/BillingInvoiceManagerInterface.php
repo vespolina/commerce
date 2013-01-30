@@ -2,7 +2,9 @@
 
 namespace Vespolina\Billing\Manager;
 
-use Vespolina\Entity\Billing\BillingInvoiceInterface;
+use Vespolina\Entity\Billing\BillingRequestInterface;
+use ImmersiveLabs\Pricing\Entity\PricingSet;
+use Vespolina\Entity\Partner\PartnerInterface;
 use Molino\QueryInterface;
 use ImmersiveLabs\CaraCore\Entity\User;
 use Vespolina\Entity\Order\OrderInterface;
@@ -22,40 +24,31 @@ interface BillingInvoiceManagerInterface
     function findAllByStatus($status);
 
     /**
-     * @param BillingInvoiceInterface $invoice
+     * @param BillingRequestInterface $invoice
      */
-    function sendNotification(User $user, BillingInvoiceInterface $invoice);
+    function sendNotification(User $user, BillingRequestInterface $invoice);
 
     /**
-     * @param OrderInterface $order
-     * @return BillingInvoiceInterface
+     * @param PartnerInterface $partner
+     * @param PricingSet $pricingSet
+     * @return BillingRequestInterface
      */
-    function createInvoice(OrderInterface $order);
+    function createInvoice(PartnerInterface $partner, PricingSet $pricingSet);
 
     /**
-     * @param BillingInvoiceInterface $invoice
+     * @param BillingRequestInterface $invoice
      */
-    function tagAsPaid(BillingInvoiceInterface $invoice);
+    function tagAsPaid(BillingRequestInterface $invoice);
 
     /**
-     * @return \Vespolina\Billing\Gateway\BillingInvoiceGatewayInterface
+     * @return \Vespolina\Billing\Gateway\BillingGatewayInterface
      */
     function getGateway();
 
     /**
-     * @param \Vespolina\Billing\Gateway\BillingInvoiceGatewayInterface $gateway
+     * @param \Vespolina\Billing\Gateway\BillingGatewayInterface $gateway
      */
     function setGateway($gateway);
-
-    /**
-     * @return \Vespolina\EventDispatcher\EventDispatcherInterface
-     */
-    function getEventDispatcher();
-
-    /**
-     * @param \Vespolina\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     */
-    function setEventDispatcher($eventDispatcher);
 
     /**
      * @return \ImmersiveLabs\DefaultBundle\Service\EmailService
