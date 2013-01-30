@@ -85,7 +85,7 @@ class BillingManager implements BillingManagerInterface
             // hack to initialize the entity and retrieve it from database
             $pricingSet->getProcessed();
 
-            if ($recurringCharge = $pricingSet->get('recurringCharge')) {
+            if ($pricingSet->get('recurringCharge')) {
                 $agreement = $this->addItemToAgreements($item, $billingAgreements);
                 $agreement
                     ->setPaymentGateway($order->getAttribute('payment_gateway'))
@@ -96,18 +96,18 @@ class BillingManager implements BillingManagerInterface
         return $billingAgreements;
     }
 
-    protected function addItemToAgreements(ItemInterface $item, array $agreements)
+    protected function addItemToAgreements(ItemInterface $item, array &$agreements)
     {
         $pricingSet = $item->getPricing();
         $interval = $pricingSet->get('interval');
         $cycles = $pricingSet->get('cycles');
-        $startsOn = $pricingSet->get('startsOn');
+        $startsOn = $pricingSet->get('startsOn')->getTimestamp();
 
         $activeAgreement = null;
         foreach ($agreements as $agreement) {
             if ($agreement->getBillingInterval() == $interval &&
                 $agreement->getBillingCycles() == $cycles &&
-                $agreement->getBillingInterval() == $startsOn->getTimestamp()) {
+                $agreement->getInitialBillingDate()->getTimestamp() == $startsOn) {
                 $activeAgreement = $agreement;
             }
         }
@@ -115,8 +115,8 @@ class BillingManager implements BillingManagerInterface
         if (!$activeAgreement) {
             $activeAgreement = new BillingAgreement();
             $activeAgreement
-                ->setInitialBillingDate($startsOn)
-                ->setNextBillingDate($startsOn)
+                ->setInitialBillingDate($pricingSet->get('startsOn'))
+                ->setNextBillingDate($pricingSet->get('startsOn'))
                 ->setBillingCycles($pricingSet->get('cycles'))
                 ->setBillingInterval($pricingSet->get('interval'));
             ;
