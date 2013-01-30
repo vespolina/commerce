@@ -14,9 +14,9 @@
         <field name="amountDue" type="float" />
         <field name="status" type="string" />
 
-        <one-to-one field="pricingSet" target-entity="ImmersiveLabs\Pricing\Entity\PricingSet">
+        <many-to-one field="pricingSet" target-entity="ImmersiveLabs\Pricing\Entity\PricingSet">
             <join-column name="pricing_set_id" referenced-column-name="id" />
-        </one-to-one>
+        </many-to-one>
 
         <one-to-one field="invoice" target-entity="Vespolina\Entity\Invoice\Invoice">
             <join-column name="invoice_id" referenced-column-name="id" />
