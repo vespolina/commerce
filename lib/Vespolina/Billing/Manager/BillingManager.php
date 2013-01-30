@@ -230,8 +230,18 @@ class BillingManager implements BillingManagerInterface
      * @param $orderItem
      * @return BillingAgreement
      */
-    public function findBillingAgreementForItem($orderItem)
+    public function findBillingAgreementForItem(ItemInterface $orderItem)
     {
-        return $this->doFindOneBy(array('orderItem' => $orderItem));
+        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
+        $query = $this->gateway->createQuery('Select');
+        $qb = $query->getQueryBuilder();
+
+        $qb
+            ->join('m.orderItems', 'i')
+            ->where('i.id = :item')
+            ->setParameter('item', $orderItem->getId())
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }
