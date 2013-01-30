@@ -4,7 +4,7 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Vespolina\OrderBundle\Document\Order" collection="vespolina_cart">
+    <document name="Vespolina\Entity\Order\Order" collection="vespolina_base_order">
         <field name="id" id="true" />
 
         <field name="createdAt"      fieldName="createdAt"      type="date" />
