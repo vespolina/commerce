@@ -17,7 +17,7 @@ class BillingGateway implements BillingGatewayInterface
      * @param \Molino\MolinoInterface $molino
      * @param string $managedClass
      */
-    public function __construct(MolinoInterface $molino, $billingAgreementClass, $billingRequestClass)
+    public function __construct(MolinoInterface $molino, $billingAgreementClass)
     {
         if (!class_exists($billingAgreementClass) ||
             !in_array('Vespolina\Entity\Billing\BillingAgreementInterface', class_implements($billingAgreementClass))) {

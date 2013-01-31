@@ -4,7 +4,7 @@ use ImmersiveLabs\CaraCore\Tests\TestBaseManager;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Product\ProductInterface;
-use ImmersiveLabs\Pricing\Entity\PricingContext;
+use Vespolina\Entity\Pricing\PricingContext;
 use Vespolina\Entity\Billing\BillingRequest;
 /**
  * @group billing-invoice-manager
@@ -78,7 +78,7 @@ class BillingInvoiceManagerTest extends TestBaseManager
         $item = $this->getOrderManager()->addProductToOrder($order, $product);
 
         $context = new PricingContext();
-        $context->set('partner', $order->getPartner());
+        $context['partner'] = $order->getPartner();
 
         $this->getOrderManager()->updateOrderPricing($order, $context);
         $this->getOrderManager()->updateOrder($order);
