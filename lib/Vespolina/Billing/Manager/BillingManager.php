@@ -10,6 +10,7 @@ namespace Vespolina\Billing\Manager;
 
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
 use Vespolina\Entity\Billing\BillingAgreement;
+use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
@@ -20,11 +21,13 @@ use Vespolina\Entity\Order\OrderEvents;
 
 class BillingManager implements BillingManagerInterface
 {
-    protected $cartClass;
+    protected $billingAgreementClass;
+    protected $billingRequestClass;
+    protected $contexts;
     protected $eventDispatcher;
     protected $gateway;
 
-    public function __construct(BillingGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
+    public function __construct(BillingGatewayInterface $gateway, array $classMapping, array $contexts, EventDispatcherInterface $eventDispatcher = null)
     {
         $missingClasses = array();
         foreach (array('billingAgreement', 'billingRequest') as $class) {
@@ -50,6 +53,12 @@ class BillingManager implements BillingManagerInterface
 
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
+        foreach ($contexts as $context) {
+            $process = $context['process'];
+            $paymentType = $context['paymentType'];
+
+            $this->context[$process][$paymentType] = $context;
+        }
     }
 
     /**
@@ -136,10 +145,17 @@ class BillingManager implements BillingManagerInterface
     /**
      * @inheritdoc
      */
-    function createBillingRequest(PartnerInterface $partner)
+    function createBillingRequest(BillingAgreementInterface $billingAgreement)
     {
-        $orderArray = $this->orderManager->findClosedOrdersByOwner($partner);
-        //$orderArray->toArray();
+        if (!$billingAgreement->getActive()) {
+            return false;
+        }
+
+        $query = $this->gateway->createQuery('select', $this->billingAgreementClass);
+        $paymentType = $billingAgreement->getPaymentProfile()->getType();
+        $context = $this->context['billingRequest'][$paymentType];
+        // todo: find everything in the context then process ....
+
     }
 
     /**
@@ -153,11 +169,12 @@ class BillingManager implements BillingManagerInterface
     /**
      * Finds billing agreements that are due
      *
+     * @param $context
      * @param $limit
      * @param int $page
      * @return array
      */
-    public function findEligibleBillingAgreements($limit, $page = 1)
+    public function findEligibleBillingAgreements($limit = null, $page = 1)
     {
         $offset = ($page - 1) * $limit;
 
@@ -180,6 +197,8 @@ class BillingManager implements BillingManagerInterface
             ->getResult()
         ;
     }
+
+
 
     /**
      * @todo add implementation, please don't forget to call $em->clear() after each batch
