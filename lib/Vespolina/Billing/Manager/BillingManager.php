@@ -216,6 +216,13 @@ class BillingManager implements BillingManagerInterface
         return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param array $criteria
+     * @param array $orderBy
+     * @param null $limit
+     * @param null $offset
+     * @return null
+     */
     public function doFindOneBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         $result = $this->doFindBy($criteria, $orderBy, $limit, $offset);
@@ -224,6 +231,17 @@ class BillingManager implements BillingManagerInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param $partner
+     * @return array
+     */
+    public function findBillingAgreementForPartner($partner)
+    {
+        return $this->doFindBy(array(
+            'partner' => $partner
+        ));
     }
 
     /**
