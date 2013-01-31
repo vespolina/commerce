@@ -17,7 +17,6 @@
         <field name="initialBillingDate" type="datetime" />
         <field name="nextBillingDate" type="datetime" />
         <field name="numberCyclesBilled" type="integer" />
-        <field name="paymentGateway" type="string" nullable="true" />
         <field name="updatedAt" type="datetime" />
 
         <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
@@ -33,6 +32,9 @@
             </join-table>
         </many-to-many>
         <many-to-one field="order" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="billingAgreements">
+        </many-to-one>
+
+        <many-to-one field="paymentProfile" target-entity="Vespolina\Entity\Partner\PaymentProfile">
         </many-to-one>
 
         <lifecycle-callbacks>
