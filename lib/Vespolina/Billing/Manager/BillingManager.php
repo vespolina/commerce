@@ -237,11 +237,30 @@ class BillingManager implements BillingManagerInterface
      * @param $partner
      * @return array
      */
-    public function findBillingAgreementForPartner($partner)
+    public function findBillingAgreementsForPartner($partner)
     {
         return $this->doFindBy(array(
             'partner' => $partner
         ));
+    }
+
+    /**
+     * @param $partner
+     * @return int
+     */
+    public function getMonthlyTotalForPartner($partner)
+    {
+        $billingAgreements = $this->findBillingAgreementsForPartner($partner);
+
+        $total = 0;
+        foreach ($billingAgreements as $billingAgreement) {
+            /** @var $billingAgreement BillingAgreement */
+            if ($billingAgreement->getBillingInterval() == 'month') {
+                $total += $billingAgreement->getBillingAmount();
+            }
+        }
+
+        return $total;
     }
 
     /**
