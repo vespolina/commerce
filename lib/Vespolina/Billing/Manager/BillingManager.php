@@ -14,6 +14,7 @@ use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
+use Vespolina\Entity\Pricing\PricingContextInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\NullDispatcher;
 use Vespolina\Exception\InvalidConfigurationException;
@@ -53,7 +54,8 @@ class BillingManager implements BillingManagerInterface
 
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
-        foreach ($contexts as $context) {
+        foreach ($contexts as $contextClass) {
+            $context = new $contextClass();
             $process = $context['process'];
             $paymentType = $context['paymentType'];
 
@@ -97,7 +99,7 @@ class BillingManager implements BillingManagerInterface
             if ($pricingSet->get('recurringCharge')) {
                 $agreement = $this->addItemToAgreements($item, $billingAgreements);
                 $agreement
-                    ->setPaymentGateway($order->getAttribute('payment_gateway'))
+                    ->setPaymentProfile($order->getPartner()->getPreferredPaymentProfile())
                     ->setPartner($order->getPartner());
             }
         }
@@ -133,9 +135,8 @@ class BillingManager implements BillingManagerInterface
         }
 
         $activeAgreement->addOrderItem($item);
-        $curAmount = $activeAgreement->getBillingAmount();
-        $curAmount += $pricingSet->getNetValue();
-        $activeAgreement->setBillingAmount($curAmount);
+        $activePricingSet = $activeAgreement->getPricing();
+        $activeAgreement->setPricing($pricingSet->plus($activePricingSet));
 
         $this->gateway->persistBillingAgreement($activeAgreement);
 
@@ -151,11 +152,23 @@ class BillingManager implements BillingManagerInterface
             return false;
         }
 
-        $query = $this->gateway->createQuery('select', $this->billingAgreementClass);
         $paymentType = $billingAgreement->getPaymentProfile()->getType();
         $context = $this->context['billingRequest'][$paymentType];
         // todo: find everything in the context then process ....
+        $relatedAgreements = $this->findBillingAgreements($context);
 
+        $billingRequest = new $this->billingRequestClass();
+        $requestPricingSet = null;
+        foreach ($relatedAgreements as $agreement) {
+            $billingRequest->mergeOrderItems($agreement->getOrderItems());
+            $requestPricingSet = $agreement->getPricing()->plus($requestPricingSet);
+        }
+        $billingRequest->setPricing($requestPricingSet);
+        $billingRequest->setDueDate($agreement->getNextBillingDate());
+
+        $this->gateway->persistBillingRequest($billingRequest);
+
+        return $requestPricingSet;
     }
 
     /**
@@ -164,6 +177,37 @@ class BillingManager implements BillingManagerInterface
     public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return $this->doFindBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * Finds billing agreements that are due
+     *
+     * @param $context
+     * @param $limit
+     * @param int $page
+     * @return array
+     */
+    public function findBillingAgreements(PricingContextInterface $context, $limit = null, $page = 1)
+    {
+        $offset = ($page - 1) * $limit;
+
+        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
+        $query = $this->gateway->createQuery('select');
+        $endDate = new \DateTime($context['endDate']);
+        $query->filterLessEqual('nextBillingDate', $endDate);
+        if ($context['startDate']) {
+            $startDate = new \DateTime($context['startDate']);
+            $query->filterGreater('nextBillingDate', $startDate);
+        }
+        $query->filterEqual('active', 1);
+        if ($limit) {
+            $query->limit($limit);
+        }
+        if ($offset) {
+            $query->skip($offset);
+        }
+
+        return $query->all();
     }
 
     /**

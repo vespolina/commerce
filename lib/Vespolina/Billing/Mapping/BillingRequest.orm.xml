@@ -11,16 +11,30 @@
 
         <field name="dueDate" type="datetime" />
         <field name="createdAt" type="datetime" />
-        <field name="amountDue" type="float" />
         <field name="status" type="string" />
-
-        <many-to-one field="pricingSet" target-entity="ImmersiveLabs\Pricing\Entity\PricingSet">
-            <join-column name="pricing_set_id" referenced-column-name="id" />
-        </many-to-one>
 
         <one-to-one field="invoice" target-entity="Vespolina\Entity\Invoice\Invoice">
             <join-column name="invoice_id" referenced-column-name="id" />
         </one-to-one>
+
+        <many-to-many field="orderItems" target-entity="Vespolina\Entity\Order\ItemInterface">
+            <join-table name="billingRequest_Items">
+                <join-columns>
+                    <join-column name="billingRequest_id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="orderItem_id"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+        <many-to-one field="pricingSet" target-entity="ImmersiveLabs\Pricing\Entity\PricingSet">
+            <join-column name="pricingSet_id" referenced-column-name="id" />
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </many-to-one>
 
         <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\Partner">
             <join-column name="partner_id" referenced-column-name="id" />
