@@ -10,9 +10,11 @@ namespace Vespolina\Billing\Manager;
 
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
 use Vespolina\Entity\Billing\BillingAgreement;
+use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
+use Vespolina\Entity\Pricing\PricingContextInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\NullDispatcher;
 use Vespolina\Exception\InvalidConfigurationException;
@@ -20,11 +22,13 @@ use Vespolina\Entity\Order\OrderEvents;
 
 class BillingManager implements BillingManagerInterface
 {
-    protected $cartClass;
+    protected $billingAgreementClass;
+    protected $billingRequestClass;
+    protected $contexts;
     protected $eventDispatcher;
     protected $gateway;
 
-    public function __construct(BillingGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
+    public function __construct(BillingGatewayInterface $gateway, array $classMapping, array $contexts, EventDispatcherInterface $eventDispatcher = null)
     {
         $missingClasses = array();
         foreach (array('billingAgreement', 'billingRequest') as $class) {
@@ -50,6 +54,13 @@ class BillingManager implements BillingManagerInterface
 
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
+        foreach ($contexts as $contextClass) {
+            $context = new $contextClass();
+            $process = $context['process'];
+            $paymentType = $context['paymentType'];
+
+            $this->context[$process][$paymentType] = $context;
+        }
     }
 
     /**
@@ -88,7 +99,7 @@ class BillingManager implements BillingManagerInterface
             if ($pricingSet->get('recurringCharge')) {
                 $agreement = $this->addItemToAgreements($item, $billingAgreements);
                 $agreement
-                    ->setPaymentGateway($order->getAttribute('payment_gateway'))
+                    ->setPaymentProfile($order->getPartner()->getPreferredPaymentProfile())
                     ->setPartner($order->getPartner());
             }
         }
@@ -124,9 +135,8 @@ class BillingManager implements BillingManagerInterface
         }
 
         $activeAgreement->addOrderItem($item);
-        $curAmount = $activeAgreement->getBillingAmount();
-        $curAmount += $pricingSet->getNetValue();
-        $activeAgreement->setBillingAmount($curAmount);
+        $activePricingSet = $activeAgreement->getPricing();
+        $activeAgreement->setPricing($pricingSet->plus($activePricingSet));
 
         $this->gateway->persistBillingAgreement($activeAgreement);
 
@@ -136,10 +146,29 @@ class BillingManager implements BillingManagerInterface
     /**
      * @inheritdoc
      */
-    function createBillingRequest(PartnerInterface $partner)
+    function createBillingRequest(BillingAgreementInterface $billingAgreement)
     {
-        $orderArray = $this->orderManager->findClosedOrdersByOwner($partner);
-        //$orderArray->toArray();
+        if (!$billingAgreement->getActive()) {
+            return false;
+        }
+
+        $paymentType = $billingAgreement->getPaymentProfile()->getType();
+        $context = $this->context['billingRequest'][$paymentType];
+        // todo: find everything in the context then process ....
+        $relatedAgreements = $this->findBillingAgreements($context);
+
+        $billingRequest = new $this->billingRequestClass();
+        $requestPricingSet = null;
+        foreach ($relatedAgreements as $agreement) {
+            $billingRequest->mergeOrderItems($agreement->getOrderItems());
+            $requestPricingSet = $agreement->getPricing()->plus($requestPricingSet);
+        }
+        $billingRequest->setPricing($requestPricingSet);
+        $billingRequest->setDueDate($agreement->getNextBillingDate());
+
+        $this->gateway->persistBillingRequest($billingRequest);
+
+        return $requestPricingSet;
     }
 
     /**
@@ -153,11 +182,43 @@ class BillingManager implements BillingManagerInterface
     /**
      * Finds billing agreements that are due
      *
+     * @param $context
      * @param $limit
      * @param int $page
      * @return array
      */
-    public function findEligibleBillingAgreements($limit, $page = 1)
+    public function findBillingAgreements(PricingContextInterface $context, $limit = null, $page = 1)
+    {
+        $offset = ($page - 1) * $limit;
+
+        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
+        $query = $this->gateway->createQuery('select');
+        $endDate = new \DateTime($context['endDate']);
+        $query->filterLessEqual('nextBillingDate', $endDate);
+        if ($context['startDate']) {
+            $startDate = new \DateTime($context['startDate']);
+            $query->filterGreater('nextBillingDate', $startDate);
+        }
+        $query->filterEqual('active', 1);
+        if ($limit) {
+            $query->limit($limit);
+        }
+        if ($offset) {
+            $query->skip($offset);
+        }
+
+        return $query->all();
+    }
+
+    /**
+     * Finds billing agreements that are due
+     *
+     * @param $context
+     * @param $limit
+     * @param int $page
+     * @return array
+     */
+    public function findEligibleBillingAgreements($limit = null, $page = 1)
     {
         $offset = ($page - 1) * $limit;
 
@@ -180,6 +241,8 @@ class BillingManager implements BillingManagerInterface
             ->getResult()
         ;
     }
+
+
 
     /**
      * @todo add implementation, please don't forget to call $em->clear() after each batch

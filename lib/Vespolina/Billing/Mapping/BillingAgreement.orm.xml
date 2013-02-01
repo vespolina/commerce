@@ -10,10 +10,8 @@
         </id>
 
         <field name="active" type="boolean" />
-        <field name="billingAmount" type="float" />
         <field name="billingCycles" type="integer" />
         <field name="billingInterval" type="string" />
-        <field name="paymentGateway" type="string" nullable="true"/>
         <field name="createdAt" type="datetime" />
         <field name="initialBillingDate" type="datetime" />
         <field name="nextBillingDate" type="datetime" />
@@ -36,6 +34,14 @@
         </many-to-one>
 
         <many-to-one field="paymentProfile" target-entity="Vespolina\Entity\Partner\PaymentProfile">
+        </many-to-one>
+
+        <many-to-one field="pricingSet" target-entity="ImmersiveLabs\Pricing\Entity\PricingSet">
+            <join-column name="pricingSet_id" referenced-column-name="id" />
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
         </many-to-one>
 
         <lifecycle-callbacks>

@@ -2,6 +2,7 @@
 
 namespace Vespolina\Billing\Gateway;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
 use Vespolina\Entity\Billing\BillingAgreementInterface;

@@ -8,8 +8,8 @@
 
 namespace Vespolina\Billing\Manager;
 
+use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Order\OrderInterface;
-use Vespolina\Entity\Partner\PartnerInterface;
 
 /**
  * An interface to manage the creation of billing requests
@@ -33,10 +33,10 @@ interface BillingManagerInterface
     /**
      * Create a new billing request
      *
-     * @param \Vespolina\Entity\Partner\PartnerInterface $partner
+     * @param \Vespolina\Entity\Billing\BillingAgreementInterface $billingAgreement
      * @return \Vespolina\Entity\Billing\BillingRequestInterface
      */
-    function createBillingRequest(PartnerInterface $partner);
+    function createBillingRequest(BillingAgreementInterface $partner);
 
     /**
      * Find billing agreements by specified fields and values
