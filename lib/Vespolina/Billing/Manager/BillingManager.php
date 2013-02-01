@@ -154,7 +154,8 @@ class BillingManager implements BillingManagerInterface
 
         $paymentType = $billingAgreement->getPaymentProfile()->getType();
         $context = $this->context['billingRequest'][$paymentType];
-        // todo: find everything in the context then process ....
+        $partner = $billingAgreement->getPartner();
+        $context['partner'] = $partner;
         $relatedAgreements = $this->findBillingAgreements($context);
 
         $billingRequest = new $this->billingRequestClass();
@@ -165,6 +166,7 @@ class BillingManager implements BillingManagerInterface
         }
         $billingRequest->setPricing($requestPricingSet);
         $billingRequest->setDueDate($agreement->getNextBillingDate());
+        $billingRequest->setPartner($partner);
 
         $this->gateway->persistBillingRequest($billingRequest);
 
@@ -198,6 +200,9 @@ class BillingManager implements BillingManagerInterface
         if ($context['startDate']) {
             $startDate = new \DateTime($context['startDate']);
             $query->filterGreater('nextBillingDate', $startDate);
+        }
+        if ($context['partner']) {
+            $query->filterEqual('partner', $context['partner']);
         }
         $query->filterEqual('active', 1);
         if ($limit) {
