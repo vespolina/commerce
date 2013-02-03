@@ -14,6 +14,7 @@ use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
+use Vespolina\Entity\Pricing\PricingContext;
 use Vespolina\Entity\Pricing\PricingContextInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\NullDispatcher;
@@ -87,38 +88,50 @@ class BillingManager implements BillingManagerInterface
     public function createBillingAgreements(OrderInterface $order)
     {
         $billingAgreements = array();
+        $partner = $order->getPartner();
+        $paymentProfile = $partner->getPreferredPaymentProfile();
 
-        $recurring = array();
+        $paymentProfileType = $paymentProfile->getType();
+        $context = $this->context['billingAgreement'][$paymentProfileType];
+
         /** @var $item \Vespolina\Entity\Order\ItemInterface */
         foreach ($order->getItems() as $item) {
             $pricingSet = $item->getPricing();
+
 
             // hack to initialize the entity and retrieve it from database
             $pricingSet->getProcessed();
 
             if ($pricingSet->get('recurringCharge')) {
-                $agreement = $this->addItemToAgreements($item, $billingAgreements);
+                $agreement = $this->addItemToAgreements($item, $billingAgreements, $context);
                 $agreement
-                    ->setPaymentProfile($order->getPartner()->getPreferredPaymentProfile())
-                    ->setPartner($order->getPartner());
+                    ->setPaymentProfile($paymentProfile)
+                    ->setPartner($partner);
             }
         }
 
         return $billingAgreements;
     }
 
-    protected function addItemToAgreements(ItemInterface $item, array &$agreements)
+    protected function addItemToAgreements(ItemInterface $item, array &$agreements, PricingContextInterface $context)
     {
         $pricingSet = $item->getPricing();
         $interval = $pricingSet->get('interval');
         $cycles = $pricingSet->get('cycles');
-        $startsOn = $pricingSet->get('startsOn')->getTimestamp();
+        if ($context['dueDate']) {
+            $startsOn = $pricingSet->get('startsOn');
+            $date = explode(',', $startsOn->format('Y,m'));
+            $startsOn->setDate($date[0], $date[1], $context['dueDate']);
+        } else {
+            $startsOn = $pricingSet->get('startsOn');
+        }
+        $startTimestamp = $startsOn->getTimestamp();
 
         $activeAgreement = null;
         foreach ($agreements as $agreement) {
             if ($agreement->getBillingInterval() == $interval &&
                 $agreement->getBillingCycles() == $cycles &&
-                $agreement->getInitialBillingDate()->getTimestamp() == $startsOn) {
+                $agreement->getInitialBillingDate()->getTimestamp() == $startTimestamp) {
                 $activeAgreement = $agreement;
             }
         }
@@ -126,8 +139,8 @@ class BillingManager implements BillingManagerInterface
         if (!$activeAgreement) {
             $activeAgreement = new BillingAgreement();
             $activeAgreement
-                ->setInitialBillingDate($pricingSet->get('startsOn'))
-                ->setNextBillingDate($pricingSet->get('startsOn'))
+                ->setInitialBillingDate($startsOn)
+                ->setNextBillingDate($startsOn)
                 ->setBillingCycles($pricingSet->get('cycles'))
                 ->setBillingInterval($pricingSet->get('interval'));
             ;
@@ -163,6 +176,8 @@ class BillingManager implements BillingManagerInterface
         foreach ($relatedAgreements as $agreement) {
             $billingRequest->mergeOrderItems($agreement->getOrderItems());
             $requestPricingSet = $agreement->getPricing()->plus($requestPricingSet);
+            $agreement->completeCurrentCycle($billingRequest);
+            $this->gateway->updateBillingAgreement($agreement);
         }
         $billingRequest->setPricing($requestPricingSet);
         $billingRequest->setDueDate($agreement->getNextBillingDate());
