@@ -31,9 +31,10 @@ interface BillingInvoiceManagerInterface
     /**
      * @param PartnerInterface $partner
      * @param PricingSet $pricingSet
+     * @param $orderItems
      * @return BillingRequestInterface
      */
-    function createInvoice(PartnerInterface $partner, PricingSet $pricingSet);
+    function createInvoice(PartnerInterface $partner, PricingSet $pricingSet, $orderItems);
 
     /**
      * @param BillingRequestInterface $invoice

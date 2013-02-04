@@ -53,9 +53,10 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
     /**
      * @param PartnerInterface $partner
      * @param PricingSet $pricingSet
+     * @param $orderItems
      * @return BillingRequestInterface
      */
-    public function createInvoice(PartnerInterface $partner, PricingSet $pricingSet)
+    public function createInvoice(PartnerInterface $partner, PricingSet $pricingSet, $orderItems)
     {
         $amountDue = $pricingSet->get('totalValue');
 
@@ -65,8 +66,11 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
             ->setPricingSet($pricingSet)
             ->setAmountDue($amountDue)
             ->setPartner($partner)
-            ->setStatus(BillingRequest::STATUS_PENDING)
+            ->setStatus(BillingRequest::STATUS_INVOICE_SENT)
         ;
+
+        $invoice->mergeOrderItems($orderItems);
+
         $this->gateway->persistBillingRequest($invoice);
 
         return $invoice;

@@ -20,9 +20,26 @@ use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\NullDispatcher;
 use Vespolina\Exception\InvalidConfigurationException;
 use Vespolina\Entity\Order\OrderEvents;
+use Vespolina\Entity\Partner\PaymentProfile;
+use Vespolina\Entity\Billing\BillingRequest;
+use Vespolina\Entity\Partner\PaymentProfileType\CreditCard;
+use Vespolina\Entity\Partner\PaymentProfileType\Invoice;
+use JMS\Payment\CoreBundle\Entity\ExtendedData;
+use JMS\Payment\CoreBundle\PluginController\Result;
+use Vespolina\Entity\Order\Item;
 
 class BillingManager implements BillingManagerInterface
 {
+    const BILLING_REQUEST_GET_LIMIT = 100;
+
+    /** @var \ImmersiveLabs\CaraCore\Manager\UserManager */
+    protected $userManager;
+    /** @var BillingInvoiceManager */
+    protected $billingInvoiceManager;
+    /** @var \ImmersiveLabs\BillingBundle\Service\BillingService */
+    protected $billingService;
+    /** @var \Vespolina\Invoice\Manager\InvoiceManager */
+    protected $invoiceManager;
     protected $billingAgreementClass;
     protected $billingRequestClass;
     protected $contexts;
@@ -156,6 +173,105 @@ class BillingManager implements BillingManagerInterface
         return $activeAgreement;
     }
 
+    public function processPendingBillingRequests()
+    {
+        $page = 1;
+        do {
+            $billingRequests = $this->findPendingBillingRequests($page);
+
+            foreach ($billingRequests as $br) {
+                /** @var BillingRequest $br */
+                $paymentProfile = $br->getPaymentProfile();
+                $isProcessItems = false;
+                if ($paymentProfile instanceof CreditCard) {
+                    $totalValue = $br->getPricingSet()->get('totalValue');
+                    $ex = new ExtendedData();
+                    $ex->set('cardId', $paymentProfile->getReference(), false, false);
+                    $result = $this->getBillingService()->doStraightPayment($totalValue, $ex);
+                    if ($result->getStatus() == Result::STATUS_SUCCESS) {
+                        $br->setStatus(BillingRequest::STATUS_PAID);
+                        $inv = new \Vespolina\Entity\Invoice\Invoice();
+                        $inv
+                            ->setPartner($br->getPartner())
+                            ->setDueDate($br->getDueDate())
+                            ->setIssuedDate($br->getCreatedAt())
+                            ->setPayment($totalValue)
+                            ->setPeriodStart(new \DateTime())
+                            ->setPeriodEnd(new \DateTime('+1 month')) //@todo confirm what's the purpose of period start and period end
+                        ;
+
+                        $this->getInvoiceManager()->updateInvoice($inv);
+
+                        $br->setInvoice($inv);
+
+                        $isProcessItems = true;
+                    }
+                } elseif ($paymentProfile instanceof Invoice) {
+                    $user = $this->getUserManager()->findOneBy(array('partner' => $br->getPartner()));
+                    $this->getBillingInvoiceManager()->sendNotification($user, $br);
+                    $br->setStatus(BillingRequest::STATUS_INVOICE_SENT);
+
+                    $isProcessItems = true;
+                }
+
+                $this->gateway->updateBillingRequest($br);
+
+                if ($isProcessItems) {
+                    $this->processPaidBillingRequest($br);
+                }
+            }
+
+            $page++;
+        } while(count($billingRequests) == self::BILLING_REQUEST_GET_LIMIT);
+    }
+
+    private function processPaidBillingRequest(BillingRequest $br)
+    {
+        $orders = array();
+
+        foreach ($br->getOrderItems() as $orderItems) {
+            foreach ($orderItems as $item) {
+                /** @var Item $item */
+
+                $order = $item->getParent();
+
+                if (!isset($orders[$order->getId()])) {
+                    $orders[$order->getId()] = $order;
+                }
+
+            }
+            break;
+        }
+
+        if (!empty($orders)) {
+            foreach ($orders as $o) {
+                $event = $this->eventDispatcher->createEvent($o);
+                $this->eventDispatcher->dispatch(OrderEvents::ACTIVATE_OR_RENEW_ITEMS, $event);
+            }
+        }
+    }
+
+    private function findPendingBillingRequests($page = 1)
+    {
+        $offset = ($page - 1) * self::BILLING_REQUEST_GET_LIMIT;
+
+        /** @var \Molino\Doctrine\ORM\SelectQuery $q  */
+        $q = $this->gateway->createQuery('select', '\Vespolina\Entity\Billing\BillingRequest');
+
+        $qb = $q->getQueryBuilder();
+
+        return $qb
+            ->andWhere('m.status = ?1')
+            ->setParameters(array(
+                1 => BillingRequest::STATUS_PENDING
+            ))
+            ->setMaxResults(self::BILLING_REQUEST_GET_LIMIT)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     /**
      * @inheritdoc
      */
@@ -179,6 +295,7 @@ class BillingManager implements BillingManagerInterface
             $agreement->completeCurrentCycle($billingRequest);
             $this->gateway->updateBillingAgreement($agreement);
         }
+        $billingRequest->setPaymentProfile($billingAgreement->getPaymentProfile());
         $billingRequest->setPricing($requestPricingSet);
         $billingRequest->setDueDate($agreement->getNextBillingDate());
         $billingRequest->setPartner($partner);
@@ -207,70 +324,52 @@ class BillingManager implements BillingManagerInterface
     public function findBillingAgreements(PricingContextInterface $context, $limit = null, $page = 1)
     {
         $offset = ($page - 1) * $limit;
-
-        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
-        $query = $this->gateway->createQuery('select');
         $endDate = new \DateTime($context['endDate']);
-        $query->filterLessEqual('nextBillingDate', $endDate);
-        if ($context['startDate']) {
-            $startDate = new \DateTime($context['startDate']);
-            $query->filterGreater('nextBillingDate', $startDate);
-        }
-        if ($context['partner']) {
-            $query->filterEqual('partner', $context['partner']);
-        }
-        $query->filterEqual('active', 1);
-        if ($limit) {
-            $query->limit($limit);
-        }
-        if ($offset) {
-            $query->skip($offset);
-        }
-
-        return $query->all();
-    }
-
-    /**
-     * Finds billing agreements that are due
-     *
-     * @param $context
-     * @param $limit
-     * @param int $page
-     * @return array
-     */
-    public function findEligibleBillingAgreements($limit = null, $page = 1)
-    {
-        $offset = ($page - 1) * $limit;
+        $params = array(1 => $endDate);
 
         /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
         $query = $this->gateway->createQuery('select');
-        $qb = $query->getQueryBuilder();
 
-        $now = new \DateTime();
+        $qb = $query->getQueryBuilder();
+        $qb->join('m.paymentProfile', 'pp');
+
+        $qb->andWhere('m.nextBillingDate <= ?1');
+
+//        if (isset($context['startDate'])) {
+//            $startDate = new \DateTime($context['startDate']);
+//            $query->filterGreater('nextBillingDate', $startDate);
+//        }
+        if (isset($context['paymentType'])) {
+            switch($context['paymentType']) {
+                case PaymentProfile::PAYMENT_PROFILE_TYPE_CREDIT_CARD:
+                    $qb->andWhere('pp instance of \Vespolina\Entity\Partner\PaymentProfileType\CreditCard');
+                    break;
+                case PaymentProfile::PAYMENT_PROFILE_TYPE_INVOICE:
+                    $qb->andWhere('pp instance of \Vespolina\Entity\Partner\PaymentProfileType\Invoice');
+                    break;
+            }
+        }
+
+        if (isset($context['partner'])) {
+            $qb->andWhere('m.partner = ?3');
+            $params[3] = $context['partner'];
+        }
+
+        $qb->andWhere('m.active = ?4');
+        $params[4] = 1;
+
+        if ($limit) {
+            $qb
+                ->setMaxResults($limit)
+                ->setFirstResult($offset)
+            ;
+        }
 
         return $qb
-            ->andWhere('m.active = ?1')
-            ->andWhere('m.nextBillingDate <= ?2')
-            ->setParameters(array(
-                    1 => 1,
-                    2 => $now->format('Y-m-d H:i:s')
-                ))
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
+            ->setParameters($params)
             ->getQuery()
             ->getResult()
         ;
-    }
-
-
-
-    /**
-     * @todo add implementation, please don't forget to call $em->clear() after each batch
-     * @param array $billingAgreements
-     */
-    public function processEligibleBillingAgreements(array $billingAgreements)
-    {
-
     }
 
     /**
@@ -363,5 +462,77 @@ class BillingManager implements BillingManagerInterface
         ;
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @return \Vespolina\Billing\Manager\BillingInvoiceManager
+     */
+    public function getBillingInvoiceManager()
+    {
+        return $this->billingInvoiceManager;
+    }
+
+    /**
+     * @param \Vespolina\Billing\Manager\BillingInvoiceManager $billingInvoiceManager
+     */
+    public function setBillingInvoiceManager($billingInvoiceManager)
+    {
+        $this->billingInvoiceManager = $billingInvoiceManager;
+
+        return $this;
+    }
+
+    /**
+     * @return \ImmersiveLabs\CaraCore\Manager\UserManager
+     */
+    public function getUserManager()
+    {
+        return $this->userManager;
+    }
+
+    /**
+     * @param \ImmersiveLabs\CaraCore\Manager\UserManager $userManager
+     */
+    public function setUserManager($userManager)
+    {
+        $this->userManager = $userManager;
+
+        return $this;
+    }
+
+    /**
+     * @return \ImmersiveLabs\BillingBundle\Service\BillingService
+     */
+    public function getBillingService()
+    {
+        return $this->billingService;
+    }
+
+    /**
+     * @param \ImmersiveLabs\BillingBundle\Service\BillingService $billingService
+     */
+    public function setBillingService($billingService)
+    {
+        $this->billingService = $billingService;
+
+        return $this;
+    }
+
+    /**
+     * @return \Vespolina\Invoice\Manager\InvoiceManager
+     */
+    public function getInvoiceManager()
+    {
+        return $this->invoiceManager;
+    }
+
+    /**
+     * @param \Vespolina\Invoice\Manager\InvoiceManager $invoiceManager
+     */
+    public function setInvoiceManager($invoiceManager)
+    {
+        $this->invoiceManager = $invoiceManager;
+
+        return $this;
     }
 }
