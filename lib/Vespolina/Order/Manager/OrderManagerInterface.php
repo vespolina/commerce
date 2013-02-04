@@ -31,7 +31,17 @@ interface OrderManagerInterface
 
     /**
      * Create a new cart instance.
-     * This also triggers a OrderEvents::INIT_CART event
+     * This also triggers a OrderEvents::INIT_ORDER event
+     *
+     * @param string $name Name of the cart
+     *
+     * @return \Vespolina\Entity\Order\OrderInterface
+     */
+    function createCart($name = 'default');
+
+    /**
+     * Create a new order instance.
+     * This also triggers a OrderEvents::INIT_ORDER event
      *
      * @param string $name Name of the cart
      *

@@ -291,21 +291,19 @@ class OrderManager implements OrderManagerInterface
     {
         /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
         $query = $this->gateway->createQuery('Select');
-        $qb = $query->getQueryBuilder();
 
         foreach($criteria as $field => $value) {
-            $qb->field($field)->equals($value);
+            $query->field($field)->equals($value);
         }
         if ($orderBy) {
-            $qb->orderBy($orderBy);
+            $query->orderBy($orderBy);
         }
         if ($limit) {
-            $qb->limit($limit);
+            $query->limit($limit);
         }
         if ($offset) {
-            $qb->offset($offset);
+            $query->offset($offset);
         }
-        $query = $qb->getQuery();
 
         return $this->gateway->findOrders($query);
     }
