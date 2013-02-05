@@ -43,6 +43,23 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function findAllBillingRequests()
+    {
+        /** @var \Molino\Doctrine\ORM\SelectQuery $q  */
+        $q = $this->gateway->createQuery('select', '\Vespolina\Entity\Billing\BillingRequest');
+
+        $qb = $q->getQueryBuilder();
+
+        return $qb
+            //->orderBy('dueDate', 'desc')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
      * @param BillingRequestInterface $invoice
      */
     public function sendNotification(User $user, BillingRequestInterface $invoice)
