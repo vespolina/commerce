@@ -9,6 +9,7 @@
 namespace Vespolina\Billing\Manager;
 
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
+use ImmersiveLabs\CaraCore\Entity\License;
 use Vespolina\Entity\Billing\BillingAgreement;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Order\ItemInterface;
@@ -27,6 +28,7 @@ use Vespolina\Entity\Partner\PaymentProfileType\Invoice;
 use JMS\Payment\CoreBundle\Entity\ExtendedData;
 use JMS\Payment\CoreBundle\PluginController\Result;
 use Vespolina\Entity\Order\Item;
+use Vespolina\Entity\Partner\Partner;
 
 class BillingManager implements BillingManagerInterface
 {
@@ -82,6 +84,21 @@ class BillingManager implements BillingManagerInterface
     }
 
     /**
+     * @param integer $id
+     * @return BillingAgreement
+     */
+    public function findBillingAgreementById($id)
+    {
+        /** @var \Molino\Doctrine\ORM\SelectQuery $q  */
+        $q = $this->gateway->createQuery('select');
+
+        return $q
+            ->filterEqual('id', $id)
+            ->one()
+        ;
+    }
+
+    /**
      * @inheritdoc
      */
     public function processOrder(OrderInterface $order)
@@ -97,33 +114,122 @@ class BillingManager implements BillingManagerInterface
         }
 
         return true;
-     }
+    }
+
+    /**
+     * @param \Vespolina\Entity\Billing\BillingAgreement $ba
+     */
+    public function deactivateBillingAgreement(BillingAgreement $ba)
+    {
+        $ba->setActive(0);
+        $this->gateway->updateBillingAgreement($ba);
+    }
 
     /**
      * @inheritdoc
      */
     public function createBillingAgreements(OrderInterface $order)
     {
-        $billingAgreements = array();
         $partner = $order->getPartner();
         $paymentProfile = $partner->getPreferredPaymentProfile();
 
         $paymentProfileType = $paymentProfile->getType();
         $context = $this->context['billingAgreement'][$paymentProfileType];
 
-        /** @var $item \Vespolina\Entity\Order\ItemInterface */
-        foreach ($order->getItems() as $item) {
+        $billingAgreements = $this->prepBillingAgreements($context, $partner, $paymentProfile, $order->getItems());
+
+        return $billingAgreements;
+    }
+
+    /**
+     * Removes licenses from their respective billing agreements. This forces recreation
+     * of billing agreements to recompute
+     *
+     * @param array $licenses
+     */
+    public function removeLicensesFromBillingAgreement(array $licenses)
+    {
+        $licensesMap = $this->mapLicensesByBillingAgreements($licenses);
+
+        foreach ($licensesMap as $baId => $licensesToRemove) {
+            $ba = $this->findBillingAgreementById($baId);
+
+            $orderItems = $ba->getOrderItems();
+
+            $finalOrderItems = array();
+
+            foreach ($orderItems as $item) {
+                /** @var Item $item */
+                if (!in_array($item->getAttribute('reference'), $licensesToRemove)) {
+                    $finalOrderItems[] = $item;
+                }
+            }
+
+            if (empty($finalOrderItems)) {
+                $this->deactivateBillingAgreement($ba);
+            } else {
+                $this->recreateBillingAgreement($ba, $finalOrderItems);
+            }
+        }
+    }
+
+    /**
+     * Rebuilds the billing agreement if there are any adjustments to the old agreement
+     *
+     * @param \Vespolina\Entity\Billing\BillingAgreement $oldAgreement
+     * @param $orderItems
+     * @return array
+     */
+    public function recreateBillingAgreement(BillingAgreement $oldAgreement, $orderItems)
+    {
+        $this->deactivateBillingAgreement($oldAgreement);
+
+        /** @var PaymentProfile $paymentProfile  */
+        $paymentProfile = $oldAgreement->getPaymentProfile();
+
+        return $this->recreateBillingAgreementByPartnerAndPaymentProfile($oldAgreement->getPartner(), $paymentProfile, $orderItems);
+    }
+
+    /**
+     * @param \Vespolina\Entity\Partner\Partner $partner
+     * @param \Vespolina\Entity\Partner\PaymentProfile $paymentProfile
+     * @param $orderItems
+     * @return array
+     */
+    public function recreateBillingAgreementByPartnerAndPaymentProfile(Partner $partner, PaymentProfile $paymentProfile, $orderItems)
+    {
+        $paymentProfileType = $paymentProfile->getType();
+
+        $context = $this->context['billingAgreement'][$paymentProfileType];
+
+        return $this->prepBillingAgreements($context, $partner, $paymentProfile, $orderItems);
+    }
+
+    /**
+     * @param $context
+     * @param \Vespolina\Entity\Partner\Partner $partner
+     * @param \Vespolina\Entity\Partner\PaymentProfile $paymentProfile
+     * @param $orderItems
+     * @return array
+     */
+    private function prepBillingAgreements($context, Partner $partner, PaymentProfile $paymentProfile, $orderItems)
+    {
+        $billingAgreements = array();
+
+        /** @var Item $item **/
+        foreach ($orderItems as $item) {
             $pricingSet = $item->getPricing();
 
-
-            // hack to initialize the entity and retrieve it from database
             $pricingSet->getProcessed();
 
             if ($pricingSet->get('recurringCharge')) {
                 $agreement = $this->addItemToAgreements($item, $billingAgreements, $context);
                 $agreement
                     ->setPaymentProfile($paymentProfile)
-                    ->setPartner($partner);
+                    ->setPartner($partner)
+                ;
+
+                $this->gateway->updateBillingAgreement($agreement);
             }
         }
 
@@ -534,5 +640,28 @@ class BillingManager implements BillingManagerInterface
         $this->invoiceManager = $invoiceManager;
 
         return $this;
+    }
+
+    /**
+     * Maps eligible licenses by the attached active billing agreement
+     *
+     * @param array $licenses
+     * @return array
+     */
+    private function mapLicensesByBillingAgreements(array $licenses)
+    {
+        $map = array();
+
+        /** @var License $license */
+        foreach($licenses as $license) {
+            if ($license->getItem()) {
+                $item = $license->getItem();
+                $ba = $item->getActiveBillingAgreement();
+
+                $map[$ba->getId()][] = $license->getId();
+            }
+        }
+
+        return $map;
     }
 }

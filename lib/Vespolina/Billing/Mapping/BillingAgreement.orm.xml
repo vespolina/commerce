@@ -20,7 +20,7 @@
 
         <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
         </many-to-one>
-        <many-to-many field="orderItems" target-entity="Vespolina\Entity\Order\ItemInterface">
+        <many-to-many field="orderItems" target-entity="Vespolina\Entity\Order\ItemInterface" inversed-by="billingAgreements">
             <join-table name="billingAgreement_Items">
                 <join-columns>
                     <join-column name="billingAgreement_id"/>
