@@ -18,6 +18,7 @@ interface InvoiceManagerInterface
 {
     /**
      * Create a new invoice from a customer order
+     * @return \Vespolina\Entity\Invoice\InvoiceInterface
      */
     function createInvoice();
 

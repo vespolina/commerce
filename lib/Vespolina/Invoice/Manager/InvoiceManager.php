@@ -8,6 +8,7 @@
 
 namespace Vespolina\Invoice\Manager;
 
+use Vespolina\Entity\Billing\BillingRequest;
 use Vespolina\Entity\Invoice\InvoiceInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Invoice\Gateway\InvoiceGateway;
@@ -57,7 +58,7 @@ class InvoiceManager implements InvoiceManagerInterface
     public function findAll()
     {
         $query = $this->gateway->createQuery('Select');
-        return $query->sort('periodEnd', 'desc')
+        return $query->sort('paid', 'asc')
             ->all()
             ;
     }
@@ -105,5 +106,23 @@ class InvoiceManager implements InvoiceManagerInterface
     public function updateInvoice(InvoiceInterface $invoice, $andPersist = true)
     {
         $this->gateway->updateInvoice($invoice);
+    }
+
+    public function createInvoiceFromBillingRequest(BillingRequest $billingRequest)
+    {
+        $invoice = $this->createInvoice();
+        $invoice->setDueDate($billingRequest->getDueDate());
+        $invoice->setIssuedDate(new \DateTime());
+        $invoice->setPeriodStart($billingRequest->getPeriodStart());
+        $invoice->setPeriodEnd($billingRequest->getPeriodEnd());
+        $invoice->setPayment($billingRequest->getAmountDue());
+        $invoice->setPartner($billingRequest->getPartner());
+
+        return $invoice;
+    }
+
+    public function persistInvoice(InvoiceInterface $invoice)
+    {
+        $this->gateway->persistInvoice($invoice);
     }
 }
