@@ -14,7 +14,7 @@
         <field name="quantity"       fieldName="quantity"       type="string" />
         <field name="state"          fieldName="state"          type="string" />
         <!--<field name="totalPrice"     fieldName="totalPrice"     type="string" /> -->
-       <!-- <reference-one fieldName="product" field="product" /> -->
+       <reference-one fieldName="product" field="product" />
 
     </embedded-document>
 </doctrine-mongo-mapping>
