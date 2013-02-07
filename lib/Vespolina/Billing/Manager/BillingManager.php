@@ -136,7 +136,7 @@ class BillingManager implements BillingManagerInterface
         $paymentProfileType = $paymentProfile->getType();
         $context = $this->context['billingAgreement'][$paymentProfileType];
 
-        $billingAgreements = $this->prepBillingAgreements($context, $partner, $paymentProfile, $order->getItems());
+        $billingAgreements = $this->prepBillingAgreements($context, $partner, $paymentProfile, $order);
 
         return $billingAgreements;
     }
@@ -212,12 +212,12 @@ class BillingManager implements BillingManagerInterface
      * @param $orderItems
      * @return array
      */
-    private function prepBillingAgreements($context, Partner $partner, PaymentProfile $paymentProfile, $orderItems)
+    private function prepBillingAgreements($context, Partner $partner, PaymentProfile $paymentProfile, $order)
     {
         $billingAgreements = array();
 
         /** @var Item $item **/
-        foreach ($orderItems as $item) {
+        foreach ($order->getItems() as $item) {
             $pricingSet = $item->getPricing();
 
             $pricingSet->getProcessed();
@@ -543,8 +543,10 @@ class BillingManager implements BillingManagerInterface
         $total = 0;
         foreach ($billingAgreements as $billingAgreement) {
             /** @var $billingAgreement BillingAgreement */
-            if ($billingAgreement->getBillingInterval() == 'month') {
-                $total += $billingAgreement->getBillingAmount();
+            if (strstr($billingAgreement->getBillingInterval(), 'month') !== false) {
+                foreach ($billingAgreement->getOrderItems() as $item) {
+                    $total += $item->getPricing()->getTotalValue();
+                }
             }
         }
 
