@@ -136,7 +136,7 @@ class BillingManager implements BillingManagerInterface
         $paymentProfileType = $paymentProfile->getType();
         $context = $this->context['billingAgreement'][$paymentProfileType];
 
-        $billingAgreements = $this->prepBillingAgreements($context, $partner, $paymentProfile, $order);
+        $billingAgreements = $this->prepBillingAgreements($context, $partner, $paymentProfile, $order->getItems());
 
         return $billingAgreements;
     }
@@ -212,12 +212,12 @@ class BillingManager implements BillingManagerInterface
      * @param $orderItems
      * @return array
      */
-    private function prepBillingAgreements($context, Partner $partner, PaymentProfile $paymentProfile, $order)
+    private function prepBillingAgreements($context, Partner $partner, PaymentProfile $paymentProfile, $orderItems)
     {
         $billingAgreements = array();
 
         /** @var Item $item **/
-        foreach ($order->getItems() as $item) {
+        foreach ($orderItems as $item) {
             $pricingSet = $item->getPricing();
 
             $pricingSet->getProcessed();
