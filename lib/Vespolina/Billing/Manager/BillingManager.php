@@ -241,7 +241,10 @@ class BillingManager implements BillingManagerInterface
         $pricingSet = $item->getPricing();
         $interval = $pricingSet->get('interval');
         $cycles = $pricingSet->get('cycles');
-        if ($context['dueDate']) {
+
+        if ($item->getAttribute('start_billing')) {
+            $startsOn = $item->getAttribute('start_billing');
+        } elseif ($context['dueDate']) {
             $startsOn = $pricingSet->get('startsOn');
             $date = explode(',', $startsOn->format('Y,m'));
             $startsOn->setDate($date[0], $date[1], $context['dueDate']);
