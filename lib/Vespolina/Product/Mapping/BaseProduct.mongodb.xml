@@ -41,8 +41,8 @@
                 />
 
         <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="incrementCreatedAt" />
-            <lifecycle-callback type="preUpdate" method="incrementUpdatedAt" />
+            <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />
+            <lifecycle-callback type="preUpdate" method="autoSetUpdatedAt" />
         </lifecycle-callbacks>
 
     </mapped-superclass>
