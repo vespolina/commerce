@@ -16,6 +16,7 @@ use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use ImmersiveLabs\Pricing\Entity\PricingSet;
 use Vespolina\Entity\Partner\PartnerInterface;
+use Vespolina\Entity\Order\Item;
 
 class BillingInvoiceManager implements BillingInvoiceManagerInterface
 {
@@ -75,6 +76,11 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
      */
     public function createInvoice(PartnerInterface $partner, PricingSet $pricingSet, $orderItems)
     {
+        /** @var Item $item  */
+        $item = $orderItems[0];
+
+        $interval = $item->getPricing()->get('interval');
+
         $amountDue = $pricingSet->get('totalValue');
 
         $invoice = new BillingRequest();
@@ -88,6 +94,23 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
 
         $invoice->mergeOrderItems($orderItems);
 
+        $periodStart = new \DateTime();
+        $periodEnd = new \DateTime($interval);
+
+        $logInvoice = new Invoice();
+        $logInvoice
+            ->setPayment($invoice->getAmountDue())
+            ->setDueDate($invoice->getDueDate())
+            ->setIssuedDate(new \DateTime())
+            ->setPartner($partner)
+            ->setPeriodStart($periodStart)
+            ->setPeriodEnd($periodEnd)
+        ;
+
+        $this->getInvoiceManager()->updateInvoice($logInvoice);
+
+        $invoice->setInvoice($logInvoice);
+
         $this->gateway->persistBillingRequest($invoice);
 
         return $invoice;
@@ -98,22 +121,7 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
      */
     public function tagAsPaid(BillingRequestInterface $invoice)
     {
-        $partner = $invoice->getPartner();
-
-        $logInvoice = new Invoice();
-        $logInvoice
-            ->setPayment($invoice->getAmountDue())
-            ->setDueDate($invoice->getDueDate())
-            ->setIssuedDate($invoice->getCreatedAt())
-            ->setPartner($partner)
-            ->setPeriodStart($invoice->getCreatedAt())
-            ->setPeriodEnd(new \DateTime())
-        ;
-
-        $this->getInvoiceManager()->updateInvoice($logInvoice);
-
         $invoice
-            ->setInvoice($logInvoice)
             ->setStatus(BillingRequest::STATUS_PAID)
         ;
 
