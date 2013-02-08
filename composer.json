@@ -1,7 +1,7 @@
 {
     "name": "vespolina/pricing",
     "type": "library",
-    "description": "Vespolina Pricing. Handle product, cart, order pricing",
+    "description": "Vespolina Pricing. Handle product, cart and order pricing",
     "keywords": ["shop", "ecommerce", "cart", "order", "item"],
     "homepage": "http://vespolina-project.org",
     "license": "MIT",
