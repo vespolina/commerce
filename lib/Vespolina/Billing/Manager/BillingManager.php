@@ -548,7 +548,9 @@ class BillingManager implements BillingManagerInterface
             /** @var $billingAgreement BillingAgreement */
             if (strstr($billingAgreement->getBillingInterval(), 'month') !== false) {
                 foreach ($billingAgreement->getOrderItems() as $item) {
-                    $total += $item->getPricing()->getTotalValue();
+                    if (!$item->getAttribute('inactive')) {
+                        $total += $item->getPricing()->getTotalValue();
+                    }
                 }
             }
         }
