@@ -5,6 +5,6 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <document name="Vespolina\Entity\Product\Product">
-
+        <field name="id" id="true" />
     </document>
 </doctrine-mongo-mapping>

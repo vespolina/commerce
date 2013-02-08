@@ -7,42 +7,17 @@
     <mapped-superclass name="Vespolina\Entity\Product\BaseProduct" collection="vespolina_products">
         <field name="id" id="true" />
 
-
+        <field name="attributes"  type="hash"  />
         <field name="description" fieldName="description" type="string" />
-
         <field name="name" fieldName="name" type="string" />
-
         <field name="slug" fieldName="slug" type="string" />
-
         <field name="type" fieldName="type" type="int" />
-
         <field name="createdAt" fieldName="createdAt" type="date" />
-
         <field name="updatedAt" fieldName="updatedAt" type="date" />
 
-        <refence-many
-            target-document="Vespolina\ProductBundle\Document\Asset"
-            field="assets"
-            simple="true"
-        />
-
-
-        <embed-many
-                target-document="Vespolina\ProductBundle\Document\OptionGroup"
-                field="options"
-                fieldName="options"
-                strategy="set"
-                />
-        <embed-many
-                target-document="Vespolina\ProductBundle\Document\ProductIdentifierSet"
-                field="identifiers"
-                fieldName="identifiers"
-                strategy="set"
-                />
-
         <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="incrementCreatedAt" />
-            <lifecycle-callback type="preUpdate" method="incrementUpdatedAt" />
+            <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />
+            <lifecycle-callback type="preUpdate" method="autoSetUpdatedAt" />
         </lifecycle-callbacks>
 
     </mapped-superclass>

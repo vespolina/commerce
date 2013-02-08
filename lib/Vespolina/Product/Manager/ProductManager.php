@@ -155,6 +155,7 @@ class ProductManager implements ProductManagerInterface
     {
         $query = $this->gateway->createQuery('Select');
         foreach ($criteria as $field => $value) {
+
             $query->filterEqual($field, $value);
         }
         if ($orderBy) {
@@ -167,8 +168,7 @@ class ProductManager implements ProductManagerInterface
         if ($offset) {
             $query->skip($offset);
         }
-
-        return $this->gateway->findProducts($query);
+       return $this->gateway->findProduct($query);
     }
 
 
