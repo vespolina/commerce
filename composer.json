@@ -1,0 +1,23 @@
+{
+    "name": "vespolina/pricing",
+    "type": "library",
+    "description": "Vespolina Pricing. Handle product, cart, order pricing",
+    "keywords": ["shop", "ecommerce", "cart", "order", "item"],
+    "homepage": "http://vespolina-project.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vespolina Team",
+            "homepage": "https://github.com/vespolina/VespolinaProduct/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "vespolina/core": "*",
+        "pablodip/molino": "*"
+    },
+    "autoload": {
+        "psr-0": { "Vespolina": "lib/" }
+    }
+}
+
