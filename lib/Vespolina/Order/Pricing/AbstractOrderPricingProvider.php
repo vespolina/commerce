@@ -8,8 +8,8 @@
 
 namespace Vespolina\Order\Pricing;
 
-use Vespolina\Order\Handler\CartHandlerInterface;
-use Vespolina\Order\Pricing\CartPricingProviderInterface;
+use Vespolina\Order\Handler\OrderHandlerInterface;
+use Vespolina\Order\Pricing\OrderPricingProviderInterface;
 use Vespolina\Entity\Pricing\PricingSet;
 use Vespolina\Entity\Order\ItemInterface;
 

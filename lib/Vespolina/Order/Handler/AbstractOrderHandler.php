@@ -10,12 +10,12 @@ namespace Vespolina\Order\Handler;
 
 use Vespolina\Order\Handler\CartHandlerInterface;
 use Vespolina\Entity\Order\ItemInterface;
-use Vespolina\Order\Pricing\PricingSet;
+use Vespolina\Entity\Pricing\PricingSet;
 
 /**
  * This provides a default set of actions for the methods that can be used by any other CartHandler by extending this class
  */
-abstract class AbstractCartHandler implements CartHandlerInterface
+abstract class AbstractOrderHandler implements OrderHandlerInterface
 {
     protected $taxationManager;
 
