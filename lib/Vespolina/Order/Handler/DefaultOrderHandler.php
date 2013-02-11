@@ -8,15 +8,14 @@
 
 namespace Vespolina\Order\Handler;
 
-use Vespolina\Order\Handler\AbstractCartHandler;
+use Vespolina\Order\Handler\AbstractOrderHandler;
 use Vespolina\Entity\Order\ItemInterface;
-use Vespolina\Entity\Order\CartInterface;
 use Vespolina\Entity\Order\OrderInterface;
 
 /**
- * DefaultHandler for the cart
+ * DefaultHandler for the order
  */
-class DefaultCartHandler extends  AbstractCartHandler
+class DefaultOrderHandler extends  AbstractOrderHandler
 {
     protected $fulfillmentPricingEnabled;
     protected $taxPricingEnabled;
@@ -27,32 +26,32 @@ class DefaultCartHandler extends  AbstractCartHandler
         $this->taxPricingEnabled = true;
     }
 
-    public function determineCartItemPrices(ItemInterface $cartItem, $pricingContext)
+    public function determineOrderItemPrices(ItemInterface $orderItem, $pricingContext)
     {
-        $pricing = $cartItem->getProduct()->getPricing();
-        $pricingSet = $cartItem->getPricing();
-        $unitNet = $pricing['unitPriceTotal'];
+        $pricing = $orderItem->getProduct()->getPricing();
+        $pricingSet = $orderItem->getPricing();
+        $unitNet = $pricing->get('unitPriceTotal');
         $upChargeNet = 0;
 
         //Add additional upcharges for a chosen product option
-        $upChargeNet = $this->determineCartItemUpCharge($cartItem, $pricingContext);
+        $upChargeNet = $this->determineOrderItemUpCharge($orderItem, $pricingContext);
 
         //Calculate fulfillment costs (eg. shipping, packaging cost)
         if ($this->fulfillmentPricingEnabled) {
-            //$this->determineCartItemFulfillmentPrices($cartItem, $pricingContext);
+            //$this->determineOrderItemFulfillmentPrices($orderItem, $pricingContext);
         }
 
-        $totalNet = ( $cartItem->getQuantity() * $unitNet ) + $upChargeNet;
+        $totalNet = ( $orderItem->getQuantity() * $unitNet ) + $upChargeNet;
         $pricingSet->set('upChargeNet', $upChargeNet);
         $pricingSet->set('totalNet', $totalNet);
 
         //Determine item level taxes
-        $taxationEnabled = $cartItem->getCart()->getAttribute('taxation_enabled');
+        $taxationEnabled = $orderItem->getOrder()->getAttribute('taxation_enabled');
 
         if ($taxationEnabled) {
 
-            $this->determineCartItemTaxes(
-                    $cartItem,
+            $this->determineOrderItemTaxes(
+                    $orderItem,
                     array('totalNet' => $totalNet),
                     $pricingSet,
                     $pricingContext);
@@ -66,13 +65,13 @@ class DefaultCartHandler extends  AbstractCartHandler
         return 'default';
     }
 
-    protected function determineCartItemUpCharge(ItemInterface $cartItem, $pricingContext)
+    protected function determineOrderItemUpCharge(ItemInterface $orderItem, $pricingContext)
     {
         $upCharge = 0;
 
-        foreach($cartItem->getOptions() as $type => $value) {
+        foreach($orderItem->getOptions() as $type => $value) {
 
-            if ($productOption = $cartItem->getProduct()->getOptionSet(array($type => $value))) {
+            if ($productOption = $orderItem->getProduct()->getOptionSet(array($type => $value))) {
                 $upCharge += $productOption->getUpcharge();
             }
         }
@@ -80,14 +79,14 @@ class DefaultCartHandler extends  AbstractCartHandler
         return $upCharge;
     }
 
-    protected function determineOrderItemTaxes(ItemInterface $cartItem, array $pricesToBeTaxed, $cartItemPricingSet, $pricingContext)
+    protected function determineOrderItemTaxes(ItemInterface $orderItem, array $pricesToBeTaxed, $orderItemPricingSet, $pricingContext)
     {
 
         $rate = 0;
         $taxes = array();
         $totalTax = 0;
 
-        //We currently assume that all cart items use the default tax zone and associated tax rate
+        //We currently assume that all order items use the default tax zone and associated tax rate
         $taxZone = $pricingContext->get('taxZone');
 
         if (null != $taxZone) {
@@ -101,18 +100,18 @@ class DefaultCartHandler extends  AbstractCartHandler
             $taxValue = $rate * $value / 100;
             $totalTax += $taxValue;
         }
-        $cartItemPricingSet->set('totalTax', $totalTax);
+        $orderItemPricingSet->set('totalTax', $totalTax);
   }
 
-    protected function determineOrderFulfillmentPrices(OrderInterface $cart, $pricingContext)
+    protected function determineOrderFulfillmentPrices(OrderInterface $order, $pricingContext)
     {
-        //Additional fulfillment to be applied not related to cart item taxes
+        //Additional fulfillment to be applied not related to order item taxes
         // eg. fixed fulfillment fee
     }
 
-    protected function sumItemPrices(ItemInterface $cartItem, $pricingContext)
+    protected function sumItemPrices(ItemInterface $orderItem, $pricingContext)
     {
         return null;
-        //$pricingContext['total'] += $cartItem->getPrice('total');
+        //$pricingContext['total'] += $orderItem->getPrice('total');
     }
 }
