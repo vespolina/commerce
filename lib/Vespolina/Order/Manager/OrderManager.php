@@ -153,6 +153,7 @@ class OrderManager implements OrderManagerInterface
     {
         if ($items = $cart->getItems()) {
             foreach ($cart->getItems() as $item) {
+                //var_dump(array($item->getProduct(), $product));die();
                 if ($item->getProduct() == $product) {
                     if ($this->doOptionsMatch($item->getOptions(), $options)) {
                         return $item;
