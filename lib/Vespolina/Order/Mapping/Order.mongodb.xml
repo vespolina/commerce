@@ -5,7 +5,7 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <document name="Vespolina\Entity\Order\Order" collection="v_order">
-        <field name="id" id="true" />
+        <field name="id" id="true" strategy="INCREMENT" />
 
     </document>
 </doctrine-mongo-mapping>
