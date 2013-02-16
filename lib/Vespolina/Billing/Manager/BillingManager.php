@@ -530,9 +530,19 @@ class BillingManager implements BillingManagerInterface
      */
     public function findBillingAgreementsForPartner($partner)
     {
-        return $this->doFindBy(array(
-            'partner' => $partner
-        ));
+        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
+        $query = $this->gateway->createQuery('Select');
+        $qb = $query->getQueryBuilder();
+
+        return $qb->where('m.partner = :partner')
+            ->andWhere('m.initialBillingDate <= :now')
+            ->setParameters(array(
+                'partner' => $partner,
+                'now'     => new \DateTime('now')
+            ))
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**
