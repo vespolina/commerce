@@ -105,6 +105,7 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
             ->setPartner($partner)
             ->setPeriodStart($periodStart)
             ->setPeriodEnd($periodEnd)
+            ->addOrder($item->getParent())
         ;
 
         $this->getInvoiceManager()->updateInvoice($logInvoice);
