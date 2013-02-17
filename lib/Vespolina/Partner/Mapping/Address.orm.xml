@@ -10,12 +10,12 @@
         </id>
 
         <field name="type"         type="string" />
-        <field name="street"       type="string" />
-        <field name="number"       type="integer" />
-        <field name="numbersuffix" type="string" />
-        <field name="zipcode"      type="string" />
-        <field name="city"         type="string" />
-        <field name="state"        type="string" />
-        <field name="country"      type="string" />
+        <field name="street"       type="string"  nullable="true" />
+        <field name="number"       type="integer" nullable="true" />
+        <field name="numbersuffix" type="string"  nullable="true" />
+        <field name="zipcode"      type="string"  nullable="true" />
+        <field name="city"         type="string"  nullable="true" />
+        <field name="state"        type="string"  nullable="true" />
+        <field name="country"      type="string"  nullable="true" />
     </entity>
 </doctrine-mapping>
