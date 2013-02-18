@@ -664,8 +664,9 @@ class BillingManager implements BillingManagerInterface
             if ($license->getItem()) {
                 $item = $license->getItem();
                 $ba = $item->getActiveBillingAgreement();
-
-                $map[$ba->getId()][] = $license->getId();
+                if (!empty($ba)) {
+                    $map[$ba->getId()][] = $license->getId();
+                }
             }
         }
 
