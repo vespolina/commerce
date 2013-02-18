@@ -166,10 +166,11 @@ class OrderManager implements OrderManagerInterface
 
     public function processOrder(OrderInterface $order, PricingContextInterface $context = null)
     {
+        $orderEvents = $this->eventsClass;
+        $this->eventDispatcher->dispatch($orderEvents::PRE_PROCESS_ORDER, $this->eventDispatcher->createEvent($order));
         $this->updateOrderPricing($order, $context);
         $this->updateOrder($order);
-        $orderEvents = $this->eventsClass;
-        $this->eventDispatcher->dispatch($orderEvents::FINISHED, $this->eventDispatcher->createEvent($order));
+        $this->eventDispatcher->dispatch($orderEvents::POST_PROCESS_ORDER, $this->eventDispatcher->createEvent($order));
     }
 
     /**
