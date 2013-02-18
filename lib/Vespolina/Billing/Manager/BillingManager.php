@@ -651,6 +651,7 @@ class BillingManager implements BillingManagerInterface
 
     /**
      * @param \Vespolina\Invoice\Manager\InvoiceManager $invoiceManager
+     * @return BillingManager
      */
     public function setInvoiceManager($invoiceManager)
     {
