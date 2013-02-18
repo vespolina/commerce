@@ -671,11 +671,11 @@ class BillingManager implements BillingManagerInterface
 
         /** @var License $license */
         foreach($licenses as $license) {
-            if ($license->getItem()) {
-                $item = $license->getItem();
+            if ($item = $license->getItem()) {
                 $ba = $item->getActiveBillingAgreement();
-
-                $map[$ba->getId()][] = $license->getId();
+                if ($ba !== null) {
+                    $map[$ba->getId()][] = $license->getId();
+                }
             }
         }
 
