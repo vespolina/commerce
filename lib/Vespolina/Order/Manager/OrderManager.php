@@ -164,6 +164,14 @@ class OrderManager implements OrderManagerInterface
         return null;
     }
 
+    public function processOrder(OrderInterface $order)
+    {
+        $this->updateOrderPricing($order);
+        $this->updateOrder($order);
+        $orderEvents = $this->eventsClass;
+        $this->eventDispatcher->dispatch($orderEvents::FINISHED, $this->eventDispatcher->createEvent($order));
+    }
+
     /**
      * @inheritdoc
      */
@@ -216,14 +224,13 @@ class OrderManager implements OrderManagerInterface
 
     public function setItemQuantity(ItemInterface $item, $quantity)
     {
-        // todo: trigger events
         $rm = new \ReflectionMethod($item, 'setQuantity');
         $rm->setAccessible(true);
         $rm->invokeArgs($item, array($quantity));
         $rm->setAccessible(false);
 
         $eventsClass = $this->eventsClass;
-        $this->eventDispatcher->dispatch($eventsClass::UPDATE_ITEM, $this->eventDispatcher->createEvent($item));
+        $this->eventDispatcher->dispatch($eventsClass::UPDATE_ITEM_QUANTITY, $this->eventDispatcher->createEvent($item));
     }
 
     /**
@@ -235,6 +242,13 @@ class OrderManager implements OrderManagerInterface
         $this->setItemQuantity($item, $quantity);
     }
 
+    public function updateItem(ItemInterface $item)
+    {
+        $orderEvents = $this->eventsClass;
+        $this->eventDispatcher->dispatch($orderEvents::UPDATE_ITEM, $this->eventDispatcher->createEvent($item));
+        $this->itemGateway->updateItem($item);
+    }
+
     /**
      * @inheritdoc
      */
@@ -243,15 +257,6 @@ class OrderManager implements OrderManagerInterface
         $orderEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($orderEvents::UPDATE_ORDER, $this->eventDispatcher->createEvent($order));
         $this->gateway->updateOrder($order);
-
-        foreach ($order->getItems() as $item) {
-            $this->itemGateway->updateItem($item);
-        }
-    }
-
-    public function updateItem(ItemInterface $item)
-    {
-        $this->itemGateway->updateItem($item);
     }
 
     public function updateOrderPricing(OrderInterface $order, PricingContextInterface $context = null)
