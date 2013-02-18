@@ -164,9 +164,9 @@ class OrderManager implements OrderManagerInterface
         return null;
     }
 
-    public function processOrder(OrderInterface $order)
+    public function processOrder(OrderInterface $order, PricingContextInterface $context = null)
     {
-        $this->updateOrderPricing($order);
+        $this->updateOrderPricing($order, $context);
         $this->updateOrder($order);
         $orderEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($orderEvents::FINISHED, $this->eventDispatcher->createEvent($order));
