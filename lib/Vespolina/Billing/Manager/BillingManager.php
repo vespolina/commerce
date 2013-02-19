@@ -525,39 +525,25 @@ class BillingManager implements BillingManagerInterface
     }
 
     /**
-     * @param $partner
-     * @return array
+     * Gets total monthly payment for next bill (in the future from billing agreement)
+     *
+     * @param PartnerInterface $partner
+     * @return integer
      */
-    public function findBillingAgreementsForPartner($partner)
+    public function getMonthlyTotalForPartner(PartnerInterface $partner)
     {
-        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
-        $query = $this->gateway->createQuery('Select');
-        $qb = $query->getQueryBuilder();
-
-        return $qb->where('m.partner = :partner')
-            ->andWhere('m.initialBillingDate <= :now')
-            ->setParameters(array(
-                'partner' => $partner,
-                'now'     => new \DateTime('now')
-            ))
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
-     * @param $partner
-     * @return int
-     */
-    public function getMonthlyTotalForPartner($partner)
-    {
-        $billingAgreements = $this->findBillingAgreementsForPartner($partner);
+        // gets billing agreements (disregarding whether they are free or not, but valid for the month)
+        $billingAgreements = $this->findBillingAgreementsOnCurrentMonthForPartner($partner);
 
         $total = 0;
         foreach ($billingAgreements as $billingAgreement) {
             /** @var $billingAgreement BillingAgreement */
             if (strstr($billingAgreement->getBillingInterval(), 'month') !== false) {
                 foreach ($billingAgreement->getOrderItems() as $item) {
+                    /**
+                     * @todo add more conditions for when we have an MCP-created license based
+                     * @todo on a set ExpiresAt in the future, we should exclude these expiresAt in the future ??
+                     */
                     if (!$item->getAttribute('inactive')) {
                         $total += $item->getPricing()->getTotalValue();
                     }
@@ -566,6 +552,33 @@ class BillingManager implements BillingManagerInterface
         }
 
         return $total;
+    }
+
+    /**
+     * Finds the last month's billing agreements and add their total for a given user/partner
+     *
+     * @param PartnerInterface $partner
+     * @return array
+     */
+    public function findBillingAgreementsOnCurrentMonthForPartner(PartnerInterface $partner)
+    {
+        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
+        $query = $this->gateway->createQuery('Select');
+        $qb = $query->getQueryBuilder();
+
+        return $qb->where('m.partner = :partner')
+            ->andWhere($qb->expr()->andX(
+                $qb->expr()->lte(':now', 'm.nextBillingDate'),
+                $qb->expr()->lt('m.nextBillingDate', ':future')
+            ))
+            ->setParameters(array(
+                'partner' => $partner,
+                'now'     => new \DateTime('now'),
+                'future'  => new \DateTime('+ 1 month')
+            ))
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**
