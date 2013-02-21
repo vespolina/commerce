@@ -17,7 +17,6 @@ use Gateway\Query;
 use Molino\BaseQuery;
 use Vespolina\Entity\Order\OrderEvents;
 use Vespolina\Order\Gateway\OrderGatewayInterface;
-use Vespolina\Order\Gateway\ItemGatewayInterface;
 use Vespolina\Order\Manager\OrderManagerInterface;
 use Vespolina\Entity\Pricing\PricingSetInterface;
 use Vespolina\Entity\Order\Order;
@@ -33,15 +32,15 @@ use Vespolina\EventDispatcher\NullDispatcher;
  */
 class OrderManager implements OrderManagerInterface
 {
+    protected $autoCommit;
     protected $cartClass;
     protected $eventDispatcher;
     protected $eventsClass;
     protected $gateway;
-    protected $itemGateway;
     protected $itemClass;
     protected $orderClass;
 
-    function __construct(OrderGatewayInterface $gateway, ItemGatewayInterface $itemGateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
+    function __construct(OrderGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
     {
         $missingClasses = array();
         foreach (array('cart', 'events', 'item', 'order') as $class) {
@@ -65,9 +64,9 @@ class OrderManager implements OrderManagerInterface
             $eventDispatcher = new NullDispatcher();
         }
 
+        $this->autoCommit = true;
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
-        $this->itemGateway = $itemGateway;
     }
 
     /**
@@ -78,7 +77,6 @@ class OrderManager implements OrderManagerInterface
         $quantity = $quantity === null ? 1 : $quantity;
 
         $item = $this->doAddProductToOrder($order, $product, $options, $quantity, $combine);
-        $order->addItem($item);
 
         return $item;
     }
@@ -91,7 +89,10 @@ class OrderManager implements OrderManagerInterface
         $cart = new $this->cartClass();
         $cart->setName($name);
         $this->initOrder($cart);
-        $this->gateway->persistOrder($cart);
+
+        if ($this->autoCommit) {
+            $this->gateway->persistOrder($cart);
+        }
 
         return $cart;
     }
@@ -104,7 +105,10 @@ class OrderManager implements OrderManagerInterface
         $order = new $this->orderClass();
         $order->setName($name);
         $this->initOrder($order);
-        $this->gateway->persistOrder($order);
+
+        if ($this->autoCommit) {
+            $this->gateway->persistOrder($order);
+        }
 
         return $order;
     }
@@ -153,7 +157,7 @@ class OrderManager implements OrderManagerInterface
     {
         if ($items = $cart->getItems()) {
             foreach ($cart->getItems() as $item) {
-                if ($item->getProduct() == $product) {
+                if ($product->equals($item->getProduct())) {
                     if ($this->doOptionsMatch($item->getOptions(), $options)) {
                         return $item;
                     }
@@ -247,7 +251,7 @@ class OrderManager implements OrderManagerInterface
     {
         $orderEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($orderEvents::UPDATE_ITEM, $this->eventDispatcher->createEvent($item));
-        $this->itemGateway->updateItem($item);
+        $this->orderGateway->updateItem($item);
     }
 
     /**
@@ -442,9 +446,6 @@ class OrderManager implements OrderManagerInterface
     public function clearOrder(OrderInterface $order)
     {
         $order->clearAttributes();
-        foreach ($order->getItems() as $item) {
-            $this->itemGateway->deleteItem($item);
-        }
-    }
 
+    }
 }
