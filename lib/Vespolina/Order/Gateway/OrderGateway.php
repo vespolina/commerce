@@ -6,6 +6,7 @@ use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
 use InvalidArgumentException;
 use Vespolina\Entity\Order\OrderInterface;
+use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 
 class OrderGateway implements OrderGatewayInterface
@@ -62,6 +63,16 @@ class OrderGateway implements OrderGatewayInterface
     }
 
     /**
+     * Update an Order item that has been persisted.  The Order itemwill be immediately flushed in the database
+     *
+     * @param \Vespolina\Entity\Order\OrderInterface $cart
+     */
+    public function updateOrderItem(ItemInterface $orderItem)
+    {
+        $this->molino->save($orderItem->getParent());
+    }
+
+    /**
      * @param \Vespolina\Entity\Order\OrderInterface $order
      */
     public function deleteOrder(OrderInterface $order)
@@ -75,13 +86,13 @@ class OrderGateway implements OrderGatewayInterface
      * @return \Molino\Doctrine\ORM\BaseQuery
      * @throws InvalidArgumentException
      */
-    public function createQuery($type, $queryClass = null)
+    public function createQuery($queryType, $queryClass = null)
     {
-        $type = ucfirst(strtolower($type));
-        if (!in_array($type, array('Delete', 'Select', 'Update'))) {
-            throw new InvalidArgumentException($type . ' is not a valid Query type');
+        $queryType = ucfirst(strtolower($queryType));
+        if (!in_array($queryType, array('Delete', 'Select', 'Update'))) {
+            throw new InvalidArgumentException($queryType . ' is not a valid Query type');
         }
-        $queryFunction = 'create' . $type . 'Query';
+        $queryFunction = 'create' . $queryType . 'Query';
 
         if (!$queryClass) {
             $queryClass = $this->orderClass;

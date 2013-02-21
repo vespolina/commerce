@@ -4,8 +4,8 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Vespolina\Entity\Order\Cart" collection="vespolina_carts">
+    <document name="Vespolina\Entity\Order\Cart" collection="v_cart">
         <field name="id" id="true" />
-
+        <field name="expiresAt"      fieldName="expiresAt"      type="date" />
     </document>
 </doctrine-mongo-mapping>
