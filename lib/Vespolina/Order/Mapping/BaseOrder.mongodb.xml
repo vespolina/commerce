@@ -15,7 +15,9 @@
 
         <reference-one field="owner"
                        fieldName="owner"
-                       target-document="Vespolina\Entity\Partner\Partner"/>
+                       target-document="Vespolina\Entity\Partner\Partner">
+            <cascade><all/></cascade>                                               
+        </reference-one>
         <embed-many field="items"
                     target-document="Vespolina\Entity\Order\Item"/>
 
