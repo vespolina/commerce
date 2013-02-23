@@ -6,6 +6,6 @@
 
     <document name="Vespolina\Entity\Order\Order" collection="v_order">
         <field name="id" id="true" strategy="INCREMENT" />
-
+        <field name="orderDate"    fieldName="orderDate" type="date" />
     </document>
 </doctrine-mongo-mapping>

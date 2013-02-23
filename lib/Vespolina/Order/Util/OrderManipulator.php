@@ -32,8 +32,7 @@ class OrderManipulator
 
         $order = $this->orderManager->createOrder();
         $order->setOwner($cart->getOwner());
-
-        //$order->setOrderDate(new \DateTime());
+        $order->setOrderDate(new \DateTime());
         $this->orderManager->setOrderState($order, 'unprocessed');
         $order->setPricing($cart->getPricing());    //TODO: order pricing should be independent from a cart
 

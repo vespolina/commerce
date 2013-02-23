@@ -32,7 +32,7 @@ use Vespolina\EventDispatcher\NullDispatcher;
  */
 class OrderManager implements OrderManagerInterface
 {
-    protected $autoCommit;
+    protected $autoPersist;
     protected $cartClass;
     protected $eventDispatcher;
     protected $eventsClass;
@@ -40,7 +40,7 @@ class OrderManager implements OrderManagerInterface
     protected $itemClass;
     protected $orderClass;
 
-    function __construct(OrderGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null)
+    function __construct(OrderGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null, $autoPersist = true)
     {
         $missingClasses = array();
         foreach (array('cart', 'events', 'item', 'order') as $class) {
@@ -64,9 +64,9 @@ class OrderManager implements OrderManagerInterface
             $eventDispatcher = new NullDispatcher();
         }
 
-        $this->autoCommit = true;
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
+        $this->autoPersist = $autoPersist;
     }
 
     /**
@@ -90,7 +90,7 @@ class OrderManager implements OrderManagerInterface
         $cart->setName($name);
         $this->initOrder($cart);
 
-        if ($this->autoCommit) {
+        if ($this->autoPersist) {
             $this->gateway->persistOrder($cart);
         }
 
@@ -106,7 +106,7 @@ class OrderManager implements OrderManagerInterface
         $order->setName($name);
         $this->initOrder($order);
 
-        if ($this->autoCommit) {
+        if ($this->autoPersist) {
             $this->gateway->persistOrder($order);
         }
 
@@ -299,12 +299,10 @@ class OrderManager implements OrderManagerInterface
      */
     protected function doFindBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
+        /** @var \Molino\SelectQueryInterface $query  */
         $query = $this->gateway->createQuery('Select');
+        $query->fields($criteria);
 
-        foreach($criteria as $field => $value) {
-            $query->field($field)->equals($value);
-        }
         if ($orderBy) {
             $query->orderBy($orderBy);
         }
