@@ -317,7 +317,6 @@ class BillingManager implements BillingManagerInterface
                     }
                 } elseif ($paymentProfile instanceof Invoice) {
                     $user = $this->getUserManager()->findOneBy(array('partner' => $br->getPartner()));
-                    $this->getBillingInvoiceManager()->sendNotification($user, $br);
                     $br->setStatus(BillingRequest::STATUS_INVOICE_SENT);
 
                     $isProcessItems = true;
