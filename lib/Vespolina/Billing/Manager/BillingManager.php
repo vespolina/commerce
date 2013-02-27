@@ -105,9 +105,6 @@ class BillingManager implements BillingManagerInterface
     {
         $billingAgreements = $this->createBillingAgreements($order);
 
-        $event = $this->eventDispatcher->createEvent($order);
-        $this->eventDispatcher->dispatch(OrderEvents::ACTIVATE_OR_RENEW_ITEMS, $event);
-
         // order already processed
         if (count($billingAgreements) == 0) {
             return false;
