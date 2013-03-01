@@ -564,6 +564,7 @@ class BillingManager implements BillingManagerInterface
 
         return $qb->where('m.partner = :partner')
             ->andWhere($qb->expr()->andX(
+                $qb->expr()->eq('m.active', true),
                 $qb->expr()->lte(':now', 'm.nextBillingDate'),
                 $qb->expr()->lt('m.nextBillingDate', ':future')
             ))
