@@ -6,7 +6,6 @@
 
     <mapped-superclass name="Vespolina\Entity\Order\BaseOrder" table="vespolina_base_order">
         <field name="attributes"  type="array" nullable="true" />
-        <field name="owner"      type="string" nullable="true" />
         <field name="state"      type="string" />
         <field name="createdAt"  type="datetime" nullable="true"/>
         <field name="expiresAt"  type="datetime"   nullable="true" />
@@ -18,7 +17,7 @@
                 <cascade-remove/>
             </cascade>
         </one-to-one>
-        <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface" inversed-by="order">
+        <many-to-one field="owner" target-entity="Vespolina\Entity\Partner\PartnerInterface" inversed-by="order">
             <cascade>
                 <cascade-persist/>
             </cascade>
