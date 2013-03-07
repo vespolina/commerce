@@ -56,6 +56,23 @@ class ProductManager implements ProductManagerInterface
         $this->productHandlers = array();
     }
 
+    public function addAttributeToProduct(ProductInterface $product, $attribute, $name = null)
+    {
+        if (!$attribute instanceof AttributeInterface) {
+            if (is_array($attribute)) {
+                $type = key($attribute);
+                $name = $attribute[$type];
+            } else {
+                $type = $attribute;
+            }
+            $attribute  = new $this->attributeClass;
+            $attribute->setType($type);
+            $attribute->setName($name);
+        }
+
+        $product->addAttribute($attribute);
+    }
+
     public function addOptionToProduct(ProductInterface $product, $type, $value = null)
     {
 
