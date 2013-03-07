@@ -14,7 +14,7 @@
     "require": {
         "php": ">=5.3.2",
         "vespolina/core": "dev-refactor",
-        "pablodip/molino": "*"
+        "vespolina/molino": "*"
     },
     "autoload": {
         "psr-0": { "Vespolina": "lib/" }
