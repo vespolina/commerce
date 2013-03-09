@@ -8,40 +8,28 @@
 
 namespace Vespolina\Billing\Manager;
 
+use JMS\Payment\CoreBundle\Entity\ExtendedData;
+use JMS\Payment\CoreBundle\PluginController\Result;
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
-use ImmersiveLabs\CaraCore\Entity\License;
-use Vespolina\Entity\Billing\BillingAgreement;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
+use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\Entity\Order\ItemInterface;
+use Vespolina\Entity\Order\OrderEvents;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
+use Vespolina\Entity\Partner\PaymentProfileInterface;
+use Vespolina\Entity\Partner\PaymentProfileType\CreditCard;
+use Vespolina\Entity\Partner\PaymentProfileType\Invoice;
 use Vespolina\Entity\Pricing\PricingContext;
 use Vespolina\Entity\Pricing\PricingContextInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\NullDispatcher;
 use Vespolina\Exception\InvalidConfigurationException;
-use Vespolina\Entity\Order\OrderEvents;
-use Vespolina\Entity\Partner\PaymentProfile;
-use Vespolina\Entity\Billing\BillingRequest;
-use Vespolina\Entity\Partner\PaymentProfileType\CreditCard;
-use Vespolina\Entity\Partner\PaymentProfileType\Invoice;
-use JMS\Payment\CoreBundle\Entity\ExtendedData;
-use JMS\Payment\CoreBundle\PluginController\Result;
-use Vespolina\Entity\Order\Item;
-use Vespolina\Entity\Partner\Partner;
 
 class BillingManager implements BillingManagerInterface
 {
     const BILLING_REQUEST_GET_LIMIT = 100;
 
-    /** @var \ImmersiveLabs\CaraCore\Manager\UserManager */
-    protected $userManager;
-    /** @var BillingInvoiceManager */
-    protected $billingInvoiceManager;
-    /** @var \ImmersiveLabs\BillingBundle\Service\BillingService */
-    protected $billingService;
-    /** @var \Vespolina\Invoice\Manager\InvoiceManager */
-    protected $invoiceManager;
     protected $billingAgreementClass;
     protected $billingRequestClass;
     protected $contexts;
@@ -85,7 +73,7 @@ class BillingManager implements BillingManagerInterface
 
     /**
      * @param integer $id
-     * @return BillingAgreement
+     * @return BillingAgreementInterface
      */
     public function findBillingAgreementById($id)
     {
@@ -114,70 +102,43 @@ class BillingManager implements BillingManagerInterface
     }
 
     /**
-     * @param \Vespolina\Entity\Billing\BillingAgreement $ba
+     * @param \Vespolina\Entity\Billing\BillingAgreementInterface $ba
      */
-    public function deactivateBillingAgreement(BillingAgreement $ba)
+    public function deactivateBillingAgreement(BillingAgreementInterface $ba)
     {
         $ba->setActive(0);
         $this->gateway->updateBillingAgreement($ba);
     }
 
+    public function createBillingAgreement()
+    {
+
+        return new $this->billingAgreementClass();
+    }
     /**
      * @inheritdoc
      */
     public function createBillingAgreements(OrderInterface $order)
     {
-        $partner = $order->getPartner();
-        $paymentProfile = $partner->getPreferredPaymentProfile();
+        $owner = $order->getOwner();
+        $paymentProfile = $owner->getPreferredPaymentProfile();
 
         $paymentProfileType = $paymentProfile->getType();
         $context = $this->context['billingAgreement'][$paymentProfileType];
 
-        $billingAgreements = $this->prepBillingAgreements($context, $partner, $paymentProfile, $order->getItems());
+        $billingAgreements = $this->prepBillingAgreements($context, $owner, $paymentProfile, $order->getItems());
 
         return $billingAgreements;
     }
 
     /**
-     * Removes licenses from their respective billing agreements. This forces recreation
-     * of billing agreements to recompute
-     *
-     * @param array $licenses
-     */
-    public function removeLicensesFromBillingAgreement(array $licenses)
-    {
-        $licensesMap = $this->mapLicensesByBillingAgreements($licenses);
-
-        foreach ($licensesMap as $baId => $licensesToRemove) {
-            $ba = $this->findBillingAgreementById($baId);
-
-            $orderItems = $ba->getOrderItems();
-
-            $finalOrderItems = array();
-
-            foreach ($orderItems as $item) {
-                /** @var Item $item */
-                if (!in_array($item->getAttribute('reference'), $licensesToRemove)) {
-                    $finalOrderItems[] = $item;
-                }
-            }
-
-            if (empty($finalOrderItems)) {
-                $this->deactivateBillingAgreement($ba);
-            } else {
-                $this->recreateBillingAgreement($ba, $finalOrderItems);
-            }
-        }
-    }
-
-    /**
      * Rebuilds the billing agreement if there are any adjustments to the old agreement
      *
-     * @param \Vespolina\Entity\Billing\BillingAgreement $oldAgreement
+     * @param \Vespolina\Entity\Billing\BillingAgreementInterface $oldAgreement
      * @param $orderItems
      * @return array
      */
-    public function recreateBillingAgreement(BillingAgreement $oldAgreement, $orderItems)
+    public function recreateBillingAgreement(BillingAgreementInterface $oldAgreement, $orderItems)
     {
         $this->deactivateBillingAgreement($oldAgreement);
 
@@ -260,7 +221,7 @@ class BillingManager implements BillingManagerInterface
         }
 
         if (!$activeAgreement) {
-            $activeAgreement = new BillingAgreement();
+            $activeAgreement = new $this->billingAgreementClass();
             $activeAgreement
                 ->setInitialBillingDate($startsOn)
                 ->setNextBillingDate($startsOn)
@@ -313,7 +274,7 @@ class BillingManager implements BillingManagerInterface
                         $isProcessItems = true;
                     }
                 } elseif ($paymentProfile instanceof Invoice) {
-                    $user = $this->getUserManager()->findOneBy(array('partner' => $br->getPartner()));
+                    //$user = $this->getUserManager()->findOneBy(array('partner' => $br->getPartner()));
                     $br->setStatus(BillingRequest::STATUS_INVOICE_SENT);
 
                     $isProcessItems = true;
@@ -330,7 +291,7 @@ class BillingManager implements BillingManagerInterface
         } while(count($billingRequests) == self::BILLING_REQUEST_GET_LIMIT);
     }
 
-    private function processPaidBillingRequest(BillingRequest $br)
+    private function processPaidBillingRequest(BillingRequestInterface $br)
     {
         $orders = array();
 
@@ -597,99 +558,4 @@ class BillingManager implements BillingManagerInterface
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    /**
-     * @return \Vespolina\Billing\Manager\BillingInvoiceManager
-     */
-    public function getBillingInvoiceManager()
-    {
-        return $this->billingInvoiceManager;
-    }
-
-    /**
-     * @param \Vespolina\Billing\Manager\BillingInvoiceManager $billingInvoiceManager
-     */
-    public function setBillingInvoiceManager($billingInvoiceManager)
-    {
-        $this->billingInvoiceManager = $billingInvoiceManager;
-
-        return $this;
-    }
-
-    /**
-     * @return \ImmersiveLabs\CaraCore\Manager\UserManager
-     */
-    public function getUserManager()
-    {
-        return $this->userManager;
-    }
-
-    /**
-     * @param \ImmersiveLabs\CaraCore\Manager\UserManager $userManager
-     */
-    public function setUserManager($userManager)
-    {
-        $this->userManager = $userManager;
-
-        return $this;
-    }
-
-    /**
-     * @return \ImmersiveLabs\BillingBundle\Service\BillingService
-     */
-    public function getBillingService()
-    {
-        return $this->billingService;
-    }
-
-    /**
-     * @param \ImmersiveLabs\BillingBundle\Service\BillingService $billingService
-     */
-    public function setBillingService($billingService)
-    {
-        $this->billingService = $billingService;
-
-        return $this;
-    }
-
-    /**
-     * @return \Vespolina\Invoice\Manager\InvoiceManager
-     */
-    public function getInvoiceManager()
-    {
-        return $this->invoiceManager;
-    }
-
-    /**
-     * @param \Vespolina\Invoice\Manager\InvoiceManager $invoiceManager
-     * @return BillingManager
-     */
-    public function setInvoiceManager($invoiceManager)
-    {
-        $this->invoiceManager = $invoiceManager;
-
-        return $this;
-    }
-
-    /**
-     * Maps eligible licenses by the attached active billing agreement
-     *
-     * @param array $licenses
-     * @return array
-     */
-    private function mapLicensesByBillingAgreements(array $licenses)
-    {
-        $map = array();
-
-        /** @var License $license */
-        foreach($licenses as $license) {
-            if ($item = $license->getItem()) {
-                $ba = $item->getActiveBillingAgreement();
-                if ($ba !== null) {
-                    $map[$ba->getId()][] = $license->getId();
-                }
-            }
-        }
-
-        return $map;
-    }
 }

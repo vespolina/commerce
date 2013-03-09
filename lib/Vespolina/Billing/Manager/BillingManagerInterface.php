@@ -18,11 +18,22 @@ use Vespolina\Entity\Order\OrderInterface;
  */
 interface BillingManagerInterface
 {
+
     /**
-     * @param \Vespolina\Entity\Order\OrderInterface $order
-     * @return boolean
+     * Invokes the billing process for an order
+     *
+     *  a)Create the necessary billing agreements
+     *  b)Generate the necessary billing requests (if requested)
+     *  c)Optionally send the first billing request to the payment gateway
+     *
+     * @return mixed
      */
-    function processOrder(OrderInterface $order);
+    function billOrder(OrderInterface $order);
+
+    /**
+     * @return \Vespolina\Entity\Billing\BillingAgreementInterface
+     */
+    function createBillingAgreement();
 
     /**
      * @param \Vespolina\Entity\Order\OrderInterface $order

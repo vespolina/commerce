@@ -4,7 +4,7 @@
       xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Vespolina\Entity\Billing\BillingAgreement" table="vespolina_billing_agreement">
+    <entity name="Vespolina\Entity\Billing\BillingAgreement" table="v_billing_agreement">
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO" />
         </id>
@@ -36,7 +36,7 @@
         <many-to-one field="paymentProfile" target-entity="Vespolina\Entity\Partner\PaymentProfile">
         </many-to-one>
 
-        <many-to-one field="pricingSet" target-entity="ImmersiveLabs\Pricing\Entity\PricingSet">
+        <many-to-one field="pricingSet" target-entity="Vespolina\Pricing\Entity\PricingSet">
             <join-column name="pricingSet_id" referenced-column-name="id" />
             <cascade>
                 <cascade-persist/>

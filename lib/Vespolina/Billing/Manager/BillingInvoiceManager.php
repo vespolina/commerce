@@ -6,15 +6,13 @@ use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Molino\QueryInterface;
-use ImmersiveLabs\DefaultBundle\Service\EmailService;
 use Vespolina\Invoice\Manager\InvoiceManagerInterface;
 use Vespolina\Entity\Billing\BillingRequest;
 use Vespolina\Entity\Invoice\Invoice;
 use Vespolina\Entity\Order\OrderEvents;
-use ImmersiveLabs\CaraCore\Entity\User;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
-use ImmersiveLabs\Pricing\Entity\PricingSet;
+use Vespolina\Pricing\Entity\PricingSet;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Entity\Order\Item;
 
@@ -153,42 +151,6 @@ class BillingInvoiceManager implements BillingInvoiceManagerInterface
     public function createSelectQuery()
     {
         return $this->gateway->createQuery('select');
-    }
-
-    /**
-     * @return \ImmersiveLabs\DefaultBundle\Service\EmailService
-     */
-    public function getEmailService()
-    {
-        return $this->emailService;
-    }
-
-    /**
-     * @param \ImmersiveLabs\DefaultBundle\Service\EmailService $emailService
-     */
-    public function setEmailService($emailService)
-    {
-        $this->emailService = $emailService;
-
-        return $this;
-    }
-
-    /**
-     * @return \Vespolina\Invoice\Manager\InvoiceManagerInterface
-     */
-    public function getInvoiceManager()
-    {
-        return $this->invoiceManager;
-    }
-
-    /**
-     * @param \Vespolina\Invoice\Manager\InvoiceManagerInterface $invoiceManager
-     */
-    public function setInvoiceManager($invoiceManager)
-    {
-        $this->invoiceManager = $invoiceManager;
-
-        return $this;
     }
 
     /**

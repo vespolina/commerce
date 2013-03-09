@@ -2,12 +2,10 @@
 
 namespace Vespolina\Billing\Manager;
 
-use Vespolina\Entity\Billing\BillingRequestInterface;
-use ImmersiveLabs\Pricing\Entity\PricingSet;
-use Vespolina\Entity\Partner\PartnerInterface;
 use Molino\QueryInterface;
-use ImmersiveLabs\CaraCore\Entity\User;
+use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\Entity\Order\OrderInterface;
+use Vespolina\Entity\Partner\PartnerInterface;
 
 interface BillingInvoiceManagerInterface
 {
@@ -50,27 +48,6 @@ interface BillingInvoiceManagerInterface
      * @param \Vespolina\Billing\Gateway\BillingGatewayInterface $gateway
      */
     function setGateway($gateway);
-
-    /**
-     * @return \ImmersiveLabs\DefaultBundle\Service\EmailService
-     */
-    function getEmailService();
-
-    /**
-     * @param \ImmersiveLabs\DefaultBundle\Service\EmailService $emailService
-     */
-    function setEmailService($emailService);
-
-    /**
-     * @return \Vespolina\Invoice\Manager\InvoiceManagerInterface
-     */
-    function getInvoiceManager();
-
-    /**
-     * @param \Vespolina\Invoice\Manager\InvoiceManagerInterface $invoiceManager
-     */
-    function setInvoiceManager($invoiceManager);
-
     /**
      * @param string $duration
      * @return BillingInvoiceManagerInterface

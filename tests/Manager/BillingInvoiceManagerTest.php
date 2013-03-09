@@ -1,15 +1,15 @@
 <?php
 
-use ImmersiveLabs\CaraCore\Tests\TestBaseManager;
-use Vespolina\Entity\Partner\PartnerInterface;
+use Vespolina\Entity\Billing\BillingRequest;
 use Vespolina\Entity\Order\ItemInterface;
+use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Pricing\PricingContext;
-use Vespolina\Entity\Billing\BillingRequest;
+
 /**
  * @group billing-invoice-manager
  */
-class BillingInvoiceManagerTest extends TestBaseManager
+class BillingInvoiceManagerTest //extends TestBaseManager
 {
     const PRODUCT_ID = 'Paid Pro';
 
