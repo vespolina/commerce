@@ -13,10 +13,11 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "vespolina/core": "dev-refactor"
+        "vespolina/core": "dev-refactor",
+        "vespolina/molino": "*"
     },
     "require-dev": {
-        "doctrine/mongodb-odm-bundle": "2.2.*"
+        "vespolina/order": "*"
     },
     "minimum-stability": "dev",
     "autoload": {

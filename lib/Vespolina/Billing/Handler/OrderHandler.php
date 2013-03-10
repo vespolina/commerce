@@ -11,6 +11,7 @@ namespace Vespolina\Billing\Handler;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\Billing\Handler\EntityHandlerInterface;
+use Vespolina\Billing\Manager\BillingManagerInterface;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
 

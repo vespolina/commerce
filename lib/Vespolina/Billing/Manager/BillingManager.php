@@ -91,13 +91,10 @@ class BillingManager implements BillingManagerInterface
      */
     public function billEntity($entity)
     {
-
         $billingProcess = new \Vespolina\Billing\Process\DefaultBillingProcess($this);
-
         $outcome =  $billingProcess->prepareBilling($entity);
 
         if (true) {
-
 
         }
 

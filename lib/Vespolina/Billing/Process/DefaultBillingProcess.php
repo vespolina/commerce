@@ -44,7 +44,7 @@ class DefaultBillingProcess implements BillingProcessInterface
 
         if (!$entityHandler->isBillable($entity)) {
 
-            throw new Exception("Entity is not billable");
+            throw new \Exception("Entity is not billable");
         }
 
         $billingAgreements = $entityHandler->createBillingAgreements($entity);
