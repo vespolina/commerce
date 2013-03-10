@@ -16,7 +16,7 @@ use Vespolina\Entity\Order\OrderInterface;
  *
  * @author Daniel Kucharski <daniel@xerias.be>
  */
-interface BillingEntityHandlerInterface
+interface EntityHandlerInterface
 {
 
     /**
@@ -34,5 +34,13 @@ interface BillingEntityHandlerInterface
      * @return mixed
      */
     function cancelBilling($entity);
+
+    /**
+     * Is this order (still?) billable
+     *
+     * @param $entity
+     * @return mixed
+     */
+    function isBillable($entity);
 
 }

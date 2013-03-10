@@ -20,7 +20,7 @@ interface BillingManagerInterface
 {
 
     /**
-     * Invokes the billing process for an order
+     * Invokes the billing process for an entity (eg. recurring order, contract, ...)
      *
      *  a)Create the necessary billing agreements
      *  b)Generate the necessary billing requests (if requested)
@@ -28,7 +28,7 @@ interface BillingManagerInterface
      *
      * @return mixed
      */
-    function billOrder(OrderInterface $order);
+    function billEntity($entity);
 
     /**
      * @return \Vespolina\Entity\Billing\BillingAgreementInterface

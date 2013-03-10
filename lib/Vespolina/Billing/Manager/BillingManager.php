@@ -89,14 +89,28 @@ class BillingManager implements BillingManagerInterface
     /**
      * @inheritdoc
      */
-    public function processOrder(OrderInterface $order)
+    public function billEntity($entity)
     {
-        $billingAgreements = $this->createBillingAgreements($order);
+        $entityHandler = $this->getEntityHandler($entity);
 
-        // order already processed
-        if (count($billingAgreements) == 0) {
-            return false;
+        if (null == $entityHandler)
+        {
+            throw new \InvalidConfigurationException("Could not find a handler for ", get_class($entity));
         }
+
+        if (!$entityHandler->isBillable($entity)) {
+
+            throw new Exception("Entity is not billable");
+        }
+
+        $billingAgreements = $entityHandler->createBillingAgreements($entity);
+
+        //Persist billing agreements
+        foreach ($billingAgreements as $billingAgreement) {
+
+            $this->gateway->updateBillingAgreement($billingAgreement);
+        }
+
 
         return true;
     }
@@ -556,6 +570,13 @@ class BillingManager implements BillingManagerInterface
         ;
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+
+    protected function getEntityHandler($entity)
+    {
+        //Todo make configurable
+        return new \Vespolina\Billing\Handler\OrderHandler($this);
     }
 
 }
