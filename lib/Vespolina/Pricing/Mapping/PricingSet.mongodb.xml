@@ -10,7 +10,7 @@
         <field fieldName="processed"       type="hash"   />
         <field fieldName="processingState" type="string" />
 
-        <embed-many fieldName="pricingElements">
+        <embed-many field="pricingElements">
             <discriminator-map>
                 <discriminator-mapping value="recurring" class="Vespolina\Entity\Pricing\Element\RecurringElement" />
                 <discriminator-mapping value="totalDoughValue" class="Vespolina\Entity\Pricing\Element\TotalDoughValueElement" />
