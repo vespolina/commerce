@@ -4,7 +4,18 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Vespolina\Entity\Pricing\PricingSet">
+    <embedded-document name="Vespolina\Entity\Pricing\PricingSet">
         <field name="id" id="true" />
-    </document>
+
+        <field fieldName="processed"       type="hash"   />
+        <field fieldName="processingState" type="string" />
+
+        <embed-many fieldName="pricingElements">
+            <discriminator-map>
+                <discriminator-mapping value="recurring" class="Vespolina\Entity\Pricing\Element\RecurringElement" />
+                <discriminator-mapping value="totalDoughValue" class="Vespolina\Entity\Pricing\Element\TotalDoughValueElement" />
+                <discriminator-mapping value="totalValue" class="Vespolina\Entity\Pricing\Element\TotalValueElement" />
+            </discriminator-map>
+        </embed-many>
+    </embedded-document>
 </doctrine-mongo-mapping>
