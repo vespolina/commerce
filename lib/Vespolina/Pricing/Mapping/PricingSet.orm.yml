@@ -1,4 +1,4 @@
-ImmersiveLabs\Pricing\Entity\PricingSet:
+Vespolina\Entity\Pricing\PricingSet:
     type: entity
     table: pricing_set
 
@@ -15,6 +15,6 @@ ImmersiveLabs\Pricing\Entity\PricingSet:
             nullable: true
     oneToMany:
         pricingElements:
-            targetEntity: ImmersiveLabs\Pricing\Entity\PricingElement
+            targetEntity: Vespolina\Entity\Pricing\PricingElement
             mappedBy: pricingSet
             cascade: ["persist", "remove"]

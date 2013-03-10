@@ -1,10 +1,10 @@
-ImmersiveLabs\Pricing\Entity\PricingElement:
+Vespolina\Entity\Pricing\PricingElement:
     type: entity
     table: pricing_element
     inheritanceType: SINGLE_TABLE
     discriminatorMap:
-        recurring: ImmersiveLabs\Pricing\Entity\Element\RecurringElement
-        totalValue: ImmersiveLabs\Pricing\Entity\Element\TotalValueElement
+        recurring: Vespolina\Entity\Pricing\Element\RecurringElement
+        totalValue: Vespolina\Entity\Pricing\Element\TotalValueElement
 
     id:
         id:
@@ -26,5 +26,5 @@ ImmersiveLabs\Pricing\Entity\PricingElement:
             name: "element_type"
     manyToOne:
         pricingSet:
-            targetEntity: ImmersiveLabs\Pricing\Entity\PricingSet
+            targetEntity: Vespolina\Entity\Pricing\PricingSet
             inversedBy: pricingElements
