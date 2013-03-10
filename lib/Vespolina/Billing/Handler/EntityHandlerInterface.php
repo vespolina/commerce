@@ -28,6 +28,17 @@ interface EntityHandlerInterface
     function createBillingAgreements($entity);
 
     /**
+     * Init is called after a billing agreement has been created
+     * It copies relevant fields from the entity to the billing agreement
+     *
+     * @param $billingAgreement The billing agreement to be initialized
+     * @param $entity     The main entity (eg. Order)
+     * @param $entityItem The item of the entity (eg. OrderItem)
+     * @return mixed
+     */
+    function initBillingAgreement(BillingAgreementInterface $billingAgreement, $entity, $entityItem = null);
+
+    /**
      * Cancel the billing process for this entity
      *
      * @param $entity

@@ -91,6 +91,7 @@ class BillingManager implements BillingManagerInterface
      */
     public function billEntity($entity)
     {
+        $billingAgreements = array();
         $entityHandler = $this->getEntityHandler($entity);
 
         if (null == $entityHandler)
@@ -111,8 +112,7 @@ class BillingManager implements BillingManagerInterface
             $this->gateway->updateBillingAgreement($billingAgreement);
         }
 
-
-        return true;
+        return $billingAgreements;
     }
 
     /**
@@ -128,21 +128,6 @@ class BillingManager implements BillingManagerInterface
     {
 
         return new $this->billingAgreementClass();
-    }
-    /**
-     * @inheritdoc
-     */
-    public function createBillingAgreements(OrderInterface $order)
-    {
-        $owner = $order->getOwner();
-        $paymentProfile = $owner->getPreferredPaymentProfile();
-
-        $paymentProfileType = $paymentProfile->getType();
-        $context = $this->context['billingAgreement'][$paymentProfileType];
-
-        $billingAgreements = $this->prepBillingAgreements($context, $owner, $paymentProfile, $order->getItems());
-
-        return $billingAgreements;
     }
 
     /**
@@ -178,17 +163,10 @@ class BillingManager implements BillingManagerInterface
     }
 
     /**
-     * @param $context
-     * @param \Vespolina\Entity\Partner\Partner $partner
-     * @param \Vespolina\Entity\Partner\PaymentProfile $paymentProfile
-     * @param $orderItems
-     * @return array
-     */
     private function prepBillingAgreements($context, Partner $partner, PaymentProfile $paymentProfile, $orderItems)
     {
         $billingAgreements = array();
 
-        /** @var Item $item **/
         foreach ($orderItems as $item) {
             $pricingSet = $item->getPricing();
 
@@ -252,7 +230,7 @@ class BillingManager implements BillingManagerInterface
         $this->gateway->persistBillingAgreement($activeAgreement);
 
         return $activeAgreement;
-    }
+    } */
 
     public function processPendingBillingRequests()
     {

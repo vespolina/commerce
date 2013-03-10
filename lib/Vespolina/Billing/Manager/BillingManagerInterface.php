@@ -36,12 +36,6 @@ interface BillingManagerInterface
     function createBillingAgreement();
 
     /**
-     * @param \Vespolina\Entity\Order\OrderInterface $order
-     * @return array
-     */
-    function createBillingAgreements(OrderInterface $order);
-
-    /**
      * Create a new billing request
      *
      * @param \Vespolina\Entity\Billing\BillingAgreementInterface $billingAgreement

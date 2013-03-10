@@ -7,21 +7,16 @@ use Symfony\Component\DependencyInjection\Container;
 
 use Vespolina\Billing\Manager\BillingManager;
 use Vespolina\Billing\Gateway\BillingGateway;
-use Vespolina\Entity\Order\OrderEvents;
-use Vespolina\Entity\Order\Order;
-use Vespolina\Entity\Partner\PaymentProfileType\Invoice;
+use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\EventInterface;
 use Vespolina\Pricing\Entity\Element\RecurringElement;
 use Vespolina\Pricing\Entity\PricingSet;
 
-use Vespolina\Billing\Tests\Manager\TestDispatcher;
-use Vespolina\Billing\Tests\Manager\TestBaseManager;
-
 /**
  * @group ecommerce
  */
-class BillingManagerTest extends TestBaseManager
+class BillingManagerTest extends \PHPUnit_Framework_TestCase
 {
     protected $billingGateway;
 
@@ -30,18 +25,13 @@ class BillingManagerTest extends TestBaseManager
         $this->markTestIncomplete('tests are need to make sure the contexts are set up correctly');
     }
 
-    public function test()
+    public function testCreateBillingAgreement()
     {
-        $this->markTestIncomplete('the various pieces need to be tested with the events tha are triggered');
-        // track states in processing
+        $billingManager = $this->createBillingManager();
 
-        /** current needs */
-        // get order
-        // create current bill
-        // create recurring bill
-        // get CC
-        // submit current bill to CC
-        // create licenses when CC is approved
+        $billingAgreement = $billingManager->createBillingAgreement();
+
+        $this->assertTrue($billingAgreement instanceof BillingAgreementInterface);
     }
 
     public function testCreateBillingAgreements()
@@ -131,12 +121,9 @@ class BillingManagerTest extends TestBaseManager
 
     protected function createTestOrder()
     {
-        $licenses = $this->getTestObjectsProvider()->loadLicenseProductDataFixtures();
-        $upgrade = $this->getTestObjectsProvider()->loadUpgradeProductDataFixture();
-        $user = $this->getTestObjectsProvider()->createRandomUser();
 
         $order = $this->getOrderManager()->createOrder();
-        $order->setPartner($user->getPartner());
+        //$order->setOwner($user->getPartner());
 
         $this->getOrderManager()->addProductToOrder($order, $licenses[License::PRODUCT_LICENSE_NAME], array(), 1, false);
         $this->getOrderManager()->addProductToOrder($order, $licenses[License::PRODUCT_LICENSE_NAME], array(), 1, false);
@@ -152,18 +139,26 @@ class BillingManagerTest extends TestBaseManager
 
     protected function createBillingManager()
     {
-        $this->billingGateway = new BillingGateway($this->getMolino(), 'Vespolina\Entity\Billing\BillingAgreement');
+        //$this->billingGateway = new BillingGateway($this->getMolino(), 'Vespolina\Entity\Billing\BillingAgreement');
+
+        $billingGateway = $this->getMockBuilder('Vespolina\Billing\Gateway\BillingGateway')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
         $eventDispatcher = new TestDispatcher();
         $classMapping = array(
             'billingAgreementClass' => 'Vespolina\Entity\Billing\BillingAgreement',
             'billingRequestClass' => 'Vespolina\Entity\Billing\BillingRequest',
         );
-        $contexts = array(
-            'ImmersiveLabs\CaraCore\Context\InvoiceAgreementContext',
-            'ImmersiveLabs\CaraCore\Context\InvoiceRequestContext',
-        );
-        $manager = new BillingManager($this->billingGateway, $classMapping, $contexts, $eventDispatcher);
+        $contexts = array();
+        $manager = new BillingManager($billingGateway, $classMapping, $contexts, $eventDispatcher);
 
         return $manager;
+    }
+
+    protected function getMolino()
+    {
+
     }
 }

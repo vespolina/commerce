@@ -12,6 +12,7 @@ use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\Billing\Handler\EntityHandlerInterface;
 use Vespolina\Entity\Order\OrderInterface;
+use Vespolina\Entity\Order\ItemInterface;
 
 class OrderHandler implements EntityHandlerInterface
 {
@@ -25,11 +26,36 @@ class OrderHandler implements EntityHandlerInterface
 
     public function createBillingAgreements($entity)
     {
+        $billingAgreements = array();
+        $recurringItems = array();          //Initial set of detected recurring items
+        $recurringItemsMerged = array();    //Final set of recurring items after merge
 
         if (!$this->isBillable($entity)) {
             throw new \ErrorException('Entity is not billable');
         }
 
+        //Collect items for which a recurring charge exists
+        /** @var Item $item **/
+        foreach ($entity->getItems() as $item) {
+            $pricingSet = $item->getPricing();
+            $pricingSet->getProcessed();
+
+            if ($pricingSet->get('recurringCharge')) {
+
+                $recurringItems = $item;
+            }
+        }
+
+        //Todo: merge items together
+        $recurringItems = $recurringItems;
+
+        foreach ($recurringItems as $recurringItem) {
+
+            // Check if we can attach this item to one of the existing billing agreements.
+            // If no suitable agreement can be found a new one is created
+            // If a suitable agreement is found the order item is attached to it
+            $this->createOrUpdateBusinessAgreements($billingAgreements, $recurringItem);
+        }
     }
 
     public function cancelBilling($entity)
@@ -37,12 +63,72 @@ class OrderHandler implements EntityHandlerInterface
 
     }
 
+    public function initBillingAgreement(BillingAgreementInterface $billingAgreement, $entity, $entityItem = null)
+    {
+        /** @var PartnerInterface $owner **/
+        $owner = $entity->getOwner();
+
+        $paymentProfile = $owner->getPreferredPaymentProfile();
+
+        $billingAgreement
+            ->setPartner($owner)
+            ->setPaymentProfile($owner->getPaymentProfile())
+        ;
+    }
+
     public function isBillable($entity)
     {
-        //Currenlty we only check if the entity is valid but we should additional business logic here
-        // (eg. if the order is cancelled it should not eligable for billing)
+        if (!$this->isBillableEntity($entity)) return false;
 
-        return $this->isBillableEntity($entity);
+        if (null == $entity->getOwner()) return false;
+
+        return true;
+    }
+
+    protected function createOrUpdateBusinessAgreements(array &$agreements, ItemInterface $item, $context = null)
+    {
+        $pricingSet = $item->getPricing();
+        $interval = $pricingSet->get('interval');
+        $cycles = $pricingSet->get('cycles');
+
+        if ($item->getAttribute('start_billing')) {
+            $startsOn = $item->getAttribute('start_billing');
+        } elseif ($context['dueDate']) {
+            $startsOn = $pricingSet->get('startsOn');
+            $date = explode(',', $startsOn->format('Y,m'));
+            $startsOn->setDate($date[0], $date[1], $context['dueDate']);
+        } else {
+            $startsOn = $pricingSet->get('startsOn');
+        }
+        $startTimestamp = $startsOn->getTimestamp();
+
+        //Find a suitable billing agreement
+        $activeAgreement = null;
+        foreach ($agreements as $agreement) {
+            if ($agreement->getBillingInterval() == $interval &&
+                $agreement->getBillingCycles() == $cycles &&
+                $agreement->getInitialBillingDate()->getTimestamp() == $startTimestamp) {
+                $activeAgreement = $agreement;
+            }
+        }
+
+        if (null == $activeAgreement) {
+            $activeAgreement = $this->billingManager->createBillingAgreement();
+            $this->initBillingAgreement($item->getParent(), $item);
+            $activeAgreement
+                ->setInitialBillingDate($startsOn)
+                ->setNextBillingDate($startsOn)
+                ->setBillingCycles($pricingSet->get('cycles'))
+                ->setBillingInterval($pricingSet->get('interval'));
+            ;
+            $agreements[] = $activeAgreement;
+        }
+
+        $activeAgreement->addOrderItem($item);
+        $activePricingSet = $activeAgreement->getPricing();
+        $activeAgreement->setPricing($pricingSet->plus($activePricingSet));
+
+        return $activeAgreement;
     }
 
     protected function isBillableEntity($entity)
