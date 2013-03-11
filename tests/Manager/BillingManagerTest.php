@@ -10,9 +10,13 @@ use Vespolina\Billing\Gateway\BillingGateway;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\EventInterface;
-use Vespolina\Pricing\Entity\Element\RecurringElement;
-use Vespolina\Pricing\Entity\PricingSet;
-
+use Vespolina\Entity\Pricing\Element\RecurringElement;
+use Vespolina\Entity\Pricing\PricingSet;
+use Vespolina\Entity\Order\Item;
+use Vespolina\Entity\Order\Order;
+use Vespolina\Entity\Product\Product;
+use Vespolina\Entity\Pricing\PricingContext;
+use Vespolina\Entity\Partner\Partner;
 /**
  * @group ecommerce
  */
@@ -38,10 +42,11 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
         $billingManager = $this->createBillingManager();
         $recurringOrder = $this->createRecurringOrder();
         $outcome = $billingManager->billEntity($recurringOrder);
+        $billingAgreements = $outcome[0];
 
-        $this->markTestIncomplete('refactor');
+        $this->assertCount(1, $billingAgreements , 'there needs to be 1 billing agreement');
 
-        $this->assertCount(1, $billingAgreements, 'there needs to be 1 billing agreement');
+        return;
 
         foreach ($billingAgreements as $agreement) {
             $orderItems = $agreement->getOrderItems();
@@ -135,18 +140,27 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function createRecurringOrder()
     {
-        $order = new \Vespolina\Entity\Order\Order();
-        $customer = new \Vespolina\Entity\Partner\Partner();
+        $order = new Order();
+        $customer = new Partner();
         $order->setOwner($customer);
 
-        $product1 = new \Vespolina\Entity\Product\Product();
+        $product1 = new Product();
         $product1->setName('product1');
 
-        $pricingSet1 = new \Vespolina\Entity\Pricing\PricingSet();
-        $pricingSet1->addPricingElement(new \Vespolina\Entity\Pricing\Element\RecurringElement());
-        $pricingSet1->getProcessed();
+        $context = new PricingContext();
 
-        $orderItem1 = new \Vespolina\Entity\Order\Item($product1);
+        $recurringElement = new RecurringElement();
+        $recurringElement->setCycles(-1);
+        $recurringElement->setInterval('1 month');
+        $recurringElement->setRecurringCharge('30');
+
+        $pricingSet = new PricingSet();
+        $pricingSet->addPricingElement($recurringElement);
+        $pricingSet1 = $pricingSet->process($context);
+
+        //$pricingSet1->setProcessingState(PricingSet::PROCESSING_FINISHED);
+
+        $orderItem1 = new Item($product1);
 
         $rp = new \ReflectionProperty($orderItem1, 'pricingSet');
         $rp->setAccessible(true);

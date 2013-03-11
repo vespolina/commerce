@@ -8,15 +8,17 @@
 
 namespace Vespolina\Billing\Process;
 
+use Vespolina\Billing\Manager\BillingManagerInterface;
+use Vespolina\Billing\Handler\OrderHandler;
+use Vespolina\Billing\Generator\DefaultBillingRequestGenerator;
+use Vespolina\Billing\Process\BillingProcessInterface;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Billing\BillingRequestInterface;
-use Vespolina\Billing\Process\BillingProcessInterface;
-use Vespolina\Billing\Manager\BillingManagerInterface;
-use Vespolina\Billing\Handler\DefaultBillingRequestGenerator;
 
 class DefaultBillingProcess implements BillingProcessInterface
 {
     protected $billingManager;
+    protected $billingRequestGenerator;
 
     public function __construct(BillingManagerInterface $billingManager, $config = array())
     {
@@ -47,34 +49,47 @@ class DefaultBillingProcess implements BillingProcessInterface
             throw new \Exception("Entity is not billable");
         }
 
-        $billingAgreements = $entityHandler->createBillingAgreements($entity);
+        try {
 
-        //Persist generated billing agreements
-        foreach ($billingAgreements as $billingAgreement) {
+            $billingAgreements = $entityHandler->createBillingAgreements($entity);
 
-            $this->gateway->updateBillingAgreement($billingAgreement);
-        }
+            //Persist generated billing agreements
+            foreach ($billingAgreements as $billingAgreement) {
 
-        //Optionally create the first billing requests
-        if ($this->config['generate_first_billing_request']) {
-            $billingRequestGenerator = new DefaultBillingRequestGenerator($this);
-            $billingRequests = $billingRequestGenerator->generateNext($billingAgreements);
-
-            foreach ($billingRequests as $billingRequest) {
-                $this->gateway->updateBillingRequest($billingRequest);
+                $this->billingManager->updateBillingAgreement($billingAgreement);
             }
+
+            //Optionally create the first billing requests
+            if (count($billingAgreements) > 0 && $this->config['generate_first_billing_request']) {
+
+                //Use the default billing request generator
+                $billingRequests = $this->getBillingRequestGenerator()->generateNext($billingAgreements);
+
+                foreach ($billingRequests as $billingRequest) {
+                    $this->billingManager->updateBillingRequest($billingRequest);
+                }
+            }
+        } catch (\Exception $e) {
+
         }
 
-            return array($billingAgreements, $billingRequests);
+        return array($billingAgreements, $billingRequests);
     }
 
     public function executeBilling(array $billingAgreements)
     {
-        //1. Check if the billing agreement is still billable (eg. there is no billing block )
-        //2. Check if we have already a billing request ready to bill
-        //3. If not generate new billing requests
-        //4. Offer billing requests to the payment gateway
-        //5. Handle payment outcome and raise events
+        foreach ($billingAgreements as $billingAgreement) {
+
+            //1. Check if the billing agreement is still billable (eg. there is no billing block )
+            if ($billingAgreement->isBillable()) {
+
+                //2. Check if we have already a billing request ready to bill
+
+                //3. If not generate new billing requests
+                //4. Offer billing requests to the payment gateway
+                //5. Handle payment outcome and raise events
+            }
+        }
     }
 
     public function isCompleted($entity)
@@ -82,9 +97,18 @@ class DefaultBillingProcess implements BillingProcessInterface
 
     }
 
+    protected function getBillingRequestGenerator()
+    {
+        if (null == $this->billingRequestGenerator) {
+            $this->billingRequestGenerator = new DefaultBillingRequestGenerator($this->billingManager);
+        }
+
+        return $this->billingRequestGenerator;
+    }
+
     protected function getEntityHandler($entity)
     {
         //Todo make configurable
-        return new \Vespolina\Billing\Handler\OrderHandler($this->billingManager);
+        return new OrderHandler($this->billingManager);
     }
 }

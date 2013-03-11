@@ -148,76 +148,6 @@ class BillingManager implements BillingManagerInterface
         return $this->prepBillingAgreements($context, $partner, $paymentProfile, $orderItems);
     }
 
-    /**
-    private function prepBillingAgreements($context, Partner $partner, PaymentProfile $paymentProfile, $orderItems)
-    {
-        $billingAgreements = array();
-
-        foreach ($orderItems as $item) {
-            $pricingSet = $item->getPricing();
-
-            $pricingSet->getProcessed();
-
-            if ($pricingSet->get('recurringCharge')) {
-                $agreement = $this->addItemToAgreements($item, $billingAgreements, $context);
-                $agreement
-                    ->setPaymentProfile($paymentProfile)
-                    ->setPartner($partner)
-                ;
-
-                $this->gateway->updateBillingAgreement($agreement);
-            }
-        }
-
-        return $billingAgreements;
-    }
-
-    protected function addItemToAgreements(ItemInterface $item, array &$agreements, PricingContextInterface $context)
-    {
-        $pricingSet = $item->getPricing();
-        $interval = $pricingSet->get('interval');
-        $cycles = $pricingSet->get('cycles');
-
-        if ($item->getAttribute('start_billing')) {
-            $startsOn = $item->getAttribute('start_billing');
-        } elseif ($context['dueDate']) {
-            $startsOn = $pricingSet->get('startsOn');
-            $date = explode(',', $startsOn->format('Y,m'));
-            $startsOn->setDate($date[0], $date[1], $context['dueDate']);
-        } else {
-            $startsOn = $pricingSet->get('startsOn');
-        }
-        $startTimestamp = $startsOn->getTimestamp();
-
-        $activeAgreement = null;
-        foreach ($agreements as $agreement) {
-            if ($agreement->getBillingInterval() == $interval &&
-                $agreement->getBillingCycles() == $cycles &&
-                $agreement->getInitialBillingDate()->getTimestamp() == $startTimestamp) {
-                $activeAgreement = $agreement;
-            }
-        }
-
-        if (!$activeAgreement) {
-            $activeAgreement = new $this->billingAgreementClass();
-            $activeAgreement
-                ->setInitialBillingDate($startsOn)
-                ->setNextBillingDate($startsOn)
-                ->setBillingCycles($pricingSet->get('cycles'))
-                ->setBillingInterval($pricingSet->get('interval'));
-            ;
-            $agreements[] = $activeAgreement;
-        }
-
-        $activeAgreement->addOrderItem($item);
-        $activePricingSet = $activeAgreement->getPricing();
-        $activeAgreement->setPricing($pricingSet->plus($activePricingSet));
-
-        $this->gateway->persistBillingAgreement($activeAgreement);
-
-        return $activeAgreement;
-    } */
-
     public function processPendingBillingRequests()
     {
         $page = 1;
@@ -534,5 +464,10 @@ class BillingManager implements BillingManagerInterface
         ;
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function updateBillingAgreement(BillingAgreementInterface $billingAgreement)
+    {
+        $this->gateway->updateBillingAgreement($billingAgreement);
     }
 }

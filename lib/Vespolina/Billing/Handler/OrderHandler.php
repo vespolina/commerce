@@ -42,21 +42,22 @@ class OrderHandler implements EntityHandlerInterface
             $pricingSet->getProcessed();
 
             if ($pricingSet->get('recurringCharge')) {
-
-                $recurringItems = $item;
+                $recurringItems[] = $item;
             }
         }
 
         //Todo: merge items together
-        $recurringItems = $recurringItems;
+        $recurringItemsMerged = $recurringItems;
 
-        foreach ($recurringItems as $recurringItem) {
+        foreach ($recurringItemsMerged as $recurringItem) {
 
             // Check if we can attach this item to one of the existing billing agreements.
             // If no suitable agreement can be found a new one is created
             // If a suitable agreement is found the order item is attached to it
             $this->createOrUpdateBusinessAgreements($billingAgreements, $recurringItem);
         }
+
+        return $billingAgreements;
     }
 
     public function cancelBilling($entity)
@@ -69,11 +70,10 @@ class OrderHandler implements EntityHandlerInterface
         /** @var PartnerInterface $owner **/
         $owner = $entity->getOwner();
 
-        $paymentProfile = $owner->getPreferredPaymentProfile();
-
+        //$paymentProfile = $owner->getPreferredPaymentProfile();
         $billingAgreement
             ->setPartner($owner)
-            ->setPaymentProfile($owner->getPaymentProfile())
+            //->setPaymentProfile($owner->getPaymentProfile())
         ;
     }
 
@@ -115,7 +115,7 @@ class OrderHandler implements EntityHandlerInterface
 
         if (null == $activeAgreement) {
             $activeAgreement = $this->billingManager->createBillingAgreement();
-            $this->initBillingAgreement($item->getParent(), $item);
+            $this->initBillingAgreement($activeAgreement, $item->getParent(), $item);
             $activeAgreement
                 ->setInitialBillingDate($startsOn)
                 ->setNextBillingDate($startsOn)
@@ -126,8 +126,8 @@ class OrderHandler implements EntityHandlerInterface
         }
 
         $activeAgreement->addOrderItem($item);
-        $activePricingSet = $activeAgreement->getPricing();
-        $activeAgreement->setPricing($pricingSet->plus($activePricingSet));
+        //$activePricingSet = $activeAgreement->getPricing();
+        //$activeAgreement->setPricing($pricingSet->plus($activePricingSet));
 
         return $activeAgreement;
     }
