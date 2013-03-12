@@ -17,6 +17,7 @@ use Vespolina\Entity\Order\Order;
 use Vespolina\Entity\Product\Product;
 use Vespolina\Entity\Pricing\PricingContext;
 use Vespolina\Entity\Partner\Partner;
+use Vespolina\Entity\Pricing\Element\TotalDoughValueElement;
 /**
  * @group ecommerce
  */
@@ -46,11 +47,10 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $billingAgreements , 'there needs to be 1 billing agreement');
 
-        return;
 
         foreach ($billingAgreements as $agreement) {
             $orderItems = $agreement->getOrderItems();
-            if (count($orderItems) == 2) {
+            if (count($orderItems) == 1) {
                 // test monthly charge
                 $dueDate = new \DateTime('today');
                 $date = explode(',', $dueDate->format('Y,m'));
@@ -63,7 +63,7 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
                 $this->assertEquals($dueDate, $agreement->getNextBillingDate());
             } else {
                 // test annual charge
-                $dueDate = new \DateTime('today');
+                /**$dueDate = new \DateTime('today');
                 $date = explode(',', $dueDate->format('Y,m'));
                 $dueDate->setDate($date[0]+1, $date[1], 20);
 
@@ -71,9 +71,11 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
                 $this->assertEquals('-1', $agreement->getBillingCycles());
                 $this->assertEquals('1 year', $agreement->getBillingInterval());
                 $this->assertEquals($dueDate, $agreement->getInitialBillingDate());
-                $this->assertEquals($dueDate, $agreement->getNextBillingDate());
+                $this->assertEquals($dueDate, $agreement->getNextBillingDate());*/
             }
         }
+
+        return;
 
         $this->markTestIncomplete('test for non-recurring items in order');
         $this->markTestIncomplete('test for recurring ending at different times');
@@ -154,7 +156,7 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
         $recurringElement->setInterval('1 month');
         $recurringElement->setRecurringCharge('30');
 
-        $pricingSet = new PricingSet();
+        $pricingSet = new PricingSet(new TotalDoughValueElement());
         $pricingSet->addPricingElement($recurringElement);
         $pricingSet1 = $pricingSet->process($context);
 

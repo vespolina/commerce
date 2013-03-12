@@ -8,9 +8,8 @@
 
 namespace Vespolina\Billing\Manager;
 
-use JMS\Payment\CoreBundle\Entity\ExtendedData;
-use JMS\Payment\CoreBundle\PluginController\Result;
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
+use Vespolina\Billing\Process\DefaultBillingProcess;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\Entity\Order\ItemInterface;
@@ -28,8 +27,6 @@ use Vespolina\Exception\InvalidConfigurationException;
 
 class BillingManager implements BillingManagerInterface
 {
-    const BILLING_REQUEST_GET_LIMIT = 100;
-
     protected $billingAgreementClass;
     protected $billingRequestClass;
     protected $contexts;
@@ -91,14 +88,10 @@ class BillingManager implements BillingManagerInterface
      */
     public function billEntity($entity)
     {
-        $billingProcess = new \Vespolina\Billing\Process\DefaultBillingProcess($this);
-        $outcome =  $billingProcess->prepareBilling($entity);
+        $billingProcess = new DefaultBillingProcess($this,  $this->eventDispatcher);
+        list($billingAgreements, $billingRequests) =  $billingProcess->prepareBilling($entity);
 
-        if (true) {
-
-        }
-
-        return $outcome;
+        return $billingProcess->executeBilling($billingAgreements, $billingRequests);
     }
 
     /**
@@ -112,91 +105,7 @@ class BillingManager implements BillingManagerInterface
 
     public function createBillingAgreement()
     {
-
         return new $this->billingAgreementClass();
-    }
-
-    /**
-     * Rebuilds the billing agreement if there are any adjustments to the old agreement
-     *
-     * @param \Vespolina\Entity\Billing\BillingAgreementInterface $oldAgreement
-     * @param $orderItems
-     * @return array
-     */
-    public function recreateBillingAgreement(BillingAgreementInterface $oldAgreement, $orderItems)
-    {
-        $this->deactivateBillingAgreement($oldAgreement);
-
-        /** @var PaymentProfile $paymentProfile  */
-        $paymentProfile = $oldAgreement->getPaymentProfile();
-
-        return $this->recreateBillingAgreementByPartnerAndPaymentProfile($oldAgreement->getPartner(), $paymentProfile, $orderItems);
-    }
-
-    /**
-     * @param \Vespolina\Entity\Partner\Partner $partner
-     * @param \Vespolina\Entity\Partner\PaymentProfile $paymentProfile
-     * @param $orderItems
-     * @return array
-     */
-    public function recreateBillingAgreementByPartnerAndPaymentProfile(Partner $partner, PaymentProfile $paymentProfile, $orderItems)
-    {
-        $paymentProfileType = $paymentProfile->getType();
-
-        $context = $this->context['billingAgreement'][$paymentProfileType];
-
-        return $this->prepBillingAgreements($context, $partner, $paymentProfile, $orderItems);
-    }
-
-    public function processPendingBillingRequests()
-    {
-        $page = 1;
-        do {
-            $billingRequests = $this->findPendingBillingRequests($page);
-
-            foreach ($billingRequests as $br) {
-                /** @var BillingRequest $br */
-                $paymentProfile = $br->getPaymentProfile();
-                $isProcessItems = false;
-                if ($paymentProfile instanceof CreditCard) {
-                    $totalValue = $br->getPricingSet()->get('totalValue');
-                    $ex = new ExtendedData();
-                    $ex->set('cardId', $paymentProfile->getReference(), false, false);
-                    $result = $this->getBillingService()->doStraightPayment($totalValue, $ex);
-                    if ($result->getStatus() == Result::STATUS_SUCCESS) {
-                        $br->setStatus(BillingRequest::STATUS_PAID);
-                        $inv = new \Vespolina\Entity\Invoice\Invoice();
-                        $inv
-                            ->setPartner($br->getPartner())
-                            ->setDueDate($br->getDueDate())
-                            ->setIssuedDate($br->getCreatedAt())
-                            ->setPayment($totalValue)
-                            ->setPeriodStart(new \DateTime())
-                            ->setPeriodEnd(new \DateTime('+1 month')) //@todo confirm what's the purpose of period start and period end
-                        ;
-
-                        $this->getInvoiceManager()->updateInvoice($inv);
-
-                        $br->setInvoice($inv);
-
-                        $isProcessItems = true;
-                    }
-                } elseif ($paymentProfile instanceof Invoice) {
-                    //$user = $this->getUserManager()->findOneBy(array('partner' => $br->getPartner()));
-                    $br->setStatus(BillingRequest::STATUS_INVOICE_SENT);
-
-                    $isProcessItems = true;
-                }
-
-                $this->gateway->updateBillingRequest($br);
-
-                if ($isProcessItems) {
-                    $this->processPaidBillingRequest($br);
-                }
-            }
-
-            $page++;
-        } while(count($billingRequests) == self::BILLING_REQUEST_GET_LIMIT);
     }
 
     private function processPaidBillingRequest(BillingRequestInterface $br)
@@ -244,39 +153,6 @@ class BillingManager implements BillingManagerInterface
             ->getQuery()
             ->getResult()
         ;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    function createBillingRequest(BillingAgreementInterface $billingAgreement)
-    {
-        if (!$billingAgreement->getActive()) {
-            return false;
-        }
-
-        $paymentType = $billingAgreement->getPaymentProfile()->getType();
-        $context = $this->context['billingRequest'][$paymentType];
-        $partner = $billingAgreement->getPartner();
-        $context['partner'] = $partner;
-        $relatedAgreements = $this->findBillingAgreements($context);
-
-        $billingRequest = new $this->billingRequestClass();
-        $requestPricingSet = null;
-        foreach ($relatedAgreements as $agreement) {
-            $billingRequest->mergeOrderItems($agreement->getOrderItems());
-            $requestPricingSet = $agreement->getPricing()->plus($requestPricingSet);
-            $agreement->completeCurrentCycle($billingRequest);
-            $this->gateway->updateBillingAgreement($agreement);
-        }
-        $billingRequest->setPaymentProfile($billingAgreement->getPaymentProfile());
-        $billingRequest->setPricing($requestPricingSet);
-        $billingRequest->setDueDate($agreement->getNextBillingDate());
-        $billingRequest->setPartner($partner);
-
-        $this->gateway->persistBillingRequest($billingRequest);
-
-        return $requestPricingSet;
     }
 
     /**
@@ -390,37 +266,7 @@ class BillingManager implements BillingManagerInterface
     }
 
     /**
-     * Gets total monthly payment for next bill (in the future from billing agreement)
-     *
-     * @param PartnerInterface $partner
-     * @return integer
-     */
-    public function getMonthlyTotalForPartner(PartnerInterface $partner)
-    {
-        // gets billing agreements (disregarding whether they are free or not, but valid for the month)
-        $billingAgreements = $this->findBillingAgreementsOnCurrentMonthForPartner($partner);
-
-        $total = 0;
-        foreach ($billingAgreements as $billingAgreement) {
-            /** @var $billingAgreement BillingAgreement */
-            if (strstr($billingAgreement->getBillingInterval(), 'month') !== false) {
-                foreach ($billingAgreement->getOrderItems() as $item) {
-                    /**
-                     * @todo add more conditions for when we have an MCP-created license based
-                     * @todo on a set ExpiresAt in the future, we should exclude these expiresAt in the future ??
-                     */
-                    if (!$item->getAttribute('inactive')) {
-                        $total += $item->getPricing()->getTotalValue();
-                    }
-                }
-            }
-        }
-
-        return $total;
-    }
-
-    /**
-     * Finds the last month's billing agreements and add their total for a given user/partner
+     * Finds billing agreements for the given user/partner
      *
      * @param PartnerInterface $partner
      * @return array
@@ -438,7 +284,7 @@ class BillingManager implements BillingManagerInterface
                 $qb->expr()->lt('m.nextBillingDate', ':future')
             ))
             ->setParameters(array(
-                'partner' => $partner,
+                'owner' => $partner,
                 'now'     => new \DateTime('now'),
                 'future'  => new \DateTime('+ 1 month')
             ))

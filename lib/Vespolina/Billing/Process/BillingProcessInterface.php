@@ -29,6 +29,13 @@ interface BillingProcessInterface
     function executeBilling(array $businessAgreements);
 
     /**
+     * Execute billing requests ready to be billed
+     *
+     * @return mixed
+     */
+    function executePendingBillingRequests();
+
+    /**
      * Prepare billing for this entity
      * This action typically consists of generating billing agreements and (optionally) billing requests
      *
