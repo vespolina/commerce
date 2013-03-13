@@ -68,6 +68,14 @@ class BillingManager implements BillingManagerInterface
         }
     }
 
+    public function createBillingRequest(BillingAgreementInterface $billingAgreement)
+    {
+
+        $billingRequest = new $this->billingRequestClass();
+
+        return $billingRequest;
+    }
+
     /**
      * @param integer $id
      * @return BillingAgreementInterface
