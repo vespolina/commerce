@@ -5,8 +5,9 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <mapped-superclass name="Vespolina\Entity\Pricing\PricingElement">
-        <field fieldName="attributes" type="hash"   />
-        <field fieldName="position"   type="int"    />
-        <field fieldName="type"       type="string" />
+        <field name="position"   type="int"    />
+        <field name="properties" type="hash" />
+        <field name="type"       type="string" />
+        <field name="values"     type="dough_currency_money_hash" />
     </mapped-superclass>
 </doctrine-mongo-mapping>

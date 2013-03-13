@@ -7,15 +7,9 @@
     <embedded-document name="Vespolina\Entity\Pricing\PricingSet">
         <field name="id" id="true" />
 
-        <field fieldName="processedProperties" type="hash" />
-        <field fieldName="processingState" type="string" />
-
-        <embed-many field="processedValues">
-            <discriminator-map>
-                <discriminator-mapping value="dough_currency_money" class="Dough\Money\MultiCurrencyMoney" />
-                <discriminator-mapping value="dough_money" class="Dough\Money\Money" />
-            </discriminator-map>
-        </embed-many>
+        <field name="processedProperties" type="hash" />
+        <field name="processingState" type="string" />
+        <field name="processedValues" type="dough_currency_money_hash" />
 
         <embed-many field="pricingElements">
             <discriminator-map>
@@ -24,5 +18,6 @@
                 <discriminator-mapping value="totalValue" class="Vespolina\Entity\Pricing\Element\TotalValueElement" />
             </discriminator-map>
         </embed-many>
+
     </embedded-document>
 </doctrine-mongo-mapping>
