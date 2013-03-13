@@ -126,23 +126,30 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAttributeToProduct()
     {
-        $this->markTestIncomplete(
-            'This test needs asserts for listeners.'
-        );
-        $product = new Product();
+        $product = $this->mgr->createProduct();
         $label = $this->mgr->createAttribute('label', 'Joat Music');
-        $this->mgr->addAttributeToProduct($label, $product);
+        $this->mgr->addAttributeToProduct($product, $label);
         $this->assertCount(1, $product->getAttributes(), 'the attribute should be added');
         $this->assertSame($label, $product->getAttribute('label'), 'the original attribute should be returned');
 
         $format = array('format' => 'mp3');
-        $this->mgr->addAttributeToProduct($format, $product);
+        $this->mgr->addAttributeToProduct($product, $format);
         $this->assertCount(2, $product->getAttributes(), 'an array has been passed in should be added as an attribute');
 
         $formatAttribute = $product->getAttribute('format');
-        $this->assertInstanceOf('Vespolina\Entity\Product\Product', $formatAttribute, 'the array should be turned into an Attribute object');
+        $this->assertInstanceOf('Vespolina\Entity\Product\AttributeInterface', $formatAttribute, 'the array should be turned into an Attribute object');
         $this->assertSame('format', $formatAttribute->getType(), 'the type should be copied');
         $this->assertSame('mp3', $formatAttribute->getName(), 'the name should be copied');
+
+        $attribute = 'genre';
+        $value = 'rock';
+        $this->mgr->addAttributeToProduct($product, $attribute, $value);
+        $this->assertCount(3, $product->getAttributes(), 'an array has been passed in should be added as an attribute');
+
+        $formatAttribute = $product->getAttribute('genre');
+        $this->assertInstanceOf('Vespolina\Entity\Product\AttributeInterface', $formatAttribute, 'the array should be turned into an Attribute object');
+        $this->assertSame('genre', $formatAttribute->getType(), 'the type should be copied');
+        $this->assertSame('rock', $formatAttribute->getName(), 'the name should be copied');
     }
 
     public function testGetImageManager()
