@@ -13,8 +13,12 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "vespolina/core": "*",
-        "vespolina/molino": "*"
+        "vespolina/core": "dev-refactor",
+        "vespolina/molino": "dev-master"
+    },
+    "require-dev": {
+        "doctrine/mongodb-odm": "1.0.*@dev",
+        "merk/dough": "*"
     },
     "autoload": {
         "psr-0": { "Vespolina": "lib/" }
