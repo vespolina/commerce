@@ -9,10 +9,13 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="billingDate" type="datetime" />
-        <field name="plannedBillingDate" type="datetime" />
-        <field name="createdAt" type="datetime" />
-        <field name="state" type="string" />
+        <field name="billingDate"           type="datetime" />
+        <field name="createdAt"             type="datetime" />
+        <field name="periodStartDate"       type="datetime" />
+        <field name="periodEndDate"         type="datetime" />
+        <field name="plannedBillingDate"    type="datetime" />
+        <field name="state"                 type="string" />
+        <field name="updatedAt"             type="datetime" />
 
         <many-to-one field="pricingSet" target-entity="Vespolina\Pricing\Entity\PricingSet">
             <join-column name="pricingSet_id" referenced-column-name="id" />

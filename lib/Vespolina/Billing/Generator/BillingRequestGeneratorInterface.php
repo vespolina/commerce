@@ -28,10 +28,18 @@ interface BillingRequestGeneratorInterface
     function generate(array $billingAgreements);
 
     /**
-     * Generate the next (or first) billing request for each billing agreement
+     * Generate the next (or first) billing request for provided billing agreement
      *
-     * @param array $billingAgreements
+     * @param $billingAgreement
      * @return mixed
      */
-    function generateNext(array $billingAgreements);
+    function generateNext(BillingAgreementInterface $billingAgreement);
+
+    /**
+     * Determine the next billing period (start date + end date)
+     *
+     * @param BillingAgreementInterface $billingAgreement
+     * @return mixed
+     */
+    function getNextBillingPeriod(BillingAgreementInterface $billingAgreement);
 }
