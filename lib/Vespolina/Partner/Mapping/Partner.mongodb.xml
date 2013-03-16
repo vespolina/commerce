@@ -22,6 +22,14 @@
 
         <embed-one field="primaryContact" target-document="Vespolina\Entity\Partner\Contact" />
         <embed-many field="addresses" target-document="Vespolina\Entity\Partner\Address" />
+
+        <reference-many field="paymentProfiles">
+            <discriminator-map>
+                <discriminator-mapping value="bitcoin" class="Vespolina\Entity\Partner\PaymentProfile\Bitcoin" />
+                <discriminator-mapping value="creditCard" class="Vespolina\Entity\Partner\PaymentProfile\CreditCard" />
+            </discriminator-map>
+        </reference-many>
+        <reference-one field="preferredPaymentProfile" />
     </document>
 
 </doctrine-mongo-mapping>
