@@ -17,7 +17,7 @@ use Vespolina\Entity\Order\Order;
 use Vespolina\Entity\Product\Product;
 use Vespolina\Entity\Pricing\PricingContext;
 use Vespolina\Entity\Partner\Partner;
-use Vespolina\Entity\Pricing\Element\TotalDoughValueElement;
+use Vespolina\Entity\Pricing\Element\TotalValueElement;
 /**
  * @group ecommerce
  */
@@ -156,7 +156,7 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
         $recurringElement->setInterval('1 month');
         $recurringElement->setRecurringCharge('30');
 
-        $pricingSet = new PricingSet(new TotalDoughValueElement());
+        $pricingSet = new PricingSet(new TotalValueElement());
         $pricingSet->addPricingElement($recurringElement);
         $pricingSet1 = $pricingSet->process($context);
 

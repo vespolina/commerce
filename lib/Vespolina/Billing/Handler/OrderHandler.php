@@ -72,7 +72,7 @@ class OrderHandler implements EntityHandlerInterface
 
         //$paymentProfile = $owner->getPreferredPaymentProfile();
         $billingAgreement
-            ->setPartner($owner)
+            ->setOwner($owner)
             //->setPaymentProfile($owner->getPaymentProfile())
         ;
     }
@@ -99,7 +99,7 @@ class OrderHandler implements EntityHandlerInterface
             $date = explode(',', $startsOn->format('Y,m'));
             $startsOn->setDate($date[0], $date[1], $context['dueDate']);
         } else {
-            $startsOn = $pricingSet->get('startsOn');
+            $startsOn = new \DateTime($pricingSet->get('startsOn'));
         }
         $startTimestamp = $startsOn->getTimestamp();
 
