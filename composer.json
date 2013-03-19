@@ -12,7 +12,7 @@
     "keywords": ["Vespolina", "product", "ecommerce"],
     "require": {
         "php":                   ">=5.3.0",
-        "vespolina/core":      "dev-refactor"
+        "vespolina/core":      "*"
     },
     "minimum-stability": "dev",
     "autoload": {
