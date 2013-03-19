@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "vespolina/core": "dev-refactor",
+        "vespolina/core": "*",
         "vespolina/molino": "dev-master"
     },
     "require-dev": {
