@@ -42,19 +42,20 @@ class OrderHandler implements EntityHandlerInterface
             $pricingSet->getProcessed();
 
             if ($pricingSet->get('recurringCharge')) {
+
                 $recurringItems[] = $item;
             }
         }
 
         //Todo: merge items together
         $recurringItemsMerged = $recurringItems;
-
         foreach ($recurringItemsMerged as $recurringItem) {
 
             // Check if we can attach this item to one of the existing billing agreements.
             // If no suitable agreement can be found a new one is created
             // If a suitable agreement is found the order item is attached to it
             $this->createOrUpdateBusinessAgreements($billingAgreements, $recurringItem);
+
         }
 
         return $billingAgreements;
@@ -117,15 +118,16 @@ class OrderHandler implements EntityHandlerInterface
             $activeAgreement = $this->billingManager->createBillingAgreement();
             $this->initBillingAgreement($activeAgreement, $item->getParent(), $item);
             $activeAgreement
-                ->setInitialBillingDate($startsOn)
+                ->setPlannedBillingDate($startsOn)
                 ->setNextBillingDate($startsOn)
                 ->setBillingCycles($pricingSet->get('cycles'))
                 ->setBillingInterval($pricingSet->get('interval'));
             ;
             $agreements[] = $activeAgreement;
+
         }
 
-        $activeAgreement->addOrderItem($item);
+        //$activeAgreement->addOrderItem($item);
         //$activePricingSet = $activeAgreement->getPricing();
         //$activeAgreement->setPricing($pricingSet->plus($activePricingSet));
 

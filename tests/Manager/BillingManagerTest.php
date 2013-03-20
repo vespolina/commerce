@@ -158,9 +158,9 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
 
         $pricingSet = new PricingSet(new TotalValueElement());
         $pricingSet->addPricingElement($recurringElement);
+        $pricingSet->setProcessingState(PricingSet::PROCESSING_FINISHED);
         $pricingSet1 = $pricingSet->process($context);
 
-        //$pricingSet1->setProcessingState(PricingSet::PROCESSING_FINISHED);
 
         $orderItem1 = new Item($product1);
 

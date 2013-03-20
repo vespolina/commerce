@@ -86,11 +86,13 @@ class DefaultBillingProcess implements BillingProcessInterface
     {
         foreach ($billingAgreements as $billingAgreement) {
 
+            $billingRequests = null;
+
             //1. Check if the billing agreement is still billable (eg. there is no billing block )
-            if ($billingAgreement->isBillable()) {
+            if (true) { //$billingAgreement->isBillable()) {
 
                 //2. Check if we have already a billing request ready to bill
-                $billingRequests = $this->billingManager->findBillableBillingRequestsByBillingAgreement($billingAgreement);
+                //$billingRequests = $this->billingManager->findBillableBillingRequestsByBillingAgreement($billingAgreement);
 
                 //3. If not generate a new billing requests
                 if (null == $billingRequests) {

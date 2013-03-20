@@ -61,6 +61,8 @@ class DefaultBillingRequestGenerator implements BillingRequestGeneratorInterface
                       $this->config['generate_all_billing_requests'] &&
                       $i < $this->config['generate_billing_requests_limit'] );
         }
+
+        return $generatedBillingRequests;
     }
 
     /**
@@ -102,6 +104,18 @@ class DefaultBillingRequestGenerator implements BillingRequestGeneratorInterface
     public function getNextBillingPeriod(BillingAgreementInterface $billingAgreement)
     {
 
+        //Find out to which date the billing agreement was already executed (eg. a billing request was already made)
+        $billedToDate = $billingAgreement->getBilledToDate();
+
+        if (null == $billedToDate) {
+            //If never billed: use the initial billing date to start with
+            $startDate = clone $billingAgreement->getInitialBillingDate(); //+1 day
+        }
+
+        //Determine end date
+        $endDate = $startDate->add(new \DateInterval('P1M'));
+
+        return array($startDate, $endDate);
     }
 
 }
