@@ -13,7 +13,7 @@
         <field name="createdAt"             type="datetime" />
         <field name="periodStartDate"       type="datetime" />
         <field name="periodEndDate"         type="datetime" />
-        <field name="plannedBillingDate"    type="datetime" />
+        <field name="initialBillingDate"    type="datetime" />
         <field name="state"                 type="string" />
         <field name="updatedAt"             type="datetime" />
 

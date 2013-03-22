@@ -8,6 +8,7 @@
 
 namespace Vespolina\Billing\Manager;
 
+use Symfony\Component\Validator\Constraints\DateTime;
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
 use Vespolina\Billing\Process\DefaultBillingProcess;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
@@ -113,7 +114,10 @@ class BillingManager implements BillingManagerInterface
 
     public function createBillingAgreement()
     {
-        return new $this->billingAgreementClass();
+        $billingAgreement = new $this->billingAgreementClass();
+        $billingAgreement->setInitialBillingDate(new \DateTime());
+
+        return $billingAgreement;
     }
 
     private function processPaidBillingRequest(BillingRequestInterface $br)
@@ -323,5 +327,11 @@ class BillingManager implements BillingManagerInterface
     public function updateBillingAgreement(BillingAgreementInterface $billingAgreement)
     {
         $this->gateway->updateBillingAgreement($billingAgreement);
+    }
+
+
+    public function updateBillingRequest(BillingRequestInterface $billingRequest)
+    {
+        $this->gateway->updateBillingRequest($billingRequest);
     }
 }

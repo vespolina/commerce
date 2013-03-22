@@ -8,6 +8,7 @@
 
 namespace Vespolina\Billing\Process;
 
+use Vespolina\Billing\Event\BillingEvents;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
@@ -19,11 +20,11 @@ class DefaultBillingProcess implements BillingProcessInterface
     protected $billingManager;
     protected $billingRequestGenerator;
     protected $classMapping;
-    protected $dispatcher;
+    protected $eventDispatcher;
     protected $entityHandler;
     protected $processes;
 
-    public function __construct(BillingManagerInterface $billingManager, EventDispatcherInterface $dispatcher, $config = array())
+    public function __construct(BillingManagerInterface $billingManager, EventDispatcherInterface $eventDispatcher, $config = array())
     {
 
         $this->classMapping = array('billingRequestGenerator'   => 'Vespolina\Billing\Generator\DefaultBillingRequestGenerator',
@@ -34,7 +35,7 @@ class DefaultBillingProcess implements BillingProcessInterface
 
         $this->billingManager = $billingManager;
         $this->config = array_merge($defaultConfig, $config);
-        $this->dispatcher = $dispatcher;
+        $this->eventDispatcher = $eventDispatcher;
         $this->processes = array();
     }
 
@@ -101,11 +102,11 @@ class DefaultBillingProcess implements BillingProcessInterface
 
                 if (null != $billingRequests) {
 
-                    //4. Offer billing requests to the payment process
-                    $paymentProcess = $this->getProcess('payment');
-
+                    //4. Create and fire payment request event
                     foreach ($billingRequests as $billingRequest) {
-                        $paymentProcess->executePayment($billingRequest);
+
+                        $event = $this->eventDispatcher->createEvent($billingRequest);
+                        $this->eventDispatcher->dispatch(BillingEvents::BILLING_REQUEST_OFFER_FOR_PAYMENT, $event);
                     }
                     //5. Handle payment outcome and raise events
                 }
@@ -143,15 +144,5 @@ class DefaultBillingProcess implements BillingProcessInterface
             $this->entityHandler = new $this->classMapping['entityHandler']($this->billingManager);
         }
         return $this->entityHandler;
-    }
-
-    protected function getProcess($name)
-    {
-        if (!array_key_exists($this->processes, $name)) {
-
-            $this->processes[$name] = new $this->classMapping[$name . 'Process']($this, $this->dispatcher);
-        }
-
-        return $this->processes[$name];
     }
 }

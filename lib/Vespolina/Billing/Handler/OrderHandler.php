@@ -118,8 +118,7 @@ class OrderHandler implements EntityHandlerInterface
             $activeAgreement = $this->billingManager->createBillingAgreement();
             $this->initBillingAgreement($activeAgreement, $item->getParent(), $item);
             $activeAgreement
-                ->setPlannedBillingDate($startsOn)
-                ->setNextBillingDate($startsOn)
+                ->setInitialBillingDate($startsOn)
                 ->setBillingCycles($pricingSet->get('cycles'))
                 ->setBillingInterval($pricingSet->get('interval'));
             ;

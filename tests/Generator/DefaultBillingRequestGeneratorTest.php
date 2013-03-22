@@ -38,7 +38,7 @@ class DefaultBillingRequestGeneratorTest extends \PHPUnit_Framework_TestCase
                                 'initialBilling'    => '2013-01-31',
                                 //expected outcome
                                 'periodStart'       => '2013-01-31',
-                                'periodEnd'         => '2013-02-31'));
+                                'periodEnd'         => '2013-02-28'));
 
 
         foreach ($scenarios as $scenario) {
@@ -63,7 +63,8 @@ class DefaultBillingRequestGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = $this->createDefaultGenerator($this->createBillingManager());
         $billingAgreement = new BillingAgreement();
         $billingAgreement->setBillingCycles(1);
-        $billingAgreement->setBillingInterval('1 month');
+        $billingAgreement->setBillingInterval('month');
+        $billingAgreement->setInitialBillingDate(new \DateTime());
 
         $billingRequests = $generator->generate(array($billingAgreement));
 

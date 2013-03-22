@@ -10,15 +10,15 @@
         </id>
 
         <field name="active" type="boolean" />
+        <field name="billedToDate" type="datetime" />
         <field name="billingCycles" type="integer" />
         <field name="billingInterval" type="string" />
         <field name="createdAt" type="datetime" />
         <field name="initialBillingDate" type="datetime" />
-        <field name="nextBillingDate" type="datetime" />
         <field name="numberCyclesBilled" type="integer" />
         <field name="updatedAt" type="datetime" />
 
-        <many-to-one field="partner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
+        <many-to-one field="owner" target-entity="Vespolina\Entity\Partner\PartnerInterface">
         </many-to-one>
         <many-to-many field="orderItems" target-entity="Vespolina\Entity\Order\ItemInterface" inversed-by="billingAgreements">
             <join-table name="billingAgreement_Items">
