@@ -36,12 +36,12 @@ interface BillingManagerInterface
     function createBillingAgreement();
 
     /**
-     * Create a new billing request
+     * Generate a new billing request from a BillingAgreement
      *
      * @param \Vespolina\Entity\Billing\BillingAgreementInterface $billingAgreement
      * @return \Vespolina\Entity\Billing\BillingRequestInterface
      */
-    function createBillingRequest(BillingAgreementInterface $partner);
+    function generateBillingRequest(BillingAgreementInterface $billingAgreement);
 
     /**
      * Execute a BillingRequest to collect payment
