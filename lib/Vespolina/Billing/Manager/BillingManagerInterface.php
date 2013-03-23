@@ -9,6 +9,7 @@
 namespace Vespolina\Billing\Manager;
 
 use Vespolina\Entity\Billing\BillingAgreementInterface;
+use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\Entity\Order\OrderInterface;
 
 /**
@@ -18,7 +19,6 @@ use Vespolina\Entity\Order\OrderInterface;
  */
 interface BillingManagerInterface
 {
-
     /**
      * Invokes the billing process for an entity (eg. recurring order, contract, ...)
      *
@@ -28,7 +28,7 @@ interface BillingManagerInterface
      *
      * @return mixed
      */
-    function billEntity($entity);
+    function initializeBilling($entity);
 
     /**
      * @return \Vespolina\Entity\Billing\BillingAgreementInterface
@@ -42,6 +42,14 @@ interface BillingManagerInterface
      * @return \Vespolina\Entity\Billing\BillingRequestInterface
      */
     function createBillingRequest(BillingAgreementInterface $partner);
+
+    /**
+     * Execute a BillingRequest to collect payment
+     *
+     * @param BillingRequestInterface $billingRequest
+     * @return mixed
+     */
+    function executeBillingRequest(BillingRequestInterface $billingRequest);
 
     /**
      * Find billing agreements by specified fields and values

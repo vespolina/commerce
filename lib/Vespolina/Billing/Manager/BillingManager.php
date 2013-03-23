@@ -77,6 +77,11 @@ class BillingManager implements BillingManagerInterface
         return $billingRequest;
     }
 
+    public function executeBillingRequest(BillingRequestInterface $billingRequest)
+    {
+
+    }
+
     /**
      * @param integer $id
      * @return BillingAgreementInterface
@@ -95,8 +100,9 @@ class BillingManager implements BillingManagerInterface
     /**
      * @inheritdoc
      */
-    public function billEntity($entity)
+    public function initializeBilling($entity)
     {
+        // todo use PaymentProfile handler
         $billingProcess = new DefaultBillingProcess($this,  $this->eventDispatcher);
         list($billingAgreements, $billingRequests) =  $billingProcess->prepareBilling($entity);
 
