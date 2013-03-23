@@ -69,14 +69,6 @@ class BillingManager implements BillingManagerInterface
         }
     }
 
-    public function createBillingRequest(BillingAgreementInterface $billingAgreement)
-    {
-
-        $billingRequest = new $this->billingRequestClass();
-
-        return $billingRequest;
-    }
-
     public function executeBillingRequest(BillingRequestInterface $billingRequest)
     {
 
@@ -95,6 +87,17 @@ class BillingManager implements BillingManagerInterface
             ->filterEqual('id', $id)
             ->one()
         ;
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function generateBillingRequest(BillingAgreementInterface $billingAgreement)
+    {
+        // todo: retrieve the generate service for this billing agreement and use generator to generate the BR
+        $billingRequest = new $this->billingRequestClass();
+
+        return $billingRequest;
     }
 
     /**
