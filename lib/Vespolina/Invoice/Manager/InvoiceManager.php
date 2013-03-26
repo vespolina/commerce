@@ -8,6 +8,7 @@
 
 namespace Vespolina\Invoice\Manager;
 
+use Molino\Doctrine\ORM\SelectQuery;
 use Vespolina\Entity\Billing\BillingRequest;
 use Vespolina\Entity\Invoice\InvoiceInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
@@ -68,11 +69,30 @@ class InvoiceManager implements InvoiceManagerInterface
      */
     public function findAllInvoicesByPartner(PartnerInterface $partner)
     {
+        $query = $this->gateway->createQuery('Select')
+            ->filterEqual('partner', $partner)
+            ->sort('periodEnd', 'desc');
+
+        return $query->all();
+    }
+
+    /**
+     * @param PartnerInterface $partner
+     * @param null $interval
+     * @return mixed
+     */
+    public function findAllInvoicesByPartnerUsingInterval(PartnerInterface $partner, $interval = null)
+    {
+        /** @var $query SelectQuery */
         $query = $this->gateway->createQuery('Select');
-        return $query->filterEqual('partner', $partner)
+
+        $query
+            ->filterEqual('partner', $partner)
+            ->filterGreaterEqual('issuedDate', new \DateTime($interval))
             ->sort('periodEnd', 'desc')
-            ->all()
         ;
+
+        return $query->all();
     }
 
     /**
