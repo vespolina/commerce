@@ -29,6 +29,14 @@
                 fieldName="optionGroups"
                 strategy="set"
                 />
+
+        <embed-many
+                target-document="Vespolina\Entity\Taxonomy\Taxonomy"
+                field="taxonomies"
+                fieldName="taxonomies"
+                strategy="set"
+                />
+
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />
             <lifecycle-callback type="preUpdate" method="autoSetUpdatedAt" />
