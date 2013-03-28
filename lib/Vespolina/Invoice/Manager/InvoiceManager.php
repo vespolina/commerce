@@ -88,9 +88,12 @@ class InvoiceManager implements InvoiceManagerInterface
 
         $query
             ->filterEqual('partner', $partner)
-            ->filterGreaterEqual('issuedDate', new \DateTime($interval))
             ->sort('periodEnd', 'desc')
         ;
+
+        if (!empty($interval)) {
+            $query->filterGreaterEqual('issuedDate', new \DateTime($interval));
+        }
 
         return $query->all();
     }
