@@ -4,6 +4,7 @@ namespace Vespolina\Product\Gateway;
 
 use Molino\MolinoInterface;
 use Molino\SelectQueryInterface;
+use Pagerfanta\Pagerfanta;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 
@@ -66,9 +67,15 @@ class ProductGateway
      * @param \Molino\SelectQueryInterface $query
      * @return \Vespolina\Entity\Product\ProductInterface
      */
-    public function findProducts(SelectQueryInterface $query)
+    public function findProducts(SelectQueryInterface $query, $pager = false)
     {
-        return $query->all();
+        if (!$pager) {
+
+            return $query->all();
+        } else {
+
+            return new Pagerfanta($query->createPagerfantaAdapter());
+        }
     }
 
     /**
