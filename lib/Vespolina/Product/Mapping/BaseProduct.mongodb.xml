@@ -31,7 +31,7 @@
                 />
 
         <embed-many
-                target-document="Vespolina\Entity\Taxonomy\Taxonomy"
+                target-document="Vespolina\Entity\Taxonomy\TaxonomyNode"
                 field="taxonomies"
                 fieldName="taxonomies"
                 strategy="set"
