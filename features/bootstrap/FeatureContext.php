@@ -42,7 +42,7 @@ class FeatureContext extends BehatContext
      */
     public function __construct(array $parameters)
     {
-        $this->manager = new InvoiceManager('\Vespolina\Entity\Invoice');
+        $this->manager = new InvoiceManager('\Vespolina\Entity\Invoice\Invoice');
     }
 
     /**
@@ -66,7 +66,7 @@ class FeatureContext extends BehatContext
      */
     public function iShouldReceiveAnInvoice()
     {
-        assertInstanceOf('Vespolina\Entity\InvoiceInterface', $this->invoice);
+        assertInstanceOf('Vespolina\Entity\Invoice\InvoiceInterface', $this->invoice);
     }
 
     /**
