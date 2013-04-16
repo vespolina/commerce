@@ -18,20 +18,15 @@ class BillingGateway implements BillingGatewayInterface
      * @param \Molino\MolinoInterface $molino
      * @param string $managedClass
      */
-    public function __construct(MolinoInterface $molino, $billingAgreementClass)
+    public function __construct(MolinoInterface $molino)
     {
-        if (!class_exists($billingAgreementClass) ||
-            !in_array('Vespolina\Entity\Billing\BillingAgreementInterface', class_implements($billingAgreementClass))) {
-            throw new InvalidInterfaceException('Please have your BillingAgreement class implement Vespolina\Entity\Billing\BillingAgreementInterface');
-        }
         $this->molino = $molino;
-        $this->billingAgreementClass = $billingAgreementClass;
     }
 
     /**
      * @inheritdoc
      */
-    public function createQuery($type, $queryClass = null)
+    public function createQuery($type, $queryClass)
     {
         $type = ucfirst(strtolower($type));
         if (!in_array($type, array('Delete', 'Select', 'Update'))) {
@@ -39,9 +34,6 @@ class BillingGateway implements BillingGatewayInterface
         }
         $queryFunction = 'create' . $type . 'Query';
 
-        if (!$queryClass) {
-            $queryClass = $this->billingAgreementClass;
-        }
         return $this->molino->$queryFunction($queryClass);
     }
 

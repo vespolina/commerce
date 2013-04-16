@@ -133,6 +133,7 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
         $classMapping = array(
             'billingAgreementClass' => 'Vespolina\Entity\Billing\BillingAgreement',
             'billingRequestClass' => 'Vespolina\Entity\Billing\BillingRequest',
+            'defaultBillingProcessClass' => 'Vespolina\Billing\Process\DefaultBillingProcess'
         );
         $contexts = array();
 

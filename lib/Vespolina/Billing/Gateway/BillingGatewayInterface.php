@@ -16,7 +16,7 @@ interface BillingGatewayInterface
      * @return type
      * @throws InvalidArgumentException
      */
-    function createQuery($type, $queryClass = null);
+    function createQuery($type, $queryClass);
 
     /**
      * @param \Vespolina\Entity\Billing\BillingAgreementInterface $billingAgreement
