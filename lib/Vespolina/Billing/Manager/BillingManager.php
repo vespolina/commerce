@@ -8,22 +8,13 @@
 
 namespace Vespolina\Billing\Manager;
 
-use Symfony\Component\Validator\Constraints\DateTime;
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
 use Vespolina\Billing\Process\DefaultBillingProcess;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Billing\BillingRequestInterface;
-use Vespolina\Entity\Order\ItemInterface;
-use Vespolina\Entity\Order\OrderEvents;
-use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Entity\Partner\PaymentProfileInterface;
-use Vespolina\Entity\Partner\PaymentProfileType\CreditCard;
-use Vespolina\Entity\Partner\PaymentProfileType\Invoice;
-use Vespolina\Entity\Pricing\PricingContext;
-use Vespolina\Entity\Pricing\PricingContextInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
-use Vespolina\EventDispatcher\NullDispatcher;
 use Vespolina\Exception\InvalidConfigurationException;
 
 class BillingManager implements BillingManagerInterface
@@ -31,13 +22,14 @@ class BillingManager implements BillingManagerInterface
     protected $billingAgreementClass;
     protected $billingRequestClass;
     protected $contexts;
+    protected $defaultBillingProcessClass;
     protected $eventDispatcher;
     protected $gateway;
 
     public function __construct(BillingGatewayInterface $gateway, array $classMapping, array $contexts, EventDispatcherInterface $eventDispatcher = null)
     {
         $missingClasses = array();
-        foreach (array('billingAgreement', 'billingRequest') as $class) {
+        foreach (array('billingAgreement', 'billingRequest', 'defaultBillingProcess') as $class) {
             $class = $class . 'Class';
             if (isset($classMapping[$class])) {
 
@@ -81,7 +73,7 @@ class BillingManager implements BillingManagerInterface
     public function findBillingAgreementById($id)
     {
         /** @var \Molino\Doctrine\ORM\SelectQuery $q  */
-        $q = $this->gateway->createQuery('select');
+        $q = $this->gateway->createQuery('select', $this->billingAgreementClass);
 
         return $q
             ->filterEqual('id', $id)
@@ -106,7 +98,7 @@ class BillingManager implements BillingManagerInterface
     public function initializeBilling($entity)
     {
         // todo use PaymentProfile handler
-        $billingProcess = new DefaultBillingProcess($this,  $this->eventDispatcher);
+        $billingProcess = new $this->defaultBillingProcessClass($this,  $this->eventDispatcher);
         list($billingAgreements, $billingRequests) =  $billingProcess->prepareBilling($entity);
 
         return $billingProcess->executeBilling($billingAgreements, $billingRequests);
@@ -129,13 +121,13 @@ class BillingManager implements BillingManagerInterface
         return $billingAgreement;
     }
 
+    /**
     private function processPaidBillingRequest(BillingRequestInterface $br)
     {
         $orders = array();
 
         foreach ($br->getOrderItems() as $orderItems) {
             foreach ($orderItems as $item) {
-                /** @var Item $item */
 
                 $order = $item->getParent();
 
@@ -159,8 +151,7 @@ class BillingManager implements BillingManagerInterface
     {
         $offset = ($page - 1) * self::BILLING_REQUEST_GET_LIMIT;
 
-        /** @var \Molino\Doctrine\ORM\SelectQuery $q  */
-        $q = $this->gateway->createQuery('select', '\Vespolina\Entity\Billing\BillingRequest');
+        $q = $this->gateway->createQuery('select', $this->billingRequestClass);
 
         $qb = $q->getQueryBuilder();
 
@@ -174,8 +165,7 @@ class BillingManager implements BillingManagerInterface
             ->getQuery()
             ->getResult()
         ;
-    }
-
+    } */
     /**
      * @inheritdoc
      */
@@ -199,27 +189,12 @@ class BillingManager implements BillingManagerInterface
         $params = array(1 => $endDate);
 
         /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
-        $query = $this->gateway->createQuery('select');
+        $query = $this->gateway->createQuery('select', $this->billingAgreementClass);
 
         $qb = $query->getQueryBuilder();
         $qb->join('m.paymentProfile', 'pp');
 
         $qb->andWhere('m.nextBillingDate <= ?1');
-
-//        if (isset($context['startDate'])) {
-//            $startDate = new \DateTime($context['startDate']);
-//            $query->filterGreater('nextBillingDate', $startDate);
-//        }
-        if (isset($context['paymentType'])) {
-            switch($context['paymentType']) {
-                case PaymentProfile::PAYMENT_PROFILE_TYPE_CREDIT_CARD:
-                    $qb->andWhere('pp instance of \Vespolina\Entity\Partner\PaymentProfileType\CreditCard');
-                    break;
-                case PaymentProfile::PAYMENT_PROFILE_TYPE_INVOICE:
-                    $qb->andWhere('pp instance of \Vespolina\Entity\Partner\PaymentProfileType\Invoice');
-                    break;
-            }
-        }
 
         if (isset($context['partner'])) {
             $qb->andWhere('m.partner = ?3');
@@ -292,10 +267,10 @@ class BillingManager implements BillingManagerInterface
      * @param PartnerInterface $partner
      * @return array
      */
+    /**
     public function findBillingAgreementsOnCurrentMonthForPartner(PartnerInterface $partner)
     {
-        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
-        $query = $this->gateway->createQuery('Select');
+        $query = $this->gateway->createQuery('Select', $this->billingAgreementClass);
         $qb = $query->getQueryBuilder();
 
         return $qb->where('m.partner = :partner')
@@ -312,16 +287,16 @@ class BillingManager implements BillingManagerInterface
             ->getQuery()
             ->getResult()
         ;
-    }
+    } */
 
     /**
      * @param $orderItem
      * @return BillingAgreement
      */
+    /**
     public function findBillingAgreementForItem(ItemInterface $orderItem)
     {
-        /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
-        $query = $this->gateway->createQuery('Select');
+        $query = $this->gateway->createQuery('Select', $this->billingAgreementClass);
         $qb = $query->getQueryBuilder();
 
         $qb
@@ -331,7 +306,7 @@ class BillingManager implements BillingManagerInterface
         ;
 
         return $qb->getQuery()->getOneOrNullResult();
-    }
+    } */
 
     public function updateBillingAgreement(BillingAgreementInterface $billingAgreement)
     {
