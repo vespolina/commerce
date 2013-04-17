@@ -13,9 +13,10 @@ use Vespolina\Billing\Process\DefaultBillingProcess;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
-use Vespolina\Entity\Partner\PaymentProfileInterface;
+use Vespolina\Entity\Payment\PaymentProfileInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\Exception\InvalidConfigurationException;
+use Vespolina\Entity\Pricing\PricingContextInterface;
 
 class BillingManager implements BillingManagerInterface
 {
