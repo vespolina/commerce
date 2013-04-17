@@ -186,7 +186,11 @@ class BillingManager implements BillingManagerInterface
     public function findBillingAgreements(PricingContextInterface $context, $limit = null, $page = 1)
     {
         $offset = ($page - 1) * $limit;
-        $endDate = new \DateTime($context['endDate']);
+        if (isset($context['endDate'])) {
+            $endDate = new \DateTime($context['endDate']);
+        } else {
+            $endDate = new \DateTime();
+        }
         $params = array(1 => $endDate);
 
         /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
