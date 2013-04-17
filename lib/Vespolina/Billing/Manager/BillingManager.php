@@ -195,7 +195,7 @@ class BillingManager implements BillingManagerInterface
         $qb = $query->getQueryBuilder();
         $qb->join('m.paymentProfile', 'pp');
 
-        $qb->andWhere('m.nextBillingDate <= ?1');
+        $qb->andWhere('m.generateRequestOn <= ?1');
 
         if (isset($context['partner'])) {
             $qb->andWhere('m.partner = ?3');
