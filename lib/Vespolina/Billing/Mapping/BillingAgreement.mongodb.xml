@@ -23,7 +23,7 @@
 
         <reference-one field="owner" target-document="Vespolina\Entity\Partner\Partner" />
         <reference-one field="order" target-document="Vespolina\Entity\Order\Order" />
-        <reference-one field="paymentProfile" target-document="Vespolina\Entity\Partner\PaymentProfile" />
+        <reference-one field="paymentProfile" target-document="Vespolina\Entity\Payment\PaymentProfile" />
         <reference-many field="orderItems" target-document="Vespolina\Entity\Order\Item" />
 
         <lifecycle-callbacks>
