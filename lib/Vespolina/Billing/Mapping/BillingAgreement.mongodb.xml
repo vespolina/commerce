@@ -25,7 +25,6 @@
         <reference-one field="order" target-document="Vespolina\Entity\Order\Order" />
         <reference-one field="paymentProfile" target-document="Vespolina\Entity\Partner\PaymentProfile" />
         <reference-many field="orderItems" target-document="Vespolina\Entity\Order\Item" />
-        <reference-many field="pricingSet" target-document="Vespolina\Pricing\Entity\PricingSet" />
 
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />
