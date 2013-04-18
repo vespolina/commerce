@@ -46,10 +46,10 @@ class PricingManager implements PricingManagerInterface {
         //Create the pricing set
         $pricingSet = new $configuration['pricingSetClass'](new TotalDoughValueElement(), array(), $pricingElements);
 
+        //Add default values to the pricing set
         foreach ($pricingValues as $pricingValueName => $pricingValue) {
             $pricingSet->set($pricingValueName, new MultiCurrencyMoney($pricingValue, $this->defaultCurrency));
         }
-
 
         return $pricingSet;
     }
