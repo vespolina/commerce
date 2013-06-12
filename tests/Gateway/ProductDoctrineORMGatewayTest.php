@@ -1,24 +1,24 @@
 <?php
 
-use Vespolina\Product\Gateway\ProductGateway;
+use Vespolina\Product\Gateway\ProductDoctrineORMGateway;
 
-class ProductGatewayTest extends \PHPUnit_Framework_TestCase
+class ProductDoctrineORMGatewayTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {
         $molino = $this->getMock('Molino\MolinoInterface');
-        $gateway = new ProductGateway($molino, 'Vespolina\Entity\Product\Product');
+        $gateway = new ProductDoctrineORMGateway($molino, 'Vespolina\Entity\Product\Product');
         $this->assertInstanceOf('Vespolina\Product\Gateway\ProductGateway', $gateway);
 
         $this->setExpectedException(
             'Vespolina\Exception\InvalidInterfaceException',
             'Please have your product class implement Vespolina\Entity\Product\ProductInterface'
         );
-        $gateway = new ProductGateway($molino, 'InvalidClass');
+        $gateway = new ProductDoctrineORMGateway($molino, 'InvalidClass');
         $this->setExpectedException(
             'Vespolina\Exception\InvalidInterfaceException',
             'Please have your product class implement Vespolina\Entity\Product\ProductInterface'
         );
-        $gateway = new ProductGateway($molino, 'Vespolina\Entity\Product\Product');
+        $gateway = new ProductDoctrineORMGateway($molino, 'Vespolina\Entity\Product\Product');
     }
 }

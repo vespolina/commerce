@@ -12,7 +12,11 @@
     "keywords": ["Vespolina", "product", "ecommerce"],
     "require": {
         "php":                   ">=5.3.0",
-        "vespolina/core":      "*"
+        "vespolina/core": "*",
+        "vespolina/molino": "*"
+    },
+    "require-dev": {
+        "doctrine/mongodb-odm": "*"
     },
     "minimum-stability": "dev",
     "autoload": {

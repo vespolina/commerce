@@ -2,88 +2,53 @@
 
 namespace Vespolina\Product\Gateway;
 
-use Molino\MolinoInterface;
-use Molino\SelectQueryInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
+use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Product\Specification\SpecificationWalker;
 
-class ProductGateway
+abstract class ProductGateway implements ProductGatewayInterface
 {
-    protected $molino;
     protected $productClass;
+    protected $gatewayName;
+    protected $specificationWalker;
 
     /**
      * @param \Molino\MolinoInterface $molino
      * @param string $managedClass
      */
-    public function __construct(MolinoInterface $molino, $productClass)
+    public function __construct($productClass, $gatewayName)
     {
         if (!class_exists($productClass) || !in_array('Vespolina\Entity\Product\ProductInterface', class_implements($productClass))) {
              throw new InvalidInterfaceException('Please have your product class implement Vespolina\Entity\Product\ProductInterface');
         }
-        $this->molino = $molino;
         $this->productClass = $productClass;
+        $this->gatewayName = $gatewayName;
+
     }
 
-    /**
-     * @param string $type
-     * @param type $queryClass
-     * @return type
-     * @throws InvalidArgumentException
-     */
-    public function createQuery($type, $queryClass = null)
+    protected function buildSpecification(SpecificationInterface $specification)
     {
-        $type = ucfirst(strtolower($type));
-        if (!in_array($type, array('Delete', 'Select', 'Update'))) {
-            throw new InvalidArgumentException($type . ' is not a valid Query type');
+        $query = $this->createQuery();
+        $this->getSpecificationWalker()->walk($specification, $query);
+
+        return $query;
+    }
+
+    protected function executeSpecification(SpecificationInterface $specification)
+    {
+        $query = $this->buildSpecification($specification);
+    }
+
+    protected function getSpecificationWalker()
+    {
+        if (null == $this->specificationWalker) {
+
+            $defaultVisitorClass = 'Vespolina\Product\Specification\\' . $this->gatewayName . 'DefaultSpecificationVisitor';
+            $this->specificationWalker = new SpecificationWalker(array(new $defaultVisitorClass()));
         }
-        $queryFunction = 'create' . $type . 'Query';
 
-        if (!$queryClass) {
-            $queryClass = $this->productClass;
-        }
-        return $this->molino->$queryFunction($queryClass);
+        return $this->specificationWalker;
     }
 
-    /**
-     * @param \Vespolina\Entity\Product\ProductInterface $product
-     */
-    public function deleteProduct(ProductInterface $product)
-    {
-        $this->molino->delete($product);
-    }
-
-    /**
-     * @param \Molino\SelectQueryInterface $query
-     * @return \Vespolina\Entity\Product\ProductInterface
-     */
-    public function findProduct(SelectQueryInterface $query)
-    {
-        return $query->one();
-    }
-
-    /**
-     * @param \Molino\SelectQueryInterface $query
-     * @return \Vespolina\Entity\Product\ProductInterface
-     */
-    public function findProducts(SelectQueryInterface $query)
-    {
-        return $query->all();
-    }
-
-    /**
-     * @param \Vespolina\Entity\Product\ProductInterface $product
-     */
-    public function persistProduct(ProductInterface $product)
-    {
-        $this->molino->save($product);
-    }
-
-    /**
-     * @param \Vespolina\Entity\Product\ProductInterface $product
-     */
-    public function updateProduct(ProductInterface $product)
-    {
-        $this->molino->save($product);
-    }
 }
