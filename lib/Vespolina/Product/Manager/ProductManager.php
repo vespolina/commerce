@@ -9,22 +9,21 @@ namespace Vespolina\Product\Manager;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use Vespolina\Product\Gateway\ProductGateway;
-use Vespolina\Product\Handler\ProductHandlerInterface;
-use Vespolina\Product\Manager\ProductManagerInterface;
-
 use Vespolina\Entity\Product\AttributeInterface;
 use Vespolina\Entity\Product\MerchandiseInterface;
 use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Identifier\IdentifierInterface;
+use Vespolina\Product\Gateway\ProductGatewayInterface;
+use Vespolina\Product\Handler\ProductHandlerInterface;
+use Vespolina\Product\Manager\ProductManagerInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
  */
 class ProductManager implements ProductManagerInterface
 {
-    protected $gateway;
+    protected $gateways;
     protected $identifiers;
     protected $productHandlers;
     protected $attributeClass;
@@ -32,7 +31,7 @@ class ProductManager implements ProductManagerInterface
     protected $optionClass;
     protected $productClass;
 
-    public function __construct(ProductGateway $gateway, array $classMapping)
+    public function __construct(ProductGatewayInterface $defaultGateway, array $classMapping)
     {
         $missingClasses = array();
         foreach (array('attribute', 'merchandise', 'option', 'product') as $class) {
@@ -51,7 +50,9 @@ class ProductManager implements ProductManagerInterface
         if (count($missingClasses)) {
             throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
         }
-        $this->gateway = $gateway;
+
+        //Setup the default product gateway
+        $this->gateways = array('default' => $defaultGateway);
 //        $this->identifiers = $identifiers;
         $this->productHandlers = array();
     }
@@ -170,7 +171,7 @@ class ProductManager implements ProductManagerInterface
 
     public function findProductBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        $query = $this->gateway->createQuery('Select');
+        $query = $this->resolveGateway()->createQuery('Select');
         foreach ($criteria as $field => $value) {
 
             $query->filterEqual($field, $value);
@@ -185,7 +186,7 @@ class ProductManager implements ProductManagerInterface
         if ($offset) {
             $query->skip($offset);
         }
-       return $this->gateway->findProduct($query);
+       return $this->resolveGateway()->findProduct($query);
     }
 
 
@@ -285,7 +286,7 @@ class ProductManager implements ProductManagerInterface
      */
     public function findOptionGroupsData(array $orderBy = null, $limit = null, $offset = null)
     {
-        $qb = $this->gateway->createQueryBuilder($this->optionGroupClass);
+        $qb = $this->resolveGateway()->createQueryBuilder($this->optionGroupClass);
         $qb->hydrate(false);
         if($limit) {
             $qb->limit($limit);
@@ -358,7 +359,7 @@ class ProductManager implements ProductManagerInterface
      */
     public function deleteProduct(ProductInterface $product, $andPersist = true)
     {
-        $this->gateway->deleteProduct($product);
+        $this->resolveGateway($product)->deleteProduct($product);
     }
 
     /**
@@ -366,7 +367,19 @@ class ProductManager implements ProductManagerInterface
      */
     public function updateProduct(ProductInterface $product, $andPersist = true)
     {
-        $this->gateway->updateProduct($product);
+        $this->resolveGateway($product)->updateProduct($product);
+    }
+
+    public function resolveGateway(ProductInterface $product = null, $name = 'default')
+    {
+
+        if (null != $product) {
+            //Todo trigger an event to determine the product gateway based on the product data (eg. determine the gateway by an external id)
+
+        }
+
+        //Default fallback
+        return $this->gateways[$name];
     }
 
     protected function doDeleteOptionGroup(OptionGroupInterface $merchandise)
