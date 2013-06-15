@@ -26,9 +26,14 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
         return $this->documentManager->createQueryBuilder($this->productClass);
     }
 
+    public function matchProduct(SpecificationInterface $specification)
+    {
+        return $this->executeSpecification($specification, true);
+    }
+
+
     public function matchProducts(SpecificationInterface $specification)
     {
-
         return $this->executeSpecification($specification);
     }
 
@@ -79,7 +84,8 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
      */
     function updateProduct(ProductInterface $product, $andFlush = false)
     {
-        // TODO: Implement updateProduct() method.
+        $this->documentManager->persist($product);
+        if ($andFlush) $this->documentManager->flush();
     }
 
 

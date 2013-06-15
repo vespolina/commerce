@@ -6,6 +6,7 @@ use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 use Vespolina\Product\Specification\SpecificationInterface;
 use Vespolina\Product\Specification\SpecificationWalker;
+use Vespolina\Product\Specification\IdSpecification;
 
 abstract class ProductGateway implements ProductGatewayInterface
 {
@@ -25,6 +26,21 @@ abstract class ProductGateway implements ProductGatewayInterface
         $this->productClass = $productClass;
         $this->gatewayName = $gatewayName;
 
+    }
+
+    public  function matchProductById($id, $type = null)
+    {
+        return $this->executeSpecification(new IdSpecification($type), true);
+    }
+
+    public function matchProducts(SpecificationInterface $specification)
+    {
+        return $this->executeSpecification($specification);
+    }
+
+    public function matchProduct(SpecificationInterface $specification)
+    {
+        return $this->executeSpecification($specification, true);
     }
 
     protected function buildSpecification(SpecificationInterface $specification)

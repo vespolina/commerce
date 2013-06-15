@@ -20,6 +20,7 @@ class FilterSpecification implements SpecificationInterface
 
     public function isSatisfiedBy(ProductInterface $product)
     {
+
         return $product->{"get" . $this->field}() === $this->value;
     }
 }

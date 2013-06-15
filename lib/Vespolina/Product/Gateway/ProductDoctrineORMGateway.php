@@ -74,10 +74,16 @@ class ProductDoctrineORMGateway extends ProductGateway
     }
 
 
+    public function matchProduct(SpecificationInterface $specification)
+    {
+        return $this->executeSpecification($specification, true);
+    }
+
     public function matchProducts(SpecificationInterface $specification)
     {
-
+        return $this->executeSpecification($specification);
     }
+
 
     /**
      * @param \Vespolina\Entity\Product\ProductInterface $product

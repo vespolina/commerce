@@ -372,10 +372,8 @@ class ProductManager implements ProductManagerInterface
 
     public function resolveGateway(ProductInterface $product = null, $name = 'default')
     {
-
         if (null != $product) {
             //Todo trigger an event to determine the product gateway based on the product data (eg. determine the gateway by an external id)
-
         }
 
         //Default fallback

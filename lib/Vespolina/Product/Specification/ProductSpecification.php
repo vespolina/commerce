@@ -11,7 +11,14 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
 
     public function isSatisfiedBy(ProductInterface $product)
     {
-        // TODO: Implement isSatisfiedBy() method.
+        foreach ($this->operands as $specification) {
+            if (!$specification->isSatisfiedBy($product)) {
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function attributeEquals($name, $value)

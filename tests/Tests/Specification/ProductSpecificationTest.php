@@ -5,10 +5,12 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+namespace Tests\Specification;
 
+use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Vespolina\Entity\Product\Product;
 use Vespolina\Product\Specification\ProductSpecification;
-use Vespolina\Product\Gateway\ProductDoctrineMongoDBGateway;
 
 /**
  * @author Daniel Kucharski <daniel@xerias.be>
@@ -31,15 +33,8 @@ class ProductSpecificationTest extends \PHPUnit_Framework_TestCase
              ->withTaxonomyNode($aTaxonomyNode)
              ->withPriceRange('netValue', 20, 30);
 
-        $this->productGateway->matchProducts($spec);
+        $this->assertNotNull($spec);
+  }
 
 
-    }
-
-    protected function setUp()
-    {
-        $doctrineODM =  \Doctrine\ODM\MongoDB\DocumentManager::create();
-
-        $this->productGateway = new ProductDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Product\Product');
-    }
 }
