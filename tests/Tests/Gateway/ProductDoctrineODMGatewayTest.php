@@ -23,24 +23,14 @@ class ProductDoctrineODMGatewayTest extends ProductGatewayTestCommon
             array(
                 __DIR__ . '/../../../lib/Vespolina/Product/Mapping' => 'Vespolina\\Entity\\Product',
                 __DIR__ . '/../../../vendor/vespolina/pricing/lib/Vespolina/Pricing/Mapping' => 'Vespolina\\Entity\\Pricing',
-        ),
-            '.mongodb.xml'
-        );
-        $locatorYaml = new SymfonyFileLocator(
-            array(
                 __DIR__ . '/../../../vendor/vespolina/taxonomy/lib/Vespolina/Taxonomy/Mapping' => 'Vespolina\\Entity\\Taxonomy',
             ),
-            '.mongodb.yml'
+            '.mongodb.xml'
         );
-        $drivers = new MappingDriverChain();
+
         $xmlDriver = new XmlDriver($locatorXml);
-        $ymlDriver = new YamlDriver($locatorYaml);
 
-        $drivers->addDriver($xmlDriver, 'Vespolina\\Entity\\Product');
-        $drivers->addDriver($xmlDriver, 'Vespolina\\Entity\\Pricing');
-        $drivers->addDriver($ymlDriver, 'Vespolina\\Entity\\Taxonomy');
-
-        $config->setMetadataDriverImpl($drivers);
+        $config->setMetadataDriverImpl($xmlDriver);
         $config->setMetadataCacheImpl(new ArrayCache());
         $config->setAutoGenerateProxyClasses(true);
         $doctrineODM = \Doctrine\ODM\MongoDB\DocumentManager::create(null, $config);

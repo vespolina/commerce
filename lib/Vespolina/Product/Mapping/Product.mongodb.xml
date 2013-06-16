@@ -5,7 +5,6 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <document name="Vespolina\Entity\Product\Product" collection="v_product">
-        <field name="id" id="true" />
         <field name="slug" fieldName="slug" type="string" />
     </document>
 </doctrine-mongo-mapping>

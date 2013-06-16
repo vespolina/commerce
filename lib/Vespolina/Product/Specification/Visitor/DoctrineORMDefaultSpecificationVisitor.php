@@ -8,18 +8,16 @@ use Vespolina\Product\Specification\SpecificationInterface;
 use Vespolina\Product\Specification\SpecificationWalker;
 use Vespolina\Product\Specification\ProductSpecificationInterface;
 
-class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitorInterface
+class DoctrineORMDefaultSpecificationVisitor implements SpecificationVisitorInterface
 {
+    protected $lastParameterId;
+
     protected $methods = array(
         'AndSpecification' => 'visitAnd',
         'FilterSpecification' => 'visitFilter',
         'IdSpecification'   => 'visitId',
         'PriceSpecification' => 'visitPrice',
         'ProductSpecification' => 'visitProduct'
-    );
-
-    protected $filterMap = array(
-        '=' => 'equals'
     );
 
     public function supports(SpecificationInterface $specification)
@@ -38,13 +36,12 @@ class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitor
 
     public function visitId(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
-        $query->field('_id')->equals($specification->getId());
+        $this->andWhere($query, '=', 'id', $specification->getId());
     }
 
     public function visitFilter(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
-        $mappedOperator = $this->filterMap[$specification->getOperator()];
-        $query->field($specification->getField())->$mappedOperator($specification->getValue());
+        $this->andWhere($query, $specification->getOperator(),$specification->getField(),$specification->getValue() );
     }
 
     public function visitProduct(ProductSpecificationInterface $specification, SpecificationWalker $walker, $query)
@@ -63,12 +60,11 @@ class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitor
         return ++$this->lastParameterId;
     }
 
-    private function andWhere($comparison, $field, $value)
+    private function andWhere($queryBuilder, $operator, $field, $value)
     {
         $parameterId = $this->generateParameterId();
-        $rootAlias = $this->getQueryBuilder()->getRootAlias();
-        $this->getQueryBuilder()->andWhere(sprintf('%s.%s %s ?%d', $rootAlias, $field, $comparison, $parameterId));
-        $this->getQueryBuilder()->setParameter($parameterId, $value);
+        $rootAlias = $queryBuilder->getRootAlias();
+        $queryBuilder->andWhere(sprintf('%s.%s %s ?%d', $rootAlias, $field, $operator, $parameterId));
+        $queryBuilder->setParameter($parameterId, $value);
     }
-
 }

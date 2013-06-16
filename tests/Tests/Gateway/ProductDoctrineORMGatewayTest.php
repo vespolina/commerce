@@ -27,32 +27,32 @@ class ProductDoctrineORMGatewayTest extends ProductGatewayTestCommon
             array(
                 __DIR__ . '/../../../lib/Vespolina/Product/Mapping' => 'Vespolina\\Entity\\Product',
                 __DIR__ . '/../../../vendor/vespolina/pricing/lib/Vespolina/Pricing/Mapping' => 'Vespolina\\Entity\\Pricing',
+                __DIR__ . '/../../../vendor/vespolina/taxonomy/lib/Vespolina/Taxonomy/Mapping' => 'Vespolina\\Entity\\Taxonomy',
             ),
             '.orm.xml'
         );
-        $locatorYaml = new SymfonyFileLocator(
-            array(
-                __DIR__ . '/../../../vendor/vespolina/taxonomy/lib/Vespolina/Taxonomy/Mapping' => 'Vespolina\\Entity\\Taxonomy',
-            ),
-            '.orm.yml'
-        );
+
         $drivers = new MappingDriverChain();
         $xmlDriver = new XmlDriver($locatorXml);
-        $ymlDriver = new YamlDriver($locatorYaml);
 
-        $drivers->addDriver($xmlDriver, 'Vespolina\\Entity\\Product');
-        $drivers->addDriver($xmlDriver, 'Vespolina\\Entity\\Pricing');
-        $drivers->addDriver($ymlDriver, 'Vespolina\\Entity\\Taxonomy');
-
-        $config->setMetadataDriverImpl($drivers);
+        $config->setMetadataDriverImpl($xmlDriver);
         $config->setMetadataCacheImpl(new ArrayCache());
         $config->setAutoGenerateProxyClasses(true);
-        $doctrineORM = EntityManager::create(array(
+        $em = EntityManager::create(array(
             'driver' => 'pdo_sqlite',
             'path' => 'database.sqlite'
         ), $config);
 
-        $this->gateway = new ProductDoctrineORMGateway($doctrineORM, 'Vespolina\Entity\Product\Product');
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+        $classes = array(
+            $em->getClassMetadata('Vespolina\Entity\Product\Product'),
+        );
+
+        try {
+            $tool->createSchema($classes);
+        } catch(\Exception $e) {}
+
+        $this->gateway = new ProductDoctrineORMGateway($em, 'Vespolina\Entity\Product\Product');
 
     }
 }

@@ -20,7 +20,7 @@ class ProductDoctrineORMGateway extends ProductGateway
 
     public function createQuery()
     {
-        return $this->em->createQueryBuilder($this->productClass);
+        return $this->em->createQueryBuilder($this->productClass)->from($this->productClass, 'p');
     }
 
     /**
@@ -41,12 +41,16 @@ class ProductDoctrineORMGateway extends ProductGateway
     {
         $queryBuilder = $this->createQuery();
         $this->getSpecificationWalker()->walk($specification, $queryBuilder);
-        $query = $queryBuilder->getQuery();
+
+        $queryBuilder->select('p');
+
 
         if ($matchOne) {
+            $query = $queryBuilder->getQuery()->setMaxResults(1);
 
             return $query->getSingleResult();
         } else {
+            $query = $queryBuilder->getQuery();
 
             return $query->execute();
         }
