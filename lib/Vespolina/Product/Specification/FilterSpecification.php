@@ -23,4 +23,19 @@ class FilterSpecification implements SpecificationInterface
 
         return $product->{"get" . $this->field}() === $this->value;
     }
+
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    public function getOperator()
+    {
+        return $this->operator;
+    }
 }

@@ -11,19 +11,34 @@ use Vespolina\Product\Specification\SpecificationInterface;
 class ProductDoctrineMongoDBGateway extends ProductGateway
 {
 
-    protected $documentManager;
+    protected $dm;
     /**
      * @param string $managedClass
      */
     public function __construct($documentManager, $productClass)
     {
-        $this->documentManager = $documentManager;
+        $this->dm = $documentManager;
         parent::__construct($productClass, 'DoctrineMongoDB');
     }
 
     public function createQuery()
     {
-        return $this->documentManager->createQueryBuilder($this->productClass);
+        return $this->dm->createQueryBuilder($this->productClass);
+    }
+
+    protected function executeSpecification(SpecificationInterface $specification, $matchOne = false)
+    {
+        $queryBuilder = $this->createQuery();
+        $this->getSpecificationWalker()->walk($specification, $queryBuilder);
+        $query = $queryBuilder->getQuery();
+
+        if ($matchOne) {
+
+            return $query->getSingleResult();
+        } else {
+
+            return $query->execute();
+        }
     }
 
     public function matchProduct(SpecificationInterface $specification)
@@ -34,7 +49,7 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
 
     public function matchProducts(SpecificationInterface $specification)
     {
-        return $this->executeSpecification($specification);
+        return $this->executeSpecification($specification, false);
     }
 
     /**
@@ -48,7 +63,8 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
      */
     function deleteProduct(ProductInterface $product, $andFlush = false)
     {
-        // TODO: Implement deleteProduct() method.
+        $this->dm->remove($product);
+        if ($andFlush) $this->flush();
     }
 
     /**
@@ -56,7 +72,7 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
      */
     function flush()
     {
-        // TODO: Implement flush() method.
+        $this->dm->flush();
     }
 
     /**
@@ -70,7 +86,8 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
      */
     function persistProduct(ProductInterface $product, $andFlush = false)
     {
-        // TODO: Implement persistProduct() method.
+        $this->dm->persist($product);
+        if ($andFlush) $this->flush();
     }
 
     /**
@@ -84,8 +101,8 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
      */
     function updateProduct(ProductInterface $product, $andFlush = false)
     {
-        $this->documentManager->persist($product);
-        if ($andFlush) $this->documentManager->flush();
+        $this->dm->persist($product);
+        if ($andFlush) $this->flush();
     }
 
 

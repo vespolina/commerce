@@ -13,10 +13,13 @@
     "require": {
         "php":                   ">=5.3.0",
         "vespolina/core": "*",
-        "vespolina/molino": "*"
+        "vespolina/molino": "*",
+        "vespolina/pricing": "*",
+        "vespolina/taxonomy": "*"
     },
     "require-dev": {
-        "doctrine/mongodb-odm": "*"
+        "doctrine/mongodb-odm": "*",
+        "doctrine/orm" : "*"
     },
     "minimum-stability": "dev",
     "autoload": {

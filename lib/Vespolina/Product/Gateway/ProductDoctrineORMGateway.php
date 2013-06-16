@@ -10,36 +10,17 @@ use Vespolina\Product\Specification\SpecificationInterface;
 
 class ProductDoctrineORMGateway extends ProductGateway
 {
-    protected $molino;
+    protected $entityManager;
 
-    /**
-     * @param \Molino\MolinoInterface $molino
-     * @param string $managedClass
-     */
-    public function __construct(MolinoInterface $molino, $productClass)
+    public function __construct($entityManager, $productClass)
     {
-        $this->molino = $molino;
+        $this->em = $entityManager;
         parent::__construct($productClass, 'DoctrineORM');
     }
 
-    /**
-     * @param string $type
-     * @param type $queryClass
-     * @return type
-     * @throws InvalidArgumentException
-     */
-    public function createQuery($type, $queryClass = null)
+    public function createQuery()
     {
-        $type = ucfirst(strtolower($type));
-        if (!in_array($type, array('Delete', 'Select', 'Update'))) {
-            throw new InvalidArgumentException($type . ' is not a valid Query type');
-        }
-        $queryFunction = 'create' . $type . 'Query';
-
-        if (!$queryClass) {
-            $queryClass = $this->productClass;
-        }
-        return $this->molino->$queryFunction($queryClass);
+        return $this->em->createQueryBuilder($this->productClass);
     }
 
     /**
@@ -47,12 +28,28 @@ class ProductDoctrineORMGateway extends ProductGateway
      */
     public function deleteProduct(ProductInterface $product, $andFlush = true)
     {
-        $this->molino->delete($product);
+        $this->em->remove($product);
+        if ($andFlush) $this->flush();
     }
 
     public function flush()
     {
+        $this->em->flush();
+    }
 
+    protected function executeSpecification(SpecificationInterface $specification, $matchOne = false)
+    {
+        $queryBuilder = $this->createQuery();
+        $this->getSpecificationWalker()->walk($specification, $queryBuilder);
+        $query = $queryBuilder->getQuery();
+
+        if ($matchOne) {
+
+            return $query->getSingleResult();
+        } else {
+
+            return $query->execute();
+        }
     }
 
     /**
@@ -90,7 +87,8 @@ class ProductDoctrineORMGateway extends ProductGateway
      */
     public function persistProduct(ProductInterface $product, $andFlush = true)
     {
-        $this->molino->save($product);
+        $this->em->persist($product);
+        if ($andFlush) $this->flush();
     }
 
     /**
@@ -98,6 +96,7 @@ class ProductDoctrineORMGateway extends ProductGateway
      */
     public function updateProduct(ProductInterface $product, $andFlush = true)
     {
-        $this->molino->save($product);
+        $this->em->persist($product);
+        if ($andFlush) $this->flush();
     }
 }

@@ -21,4 +21,9 @@ class IdSpecification implements SpecificationInterface
     {
         return $product->getId() === $this->id;
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }

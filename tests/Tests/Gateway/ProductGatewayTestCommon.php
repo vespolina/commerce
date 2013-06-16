@@ -37,8 +37,9 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
     {
         $products = $this->createProducts(10);
         foreach ($products as $product) {
-            $this->gateway->updateProduct($product);
+            $this->gateway->updateProduct($product, false);
         }
+        $this->gateway->flush();
 
         /**
         foreach ($products as $product) {
@@ -61,6 +62,17 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
         $product = $this->gateway->matchProduct($spec);
         $this->assertNotNull($product);
         $this->assertEquals('product2', $product->getName());
+    }
+
+    public function testMatchProductById()
+    {
+        $products = $this->createProducts(10);
+        foreach ($products as $product) {
+            $this->gateway->updateProduct($product);
+        }
+
+        $product = $this->gateway->matchProductById(1);
+        $this->assertNotNull($product);
     }
 
     protected function createProductManager()

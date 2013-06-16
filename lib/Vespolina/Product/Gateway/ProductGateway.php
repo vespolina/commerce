@@ -30,7 +30,7 @@ abstract class ProductGateway implements ProductGatewayInterface
 
     public  function matchProductById($id, $type = null)
     {
-        return $this->executeSpecification(new IdSpecification($type), true);
+        return $this->executeSpecification(new IdSpecification($id, $type), true);
     }
 
     public function matchProducts(SpecificationInterface $specification)
@@ -43,24 +43,10 @@ abstract class ProductGateway implements ProductGatewayInterface
         return $this->executeSpecification($specification, true);
     }
 
-    protected function buildSpecification(SpecificationInterface $specification)
-    {
-        $query = $this->createQuery();
-        $this->getSpecificationWalker()->walk($specification, $query);
-
-        return $query;
-    }
-
-    protected function executeSpecification(SpecificationInterface $specification)
-    {
-        $query = $this->buildSpecification($specification);
-    }
-
     protected function getSpecificationWalker()
     {
         if (null == $this->specificationWalker) {
-
-            $defaultVisitorClass = 'Vespolina\Product\Specification\\' . $this->gatewayName . 'DefaultSpecificationVisitor';
+            $defaultVisitorClass = 'Vespolina\Product\Specification\\Visitor\\' . $this->gatewayName . 'DefaultSpecificationVisitor';
             $this->specificationWalker = new SpecificationWalker(array(new $defaultVisitorClass()));
         }
 

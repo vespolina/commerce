@@ -39,6 +39,11 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
         return $this;
     }
 
+    public function getOperands()
+    {
+        return $this->operands;
+    }
+
     public function withPriceRange($name, $fromValue, $toValue)
     {
         $this->addOperand(new PriceSpecification($name, $fromValue, $toValue));

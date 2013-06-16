@@ -3,6 +3,7 @@
 namespace Vespolina\Product\Specification;
 
 use Vespolina\Entity\Product\ProductInterface;
+use Vespolina\Product\Specification\SpecificationInterface;
 use Vespolina\Product\Specification\SpecificationWalker;
 
 /**

@@ -87,9 +87,17 @@ class ProductMemoryGateway extends ProductGateway
      */
     function updateProduct(ProductInterface $product, $andFlush = false)
     {
-        $key = $product->getName(); //Hackish
+        $id = $product->getId();
 
-        $this->products[$key] = $product;
+        if (null == $id) {
+            $id = uniqid();
+            $rp = new \ReflectionProperty($product, 'id');
+            $rp->setAccessible(true);
+            $rp->setValue($product, $id);
+            $rp->setAccessible(false);
+        }
+
+        $this->products[$id] = $product;
     }
 
 
