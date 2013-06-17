@@ -18,8 +18,11 @@
         "vespolina/taxonomy": "*"
     },
     "require-dev": {
+        "doctrine/phpcr-odm": "1.0.*",
         "doctrine/mongodb-odm": "*",
-        "doctrine/orm" : "*"
+        "doctrine/orm" : "*",
+        "jackalope/jackalope-doctrine-dbal": "1.0.*"
+
     },
     "minimum-stability": "dev",
     "autoload": {
