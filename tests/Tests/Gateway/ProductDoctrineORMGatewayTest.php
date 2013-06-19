@@ -11,6 +11,7 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 
 use Vespolina\Product\Gateway\ProductDoctrineORMGateway;
+use Vespolina\Taxonomy\Gateway\TaxonomyMemoryGateway;
 
 class ProductDoctrineORMGatewayTest extends ProductGatewayTestCommon
 {
@@ -52,7 +53,8 @@ class ProductDoctrineORMGatewayTest extends ProductGatewayTestCommon
             $tool->createSchema($classes);
         } catch(\Exception $e) {}
 
-        $this->gateway = new ProductDoctrineORMGateway($em, 'Vespolina\Entity\Product\Product');
+        $this->productGateway = new ProductDoctrineORMGateway($em, 'Vespolina\Entity\Product\Product');
+        $this->taxonomyGateway = new TaxonomyMemoryGateway('Vespolina\Entity\Taxonomy\TaxonomyNode');
 
     }
 }

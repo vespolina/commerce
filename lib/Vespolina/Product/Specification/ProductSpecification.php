@@ -1,10 +1,12 @@
 <?php
 
 namespace Vespolina\Product\Specification;
+use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Taxonomy\TaxonomyNode;
 use Vespolina\Entity\Taxonomy\TaxonomyNodeInterface;
 use Vespolina\Product\Specification\ProductSpecificationInterface;
-use Vespolina\Entity\Product\ProductInterface;
+use Vespolina\Product\Specification\TaxonomyNodeSpecification;
+
 
 class ProductSpecification extends BaseSpecification implements ProductSpecificationInterface
 {
@@ -26,6 +28,7 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
 
         return $this;
     }
+
     public function attributeContains($name, $value)
     {
 
@@ -53,6 +56,8 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
 
     public function withTaxonomyNode(TaxonomyNodeInterface $node)
     {
+        $this->addOperand(new TaxonomyNodeSpecification($node));
+
         return $this;
     }
 }

@@ -15,7 +15,8 @@ class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitor
         'FilterSpecification' => 'visitFilter',
         'IdSpecification'   => 'visitId',
         'PriceSpecification' => 'visitPrice',
-        'ProductSpecification' => 'visitProduct'
+        'ProductSpecification' => 'visitProduct',
+        'TaxonomySpecification' => 'visitTaxonomyNode',
     );
 
     protected $filterMap = array(
@@ -45,6 +46,11 @@ class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitor
     {
         $mappedOperator = $this->filterMap[$specification->getOperator()];
         $query->field($specification->getField())->$mappedOperator($specification->getValue());
+    }
+
+    public function visitTaxonomyNode(SpecificationInterface $specification, SpecificationWalker $walker, $query)
+    {
+        //$query->field($specification->getField())->$mappedOperator($specification->getValue());
     }
 
     public function visitProduct(ProductSpecificationInterface $specification, SpecificationWalker $walker, $query)

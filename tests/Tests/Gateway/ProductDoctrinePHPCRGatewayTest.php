@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ODM\PHPCR\Mapping\Driver\XmlDriver;
 use Jackalope\Transport\DoctrineDBAL\RepositorySchema;
 use Vespolina\Product\Gateway\ProductDoctrinePHPCRGateway;
+use Vespolina\Taxonomy\Gateway\TaxonomyMemoryGateway;
 
 class ProductDoctrinePHPCRGatewayTest extends ProductGatewayTestCommon
 {
@@ -53,7 +54,9 @@ class ProductDoctrinePHPCRGatewayTest extends ProductGatewayTestCommon
         $config->setAutoGenerateProxyClasses(true);
 
         $documentManager = \Doctrine\ODM\PHPCR\DocumentManager::create($session, $config);
-        $this->gateway = new ProductDoctrinePHPCRGateway($documentManager, 'Vespolina\Entity\Product\Product');
+        $this->productGateway = new ProductDoctrinePHPCRGateway($documentManager, 'Vespolina\Entity\Product\Product');
+        $this->taxonomyGateway = new TaxonomyMemoryGateway('Vespolina\Entity\Taxonomy\TaxonomyNode');
+
     }
 
     public function testMatchProductById()

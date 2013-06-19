@@ -8,6 +8,7 @@ use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
 
 use Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver;
 use Vespolina\Product\Gateway\ProductDoctrineMongoDBGateway;
+use Vespolina\Taxonomy\Gateway\TaxonomyMemoryGateway;
 
 class ProductDoctrineODMGatewayTest extends ProductGatewayTestCommon
 {
@@ -35,7 +36,8 @@ class ProductDoctrineODMGatewayTest extends ProductGatewayTestCommon
         $config->setAutoGenerateProxyClasses(true);
         $doctrineODM = \Doctrine\ODM\MongoDB\DocumentManager::create(null, $config);
 
-        $this->gateway = new ProductDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Product\Product');
+        $this->productGateway = new ProductDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Product\Product');
+        $this->taxonomyGateway = new TaxonomyMemoryGateway('Vespolina\Entity\Taxonomy\TaxonomyNode');
     }
 
     public function testMatchProductById()
