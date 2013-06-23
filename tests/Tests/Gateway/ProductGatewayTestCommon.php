@@ -35,11 +35,10 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
             $product = $manager->createProduct();
             $product->setName('product' . $i);
 
-            //Attach each product to all taxonomy nodes
+            //Attach each product to all known taxonomy nodes
             foreach ($taxonomyNodes as $node) {
-                //$product->addTaxonomy($node);
+                $product->addTaxonomy($node);
             }
-
             $products[] = $product;
         }
 
@@ -49,14 +48,13 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
     protected function createTaxonomyNodes()
     {
         $taxonomyManager = $this->getTaxonomyManager();
-
         $node1 = $taxonomyManager->createTaxonomyNode('category1');
+
         $node2 = $taxonomyManager->createTaxonomyNode('category2');
         $taxonomyManager->updateTaxonomyNode($node1);
         $taxonomyManager->updateTaxonomyNode($node2);
 
         return array($node1, $node2);
-
     }
 
     public function testCreateAndFindProducts()
@@ -76,7 +74,7 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
         } **/
     }
 
-    public function testMatchProduct()
+    public function testMatchProductEquals()
     {
         $products = $this->createProducts(10);
         foreach ($products as $product) {

@@ -5,10 +5,9 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
-
 use Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver;
 use Vespolina\Product\Gateway\ProductDoctrineMongoDBGateway;
-use Vespolina\Taxonomy\Gateway\TaxonomyMemoryGateway;
+use Vespolina\Taxonomy\Gateway\TaxonomyDoctrineMongoDBGateway;
 
 class ProductDoctrineODMGatewayTest extends ProductGatewayTestCommon
 {
@@ -37,7 +36,7 @@ class ProductDoctrineODMGatewayTest extends ProductGatewayTestCommon
         $doctrineODM = \Doctrine\ODM\MongoDB\DocumentManager::create(null, $config);
 
         $this->productGateway = new ProductDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Product\Product');
-        $this->taxonomyGateway = new TaxonomyMemoryGateway('Vespolina\Entity\Taxonomy\TaxonomyNode');
+        $this->taxonomyGateway = new TaxonomyDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Taxonomy\TaxonomyNode');
     }
 
     public function testMatchProductById()

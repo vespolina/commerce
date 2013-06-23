@@ -9,9 +9,11 @@ use Doctrine\ORM\Mapping\Driver\YamlDriver;
 
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\EventManager;
 
+use Gedmo\Tree\TreeListener;
 use Vespolina\Product\Gateway\ProductDoctrineORMGateway;
-use Vespolina\Taxonomy\Gateway\TaxonomyMemoryGateway;
+use Vespolina\Taxonomy\Gateway\TaxonomyDoctrineORMGateway;
 
 class ProductDoctrineORMGatewayTest extends ProductGatewayTestCommon
 {
@@ -39,22 +41,30 @@ class ProductDoctrineORMGatewayTest extends ProductGatewayTestCommon
         $config->setMetadataDriverImpl($xmlDriver);
         $config->setMetadataCacheImpl(new ArrayCache());
         $config->setAutoGenerateProxyClasses(true);
+
+        $eventManager =  new EventManager();
+        $treeListener = new TreeListener();
+        $eventManager->addEventSubscriber($treeListener);
+
         $em = EntityManager::create(array(
             'driver' => 'pdo_sqlite',
             'path' => 'database.sqlite'
-        ), $config);
+        ), $config, $eventManager);
 
-        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+        $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($em);
         $classes = array(
             $em->getClassMetadata('Vespolina\Entity\Product\Product'),
+            $em->getClassMetadata('Vespolina\Entity\Taxonomy\TaxonomyNode'),
         );
 
         try {
-            $tool->createSchema($classes);
-        } catch(\Exception $e) {}
+            $schemaTool->dropSchema(array());
+            $schemaTool->createSchema($classes);
+        } catch(\Exception $e) {
+        }
 
         $this->productGateway = new ProductDoctrineORMGateway($em, 'Vespolina\Entity\Product\Product');
-        $this->taxonomyGateway = new TaxonomyMemoryGateway('Vespolina\Entity\Taxonomy\TaxonomyNode');
+        $this->taxonomyGateway = new TaxonomyDoctrineORMGateway($em, 'Vespolina\Entity\Taxonomy\TaxonomyNode');
 
     }
 }

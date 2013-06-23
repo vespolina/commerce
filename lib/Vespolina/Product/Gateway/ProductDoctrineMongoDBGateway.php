@@ -2,8 +2,6 @@
 
 namespace Vespolina\Product\Gateway;
 
-use Molino\MolinoInterface;
-use Molino\SelectQueryInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 use Vespolina\Product\Specification\SpecificationInterface;
