@@ -16,7 +16,7 @@ class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitor
         'IdSpecification'   => 'visitId',
         'PriceSpecification' => 'visitPrice',
         'ProductSpecification' => 'visitProduct',
-        'TaxonomySpecification' => 'visitTaxonomyNode',
+        'TaxonomyNodeSpecification' => 'visitTaxonomyNode',
     );
 
     protected $filterMap = array(
@@ -50,7 +50,15 @@ class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitor
 
     public function visitTaxonomyNode(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
-        //$query->field($specification->getField())->$mappedOperator($specification->getValue());
+        $taxonomyNode = $specification->getTaxonomyNode();
+
+        //Do we already have the taxonomy node?
+        if (null != $taxonomyNode) {
+            $query->field('taxonomies')->equals($taxonomyNode);
+        //If not we need to describe the taxonomy node
+        } else {
+            $query->field('taxonomies.name')->equals($specification->getName());
+        }
     }
 
     public function visitProduct(ProductSpecificationInterface $specification, SpecificationWalker $walker, $query)

@@ -3,6 +3,7 @@ namespace Tests\Gateway;
 
 use Vespolina\Product\Manager\ProductManager;
 use Vespolina\Product\Specification\ProductSpecification;
+use Vespolina\Product\Specification\TaxonomyNodeSpecification;
 use Vespolina\Taxonomy\Gateway\TaxonomyMemoryGateway;
 use Vespolina\Taxonomy\Manager\TaxonomyManager;
 
@@ -23,6 +24,7 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
     protected $productManager;
     protected $taxonomyGateway;
     protected $taxonomyManager;
+    protected $taxonomyRootNode;
 
     protected function createProducts($max = 10)
     {
@@ -48,11 +50,13 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
     protected function createTaxonomyNodes()
     {
         $taxonomyManager = $this->getTaxonomyManager();
-        $node1 = $taxonomyManager->createTaxonomyNode('category1');
+        $node1 = $taxonomyManager->createTaxonomyNode('category1', $this->taxonomyRootNode);
 
-        $node2 = $taxonomyManager->createTaxonomyNode('category2');
+        $node2 = $taxonomyManager->createTaxonomyNode('category2', $this->taxonomyRootNode);
         $taxonomyManager->updateTaxonomyNode($node1);
         $taxonomyManager->updateTaxonomyNode($node2);
+
+        $this->taxonomyGateway->flush();
 
         return array($node1, $node2);
     }
@@ -98,6 +102,43 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
 
         $product = $this->productGateway->matchProductById(1);
         $this->assertNotNull($product);
+    }
+
+    public function testMatchProductByTaxonomyNode()
+    {
+        $matchingProductFound = false;
+        $productSpec = new ProductSpecification();
+        $productSpec->withTaxonomyNodeName('category1');
+
+        $products = $this->productGateway->matchProducts($productSpec);
+
+        foreach ($products as $product) {
+            $occurs = false;
+
+           //Test if the product has the request node
+           foreach($product->getTaxonomies() as $taxonomyNode) {
+               if ($taxonomyNode->getName() == 'category1') $occurs = true;
+           }
+           $this->assertTrue($occurs);
+           $matchingProductFound = true;
+        }
+
+        $this->assertTrue($matchingProductFound);
+    }
+
+    public function testMatchProductByNotExistingTaxonomyNode()
+    {
+        $productSpec = new ProductSpecification();
+        $productSpec->withTaxonomyNodeName('categoryXYZ');
+
+        $products = $this->productGateway->matchProducts($productSpec);
+
+        if (is_array($products)) {
+            $count = count($products);
+        } else {
+            $count = $products->count();
+        }
+        $this->assertEquals(0, $count);
     }
 
     protected function getProductManager()

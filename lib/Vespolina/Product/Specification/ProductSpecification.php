@@ -60,4 +60,13 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
 
         return $this;
     }
+
+    public function withTaxonomyNodeName($name)
+    {
+        $taxonomyNodeSpecification = new TaxonomyNodeSpecification();
+        $taxonomyNodeSpecification->equals('name', $name);
+        $this->addOperand($taxonomyNodeSpecification);
+
+        return $this;
+    }
 }

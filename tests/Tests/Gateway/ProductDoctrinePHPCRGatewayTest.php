@@ -4,21 +4,24 @@ namespace Tests\Gateway;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
+
 use Doctrine\ODM\PHPCR\Mapping\Driver\XmlDriver;
 use Jackalope\Transport\DoctrineDBAL\RepositorySchema;
 use Vespolina\Product\Gateway\ProductDoctrinePHPCRGateway;
-use Vespolina\Taxonomy\Gateway\TaxonomyMemoryGateway;
+use Vespolina\Taxonomy\Gateway\TaxonomyPHPCRGateway;
 
 class ProductDoctrinePHPCRGatewayTest extends ProductGatewayTestCommon
 {
     protected function setUp()
     {
         $params = array(
-            'driver'    => 'pdo_sqlite',
+            'driver'    => 'pdo_mysql',
             'host'      => 'localhost',
             'user'      => 'root',
             'password'  => '',
-            'dbname'    => 'database',
+            'dbname'    => 'v_products_tests',
         );
 
         $workspace = 'default';
@@ -27,11 +30,11 @@ class ProductDoctrinePHPCRGatewayTest extends ProductGatewayTestCommon
 
         $dbConn = \Doctrine\DBAL\DriverManager::getConnection($params);
         $parameters = array('jackalope.doctrine_dbal_connection' => $dbConn);
-
+        /**
         $schema = RepositorySchema::create();
         foreach ($schema->toSql($dbConn->getDatabasePlatform()) as $sql) {
             $dbConn->exec($sql);
-        }
+        } */
 
         $repositoryFactory = new \Jackalope\RepositoryFactoryDoctrineDBAL();
         $repository = $repositoryFactory->getRepository($parameters);
@@ -53,9 +56,11 @@ class ProductDoctrinePHPCRGatewayTest extends ProductGatewayTestCommon
         $config->setMetadataCacheImpl(new ArrayCache());
         $config->setAutoGenerateProxyClasses(true);
 
+
         $documentManager = \Doctrine\ODM\PHPCR\DocumentManager::create($session, $config);
         $this->productGateway = new ProductDoctrinePHPCRGateway($documentManager, 'Vespolina\Entity\Product\Product');
-        $this->taxonomyGateway = new TaxonomyMemoryGateway('Vespolina\Entity\Taxonomy\TaxonomyNode');
+        $this->taxonomyGateway = new TaxonomyPHPCRGateway($documentManager, 'Vespolina\Entity\Taxonomy\TaxonomyNode', '/');
+        $this->taxonomyRootNode = $documentManager->find(null, '/');
 
     }
 

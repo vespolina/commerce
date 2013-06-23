@@ -25,9 +25,12 @@ abstract class ProductHandler implements ProductHandlerInterface
         $this->productClass = $productClass;
     }
 
-    public function createProduct()
+    public function createProduct($parent = null)
     {
-        return new $this->productClass();
+        $product = $this->productClass();
+        $product->setParent($parent);
+
+        return $product;
     }
 
     public function getType()

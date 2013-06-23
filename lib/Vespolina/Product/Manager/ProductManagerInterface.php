@@ -72,10 +72,11 @@ interface ProductManagerInterface
      * Create a Product instance
      *
      * @param string $type (optional)
+     * @param string $type Parent product (in case of a product bundle)
      *
      * @return \Vespolina\Entity\ProductInterface
      */
-    function createProduct($type = 'default');
+    function createProduct($type = 'default', $parent = null);
 
     /**
      * Find a collection of products by the criteria

@@ -8,17 +8,19 @@ use Vespolina\Product\Specification\SpecificationInterface;
 use Vespolina\Product\Specification\SpecificationWalker;
 use Vespolina\Product\Specification\ProductSpecificationInterface;
 
-class DoctrineORMDefaultSpecificationVisitor implements SpecificationVisitorInterface
+class DoctrinePHPCRDefaultSpecificationVisitor implements SpecificationVisitorInterface
 {
-    protected $lastParameterId;
-
     protected $methods = array(
         'AndSpecification' => 'visitAnd',
         'FilterSpecification' => 'visitFilter',
         'IdSpecification'   => 'visitId',
         'PriceSpecification' => 'visitPrice',
         'ProductSpecification' => 'visitProduct',
-        'TaxonomyNodeSpecification' => 'visitTaxonomyNode'
+        'TaxonomyNodeSpecification' => 'visitTaxonomyNode',
+    );
+
+    protected $filterMap = array(
+        '=' => 'eq'
     );
 
     public function supports(SpecificationInterface $specification)
@@ -37,12 +39,28 @@ class DoctrineORMDefaultSpecificationVisitor implements SpecificationVisitorInte
 
     public function visitId(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
-        $this->andWhere($query, '=', 'id', $specification->getId());
+        $query->field('_id')->equals($specification->getId());
     }
 
     public function visitFilter(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
-        $this->andWhere($query, $specification->getOperator(),$specification->getField(),$specification->getValue() );
+        $mappedOperator = $this->filterMap[$specification->getOperator()];
+        $query->expr()->$mappedOperator($specification->getField(), $specification->getValue());
+
+        //$query->field($specification->getField())->$mappedOperator($specification->getValue());
+    }
+
+    public function visitTaxonomyNode(SpecificationInterface $specification, SpecificationWalker $walker, $query)
+    {
+        $taxonomyNode = $specification->getTaxonomyNode();
+
+        //Do we already have the taxonomy node?
+        if (null != $taxonomyNode) {
+            $query->field('taxonomies')->equals($taxonomyNode);
+        //If not we need to describe the taxonomy node
+        } else {
+            $query->field('taxonomies.name')->equals($specification->getName());
+        }
     }
 
     public function visitProduct(ProductSpecificationInterface $specification, SpecificationWalker $walker, $query)
@@ -56,34 +74,17 @@ class DoctrineORMDefaultSpecificationVisitor implements SpecificationVisitorInte
         }
     }
 
-    public function visitTaxonomyNode(SpecificationInterface $specification, SpecificationWalker $walker, $query)
-    {
-        $taxonomyNode = $specification->getTaxonomyNode();
-
-        //Do we already have the taxonomy node?
-        if (null != $taxonomyNode) {
-           // $query->field('taxonomies')->equals($taxonomyNode);
-            //If not we need to describe the taxonomy node
-        } else {
-            $rootAlias = $query->getRootAlias();
-
-            $query->innerJoin($rootAlias . '.taxonomies', 't');
-            $parameterId = $this->generateParameterId();
-            $query->andWhere('t.name =?' . $parameterId);
-            $query->setParameter($parameterId,  $specification->getName());
-        }
-    }
-
     protected function generateParameterId()
     {
         return ++$this->lastParameterId;
     }
 
-    private function andWhere($queryBuilder, $operator, $field, $value)
+    private function andWhere($comparison, $field, $value)
     {
         $parameterId = $this->generateParameterId();
-        $rootAlias = $queryBuilder->getRootAlias();
-        $queryBuilder->andWhere(sprintf('%s.%s %s ?%d', $rootAlias, $field, $operator, $parameterId));
-        $queryBuilder->setParameter($parameterId, $value);
+        $rootAlias = $this->getQueryBuilder()->getRootAlias();
+        $this->getQueryBuilder()->andWhere(sprintf('%s.%s %s ?%d', $rootAlias, $field, $comparison, $parameterId));
+        $this->getQueryBuilder()->setParameter($parameterId, $value);
     }
+
 }

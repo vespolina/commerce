@@ -101,6 +101,15 @@ class ProductDoctrinePHPCRGateway extends ProductGateway
      */
     function updateProduct(ProductInterface $product, $andFlush = false)
     {
+
+        //Assure a product parent exists, if it doesn't exists use the first taxonomy node as parent
+        if (null == $product->getParent()) {
+            foreach ($product->getTaxonomies() as $taxonomyNode) {
+                $product->setParent($taxonomyNode);
+                break;
+            }
+        }
+
         $this->dm->persist($product);
         if ($andFlush) $this->flush();
     }
