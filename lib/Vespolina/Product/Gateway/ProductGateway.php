@@ -15,13 +15,12 @@ abstract class ProductGateway implements ProductGatewayInterface
     protected $specificationWalker;
 
     /**
-     * @param \Molino\MolinoInterface $molino
      * @param string $managedClass
      */
     public function __construct($productClass, $gatewayName)
     {
         if (!class_exists($productClass) || !in_array('Vespolina\Entity\Product\ProductInterface', class_implements($productClass))) {
-             throw new InvalidInterfaceException('Please have your product class implement Vespolina\Entity\Product\ProductInterface');
+            throw new InvalidInterfaceException('Please have your product class implement Vespolina\Entity\Product\ProductInterface');
         }
         $this->productClass = $productClass;
         $this->gatewayName = $gatewayName;

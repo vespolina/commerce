@@ -182,6 +182,25 @@ class ProductManager implements ProductManagerInterface
         return $this->resolveGateway()->findOne($specification);
     }
 
+    public function findProductsBy(array $criteria, array $orderBy = null, $limit = null, $offset = null, $pager = false)
+    {
+        $query = $this->gateway->createQuery('Select');
+        foreach ($criteria as $field => $value) {
+
+            $query->filterEqual($field, $value);
+        }
+        if ($orderBy) {
+            foreach ($orderBy as $field => $order)
+                $query->sort($field, $order);
+        }
+        if ($limit) {
+            $query->limit($limit);
+        }
+        if ($offset) {
+            $query->skip($offset);
+        }
+        return $this->gateway->findProducts($query, $pager);
+    }
 
     public function findProductById($id)
     {
