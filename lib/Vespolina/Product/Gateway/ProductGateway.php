@@ -33,12 +33,12 @@ abstract class ProductGateway implements ProductGatewayInterface
         return $this->executeSpecification(new IdSpecification($id, $type), true);
     }
 
-    public function matchProducts(SpecificationInterface $specification)
+    public function findAll(SpecificationInterface $specification)
     {
         return $this->executeSpecification($specification);
     }
 
-    public function matchProduct(SpecificationInterface $specification)
+    public function findOne(SpecificationInterface $specification)
     {
         return $this->executeSpecification($specification, true);
     }

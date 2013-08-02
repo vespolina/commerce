@@ -14,6 +14,7 @@ use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Identitifer\IdentifierInterface;
 
+use Vespolina\Product\Specification\SpecificationInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -79,20 +80,16 @@ interface ProductManagerInterface
     function createProduct($type = 'default', $parent = null);
 
     /**
-     * Find a collection of products by the criteria
+     * Find a collection of products or merchandise by a specification
      *
-     * @param array $criteria [$field] = $value
-     * @param array $orderBy [$field] = $order
-     * @param mixed $limit
-     * @param mixed $offset
+     * @param SpecificationInterface $specification
      *
      * @return array
      */
-    function findProductBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
+    function findAll(SpecificationInterface $specification);
 
-    function findMerchandiseBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
+    function findOne(SpecificationInterface $specification);
 
-    function findMerchandiseByTerms(array $terms);
 
     /**
      * Find a Product by its object identifier

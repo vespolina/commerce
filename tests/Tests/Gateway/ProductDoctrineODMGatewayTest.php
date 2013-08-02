@@ -37,6 +37,8 @@ class ProductDoctrineODMGatewayTest extends ProductGatewayTestCommon
 
         $this->productGateway = new ProductDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Product\Product');
         $this->taxonomyGateway = new TaxonomyDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Taxonomy\TaxonomyNode');
+
+        parent::setUp();
     }
 
     public function testMatchProductById()

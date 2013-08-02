@@ -41,13 +41,13 @@ class ProductDoctrinePHPCRGateway extends ProductGateway
         }
     }
 
-    public function matchProduct(SpecificationInterface $specification)
+    public function findOne(SpecificationInterface $specification)
     {
         return $this->executeSpecification($specification, true);
     }
 
 
-    public function matchProducts(SpecificationInterface $specification)
+    public function findAll(SpecificationInterface $specification)
     {
         return $this->executeSpecification($specification, false);
     }

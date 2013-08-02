@@ -66,5 +66,6 @@ class ProductDoctrineORMGatewayTest extends ProductGatewayTestCommon
         $this->productGateway = new ProductDoctrineORMGateway($em, 'Vespolina\Entity\Product\Product');
         $this->taxonomyGateway = new TaxonomyDoctrineORMGateway($em, 'Vespolina\Entity\Taxonomy\TaxonomyNode');
 
+        parent::setUp();
     }
 }

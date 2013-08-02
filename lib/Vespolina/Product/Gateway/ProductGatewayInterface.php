@@ -32,9 +32,9 @@ interface ProductGatewayInterface
      * @param SpecificationInterface $specification
      * @return mixed
      */
-    function matchProducts(SpecificationInterface $specification);
+    function findAll(SpecificationInterface $specification);
 
-    function matchProduct(SpecificationInterface $specification);
+    function findOne(SpecificationInterface $specification);
 
     /**
      * Flush any changes to the database

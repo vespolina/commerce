@@ -39,15 +39,13 @@ class DoctrinePHPCRDefaultSpecificationVisitor implements SpecificationVisitorIn
 
     public function visitId(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
-        $query->field('_id')->equals($specification->getId());
+        $query->expr()->eq('id', $specification->getId());
     }
 
     public function visitFilter(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
         $mappedOperator = $this->filterMap[$specification->getOperator()];
         $query->expr()->$mappedOperator($specification->getField(), $specification->getValue());
-
-        //$query->field($specification->getField())->$mappedOperator($specification->getValue());
     }
 
     public function visitTaxonomyNode(SpecificationInterface $specification, SpecificationWalker $walker, $query)
@@ -56,7 +54,7 @@ class DoctrinePHPCRDefaultSpecificationVisitor implements SpecificationVisitorIn
 
         //Do we already have the taxonomy node?
         if (null != $taxonomyNode) {
-            $query->field('taxonomies')->equals($taxonomyNode);
+            $query->from($taxonomyNode);
         //If not we need to describe the taxonomy node
         } else {
             $query->field('taxonomies.name')->equals($specification->getName());

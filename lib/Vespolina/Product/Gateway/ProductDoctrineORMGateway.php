@@ -57,36 +57,6 @@ class ProductDoctrineORMGateway extends ProductGateway
     }
 
     /**
-     * @param \Molino\SelectQueryInterface $query
-     * @return \Vespolina\Entity\Product\ProductInterface
-     */
-    public function findProduct(SelectQueryInterface $query)
-    {
-        return $query->one();
-    }
-
-    /**
-     * @param \Molino\SelectQueryInterface $query
-     * @return \Vespolina\Entity\Product\ProductInterface
-     */
-    public function findProducts(SelectQueryInterface $query)
-    {
-        return $query->all();
-    }
-
-
-    public function matchProduct(SpecificationInterface $specification)
-    {
-        return $this->executeSpecification($specification, true);
-    }
-
-    public function matchProducts(SpecificationInterface $specification)
-    {
-        return $this->executeSpecification($specification);
-    }
-
-
-    /**
      * @param \Vespolina\Entity\Product\ProductInterface $product
      */
     public function persistProduct(ProductInterface $product, $andFlush = true)

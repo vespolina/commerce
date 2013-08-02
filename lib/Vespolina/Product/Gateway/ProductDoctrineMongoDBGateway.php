@@ -39,17 +39,6 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
         }
     }
 
-    public function matchProduct(SpecificationInterface $specification)
-    {
-        return $this->executeSpecification($specification, true);
-    }
-
-
-    public function matchProducts(SpecificationInterface $specification)
-    {
-        return $this->executeSpecification($specification, false);
-    }
-
     /**
      * Delete a Product that has been persisted and optionally flush that link.
      * Systems that allow for a delayed flush can use the $andFlush parameter, other

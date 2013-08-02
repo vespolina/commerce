@@ -17,6 +17,8 @@ use Vespolina\Entity\Identifier\IdentifierInterface;
 use Vespolina\Product\Gateway\ProductGatewayInterface;
 use Vespolina\Product\Handler\ProductHandlerInterface;
 use Vespolina\Product\Manager\ProductManagerInterface;
+use Vespolina\Product\Specification\IdSpecification;
+use Vespolina\Product\Specification\SpecificationInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
@@ -169,30 +171,21 @@ class ProductManager implements ProductManagerInterface
         return $product;
     }
 
-    public function findProductBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        $query = $this->resolveGateway()->createQuery('Select');
-        foreach ($criteria as $field => $value) {
 
-            $query->filterEqual($field, $value);
-        }
-        if ($orderBy) {
-            foreach ($orderBy as $field => $order)
-            $query->sort($field, $order);
-        }
-        if ($limit) {
-            $query->limit($limit);
-        }
-        if ($offset) {
-            $query->skip($offset);
-        }
-       return $this->resolveGateway()->findProduct($query);
+    public function findAll(SpecificationInterface $specification) {
+
+        return $this->resolveGateway()->findAll($specification);
+    }
+
+    public function findOne(SpecificationInterface $specification) {
+
+        return $this->resolveGateway()->findOne($specification);
     }
 
 
     public function findProductById($id)
     {
-        return $this->doFindProductById($id);
+        return $this->findOne(new IdSpecification($id));
     }
 
     public function findProductByIdentifier($name, $code)

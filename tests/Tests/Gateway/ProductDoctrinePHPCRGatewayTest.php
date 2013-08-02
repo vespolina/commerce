@@ -62,6 +62,7 @@ class ProductDoctrinePHPCRGatewayTest extends ProductGatewayTestCommon
         $this->taxonomyGateway = new TaxonomyPHPCRGateway($documentManager, 'Vespolina\Entity\Taxonomy\TaxonomyNode', '/');
         $this->taxonomyRootNode = $documentManager->find(null, '/');
 
+        parent::setUp();
     }
 
     public function testMatchProductById()
