@@ -1,19 +1,30 @@
 <?php
 
+/**
+ * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Vespolina\Product\Gateway;
 
-use Molino\MolinoInterface;
-use Molino\SelectQueryInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 use Vespolina\Product\Specification\SpecificationInterface;
 
+/**
+ * Defines a (session) memory product gateway , suitable for testing purposes
+ *
+ * @author Daniel Kucharski <daniel@xerias.be>
+ * @author Richard Shank <develop@zestic.com>
+ */
 class ProductMemoryGateway extends ProductGateway
 {
     protected $products;
 
     /**
-     * @param string $managedClass
+     * @param $productClass
      */
     public function __construct($productClass)
     {
@@ -25,65 +36,53 @@ class ProductMemoryGateway extends ProductGateway
     protected function executeSpecification(SpecificationInterface $specification, $matchOne = false)
     {
         $results = array();
-
         foreach ($this->products as $product)
         {
             if (!$specification->isSatisfiedBy($product)) {
                continue;
             }
+            if ($matchOne) {
+                return $product;
+            }
 
-            if ($matchOne) return $product;
-
-            $result[] = $product;
+            $results[] = $product;
         }
 
         return $results;
     }
 
     /**
-     * Delete a Product that has been persisted and optionally flush that link.
-     * Systems that allow for a delayed flush can use the $andFlush parameter, other
-     * systems would disregard the flag. The success of the process is returned.
-     *
-     * @param \Vespolina\Entity\ProductInterface $product
-     *
-     * @param boolean $andFlush
+     * @inheritdoc
      */
     function deleteProduct(ProductInterface $product, $andFlush = false)
     {
-        // TODO: Implement deleteProduct() method.
+        foreach ($this->products as $id =>$memoryProduct) {
+            if ($memoryProduct->equals($product)) {
+                unset($this->products[$id]);
+
+                return;
+            }
+        }
     }
 
     /**
-     * Flush any changes to the database
+     * @inheritdoc
      */
     function flush()
     {
-        // TODO: Implement flush() method.
+        //Nothing is required to be flushed for this gateway
     }
 
     /**
-     * Persist a Product that has been created and optionally flush that link.
-     * Systems that allow for a delayed flush can use the $andFlush parameter, other
-     * systems would disregard the flag. The success of the process is returned.
-     *
-     * @param Vespolina\Entity\ProductInterface $product
-     *
-     * @param boolean $andFlush
+     * @inheritdoc
      */
     function persistProduct(ProductInterface $product, $andFlush = false)
     {
-        // TODO: Implement persistProduct() method.
+        //Nothing is required to be flushed for this gateway
     }
 
     /**
-     * Update a Product that has been persisted and optionally flush that link.
-     * Systems that allow for a delayed flush can use the $andFlush parameter, other
-     * systems would disregard the flag. The success of the process is returned.
-     *
-     * @param Vespolina\Entity\ProductInterface $product
-     *
-     * @param boolean $andFlush
+     * @inheritdoc
      */
     function updateProduct(ProductInterface $product, $andFlush = false)
     {

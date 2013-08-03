@@ -51,6 +51,7 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
         $this->setupTaxonomyNodes();
     }
 
+
     protected function setupTaxonomyNodes()
     {
         $taxonomyManager = $this->getTaxonomyManager();
@@ -87,10 +88,7 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
 
     public function testMatchProductEquals()
     {
-        $products = $this->createProducts(10);
-        foreach ($products as $product) {
-            $this->productGateway->updateProduct($product);
-        }
+        $products = $this->createAndPersistProducts(10);
 
         $spec = new ProductSpecification();
         $spec->equals('name', 'product2');
@@ -102,10 +100,7 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
 
     public function testMatchProductById()
     {
-        $products = $this->createProducts(10);
-        foreach ($products as $product) {
-            $this->productGateway->updateProduct($product);
-        }
+        $products = $this->createAndPersistProducts(10);
 
         $product = $this->productGateway->matchProductById(1);
         $this->assertNotNull($product);
@@ -113,6 +108,8 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
 
     public function testMatchProductByTaxonomyNode()
     {
+        $this->createAndPersistProducts(10);
+
         $matchingProductFound = false;
         $productSpec = new ProductSpecification();
         $productSpec->withTaxonomyNodeName('category1');
@@ -122,7 +119,7 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
         foreach ($products as $product) {
             $occurs = false;
 
-           //Test if the product has the request node
+           //Test if the product has the request taxonomy node
            foreach($product->getTaxonomies() as $taxonomyNode) {
                if ($taxonomyNode->getName() == 'category1') $occurs = true;
            }
@@ -130,7 +127,7 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
            $matchingProductFound = true;
         }
 
-        $this->assertTrue($matchingProductFound);
+        $this->assertTrue($matchingProductFound, 'oops');
     }
 
     public function testMatchProductByNotExistingTaxonomyNode()
@@ -146,6 +143,16 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
             $count = $products->count();
         }
         $this->assertEquals(0, $count);
+    }
+
+    protected function createAndPersistProducts($count)
+    {
+        $products = $this->createProducts(10);
+
+        foreach ($products as $product) {
+            $this->productGateway->updateProduct($product, false);
+        }
+        $this->productGateway->flush();
     }
 
     protected function getProductManager()
