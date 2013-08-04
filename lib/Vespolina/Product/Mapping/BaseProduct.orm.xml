@@ -17,7 +17,7 @@
         <field name="updatedAt"  type="datetime" />
 
         <many-to-many field="taxonomies" target-entity="Vespolina\Entity\Taxonomy\TaxonomyNode">
-            <join-table name="vespolina_products_taxonomies">
+            <join-table name="v_products_taxonomies">
                 <join-columns>
                     <join-column name="product_id" referenced-column-name="id" />
                 </join-columns>

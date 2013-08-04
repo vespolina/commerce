@@ -1,89 +1,62 @@
 <?php
 
+/**
+ * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace Vespolina\Product\Gateway;
 
-use Molino\MolinoInterface;
-use Molino\SelectQueryInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
+use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Product\Specification\SpecificationWalker;
+use Vespolina\Product\Specification\IdSpecification;
 
-class ProductGateway
+abstract class ProductGateway implements ProductGatewayInterface
 {
-    protected $molino;
     protected $productClass;
+    protected $gatewayName;
+    protected $specificationWalker;
 
     /**
-     * @param \Molino\MolinoInterface $molino
      * @param string $managedClass
      */
-    public function __construct(MolinoInterface $molino, $productClass)
+    public function __construct($productClass, $gatewayName)
     {
         if (!class_exists($productClass) || !in_array('Vespolina\Entity\Product\ProductInterface', class_implements($productClass))) {
-             throw new InvalidInterfaceException('Please have your product class implement Vespolina\Entity\Product\ProductInterface');
+            throw new InvalidInterfaceException('Please have your product class implement Vespolina\Entity\Product\ProductInterface');
         }
-        $this->molino = $molino;
         $this->productClass = $productClass;
+        $this->gatewayName = $gatewayName;
+
     }
 
-    /**
-     * @param string $type
-     * @param type $queryClass
-     * @return type
-     * @throws InvalidArgumentException
-     */
-    public function createQuery($type, $queryClass = null)
+    public  function matchProductById($id, $type = null)
     {
-        $type = ucfirst(strtolower($type));
-        if (!in_array($type, array('Delete', 'Select', 'Update'))) {
-            throw new InvalidArgumentException($type . ' is not a valid Query type');
+        return $this->executeSpecification(new IdSpecification($id, $type), true);
+    }
+
+    public function findAll(SpecificationInterface $specification)
+    {
+        return $this->executeSpecification($specification);
+    }
+
+    public function findOne(SpecificationInterface $specification)
+    {
+        return $this->executeSpecification($specification, true);
+    }
+
+    protected function getSpecificationWalker()
+    {
+        if (null == $this->specificationWalker) {
+            $defaultVisitorClass = 'Vespolina\Product\Specification\\Visitor\\' . $this->gatewayName . 'DefaultSpecificationVisitor';
+            $this->specificationWalker = new SpecificationWalker(array(new $defaultVisitorClass()));
         }
-        $queryFunction = 'create' . $type . 'Query';
 
-        if (!$queryClass) {
-            $queryClass = $this->productClass;
-        }
-        return $this->molino->$queryFunction($queryClass);
+        return $this->specificationWalker;
     }
 
-    /**
-     * @param \Vespolina\Entity\Product\ProductInterface $product
-     */
-    public function deleteProduct(ProductInterface $product)
-    {
-        $this->molino->delete($product);
-    }
-
-    /**
-     * @param \Molino\SelectQueryInterface $query
-     * @return \Vespolina\Entity\Product\ProductInterface
-     */
-    public function findProduct(SelectQueryInterface $query)
-    {
-        return $query->one();
-    }
-
-    /**
-     * @param \Molino\SelectQueryInterface $query
-     * @return \Vespolina\Entity\Product\ProductInterface
-     */
-    public function findProducts(SelectQueryInterface $query)
-    {
-        return $query->all();
-    }
-
-    /**
-     * @param \Vespolina\Entity\Product\ProductInterface $product
-     */
-    public function persistProduct(ProductInterface $product)
-    {
-        $this->molino->save($product);
-    }
-
-    /**
-     * @param \Vespolina\Entity\Product\ProductInterface $product
-     */
-    public function updateProduct(ProductInterface $product)
-    {
-        $this->molino->save($product);
-    }
 }

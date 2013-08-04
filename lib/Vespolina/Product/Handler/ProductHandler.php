@@ -1,10 +1,12 @@
 <?php
+
 /**
- * (c) 2012 Vespolina Project http://www.vespolina-project.org
+ * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Vespolina\Product\Handler;
 
 use Vespolina\Product\Handler\ProductHandlerInterface;
@@ -25,9 +27,20 @@ abstract class ProductHandler implements ProductHandlerInterface
         $this->productClass = $productClass;
     }
 
-    public function createProduct()
+    public function createProduct($parent = null)
     {
-        return new $this->productClass();
+        $product = new $this->productClass();
+        $product->setParent($parent);
+
+        return $product;
+    }
+
+    public function getSearchTerms(ProductInterface $product)
+    {
+        $data = array();
+        $data['name'] = $product->getName();
+
+        return $data;
     }
 
     public function getType()

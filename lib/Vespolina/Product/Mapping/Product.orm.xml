@@ -4,7 +4,6 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                     http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Vespolina\Entity\Product\Product">
-
+    <entity name="Vespolina\Entity\Product\Product" table="v_product">
     </entity>
 </doctrine-mapping>
