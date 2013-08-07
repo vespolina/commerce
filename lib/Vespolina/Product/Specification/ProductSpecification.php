@@ -9,6 +9,7 @@
 
 namespace Vespolina\Product\Specification;
 
+use Vespolina\Entity\Channel\ChannelInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Taxonomy\TaxonomyNode;
 use Vespolina\Entity\Taxonomy\TaxonomyNodeInterface;
@@ -75,6 +76,13 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
     public function withTaxonomyNode(TaxonomyNodeInterface $node)
     {
         $this->addOperand(new TaxonomyNodeSpecification($node));
+
+        return $this;
+    }
+
+    public function withChannel(ChannelInterface $channel)
+    {
+        $this->addOperand(new ChannelSpecification($channel));
 
         return $this;
     }

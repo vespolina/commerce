@@ -10,6 +10,7 @@ namespace Tests\Manager;;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+use Vespolina\Entity\Channel\Channel;
 use Vespolina\Entity\Product\Product;
 use Vespolina\Product\Manager\ProductManager;
 
@@ -61,7 +62,13 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
         $this->mgr->addProductHandler($handler);
         $product = $this->mgr->createProduct('test');
 
-        $this->assertInstanceOf('Vespolina\Entity\Product\MerchandiseInterface', $this->mgr->createMerchandise($product));
+        $this->mgr->addMerchandiseHandler($this->getMock(
+            'Vespolina\Product\Handler\MerchandiseHandler', null ,  array('Vespolina\Entity\Product\Merchandise')));
+
+
+        $channel = new Channel();
+        $channel->setName('webshop1');
+        $this->assertInstanceOf('Vespolina\Entity\Product\MerchandiseInterface', $this->mgr->createMerchandise($product, $channel));
     }
 
     public function testSearchForProductByIdentifier()

@@ -9,6 +9,8 @@
 
 namespace Vespolina\Product\Manager;
 
+use Vespolina\Entity\Channel\ChannelInterface;
+use Vespolina\Product\Handler\MerchandiseHandlerInterface;
 use Vespolina\Product\Handler\ProductHandlerInterface;
 use Vespolina\Entity\Product\AttributeInterface;
 use Vespolina\Entity\Product\MerchandiseInterface;
@@ -31,7 +33,7 @@ interface ProductManagerInterface
      * created. Optionally, just an Option object can be passed in, without a third value parameter.
      *
      * @param \Vespolina\Entity\Product\ProductInterface $product
-     * @param string | \Vespolina\Entity\OptionInterface $type
+     * @param string | \Vespolina\Entity\Product\OptionInterface $type
      * @param $value
      */
     function addOptionToProduct(ProductInterface $product, $type, $value = null);
@@ -51,6 +53,14 @@ interface ProductManagerInterface
      * @param ProductHandlerInterface $handler
      */
     function addProductHandler(ProductHandlerInterface $handler);
+
+    /**
+     * Register a merchandise handler to the manager
+     *
+     * @param MerchandiseHandlerInterface $handler
+     * @return mixed
+     */
+    function addMerchandiseHandler(MerchandiseHandlerInterface $handler);
 
     /**
      * Create a product attribute.
@@ -89,6 +99,16 @@ interface ProductManagerInterface
      * @return \Vespolina\Entity\Product\ProductInterface
      */
     function createProduct($type = 'default', $parent = null);
+
+    /**
+     * Create a merchandise entity referencing $product for sales channel $channel
+     *
+     * @param ProductInterface $product
+     * @param ChannelInterface $channel
+     * @param string $type
+     * @return \Vespolina\Entity\Product\MerchandiseInterface
+     */
+    function createMerchandise(ProductInterface $product, ChannelInterface $channel, $type  = 'default');
 
     /**
      * Find a collection of products or merchandise by a specification
@@ -189,7 +209,7 @@ interface ProductManagerInterface
     function updateOptionGroup(OptionGroupInterface $optionGroup, $andPersist = true);
 
     /**
-     * Update and persist the product
+     * Update and persist the product or merchandise
      *
      * @param \Vespolina\Entity\Product\ProductInterface $product
      * @param Boolean $andFlush Whether to flush the changes (default true)

@@ -1,6 +1,6 @@
 <?php
 /**
- * (c) 2011-2012 Vespolina Project http://www.vespolina-project.org
+ * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -9,12 +9,14 @@ namespace Vespolina\Product\Manager;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+use Vespolina\Entity\Channel\ChannelInterface;
 use Vespolina\Entity\Product\AttributeInterface;
 use Vespolina\Entity\Product\MerchandiseInterface;
 use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Identifier\IdentifierInterface;
 use Vespolina\Product\Gateway\ProductGatewayInterface;
+use Vespolina\Product\Handler\MerchandiseHandlerInterface;
 use Vespolina\Product\Handler\ProductHandlerInterface;
 use Vespolina\Product\Manager\ProductManagerInterface;
 use Vespolina\Product\Specification\IdSpecification;
@@ -22,19 +24,23 @@ use Vespolina\Product\Specification\SpecificationInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
+ * @author Daniel Kucharski <daniel@xerias.be>
  */
 class ProductManager implements ProductManagerInterface
 {
+    protected $configuration;
     protected $gateways;
     protected $identifiers;
     protected $productHandlers;
+    protected $merchandiseHandlers;
     protected $attributeClass;
     protected $merchandiseClass;
     protected $optionClass;
     protected $productClass;
 
-    public function __construct(ProductGatewayInterface $defaultGateway, array $classMapping)
+    public function __construct(ProductGatewayInterface $defaultGateway, array $classMapping, array $configuration = array())
     {
+        //Prepare the class map
         $missingClasses = array();
         foreach (array('attribute', 'merchandise', 'option', 'product') as $class) {
             $class = $class . 'Class';
@@ -53,9 +59,15 @@ class ProductManager implements ProductManagerInterface
             throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
         }
 
+        //Prepare the manager configuration
+        $defaultConfiguration = array(
+            'multiChannel' => false     //Switch off / on product merchandise support
+        );
+
+        $this->configuration = array_merge($configuration, $defaultConfiguration);
+
         //Setup the default product gateway
         $this->gateways = array('default' => $defaultGateway);
-//        $this->identifiers = $identifiers;
         $this->productHandlers = array();
     }
 
@@ -98,6 +110,15 @@ class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
+    public function addMerchandiseHandler(MerchandiseHandlerInterface $handler)
+    {
+        $type = $handler->getType();
+        $this->merchandiseHandlers[$type] = $handler;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function createAttribute($type, $name)
     {
         /** @var $attribute \Vespolina\Entity\Product\AttributeInterface */
@@ -127,11 +148,6 @@ class ProductManager implements ProductManagerInterface
     {
         $name = strtolower($name);
         return new $this->identifiers[$name];
-    }
-
-    public function createMerchandise(ProductInterface $product)
-    {
-        return new $this->merchandiseClass($product);
     }
 
     /**
@@ -171,6 +187,22 @@ class ProductManager implements ProductManagerInterface
         return $product;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function createMerchandise(ProductInterface $product, ChannelInterface $channel, $type = 'default')
+    {
+        if (isset($this->merchandiseHandlers[$type])) {
+
+            $merchandise  =  $this->merchandiseHandlers[$type]->createMerchandise($product, $channel);
+
+            //Build or adjust the link between the merchandise and its referencing product
+            $this->merchandiseHandlers[$type]->link($merchandise, $product);
+        }
+
+        return $merchandise;
+    }
+
 
     public function findAll(SpecificationInterface $specification) {
 
@@ -182,25 +214,6 @@ class ProductManager implements ProductManagerInterface
         return $this->resolveGateway()->findOne($specification);
     }
 
-    public function findProductsBy(array $criteria, array $orderBy = null, $limit = null, $offset = null, $pager = false)
-    {
-        $query = $this->gateway->createQuery('Select');
-        foreach ($criteria as $field => $value) {
-
-            $query->filterEqual($field, $value);
-        }
-        if ($orderBy) {
-            foreach ($orderBy as $field => $order)
-                $query->sort($field, $order);
-        }
-        if ($limit) {
-            $query->limit($limit);
-        }
-        if ($offset) {
-            $query->skip($offset);
-        }
-        return $this->gateway->findProducts($query, $pager);
-    }
 
     public function findProductById($id)
     {
@@ -215,16 +228,6 @@ class ProductManager implements ProductManagerInterface
     public function findProductBySlug($slug)
     {
         return $this->doFindProductBySlug($slug);
-    }
-
-    public function findMerchandiseBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        return $this->doFindMerchandiseBy($criteria, $orderBy, $limit, $offset);
-    }
-
-    public function findMerchandiseByTerms(array $terms)
-    {
-        return $this->doFindMerchandiseByTerms($terms);
     }
 
     public function getAssetManager()
@@ -254,7 +257,7 @@ class ProductManager implements ProductManagerInterface
     public function getOptionClass()
     {
         // TODO: make configurable
-        return '\Vespolina\ProductBundle\Document\Option';
+        return '\Vespolina\Entity\Product\Option';
     }
 
     /**
@@ -359,16 +362,6 @@ class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    public function updateMerchandise(MerchandiseInterface $merchandise, $andPersist = true)
-    {
-        if ($andPersist) {
-            $this->doUpdateMerchandise($merchandise);
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function deleteProduct(ProductInterface $product, $andPersist = true)
     {
         $this->resolveGateway($product)->deleteProduct($product);
@@ -398,26 +391,6 @@ class ProductManager implements ProductManagerInterface
     }
 
     protected function doFindProductBySlug($slug)
-    {
-
-    }
-
-    protected function doFindMerchandiseBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-
-    }
-
-    protected function doFindMerchandiseByTerms(array $terms)
-    {
-
-    }
-
-    protected function doGetMerchandise(array $constraints = null)
-    {
-
-    }
-
-    protected function doUpdateMerchandise(MerchandiseInterface $optionGroup)
     {
 
     }

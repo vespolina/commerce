@@ -9,6 +9,7 @@ namespace Tests\Specification;
 
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
+use Vespolina\Entity\Channel\Channel;
 use Vespolina\Entity\Product\Product;
 use Vespolina\Product\Specification\ProductSpecification;
 
@@ -20,21 +21,29 @@ class ProductSpecificationTest extends \PHPUnit_Framework_TestCase
 
     protected $productGateway;
 
-    public function testSpecification()
+    public function testProductSpecification()
     {
 
         $aTaxonomyNode = new \Vespolina\Entity\Taxonomy\TaxonomyNode();
 
         $spec = new ProductSpecification();
-
         $spec->equals('name', 't-shirt')
-             ->attributeContains('color', array('blue','white'))
-             ->attributeEquals('brand', 'nike')
-             ->withTaxonomyNode($aTaxonomyNode)
-             ->withPriceRange('netValue', 20, 30);
+            ->attributeContains('color', array('blue', 'white'))
+            ->attributeEquals('brand', 'nike')
+            ->withTaxonomyNode($aTaxonomyNode)
+            ->withPriceRange('netValue', 20, 30);
 
         $this->assertNotNull($spec);
-  }
+    }
+
+    public function testMerchandiseSpecification()
+    {
+        $storeChannel = new Channel();
+        $spec = new ProductSpecification();
+        $spec->equals('name', 't-shirt')
+            ->withChannel($storeChannel);
+
+    }
 
 
 }
