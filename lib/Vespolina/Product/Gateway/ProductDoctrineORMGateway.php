@@ -12,7 +12,7 @@ namespace Vespolina\Product\Gateway;
 use Doctrine\ORM\EntityManager;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 /**
  * Defines a gateway to ORM (eg. MySQL, Postgress, Sqlite) using Doctrine ORM

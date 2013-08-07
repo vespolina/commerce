@@ -10,7 +10,7 @@
 namespace Vespolina\Product\Gateway;
 
 use Vespolina\Entity\Product\ProductInterface;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 /**
  * Defines the interface for a product gateway to persist and retrieve products

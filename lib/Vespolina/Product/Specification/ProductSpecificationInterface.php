@@ -10,7 +10,7 @@
 namespace Vespolina\Product\Specification;
 
 use Vespolina\Entity\Product\ProductInterface;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 /**
  * Interface to construct a product query
  *
@@ -18,14 +18,6 @@ use Vespolina\Product\Specification\SpecificationInterface;
  */
 interface ProductSpecificationInterface extends SpecificationInterface
 {
-    /**
-     * Does the supplied entity matches this specification?
-     *
-     * @param ProductInterface $product
-     * @return boolean
-     */
-    function isSatisfiedBy(ProductInterface $product);
-
     /**
      * Match products having the attribute $name equal to $value
      *

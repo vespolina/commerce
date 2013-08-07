@@ -10,7 +10,7 @@
 namespace Vespolina\Product\Specification;
 
 use Vespolina\Entity\Product\ProductInterface;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 class PriceSpecification implements SpecificationInterface
 {
@@ -24,7 +24,7 @@ class PriceSpecification implements SpecificationInterface
         $this->toValue = $toValue;
     }
 
-    public function isSatisfiedBy(ProductInterface $product)
+    public function isSatisfiedBy($product)
     {
         return $product->{"get" . $this->field}() === $this->value;
     }

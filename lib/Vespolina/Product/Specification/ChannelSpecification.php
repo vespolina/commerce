@@ -11,7 +11,7 @@ namespace Vespolina\Product\Specification;
 
 use Vespolina\Entity\Channel\ChannelInterface;
 use Vespolina\Entity\Product\Merchandise;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 class ChannelSpecification implements SpecificationInterface
 {
@@ -27,7 +27,7 @@ class ChannelSpecification implements SpecificationInterface
         return $this->channel;
     }
 
-    public function isSatisfiedBy(ProductInterface $product)
+    public function isSatisfiedBy($product)
     {
         if ($product instanceof Merchandise) {
 

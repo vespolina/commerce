@@ -11,7 +11,7 @@ namespace Vespolina\Product\Gateway;
 
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 use Vespolina\Product\Specification\SpecificationWalker;
 use Vespolina\Product\Specification\IdSpecification;
 

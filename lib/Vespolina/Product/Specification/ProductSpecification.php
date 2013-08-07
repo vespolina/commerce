@@ -30,7 +30,7 @@ use Vespolina\Product\Specification\TaxonomyNodeSpecification;
  */
 class ProductSpecification extends BaseSpecification implements ProductSpecificationInterface
 {
-    public function isSatisfiedBy(ProductInterface $product)
+    public function isSatisfiedBy($product)
     {
         foreach ($this->operands as $specification) {
             if (!$specification->isSatisfiedBy($product)) {

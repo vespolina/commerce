@@ -10,7 +10,7 @@
 namespace Vespolina\Product\Specification;
 
 use Vespolina\Entity\Product\ProductInterface;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 class AndSpecification implements SpecificationInterface
 {
@@ -21,10 +21,10 @@ class AndSpecification implements SpecificationInterface
         $this->operands = func_get_args();
     }
 
-    public function isSatisfiedBy(ProductInterface $product)
+    public function isSatisfiedBy($entity)
     {
         foreach ($this->operands as $specification) {
-            if ( ! $specification->isSatisfiedBy($product)) {
+            if ( ! $specification->isSatisfiedBy($entity)) {
                 return false;
             }
         }
