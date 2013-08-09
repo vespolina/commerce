@@ -3,7 +3,7 @@
 <phpunit bootstrap="tests/bootstrap.php" color="true">
     <testsuites>
         <testsuite name="VespolinaCart Test Suite">
-            <directory>./tests/Manager</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 
