@@ -18,7 +18,7 @@ use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Identitifer\IdentifierInterface;
 
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 use Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSetInterface;
 
 /**
