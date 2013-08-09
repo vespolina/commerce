@@ -71,7 +71,6 @@ class DefaultBillingRequestGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($billingRequests));
     }
 
-
     protected function createBillingManager()
     {
         $billingGateway = $this->getMockBuilder('Vespolina\Billing\Gateway\BillingGatewayInterface')
@@ -87,7 +86,6 @@ class DefaultBillingRequestGeneratorTest extends \PHPUnit_Framework_TestCase
         $contexts = array();
 
         return new BillingManager($billingGateway, $classMapping, $contexts, $eventDispatcher);
-
     }
 
     protected function createDefaultGenerator($billingManager)
