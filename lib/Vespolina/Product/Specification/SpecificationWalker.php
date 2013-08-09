@@ -9,7 +9,7 @@
 
 namespace Vespolina\Product\Specification;
 
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 /**
  * The specification walker is used to build the specification query by iterating over visitors

@@ -10,7 +10,7 @@
 namespace Vespolina\Product\Specification;
 
 use Vespolina\Entity\Product\ProductInterface;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 class FilterSpecification implements SpecificationInterface
 {
@@ -25,9 +25,8 @@ class FilterSpecification implements SpecificationInterface
         $this->operator = $operator;
     }
 
-    public function isSatisfiedBy(ProductInterface $product)
+    public function isSatisfiedBy($product)
     {
-
         return $product->{"get" . $this->field}() === $this->value;
     }
 

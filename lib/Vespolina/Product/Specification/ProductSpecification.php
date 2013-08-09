@@ -9,6 +9,7 @@
 
 namespace Vespolina\Product\Specification;
 
+use Vespolina\Entity\Channel\ChannelInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Taxonomy\TaxonomyNode;
 use Vespolina\Entity\Taxonomy\TaxonomyNodeInterface;
@@ -29,7 +30,7 @@ use Vespolina\Product\Specification\TaxonomyNodeSpecification;
  */
 class ProductSpecification extends BaseSpecification implements ProductSpecificationInterface
 {
-    public function isSatisfiedBy(ProductInterface $product)
+    public function isSatisfiedBy($product)
     {
         foreach ($this->operands as $specification) {
             if (!$specification->isSatisfiedBy($product)) {
@@ -75,6 +76,13 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
     public function withTaxonomyNode(TaxonomyNodeInterface $node)
     {
         $this->addOperand(new TaxonomyNodeSpecification($node));
+
+        return $this;
+    }
+
+    public function withChannel(ChannelInterface $channel)
+    {
+        $this->addOperand(new ChannelSpecification($channel));
 
         return $this;
     }

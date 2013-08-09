@@ -11,7 +11,7 @@ namespace Vespolina\Product\Specification;
 
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Taxonomy\TaxonomyNodeInterface;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 class TaxonomyNodeSpecification implements SpecificationInterface
 {
@@ -38,7 +38,7 @@ class TaxonomyNodeSpecification implements SpecificationInterface
         $this->name = $value;
     }
 
-    public function isSatisfiedBy(ProductInterface $product)
+    public function isSatisfiedBy($product)
     {
         if (null != $this->node) {
             $name =  $this->node->getName();

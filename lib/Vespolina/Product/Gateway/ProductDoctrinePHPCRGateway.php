@@ -12,7 +12,7 @@ namespace Vespolina\Product\Gateway;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 class ProductDoctrinePHPCRGateway extends ProductGateway
 {

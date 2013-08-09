@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
 use Doctrine\ODM\MongoDB\Mapping\Driver\YamlDriver;
+use Gedmo\Tree\TreeListener;
 use Vespolina\Product\Gateway\ProductDoctrineMongoDBGateway;
 use Vespolina\Taxonomy\Gateway\TaxonomyDoctrineMongoDBGateway;
 
@@ -34,7 +35,7 @@ class ProductDoctrineODMGatewayTest extends ProductGatewayTestCommon
         $config->setMetadataCacheImpl(new ArrayCache());
         $config->setAutoGenerateProxyClasses(true);
         $doctrineODM = \Doctrine\ODM\MongoDB\DocumentManager::create(null, $config);
-
+        $doctrineODM->getEventManager()->addEventSubscriber(new TreeListener());
         $this->productGateway = new ProductDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Product\Product');
         $this->taxonomyGateway = new TaxonomyDoctrineMongoDBGateway($doctrineODM, 'Vespolina\Entity\Taxonomy\TaxonomyNode');
 

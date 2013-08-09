@@ -11,7 +11,7 @@ namespace Vespolina\Product\Specification\Visitor;
 
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Product\Specification\SpecificationVisitorInterface;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 use Vespolina\Product\Specification\SpecificationWalker;
 use Vespolina\Product\Specification\ProductSpecificationInterface;
 

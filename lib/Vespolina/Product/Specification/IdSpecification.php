@@ -10,7 +10,7 @@
 namespace Vespolina\Product\Specification;
 
 use Vespolina\Entity\Product\ProductInterface;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 class IdSpecification implements SpecificationInterface
 {
@@ -24,7 +24,7 @@ class IdSpecification implements SpecificationInterface
         $this->type = $type;
     }
 
-    public function isSatisfiedBy(ProductInterface $product)
+    public function isSatisfiedBy($product)
     {
         return $product->getId() === $this->id;
     }
