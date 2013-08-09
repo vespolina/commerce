@@ -20,7 +20,7 @@ use Vespolina\Product\Handler\MerchandiseHandlerInterface;
 use Vespolina\Product\Handler\ProductHandlerInterface;
 use Vespolina\Product\Manager\ProductManagerInterface;
 use Vespolina\Product\Specification\IdSpecification;
-use Vespolina\Product\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationInterface;
 
 /**
  * @author Richard Shank <develop@zestic.com>
