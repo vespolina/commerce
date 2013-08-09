@@ -8,24 +8,23 @@
         <field name="id" id="true" />
 
         <field name="active" type="boolean" />
+        <field name="billingAmount" type="float" />
         <field name="billedToDate" type="date" />
         <field name="billingCycles" type="int" />
         <field name="billingInterval" type="string" />
         <field name="createdAt" type="date" />
+        <field name="generateRequestOffset" type="string" />
+        <field name="generateRequestOn" type="date" />
         <field name="initialBillingDate" type="date" />
         <field name="numberCyclesBilled" type="int" />
-        <field name="updatedAt" type="date" />
-        <field name="numberCyclesBilled" type="int" />
-        <field name="updatedAt" type="date" />
-        <field name="generateRequestOffset" type="string" />
         <field name="processRequestOffset" type="string" />
-        <field name="generateRequestOn" type="date" />
+        <field name="updatedAt" type="date" />
+        <field name="updatedAt" type="date" />
 
         <reference-one field="owner" target-document="Vespolina\Entity\Partner\Partner" />
         <reference-one field="order" target-document="Vespolina\Entity\Order\Order" />
-        <reference-one field="paymentProfile" target-document="Vespolina\Entity\Partner\PaymentProfile" />
+        <reference-one field="paymentProfile" target-document="Vespolina\Entity\Payment\PaymentProfile" />
         <reference-many field="orderItems" target-document="Vespolina\Entity\Order\Item" />
-        <reference-many field="pricingSet" target-document="Vespolina\Pricing\Entity\PricingSet" />
 
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />

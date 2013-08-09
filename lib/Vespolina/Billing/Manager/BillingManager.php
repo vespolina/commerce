@@ -13,9 +13,10 @@ use Vespolina\Billing\Process\DefaultBillingProcess;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Billing\BillingRequestInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
-use Vespolina\Entity\Partner\PaymentProfileInterface;
+use Vespolina\Entity\Payment\PaymentProfileInterface;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\Exception\InvalidConfigurationException;
+use Vespolina\Entity\Pricing\PricingContextInterface;
 
 class BillingManager implements BillingManagerInterface
 {
@@ -185,7 +186,11 @@ class BillingManager implements BillingManagerInterface
     public function findBillingAgreements(PricingContextInterface $context, $limit = null, $page = 1)
     {
         $offset = ($page - 1) * $limit;
-        $endDate = new \DateTime($context['endDate']);
+        if (isset($context['endDate'])) {
+            $endDate = new \DateTime($context['endDate']);
+        } else {
+            $endDate = new \DateTime();
+        }
         $params = array(1 => $endDate);
 
         /** @var \Molino\Doctrine\ORM\SelectQuery $query  */
@@ -194,7 +199,7 @@ class BillingManager implements BillingManagerInterface
         $qb = $query->getQueryBuilder();
         $qb->join('m.paymentProfile', 'pp');
 
-        $qb->andWhere('m.nextBillingDate <= ?1');
+        $qb->andWhere('m.generateRequestOn <= ?1');
 
         if (isset($context['partner'])) {
             $qb->andWhere('m.partner = ?3');
