@@ -36,6 +36,11 @@ class OrderManipulator
         $this->orderManager->setOrderState($order, 'unprocessed');
         $order->setPricing($cart->getPricing());    //TODO: order pricing should be independent from a cart
 
+        // Copy the (sales) channel if it is provided
+        if (null != $cart->getChannel()) {
+            $order->setChannel($cart->getChannel());
+        }
+
         //$fulfillmentAgreement = $this->orderManager->createFulfillmentAgreement();
         //$paymentAgreement = $this->orderManager->createPaymentAgreement();
 
