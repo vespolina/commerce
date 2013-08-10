@@ -64,7 +64,9 @@ class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitor
             $query->field('taxonomies')->equals($taxonomyNode);
         //If not we need to describe the taxonomy node
         } else {
-            $query->field('taxonomies.name')->equals($specification->getName());
+
+            //Todo: use taxonomy path instead of the slug
+            $query->field('taxonomies.slug')->equals($specification->getName());
         }
     }
 
