@@ -77,7 +77,7 @@ class DoctrineORMDefaultSpecificationVisitor implements SpecificationVisitorInte
             $query->innerJoin($rootAlias . '.taxonomies', 't');
             $parameterId = $this->generateParameterId();
             $query->andWhere('t.name =?' . $parameterId);
-            $query->setParameter($parameterId,  $specification->getName());
+            $query->setParameter($parameterId,  $specification->getTaxonomyNodeName());
         }
     }
 

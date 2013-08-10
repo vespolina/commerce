@@ -16,16 +16,21 @@ use Vespolina\Specification\SpecificationInterface;
 class TaxonomyNodeSpecification implements SpecificationInterface
 {
     protected $node;
-    protected $name;
+    protected $nodeName;
 
     public function __construct(TaxonomyNodeInterface $node = null)
     {
         $this->node = $node;
     }
 
-    public function getName()
+    public function equals($name, $value)
     {
-        return $this->name;
+        $this->nodeName = $value;
+    }
+
+    public function getNodeName()
+    {
+        return $this->nodeName;
     }
 
     public function getTaxonomyNode()
@@ -33,22 +38,25 @@ class TaxonomyNodeSpecification implements SpecificationInterface
         return $this->node;
     }
 
-    public function equals($name, $value)
+    public function getTaxonomyNodeName()
     {
-        $this->name = $value;
+        if (null != $this->node) {
+            $nodeName =  $this->node->getName();
+        } else {
+            $nodeName = $this->nodeName;
+        }
+
+        return $nodeName;
     }
 
     public function isSatisfiedBy($product)
     {
-        if (null != $this->node) {
-            $name =  $this->node->getName();
-        } else {
-            $name = $this->name;
-        }
-        foreach ($product->getTaxonomies() as $node) {
-            if ($node->getName()  == $name)
-                return true;
+        $nodeName = $this->getTaxonomyNodeName();
 
+        foreach ($product->getTaxonomies() as $node) {
+            if ($node->getName()  == $nodeName)
+
+                return true;
         }
     }
 }
