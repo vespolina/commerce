@@ -1,0 +1,37 @@
+{
+    "name": "vespolina/commerce",
+    "description": "Vespolina ecommerce library handling customers, carts, orders and products",
+    "homepage": "http://vespolina-project.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vespolina Team",
+            "homepage": "https://github.com/vespolina/VespolinaCommerce/contributors"
+        }
+    ],
+    "keywords": ["Vespolina", "product", "cart", "order", "ecommerce"],
+    "require": {
+        "php":                   ">=5.3.0",
+        "vespolina/core": "*",
+        "vespolina/molino": "*",
+        "vespolina/pricing": "*",
+        "vespolina/taxonomy": "*"
+    },
+    "require-dev": {
+        "doctrine/phpcr-odm": "1.0.*",
+        "doctrine/mongodb-odm": "*",
+        "doctrine/orm" : "*",
+        "jackalope/jackalope-doctrine-dbal": "1.0.*"
+
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Vespolina\\Invoice": "lib/Invoice",
+            "Vespolina\\Order": "lib/Order",
+            "Vespolina\\Partner": "lib/Partner",
+            "Vespolina\\Product": "lib/Product",
+            "Vespolina\\Pricing": "lib/Pricing",
+        }
+    }
+}
