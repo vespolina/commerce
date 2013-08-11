@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                        http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <mapped-superclass name="Vespolina\Entity\Order\BaseOrder">
+        <field name="id"             id="true" strategy="INCREMENT"  />
+        <field name="createdAt"      fieldName="createdAt"      type="date" />
+        <field name="pricingSetData" fieldName="pricingSetData" type="hash" />
+        <field name="state"          fieldName="state"          type="string" />
+        <field name="totalPrice"     fieldName="totalPrice"     type="string" />
+        <field name="updatedAt"      fieldName="updatedAt"      type="date" />
+        <field name="attributes"     fieldName="attributes"     type="hash" strategy="set" />
+
+        <reference-one field="owner"
+                       fieldName="owner"
+                       target-document="Vespolina\Entity\Partner\Partner">
+            <cascade><all/></cascade>                                               
+        </reference-one>
+        <embed-many field="items"
+                    target-document="Vespolina\Entity\Order\Item"/>
+
+    </mapped-superclass>
+</doctrine-mongo-mapping>
