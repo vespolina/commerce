@@ -1,6 +1,7 @@
 {
     "name": "vespolina/commerce",
     "description": "Vespolina ecommerce library handling customers, carts, orders and products",
+
     "homepage": "http://vespolina-project.org",
     "license": "MIT",
     "authors": [
@@ -27,11 +28,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
-            "Vespolina\\Invoice": "lib/Invoice",
-            "Vespolina\\Order": "lib/Order",
-            "Vespolina\\Partner": "lib/Partner",
-            "Vespolina\\Product": "lib/Product",
-            "Vespolina\\Pricing": "lib/Pricing",
+            "Vespolina": "lib/"
         }
     }
 }

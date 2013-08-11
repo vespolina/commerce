@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                        http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <embedded-document name="Vespolina\Entity\Order\Item">
+
+       <!-- <field name="description"    fieldName="description"    type="string" /> -->
+       <!-- <field name="isRecurring"    fieldName="isRecurring"    type="boolean" />-->
+        <field name="name"           fieldName="name"           type="string" />
+        <field name="options"        fieldName="options"        type="hash" />
+        <field name="pricingSet"     fieldName="pricingSet"     type="hash" />
+        <field name="quantity"       fieldName="quantity"       type="string" />
+        <field name="state"          fieldName="state"          type="string" />
+        <!--<field name="totalPrice"     fieldName="totalPrice"     type="string" /> -->
+       <reference-one fieldName="product" field="product" />
+
+    </embedded-document>
+</doctrine-mongo-mapping>
