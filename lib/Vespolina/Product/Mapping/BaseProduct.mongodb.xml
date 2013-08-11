@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                        http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <mapped-superclass name="Vespolina\Entity\Product\BaseProduct">
+        <field name="id" id="true" />
+        <field name="description" fieldName="description" type="string" />
+        <field name="name" fieldName="name" type="string" />
+        <field name="slug" fieldName="slug" type="string" />
+        <field name="type" fieldName="type" type="int" />
+        <field name="createdAt" fieldName="createdAt" type="date" />
+        <field name="updatedAt" fieldName="updatedAt" type="date" />
+
+        <embed-one field="pricingSet" target-document="Vespolina\Entity\Pricing\PricingSet" />
+
+        <embed-many
+                target-document="Vespolina\Entity\Product\Attribute"
+                field="attributes"
+                fieldName="attributes"
+                strategy="set"
+                />
+
+        <embed-many
+                target-document="Vespolina\Entity\Product\OptionGroup"
+                field="optionGroups"
+                fieldName="optionGroups"
+                strategy="set"
+                />
+
+        <embed-many
+                target-document="Vespolina\Entity\Taxonomy\TaxonomyNode"
+                field="taxonomies"
+                fieldName="taxonomies"
+                strategy="set"
+                cascade="persist"
+                />
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />
+            <lifecycle-callback type="preUpdate" method="autoSetUpdatedAt" />
+        </lifecycle-callbacks>
+
+    </mapped-superclass>
+
+</doctrine-mongo-mapping>

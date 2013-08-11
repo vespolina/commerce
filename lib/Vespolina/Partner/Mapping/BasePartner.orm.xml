@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Vespolina\Entity\Partner\BasePartner" table="vespolina_base_partner">
+
+        <field name="partnerId"    type="string"   nullable="true" />
+        <field name="partnerSince" type="datetime" nullable="true" />
+        <field name="name"         type="string"   nullable="true" />
+        <field name="roles"        type="array"    nullable="true" />
+        <field name="type"         type="string"   nullable="true" />
+        <field name="currency"     type="string"   nullable="true" />
+        <field name="language"     type="string"   nullable="true" />
+        <field name="paymentTerms" type="string"   nullable="true" />
+
+        <one-to-one field="personalDetails" target-entity="Vespolina\Entity\Partner\PersonalDetails" mapped-by="partner">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-one>
+        <one-to-one field="organisationDetails" target-entity="Vespolina\Entity\Partner\OrganisationDetails" mapped-by="partner">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-one>
+        <one-to-one field="primaryContact" target-entity="Vespolina\Entity\Partner\Contact" mapped-by="partner">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-one>
+    </mapped-superclass>
+</doctrine-mapping>
