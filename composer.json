@@ -23,7 +23,6 @@
         "doctrine/mongodb-odm": "*",
         "doctrine/orm" : "*",
         "jackalope/jackalope-doctrine-dbal": "1.0.*"
-
     },
     "minimum-stability": "dev",
     "autoload": {
