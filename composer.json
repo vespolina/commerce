@@ -1,6 +1,7 @@
 {
     "name": "vespolina/commerce",
     "description": "Vespolina ecommerce library handling customers, carts, orders and products",
+
     "homepage": "http://vespolina-project.org",
     "license": "MIT",
     "authors": [
