@@ -10,7 +10,6 @@
 namespace Vespolina\Pricing\Manager;
 
 use Dough\Money\MultiCurrencyMoney;
-use Symfony\Component\DependencyInjection\Container;
 use Vespolina\Entity\Pricing\Element\TotalDoughValueElement;
 use Vespolina\Entity\Pricing\PricingSetInterface;
 
@@ -20,8 +19,8 @@ use Vespolina\Entity\Pricing\PricingSetInterface;
  *
  * @author Daniel Kucharski <daniel@xerias.be>
  */
-class PricingManager implements PricingManagerInterface {
-
+class PricingManager implements PricingManagerInterface
+{
     protected $configurations;
     protected $defaultCurrency;
 
@@ -30,8 +29,8 @@ class PricingManager implements PricingManagerInterface {
      *
      * @param string $defaultCurrency
      */
-    public function __construct($defaultCurrency = 'USD') {
-
+    public function __construct($defaultCurrency = 'USD')
+    {
         $this->configurations = array();
         $this->defaultCurrency = $defaultCurrency;
 
@@ -39,15 +38,9 @@ class PricingManager implements PricingManagerInterface {
     }
 
     /**
-     * Create a pricing set of type $type
-     * Optionally pass pricing values to the newly created pricing set
-     *
-     * @param string $type
-     * @param array $pricingValues
-     * @return Vespolina\Entity\Pricing\PricingSetInterface
-     * @throws \Exception
+     * {@inheritdoc}
      */
-    public function createPricingSet($type = 'default', array $pricingValues = array())
+    public function createPricing($pricingValues = null, $type = 'default')
     {
         $pricingElements = array();
 
@@ -66,8 +59,15 @@ class PricingManager implements PricingManagerInterface {
         $pricingSet = new $configuration['pricingSetClass'](new TotalDoughValueElement(), array(), $pricingElements);
 
         //Add default values to the pricing set
-        foreach ($pricingValues as $pricingValueName => $pricingValue) {
-            $pricingSet->set($pricingValueName, new MultiCurrencyMoney($pricingValue, $this->defaultCurrency));
+        if (is_array($pricingValues)) {
+            foreach ($pricingValues as $pricingValueName => $pricingValue) {
+                $pricingSet->set($pricingValueName, new MultiCurrencyMoney($pricingValue, $this->defaultCurrency));
+            }
+        } elseif ($pricingValues) {
+            if (!$pricingValues instanceof MultiCurrencyMoney) {
+                $pricingValues = new MultiCurrencyMoney($pricingValues, $this->defaultCurrency);
+            }
+            $pricingSet->set('netValue', $pricingValues);
         }
 
         return $pricingSet;

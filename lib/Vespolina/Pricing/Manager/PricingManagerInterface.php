@@ -19,14 +19,17 @@ use Vespolina\Entity\Pricing\PricingSetInterface;
  */
 interface PricingManagerInterface
 {
-
     /**
-     * Create a pricing set by it's configuration name
+     * Create a pricing set of type $type
+     * Optionally pass pricing values to the newly created pricing set. For a simple Pricing, an integer, float or MoneyI
      *
-     * @param $name
-     * @return Vespolina\Entity\Pricing\PricingSetInterface
+     * @param mixed $pricingValues
+     * @param string $type
+     *
+     * @return \Vespolina\Entity\Pricing\PricingSetInterface
+     * @throws \Exception
      */
-    function createPricingSet($name = 'default', array $pricingValues = array());
+    function createPricing($pricingValues = null, $type = 'default');
 
     /**
      * Add a pricing set configuration
