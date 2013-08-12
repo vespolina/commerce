@@ -7,7 +7,10 @@
  * with this source code in the file LICENSE.
  */
 
+namespace Vespolina\Tests\Pricing\Manager;
+
 use Vespolina\Pricing\Manager\PricingManager;
+use Vespolina\Tests\Pricing\PricingTestsCommon;
 
 /**
  * @author Daniel Kucharski <daniel@xerias.be>
@@ -22,22 +25,16 @@ class PricingManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateDefaultPricingSet()
     {
-        $pricingSet = $this->getPricingManager()->createPricingSet();
+        $pricingSet = PricingTestsCommon::getPricingManager()->createPricing();
         $this->assertNotNull($pricingSet);
     }
 
     public function testAddConfiguration()
     {
-        $pricingManager = $this->getPricingManager();
+        $pricingManager = PricingTestsCommon::getPricingManager();
         $pricingManager->addConfiguration('test1',
                                           'Vespolina\Entity\Pricing\PricingSet');
-        $pricingSet = $pricingManager->createPricingSet('test1');
+        $pricingSet = $pricingManager->createPricing(null, 'test1');
         $this->assertNotNull($pricingSet);
     }
-
-    protected function getPricingManager()
-    {
-        return new PricingManager();
-    }
-
 }
