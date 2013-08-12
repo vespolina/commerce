@@ -29,7 +29,7 @@ class PricingManager implements PricingManagerInterface
      *
      * @param string $defaultCurrency
      */
-    public function __construct($defaultCurrency = 'USD')
+    public function __construct($defaultCurrency = 'USD', array $configuration = array())
     {
         $this->configurations = array();
         $this->defaultCurrency = $defaultCurrency;
