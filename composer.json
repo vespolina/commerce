@@ -11,10 +11,10 @@
     ],
     "keywords": ["Vespolina", "product", "cart", "order", "ecommerce"],
     "require": {
-        "php":                   ">=5.3.0",
+        "php": ">=5.3.0",
+        "merk/dough": "*",
         "vespolina/core": "*",
         "vespolina/molino": "*",
-        "vespolina/pricing": "*",
         "vespolina/taxonomy": "*"
     },
     "require-dev": {
