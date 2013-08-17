@@ -11,7 +11,6 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Vespolina\Entity\Channel\ChannelInterface;
 use Vespolina\Entity\Product\AttributeInterface;
-use Vespolina\Entity\Product\MerchandiseInterface;
 use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Identifier\IdentifierInterface;
@@ -19,6 +18,7 @@ use Vespolina\Product\Gateway\ProductGatewayInterface;
 use Vespolina\Product\Handler\MerchandiseHandlerInterface;
 use Vespolina\Product\Handler\ProductHandlerInterface;
 use Vespolina\Product\Manager\ProductManagerInterface;
+use Vespolina\Product\Specification\FilterSpecification;
 use Vespolina\Product\Specification\IdSpecification;
 use Vespolina\Specification\SpecificationInterface;
 
@@ -28,6 +28,7 @@ use Vespolina\Specification\SpecificationInterface;
  */
 class ProductManager implements ProductManagerInterface
 {
+    protected $classMapping;
     protected $configuration;
     protected $gateways;
     protected $identifiers;
@@ -38,6 +39,15 @@ class ProductManager implements ProductManagerInterface
     protected $optionClass;
     protected $productClass;
 
+    /**
+     * Create a new product manager
+     *
+     * Pass in the default gateway, product class map and an optional configuration
+     *
+     * @param ProductGatewayInterface $defaultGateway
+     * @param array $classMapping
+     * @param array $configuration
+     */
     public function __construct(ProductGatewayInterface $defaultGateway, array $classMapping, array $configuration = array())
     {
         //Prepare the class map
@@ -58,6 +68,7 @@ class ProductManager implements ProductManagerInterface
         if (count($missingClasses)) {
             throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
         }
+        $this->classMapping = $classMapping;
 
         //Prepare the manager configuration
         $defaultConfiguration = array(
@@ -122,7 +133,7 @@ class ProductManager implements ProductManagerInterface
     public function createAttribute($type, $name)
     {
         /** @var $attribute \Vespolina\Entity\Product\AttributeInterface */
-        $attribute = new $this->attributeClass;
+        $attribute = new $this->classMapping['attribute'];
         $attribute->setType($type);
         $attribute->setName($name);
 
@@ -163,9 +174,12 @@ class ProductManager implements ProductManagerInterface
         return $option;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function createOptionGroup()
     {
-        return new $this->optionGroupClass;
+        return new $this->classMapping['option'];
     }
 
     /**
@@ -227,7 +241,7 @@ class ProductManager implements ProductManagerInterface
 
     public function findProductBySlug($slug)
     {
-        return $this->doFindProductBySlug($slug);
+        return $this->findOne(new FilterSpecification('slug', $slug));
     }
 
     public function getAssetManager()

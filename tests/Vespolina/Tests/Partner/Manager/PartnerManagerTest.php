@@ -1,43 +1,24 @@
 <?php
+
 /**
- * (c) Vespolina Project http://www.vespolina-project.org
+ * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Vespolina\PartnerBundle\Tests\Document;
 
 
-use Vespolina\PartnerBundle\Model\Address;
-
-use Doctrine\Bundle\MongoDBBundle\Mapping\Driver\XmlDriver;
-
-use Vespolina\PartnerBundle\Model\Partner;
-use Vespolina\PartnerBundle\Model\PartnerInterface;
-
-use Doctrine\Bundle\MongoDBBundle\Tests\TestCase;
-
-use Vespolina\PartnerBundle\Document\PartnerManager;
-use Vespolina\PartnerBundle\Tests\PartnerTestCommon;
-use Vespolina\PartnerBundle\Tests\Fixtures\Document\Partnerable;
+use Vespolina\Entity\Partner\Address;
+use Vespolina\Entity\Partner\Partner;
+use Vespolina\Entity\Partner\PartnerInterface;
+use Vespolina\Partner\Manager\PartnerManager;
 
 /**
  * @author Richard D Shank <develop@zestic.com>
  */
-class PartnerManagerTest extends TestCase
+class PartnerManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * 
-     * @var \Vespolina\PartnerBundle\Document\PartnerManager
-     */
     protected $partnerMgr;
-    
-    /**
-     * 
-     * Enter description here ...
-     * @var \Doctrine\ODM\MongoDB\DocumentManager
-     */
-    protected $dm;
 
     public function testCreatePartner()
     {
