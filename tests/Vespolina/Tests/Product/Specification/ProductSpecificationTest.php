@@ -1,11 +1,13 @@
 <?php
+
 /**
- * (c) 2011-2012 Vespolina Project http://www.vespolina-project.org
+ * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Tests\Specification;
+
+namespace Vespolina\Tests\Product\Specification;
 
 use Doctrine\ODM\MongoDB\Mapping\Driver\XmlDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator;

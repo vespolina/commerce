@@ -7,7 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Tests\Handler;
+namespace Vespolina\Tests\Product\Handler;
 
 use Vespolina\Product\Handler\ProductHandlerInterface;
 
