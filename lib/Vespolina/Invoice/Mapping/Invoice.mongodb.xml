@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                        http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <document name="Vespolina\Entity\Invoice\Invoice" collection="v_invoice">
+        <field name="id"             id="true" strategy="INCREMENT"  />
+        <field name="createdAt"      fieldName="createdAt"      type="date" />
+        <field name="issuedDate"     fieldName="issuedDate"     type="date" />
+        <field name="dueDate"        fieldName="dueDate"        type="date" />
+        <field name="fiscalYear"     fieldName="fiscalYear"     type="int" />
+        <field name="updatedAt"      fieldName="updatedAt"      type="date" />
+
+        <embed-many field="items"
+                    target-document="Vespolina\Entity\Invoice\Item"/>
+        <embed-many field="orders"
+                    target-document="Vespolina\Entity\Order\Order"/>
+
+    </document>
+</doctrine-mongo-mapping>
