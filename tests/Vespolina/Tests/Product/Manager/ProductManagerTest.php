@@ -1,11 +1,13 @@
 <?php
+
 /**
- * (c) 2011-2012 Vespolina Project http://www.vespolina-project.org
+ * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-namespace Tests\Manager;;
+
+namespace Vespolina\Tests\Product\Manager;
 
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
