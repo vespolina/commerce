@@ -82,6 +82,7 @@ class DefaultBillingRequestGeneratorTest extends \PHPUnit_Framework_TestCase
         $classMapping = array(
             'billingAgreementClass' => 'Vespolina\Entity\Billing\BillingAgreement',
             'billingRequestClass' => 'Vespolina\Entity\Billing\BillingRequest',
+            'billingProcessClass' => 'Vespolina\Billing\Process\DefaultBillingProcess'
         );
         $contexts = array();
 

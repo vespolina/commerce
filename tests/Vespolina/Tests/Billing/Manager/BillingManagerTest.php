@@ -27,7 +27,7 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $this->markTestIncomplete('tests are need to make sure the contexts are set up correctly');
+        //$this->markTestIncomplete('tests are need to make sure the contexts are set up correctly');
     }
 
     public function testCreateBillingAgreement()
@@ -37,6 +37,7 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($billingAgreement instanceof BillingAgreementInterface);
     }
+
 
     public function testBillEntity()
     {
@@ -133,7 +134,7 @@ class BillingManagerTest extends \PHPUnit_Framework_TestCase
         $classMapping = array(
             'billingAgreementClass' => 'Vespolina\Entity\Billing\BillingAgreement',
             'billingRequestClass' => 'Vespolina\Entity\Billing\BillingRequest',
-            'defaultBillingProcessClass' => 'Vespolina\Billing\Process\DefaultBillingProcess'
+            'billingProcessClass' => 'Vespolina\Billing\Process\DefaultBillingProcess'
         );
         $contexts = array();
 

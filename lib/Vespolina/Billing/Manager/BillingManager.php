@@ -1,6 +1,7 @@
 <?php
+
 /**
- * (c) 2013 Vespolina Project http://www.vespolina-project.org
+ * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
@@ -9,6 +10,7 @@
 namespace Vespolina\Billing\Manager;
 
 use Vespolina\Billing\Gateway\BillingGatewayInterface;
+use Vespolina\Billing\Handler\OrderHandler;
 use Vespolina\Billing\Process\DefaultBillingProcess;
 use Vespolina\Entity\Billing\BillingAgreementInterface;
 use Vespolina\Entity\Billing\BillingRequestInterface;
@@ -25,12 +27,13 @@ class BillingManager implements BillingManagerInterface
     protected $contexts;
     protected $defaultBillingProcessClass;
     protected $eventDispatcher;
+    protected $entityHandlers;
     protected $gateway;
 
     public function __construct(BillingGatewayInterface $gateway, array $classMapping, array $contexts, EventDispatcherInterface $eventDispatcher = null)
     {
         $missingClasses = array();
-        foreach (array('billingAgreement', 'billingRequest', 'defaultBillingProcess') as $class) {
+        foreach (array('billingAgreement', 'billingRequest', 'billingProcess') as $class) {
             $class = $class . 'Class';
             if (isset($classMapping[$class])) {
 
@@ -51,6 +54,8 @@ class BillingManager implements BillingManagerInterface
             $eventDispatcher = new NullDispatcher();
         }
 
+        //Setup a default order handler as we currently only support orders
+        $this->entityHandlers = array('default' => new OrderHandler($this));
         $this->eventDispatcher = $eventDispatcher;
         $this->gateway = $gateway;
         foreach ($contexts as $contextClass) {
@@ -60,6 +65,14 @@ class BillingManager implements BillingManagerInterface
 
             $this->context[$process][$paymentType] = $context;
         }
+    }
+
+    public function billEntity($entity)
+    {
+        $billingAgreements = $this->entityHandlers['default']->createBillingAgreements($entity);
+        $billingRequests = array();
+
+        return array($billingAgreements, $billingRequests);
     }
 
     public function executeBillingRequest(BillingRequestInterface $billingRequest)
