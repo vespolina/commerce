@@ -16,7 +16,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructDistpatcher()
     {
-        $mgr = $this->createCartManager(null, null, null, null, null, null);
+        $mgr = $this->createOrderManager(null, null, null, null, null, null);
         $rp = new \ReflectionProperty($mgr, 'eventDispatcher');
         $rp->setAccessible(true);
         $dispatcher = $rp->getValue($mgr);
@@ -25,7 +25,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateCart()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
         $cart = $mgr->createCart('test');
 
         $this->assertInstanceOf('Vespolina\Entity\Order\Cart', $cart, 'it should be an instance of the cart class passed in the construct');
@@ -41,7 +41,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testFindCartById()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
 
         $cart1 = $mgr->createCart('findCart1');
         $cart2 = $mgr->createCart('findCart2');
@@ -56,7 +56,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testfindProductInOrder()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
         $cart = $mgr->createCart('test');
 
         $createItem = new \ReflectionMethod($mgr, 'createItem');
@@ -169,7 +169,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testaddProductToOrder()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
         $cart = $mgr->createCart('test');
 
         $product = new Product();
@@ -247,7 +247,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testremoveProductFromOrder()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
         $cart = $mgr->createCart();
 
         $product = new Product();
@@ -285,7 +285,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testsetOrderItemState()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
         $cart = $mgr->createCart();
         $product = new Product();
 
@@ -302,7 +302,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testsetOrderState()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
         $cart = $mgr->createCart();
 
         $this->assertNotSame('test', $cart->getState(), "make sure the state isn't set to test");
@@ -316,7 +316,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetItemQuantity()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
         $cart = $mgr->createCart();
 
         $product = new Product();
@@ -332,7 +332,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetProductQuantity()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
         $cart = $mgr->createCart();
 
         $product = new Product();
@@ -352,7 +352,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testupdateOrder()
     {
-        $mgr = $this->createCartManager();
+        $mgr = $this->createOrderManager();
         $cart = $mgr->createCart('testupdateOrder');
         $dummyCart = $mgr->createCart('toMakeSureTestupdateOrderIsNotLastCart');
 
@@ -374,7 +374,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
         $this->verifyPersistence($cart);
     }
 
-    protected function createCartManager($gateway = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $dispatcherClass = 'TestDispatcher')
+    protected function createOrderManager($gateway = null, $cartClass = null, $cartItemClass = null, $cartEvents = null, $dispatcherClass = 'TestDispatcher')
     {
         if (!$gateway) {
             $gateway = self::$gateway;
