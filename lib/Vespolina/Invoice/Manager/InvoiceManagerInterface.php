@@ -18,10 +18,17 @@ use Vespolina\Entity\Invoice\InvoiceInterface;
 interface InvoiceManagerInterface
 {
     /**
-     * Create a new invoice from a customer order
+     * Create a new invoice for the given type
      * @return \Vespolina\Entity\Invoice\InvoiceInterface
      */
-    function createInvoice();
+    function createInvoice($type = 'default');
+
+    /**
+     * Create an invoice item
+     *
+     * @return mixed
+     */
+    function createInvoiceItem();
 
     /**
      * @param $id

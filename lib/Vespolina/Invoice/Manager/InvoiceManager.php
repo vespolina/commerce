@@ -20,25 +20,47 @@ use Vespolina\Invoice\Gateway\InvoiceGateway;
  */
 class InvoiceManager implements InvoiceManagerInterface
 {
-    private $invoiceClass;
     protected $gateway;
 
-    public function __construct(InvoiceGateway $gateway, $invoiceClass)
+    public function __construct(InvoiceGateway $gateway, $classMapping)
     {
-        if (!class_exists($invoiceClass)) {
-            throw new InvalidConfigurationException(sprintf("Class '%s' not found", $invoiceClass));
+        $missingClasses = array();
+        foreach (array('invoice', 'item') as $class) {
+            $class = $class . 'Class';
+            if (isset($classMapping[$class])) {
+
+                if (!class_exists($classMapping[$class]))
+                    throw new InvalidConfigurationException(sprintf("Class '%s' not found as '%s'", $classMapping[$class], $class));
+
+                $this->{$class} = $classMapping[$class];
+                continue;
+            }
+            $missingClasses[] = $class;
+        }
+
+        if (count($missingClasses)) {
+            throw new InvalidConfigurationException(sprintf("The following invoice classes are missing from configuration: %s", join(', ', $missingClasses)));
         }
 
         $this->gateway = $gateway;
-        $this->invoiceClass = $invoiceClass;
     }
 
     /**
      * @inheritdoc
      */
-    public function createInvoice()
+    public function createInvoice($type = 'default')
     {
         $invoice = new $this->invoiceClass();
+
+        return $invoice;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createInvoiceItem()
+    {
+        return new $this->itemClass();
 
         return $invoice;
     }
