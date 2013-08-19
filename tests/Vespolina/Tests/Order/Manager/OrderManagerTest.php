@@ -14,7 +14,15 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 {
     static $gateway;
 
-    public function testConstructDistpatcher()
+    public function setUp()
+    {
+        self::$gateway = $this->getMockBuilder('Vespolina\Order\Gateway\OrderGatewayInterface')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+    }
+
+    public function testConstructDispatcher()
     {
         $mgr = $this->createOrderManager(null, null, null, null, null, null);
         $rp = new \ReflectionProperty($mgr, 'eventDispatcher');
@@ -32,7 +40,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test', $cart->getName(), 'the name of cart should have been set when it was created');
         $this->assertSame(Cart::STATE_OPEN, $cart->getState());
 
-        $this->assertSame(CartEvents::INIT_CART, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::INIT_CART event should be triggered');
+        $this->assertSame(CartEvents::INIT_ORDER, $mgr->getEventDispatcher()->getLastEventName(), 'a CartEvents::INIT_CART event should be triggered');
         $event = $mgr->getEventDispatcher()->getLastEvent();
         $this->assertInstanceOf('Vespolina\Entity\Order\CartInterface', $event->getSubject());
 
@@ -350,7 +358,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
     }
 
-    public function testupdateOrder()
+    public function testUpdateOrder()
     {
         $mgr = $this->createOrderManager();
         $cart = $mgr->createCart('testupdateOrder');
@@ -382,6 +390,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
         if (!$cartClass) {
             $cartClass = 'Vespolina\Entity\Order\Cart';
+            $orderClass = 'Vespolina\Entity\Order\Order';
         }
         if (!$cartItemClass) {
             $cartItemClass = 'Vespolina\Entity\Order\Item';
@@ -395,7 +404,11 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
             $eventDispatcher = null;
         }
 
-        return new OrderManager($gateway, $cartClass, $cartItemClass, $cartEvents, $eventDispatcher);
+        return new OrderManager($gateway,
+                                array('cartClass' => $cartClass,
+                                      'orderClass' => $orderClass,
+                                      'itemClass' => $cartItemClass,
+                                      'eventsClass' => $cartEvents), $eventDispatcher);
     }
 
     protected function verifyPersistence($cart)
