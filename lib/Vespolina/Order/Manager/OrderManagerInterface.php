@@ -114,14 +114,6 @@ interface OrderManagerInterface
     function setOrderItemState(ItemInterface $cartItem, $state);
 
     /**
-     * Manually set the pricing set for a cart
-     *
-     * @param \Vespolina\Entity\Order\OrderInterface $cart
-     * @param \Vespolina\Entity\Pricing\PricingSetInterface $pricingSet
-     */
-//    function setOrderPricingSet(OrderInterface $cart, PricingSetInterface $pricingSet);
-
-    /**
      * Manually set the state of the cart.
      * This also triggers an OrderEvents::UPDATE_CART_STATE event
      *
