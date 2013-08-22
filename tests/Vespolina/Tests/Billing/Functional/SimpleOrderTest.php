@@ -3,7 +3,7 @@ namespace Vespolina\Tests\Billing\Functional;
 
 use Vespolina\Tests\Order\OrderTestsCommon;
 
-class SimpleOrderTest extends PHPUnit_Framework_TestCase
+class SimpleOrderTest extends \PHPUnit_Framework_TestCase
 {
     public function testSimpleOrder()
     {

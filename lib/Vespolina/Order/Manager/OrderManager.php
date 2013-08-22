@@ -43,7 +43,7 @@ class OrderManager implements OrderManagerInterface
     /** @var  \Vespolina\Pricing\Manager\PricingManagerInterface */
     protected $pricingManager;
 
-    function __construct(OrderGatewayInterface $gateway, array $classMapping, array $managerMapping, EventDispatcherInterface $eventDispatcher = null, $autoPersist = true)
+    function  __construct(OrderGatewayInterface $gateway, array $classMapping, array $managerMapping, EventDispatcherInterface $eventDispatcher = null, $autoPersist = true)
     {
         $missingClasses = array();
         foreach (array('cart', 'events', 'item', 'order') as $class) {
@@ -364,7 +364,7 @@ class OrderManager implements OrderManagerInterface
 
         //Delegate further initialization of the cart to those concerned
         $eventsClass = $this->eventsClass;
-        $this->eventDispatcher->dispatch($eventsClass::INIT_ORDER, $this->eventDispatcher->createEvent($cart));
+        $this->eventDispatcher->dispatch($eventsClass::INIT_ORDER, $this->eventDispatcher->createEvent($order));
     }
 
     /**

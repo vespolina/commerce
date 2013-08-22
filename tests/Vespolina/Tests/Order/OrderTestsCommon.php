@@ -7,6 +7,8 @@ use Vespolina\Entity\Product\Product;
 use Vespolina\EventDispatcher\NullDispatcher;
 use Vespolina\Order\Gateway\OrderGateway;
 use Vespolina\Order\Manager\OrderManager;
+use Vespolina\Tests\Pricing\PricingTestsCommon;
+use Vespolina\Tests\Product\ProductTestsCommon;
 
 /**
  * Class TestsCommon
@@ -30,18 +32,23 @@ class OrderTestsCommon
      *
      * @return OrderManager
      */
-    public static function getOrderManager($classes = null, $dispatcher = null)
+    public static function getOrderManager($classes = null, $managerMapping = null, $dispatcher = null)
     {
         if (!$classes) {
             $classes = array(
-                'cart' => 'Vespolina\Entity\Order\Cart',
-                'events' => 'Vespolina\Entity\Order\CartEvents',
-                'item' => 'Vespolina\Entity\Order\Item',
-                'order' => 'Vespolina\Entity\Order\Order'
+                'cartClass' => 'Vespolina\Entity\Order\Cart',
+                'eventsClass' => 'Vespolina\Entity\Order\CartEvents',
+                'itemClass' => 'Vespolina\Entity\Order\Item',
+                'orderClass' => 'Vespolina\Entity\Order\Order',
+            );
+        }
+        if (!$managerMapping) {
+            $managerMapping = array(
+                'pricingManager' => PricingTestsCommon::getPricingManager(),
             );
         }
 
-        return new OrderManager(self::getOrderGateway(), $classes, $dispatcher);
+        return new OrderManager(self::getOrderGateway(), $classes, $managerMapping, $dispatcher);
     }
 
     /**
