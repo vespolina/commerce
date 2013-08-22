@@ -40,8 +40,10 @@ class OrderManager implements OrderManagerInterface
     protected $gateway;
     protected $itemClass;
     protected $orderClass;
+    /** @var  \Vespolina\Pricing\Manager\PricingManagerInterface */
+    protected $pricingManager;
 
-    function __construct(OrderGatewayInterface $gateway, array $classMapping, EventDispatcherInterface $eventDispatcher = null, $autoPersist = true)
+    function  __construct(OrderGatewayInterface $gateway, array $classMapping, array $managerMapping, EventDispatcherInterface $eventDispatcher = null, $autoPersist = true)
     {
         $missingClasses = array();
         foreach (array('cart', 'events', 'item', 'order') as $class) {
@@ -56,9 +58,22 @@ class OrderManager implements OrderManagerInterface
             }
             $missingClasses[] = $class;
         }
-
         if (count($missingClasses)) {
-            throw new InvalidConfigurationException(sprintf("The following partner classes are missing from configuration: %s", join(', ', $missingClasses)));
+            throw new InvalidConfigurationException(sprintf("The following classes are missing from configuration: %s", join(', ', $missingClasses)));
+        }
+
+        $missingManagers = array();
+        foreach (array('pricing') as $manager) {
+            $manager = $manager . 'Manager';
+            if (isset($managerMapping[$manager])) {
+                $this->{$manager} = $managerMapping[$manager];
+
+                continue;
+            }
+            $missingManagers[] = $manager;
+        }
+        if (count($missingManagers)) {
+            throw new InvalidConfigurationException(sprintf("The following managers are missing from configuration: %s", join(', ', $missingManagers)));
         }
 
         if (!$eventDispatcher) {
@@ -176,17 +191,6 @@ class OrderManager implements OrderManagerInterface
         $this->updateOrderPricing($order, $context);
         $this->updateOrder($order);
         $this->eventDispatcher->dispatch($orderEvents::POST_PROCESS_ORDER, $this->eventDispatcher->createEvent($order));
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setOrderPricingSet(OrderInterface $cart, PricingSetInterface $pricingSet)
-    {
-        $rp = new \ReflectionProperty($cart, 'pricingSet');
-        $rp->setAccessible(true);
-        $rp->setValue($cart, $pricingSet);
-        $rp->setAccessible(false);
     }
 
     /**
@@ -350,15 +354,32 @@ class OrderManager implements OrderManagerInterface
         $this->gateway->updateOrder($order);
     }
 
-    protected function initOrder(OrderInterface $cart)
+    protected function initOrder(OrderInterface $order)
     {
+        $this->setPricing($order);
+
         // Set default state (for now we set it to "open"), do this last since it will persist and flush the cart
         $cartClass = $this->cartClass;
-        $this->setOrderState($cart, $cartClass::STATE_OPEN);
+        $this->setOrderState($order, $cartClass::STATE_OPEN);
 
         //Delegate further initialization of the cart to those concerned
         $eventsClass = $this->eventsClass;
-        $this->eventDispatcher->dispatch($eventsClass::INIT_ORDER, $this->eventDispatcher->createEvent($cart));
+        $this->eventDispatcher->dispatch($eventsClass::INIT_ORDER, $this->eventDispatcher->createEvent($order));
+    }
+
+    /**
+     * Set the pricing for an order
+     *
+     * @param \Vespolina\Entity\Order\OrderInterface $cart
+     * @param \Vespolina\Entity\Pricing\PricingSetInterface $pricingSet
+     */
+    protected function setPricing(OrderInterface $order)
+    {
+        $pricing = $this->pricingManager->createPricing();
+        $rp = new \ReflectionProperty($order, 'pricingSet');
+        $rp->setAccessible(true);
+        $rp->setValue($order, $pricing);
+        $rp->setAccessible(false);
     }
 
     protected function doAddProductToOrder(OrderInterface $cart, ProductInterface $product, $options, $quantity, $combine = true)
