@@ -7,7 +7,7 @@
  */
 namespace Vespolina\Product\Manager;
 
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Vespolina\Exception\InvalidConfigurationException;
 
 use Vespolina\Entity\Channel\ChannelInterface;
 use Vespolina\Entity\Product\AttributeInterface;
