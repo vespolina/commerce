@@ -6,7 +6,7 @@
 
     <mapped-superclass name="Vespolina\Entity\Product\BaseProduct">
         <field name="id" id="true" />
-        <field name="description" fieldName="description" type="string" />
+        <field name="descriptions" fieldName="descriptions" type="hash" />
         <field name="name" fieldName="name" type="string" />
         <field name="slug" fieldName="slug" type="string" />
         <field name="type" fieldName="type" type="int" />

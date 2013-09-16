@@ -9,7 +9,7 @@
             "homepage": "https://github.com/vespolina/VespolinaCommerce/contributors"
         }
     ],
-    "keywords": ["Vespolina", "product", "cart", "order", "ecommerce"],
+    "keywords": ["Vespolina", "product", "cart", "order", "partners", "ecommerce"],
     "require": {
         "php": ">=5.3.0",
         "merk/dough": "*",
