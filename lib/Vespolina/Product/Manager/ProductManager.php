@@ -191,12 +191,11 @@ class ProductManager implements ProductManagerInterface
 
             return $this->productHandlers[$type]->createProduct($parent);
         }
-        // TODO: this is a bit hacky, but it allows the legacy setup to work correctly until it can be updated to the handler
 
         if ($type !== 'default') {
             throw new \Exception(sprintf("%s is not a valid product type", $type));
         }
-        $product = new $this->productClass($this->identifierSetClass);
+        $product = new $this->productClass();
 
         return $product;
     }
