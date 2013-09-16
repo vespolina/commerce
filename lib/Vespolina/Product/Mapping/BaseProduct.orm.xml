@@ -10,11 +10,12 @@
         </id>
         <field name="attributes"  type="array" nullable="true" />
         <field name="createdAt"  type="datetime" />
-        <field name="description"  type="string" nullable="true" />
+        <field name="descriptions"  type="array" nullable="true" />
         <field name="name"  type="string" nullable="true" />
         <field name="optionGroups"  type="array" nullable="true" />
         <field name="type"  type="string" nullable="true" />
         <field name="updatedAt"  type="datetime" />
+        <field name="slug" type="string" />
 
         <many-to-many field="taxonomies" target-entity="Vespolina\Entity\Taxonomy\TaxonomyNode">
             <join-table name="v_products_taxonomies">
