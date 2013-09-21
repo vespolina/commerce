@@ -8,6 +8,7 @@ use Vespolina\EventDispatcher\NullDispatcher;
 use Vespolina\Product\Gateway\ProductGateway;
 use Vespolina\Product\Gateway\ProductMemoryGateway;
 use Vespolina\Product\Manager\ProductManager;
+use Vespolina\Tests\Pricing\PricingTestsCommon;
 
 /**
  * Class ProductTestsCommon
@@ -20,7 +21,7 @@ class ProductTestsCommon
         $manager = self::getProductManager();
         $product = $manager->createProduct();
         if (!$pricing) {
-            $pricing = PriceTestCommon::getPricingManager()->createPricing(5);
+            $pricing = PricingTestsCommon::getPricingManager()->createPricing(5);
         }
         $product->setPricing($pricing);
 
@@ -33,14 +34,14 @@ class ProductTestsCommon
      *
      * @return ProductManager
      */
-    public static function getProductManager($classes = null, $configuration = null)
+    public static function getProductManager($classes = null, $configuration = array())
     {
         if (!$classes) {
             $classes = array(
-                'attribute' => 'Vespolina\Entity\Product\Attribute',
-                'merchandise' => 'Vespolina\Entity\Product\Merchandise',
-                'option' => 'Vespolina\Entity\Product\Option',
-                'product' => 'Vespolina\Entity\Product\Product'
+                'attributeClass' => 'Vespolina\Entity\Product\Attribute',
+                'merchandiseClass' => 'Vespolina\Entity\Product\Merchandise',
+                'optionClass' => 'Vespolina\Entity\Product\Option',
+                'productClass' => 'Vespolina\Entity\Product\Product'
             );
         }
 
