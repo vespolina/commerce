@@ -37,9 +37,8 @@ class PartnerManagerTest extends \PHPUnit_Framework_TestCase
         $p = $this->partnerMgr->createPartner(Partner::ROLE_CUSTOMER, Partner::ORGANISATION);
         $p->setPartnerId('PartnerTest002');
         $p->addRole(Partner::ROLE_EMPLOYEE);
-        $this->dm->persist($p);
-        $this->dm->flush();
-        
+        $this->partnerMgr->updatePartner($p);
+
         $partner = $this->partnerMgr->findOneByPartnerId('PartnerTest002');
         $this->assertTrue($partner instanceOf PartnerInterface);
         $this->assertEquals(Partner::ORGANISATION, $partner->getType());
@@ -131,28 +130,18 @@ class PartnerManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Zijderveld', $details->getLastname());
     }
 
-    public function testCustomField()
-    {
-        $partner = $this->partnerMgr->createPartner();
-        $partner->setDateOfBirth(new \DateTime('1987-02-12'));
-        
-        $this->assertEquals(new \DateTime('1987-02-12'), $partner->getDateOfBirth());
-    }
-
     public function setup()
     {
-        $this->dm = self::createTestDocumentManager();
-        $xmlDriver = new XmlDriver(array(realpath(__DIR__.'/../') . '/Resources/config/doctrine' => 'Vespolina\PartnerBundle\Tests\Fixtures\Document'), '.mongodb.xml');
-        //$xmlDriver->setFileExtension('.mongodb.xml');
-        $this->dm->getConfiguration()->setMetadataDriverImpl($xmlDriver);
+        $molino = new \Molino\Memory\Molino();
+        $gateway = new \Vespolina\Partner\Gateway\PartnerGateway($molino, 'Vespolina\Entity\Partner\Partner');
         $this->partnerMgr = new PartnerManager(
-            $this->dm,
+            $gateway,
             array(
-        		'partnerClass'                    => 'Vespolina\PartnerBundle\Tests\Fixtures\Document\Partner', 
-        		'partnerAddressClass'             => 'Vespolina\PartnerBundle\Document\Address',
-        		'partnerContactClass'             => 'Vespolina\PartnerBundle\Document\Contact',
-        		'partnerPersonalDetailsClass'     => 'Vespolina\PartnerBundle\Document\PersonalDetails',
-        		'partnerOrganisationDetailsClass' => 'Vespolina\PartnerBundle\Document\OrganisationDetails',
+        		'partnerClass'                    => 'Vespolina\Entity\Partner\Partner',
+        		'partnerAddressClass'             => 'Vespolina\Entity\Partner\Address',
+        		'partnerContactClass'             => 'Vespolina\Entity\Partner\Contact',
+        		'partnerPersonalDetailsClass'     => 'Vespolina\Entity\Partner\PersonalDetails',
+        		'partnerOrganisationDetailsClass' => 'Vespolina\Entity\Partner\OrganisationDetails',
         	),
             array(
                 Partner::ROLE_CUSTOMER,
@@ -164,9 +153,6 @@ class PartnerManagerTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $collections = $this->dm->getDocumentCollections();
-        foreach ($collections as $collection) {
-            $collection->drop();
-        }
+
     }
 }

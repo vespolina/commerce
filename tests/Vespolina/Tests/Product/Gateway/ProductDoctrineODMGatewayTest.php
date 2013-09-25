@@ -31,7 +31,7 @@ class ProductDoctrineODMGatewayTest extends ProductGatewayTestCommon
         $locatorXml = new SymfonyFileLocator(
             array(
                 __DIR__ . '/../../../../../lib/Vespolina/Product/Mapping' => 'Vespolina\\Entity\\Product',
-                __DIR__ . '/../../../../../vendor/vespolina/pricing/lib/Vespolina/Pricing/Mapping' => 'Vespolina\\Entity\\Pricing',
+                __DIR__ . '/../../../../../lib/Vespolina/Pricing/Mapping' => 'Vespolina\\Entity\\Pricing',
                 __DIR__ . '/../../../../../vendor/vespolina/taxonomy/lib/Vespolina/Taxonomy/Mapping' => 'Vespolina\\Entity\\Taxonomy',
             ),
             '.mongodb.xml'
