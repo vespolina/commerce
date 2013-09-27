@@ -418,7 +418,7 @@ class ProductManager implements ProductManagerInterface
 
     }
 
-    protected function slugify($text)
+    public function slugify($text)
     {
         return preg_replace('/[^a-z0-9_\s-]/', '', preg_replace("/[\s_]/", "-", preg_replace('!\s+!', ' ', strtolower(trim($text)))));
     }
