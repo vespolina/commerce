@@ -1,10 +1,12 @@
 <?php
+
 /**
  * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
 namespace Vespolina\Product\Manager;
 
 use Vespolina\Exception\InvalidConfigurationException;
@@ -47,10 +49,12 @@ class ProductManager implements ProductManagerInterface
      * @param ProductGatewayInterface $defaultGateway
      * @param array $classMapping
      * @param array $configuration
+     *
+     * @throws \Vespolina\Exception\InvalidConfigurationException
      */
     public function __construct(ProductGatewayInterface $defaultGateway, array $classMapping, array $configuration = array())
     {
-        //Prepare the class map
+        // Prepare the class map
         $missingClasses = array();
         foreach (array('attribute', 'merchandise', 'option', 'product') as $class) {
             $class = $class . 'Class';
@@ -70,14 +74,14 @@ class ProductManager implements ProductManagerInterface
         }
         $this->classMapping = $classMapping;
 
-        //Prepare the manager configuration
+        // Prepare the manager configuration
         $defaultConfiguration = array(
-            'multiChannel' => false     //Switch off / on product merchandise support
+            'multiChannel' => false     // Switch off / on product merchandise support
         );
 
         $this->configuration = array_merge($configuration, $defaultConfiguration);
 
-        //Setup the default product gateway
+        // Setup the default product gateway
         $this->gateways = array('default' => $defaultGateway);
         $this->productHandlers = array();
     }
@@ -158,6 +162,7 @@ class ProductManager implements ProductManagerInterface
     public function createIdentifier($name)
     {
         $name = strtolower($name);
+
         return new $this->identifiers[$name];
     }
 
@@ -411,5 +416,10 @@ class ProductManager implements ProductManagerInterface
     protected function doUpdateOptionGroup(OptionGroupInterface $optionGroup)
     {
 
+    }
+
+    protected function slugify($text)
+    {
+        return preg_replace('/[^a-z0-9_\s-]/', '', preg_replace("/[\s_]/", "-", preg_replace('!\s+!', ' ', strtolower(trim($text)))));
     }
 }
