@@ -23,7 +23,7 @@ Probably the most common use. The PartnerBundle can be used to manage your custo
 	$partner = $partnerManager->createPartner(Partner::ROLE_CUSTOMER);
 	$form = $this->get('vespolina.partner.customer_form');
 	$form->setData($partner);
-	$form->bindRequest($this->getRequest());
+	$form->handleRequest($this->getRequest());
 	if ($form->isValid()) {
 		$partnerManager->updatePartner($partner);
 	}
