@@ -16,6 +16,7 @@ use Vespolina\Entity\Product\AttributeInterface;
 use Vespolina\Entity\Product\OptionGroupInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Identifier\IdentifierInterface;
+use Vespolina\Entity\Identifier\SKUIdentifier;
 use Vespolina\Product\Gateway\ProductGatewayInterface;
 use Vespolina\Product\Handler\MerchandiseHandlerInterface;
 use Vespolina\Product\Handler\ProductHandlerInterface;
@@ -108,11 +109,6 @@ class ProductManager implements ProductManagerInterface
 
     }
 
-    public function addIdentifierToProduct(ProductInterface $product, array $options = null)
-    {
-
-    }
-
     /**
      * @inheritdoc
      */
@@ -142,18 +138,6 @@ class ProductManager implements ProductManagerInterface
         $attribute->setName($name);
 
         return $attribute;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createIdentifierSet(IdentifierInterface $identifier)
-    {
-        $productIdentifierSet = $this->getIdentifierSetClass();
-        $identifierSet = new $productIdentifierSet;
-        $identifierSet->addIdentifier($identifier);
-
-        return $identifierSet;
     }
 
     /**
@@ -254,11 +238,15 @@ class ProductManager implements ProductManagerInterface
     }
 
     /**
-     * @inheritdoc
+     * @param ProductInterface $product
+     * @param string $code
      */
-    public function getIdentifierSetClass()
+    public function setProductSKU(ProductInterface $product, $code)
     {
-        return $this->identifierSetClass;
+        $sku = new SKUIdentifier();
+        $sku->setCode($code);
+
+        $product->addIdentifier($sku);
     }
 
     /**

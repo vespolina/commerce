@@ -39,15 +39,6 @@ interface ProductManagerInterface
     function addOptionToProduct(ProductInterface $product, $type, $value = null);
 
     /**
-     * Add an Identifier to a product. If the options are passed in, the Identifier applies only to those specific
-     * option types and values. The array of options can be Option objects or arrays with keys of 'type' and 'value'.
-     *
-     * @param \Vespolina\Entity\Product\ProductInterface $product
-     * @param array|null $options
-     */
-    function addIdentifierToProduct(ProductInterface $product, array $options = null);
-
-    /**
      * Register a product handler to the manager
      *
      * @param ProductHandlerInterface $handler
@@ -121,6 +112,11 @@ interface ProductManagerInterface
 
     function findOne(SpecificationInterface $specification);
 
+    /**
+     * @param ProductInterface $product
+     * @param $code
+     */
+    function setProductSKU(ProductInterface $product, $code);
 
     /**
      * Find a Product by its object identifier

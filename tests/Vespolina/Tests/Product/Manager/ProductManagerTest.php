@@ -83,18 +83,18 @@ class ProductManagerTest extends \PHPUnit_Framework_TestCase
         // full results flag returns the full data set for the product
     }
 
-    public function testCreateIdentifierSet()
+    public function testSetProductSKU()
     {
-        $this->markTestIncomplete(
-            'Behavior has changed, needs refactoring.'
-        );
+        $mgr = $this->createProductManager();
+        $product = new Product();
+        $sku = 'ABC12345';
+        $mgr->setProductSKU($product, $sku);
 
-        $mgr = $this->createProductManager('Vespolina\ProductBundle\Model\Identifier\IdIdentifier');
-        $this->assertInstanceOf(
-            'Vespolina\ProductBundle\Model\Identifier\ProductIdentifierSet',
-            $mgr->createIdentifierSet($this->createIdentifierNode('noset')),
-            'using an instance of the primary identifier as a parameter should create a new PrimaryIdentifierSet'
-        );
+        $identifiers = $product->getIdentifiers();
+        $this->assertCount(1, $identifiers);
+        $identifier = array_shift($identifiers);
+        $this->assertInstanceOf('Vespolina\Entity\Identifier\SKUIdentifier', $identifier);
+        $this->assertSame($sku, $identifier->getCode());
     }
 
     public function testCreateOption()
