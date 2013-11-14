@@ -7,7 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Product\Specification\Visitor;
+namespace Vespolina\Brand\Specification\Visitor;
 
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Product\Specification\ProductSpecificationInterface;
@@ -22,31 +22,13 @@ class DoctrineMongoDBDefaultSpecificationVisitor extends BaseDoctrineMongoDBDefa
         'AndSpecification' => 'visitAnd',
         'FilterSpecification' => 'visitFilter',
         'IdSpecification'   => 'visitId',
-        'PriceSpecification' => 'visitPrice',
-        'ProductSpecification' => 'visitProduct',
-        'TaxonomyNodeSpecification' => 'visitTaxonomyNode',
     );
 
     protected $filterMap = array(
         '=' => 'equals'
     );
 
-    public function visitTaxonomyNode(SpecificationInterface $specification, SpecificationWalker $walker, $query)
-    {
-        $taxonomyNode = $specification->getTaxonomyNode();
-
-        //Do we already have the taxonomy node?
-        if (null != $taxonomyNode) {
-            $query->field('taxonomies')->equals($taxonomyNode);
-        //If not we need to describe the taxonomy node
-        } else {
-
-            //Todo: use taxonomy path instead of the slug
-            $query->field('taxonomies.slug')->equals(strtolower($specification->getTaxonomyNodeName()));
-        }
-    }
-
-    public function visitProduct(ProductSpecificationInterface $specification, SpecificationWalker $walker, $query)
+    public function visitBrand(BrandSpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
         //Retrieve all child specifications of the product
         foreach($specification->getOperands() as $operandSpecification) {

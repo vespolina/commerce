@@ -24,39 +24,5 @@ use Vespolina\Brand\Specification\BrandSpecificationInterface;
  */
 class BrandSpecification extends BaseSpecification implements BrandSpecificationInterface
 {
-    public function isSatisfiedBy($brand)
-    {
-        foreach ($this->operands as $specification) {
-            if (!$specification->isSatisfiedBy($brand)) {
 
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public function attributeEquals($name, $value)
-    {
-
-        return $this;
-    }
-
-    public function attributeContains($name, $value)
-    {
-
-        return $this;
-    }
-
-    public function equals($name, $value)
-    {
-        $this->addOperand(new FilterSpecification($name, $value));
-
-        return $this;
-    }
-
-    public function getOperands()
-    {
-        return $this->operands;
-    }
 }

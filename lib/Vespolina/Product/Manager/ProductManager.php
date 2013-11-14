@@ -205,7 +205,6 @@ class ProductManager implements ProductManagerInterface
         return $merchandise;
     }
 
-
     public function findAll(SpecificationInterface $specification) {
 
         return $this->resolveGateway()->findAll($specification);

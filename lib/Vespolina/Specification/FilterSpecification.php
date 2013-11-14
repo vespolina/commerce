@@ -7,9 +7,8 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Product\Specification;
+namespace Vespolina\Specification;
 
-use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Specification\SpecificationInterface;
 
 class FilterSpecification implements SpecificationInterface

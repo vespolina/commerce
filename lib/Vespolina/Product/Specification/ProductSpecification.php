@@ -15,6 +15,8 @@ use Vespolina\Entity\Taxonomy\TaxonomyNode;
 use Vespolina\Entity\Taxonomy\TaxonomyNodeInterface;
 use Vespolina\Product\Specification\ProductSpecificationInterface;
 use Vespolina\Product\Specification\TaxonomyNodeSpecification;
+use Vespolina\Specification\BaseSpecification;
+use Vespolina\Specification\FilterSpecification;
 
 /**
  * A product specification implementing typical criterias used to query products
@@ -30,18 +32,6 @@ use Vespolina\Product\Specification\TaxonomyNodeSpecification;
  */
 class ProductSpecification extends BaseSpecification implements ProductSpecificationInterface
 {
-    public function isSatisfiedBy($product)
-    {
-        foreach ($this->operands as $specification) {
-            if (!$specification->isSatisfiedBy($product)) {
-
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public function attributeEquals($name, $value)
     {
 
@@ -52,18 +42,6 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
     {
 
         return $this;
-    }
-
-    public function equals($name, $value)
-    {
-        $this->addOperand(new FilterSpecification($name, $value));
-
-        return $this;
-    }
-
-    public function getOperands()
-    {
-        return $this->operands;
     }
 
     public function withPriceRange($name, $fromValue, $toValue)

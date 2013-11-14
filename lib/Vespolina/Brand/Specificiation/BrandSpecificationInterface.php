@@ -11,6 +11,7 @@ namespace Vespolina\Brand\Specification;
 
 use Vespolina\Entity\Brand\BrandInterface;
 use Vespolina\Specification\SpecificationInterface;
+
 /**
  * Interface to construct a brand query
  *
@@ -18,12 +19,5 @@ use Vespolina\Specification\SpecificationInterface;
  */
 interface BrandSpecificationInterface extends SpecificationInterface
 {
-    /**
-     * Match brands having the attribute $name equal to $value
-     *
-     * @param $name
-     * @param $value
-     * @return mixed
-     */
-    function attributeEquals($name, $value);
+
 }

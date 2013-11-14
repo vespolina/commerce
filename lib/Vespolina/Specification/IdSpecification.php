@@ -7,9 +7,8 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Product\Specification;
+namespace Vespolina\Specification;
 
-use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Specification\SpecificationInterface;
 
 class IdSpecification implements SpecificationInterface
@@ -24,9 +23,9 @@ class IdSpecification implements SpecificationInterface
         $this->type = $type;
     }
 
-    public function isSatisfiedBy($product)
+    public function isSatisfiedBy($entity)
     {
-        return $product->getId() === $this->id;
+        return $entity->getId() === $this->id;
     }
 
     public function getId()

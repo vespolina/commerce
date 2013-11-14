@@ -7,7 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Product\Specification;
+namespace Vespolina\Specification;
 
 use Vespolina\Specification\SpecificationInterface;
 
@@ -22,7 +22,7 @@ class SpecificationWalker
     protected $visitors;
 
     /**
-     * @param array $visitors A list of visitors implenting the SpecificationVisitorInterface
+     * @param array $visitors A list of visitors implementing the SpecificationVisitorInterface
      */
     public function __construct(array $visitors = array()) {
 

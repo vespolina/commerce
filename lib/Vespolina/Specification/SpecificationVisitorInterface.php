@@ -7,11 +7,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Product\Specification;
+namespace Vespolina\Specification;
 
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Specification\SpecificationInterface;
-use Vespolina\Product\Specification\SpecificationWalker;
+use Vespolina\Specification\SpecificationWalker;
 
 /**
  * Interface to construct a product query specification
