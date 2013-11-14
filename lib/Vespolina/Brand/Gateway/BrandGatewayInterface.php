@@ -1,19 +1,19 @@
 <?php
 
 /**
- * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
+ * (c) 2013 - ∞ Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Product\Gateway;
+namespace Vespolina\Brand\Gateway;
 
-use Vespolina\Entity\Product\ProductInterface;
+use Vespolina\Entity\Brand\BrandInterface;
 use Vespolina\Specification\SpecificationInterface;
 
 /**
- * Defines the interface for a product gateway to persist and retrieve products
+ * Defines the interface for a brand gateway to persist and retrieve brands
  *
  * The interface can be used for local gateways (eg. local mongo or orm database) but it might as well be
  * a remote ERP system
@@ -21,30 +21,30 @@ use Vespolina\Specification\SpecificationInterface;
  * @author Daniel Kucharski <daniel@xerias.be>
  * @author Richard Shank <develop@zestic.com>
  */
-interface ProductGatewayInterface
+interface BrandGatewayInterface
 {
     /**
-     * Delete a Product that has been persisted and optionally flush that link.
+     * Delete a Brand that has been persisted and optionally flush that link.
      * Systems that allow for a delayed flush can use the $andFlush parameter, other
      * systems would disregard the flag. The success of the process is returned.
      *
-     * @param \Vespolina\Entity\ProductInterface $product
+     * @param \Vespolina\Entity\BrandInterface $brand
      *
      * @param boolean $andFlush
      */
-    function deleteProduct(ProductInterface $product, $andFlush = false);
+    function deleteBrand(BrandInterface $brand, $andFlush = false);
 
     /**
-     * Find a product by it's ID and ID type.  If no type has been given the default id strategy will be chosen.
+     * Find a brand by it's ID and ID type.  If no type has been given the default id strategy will be chosen.
      *
      * @param $id
      * @param null $type
      * @return mixed
      */
-    function matchProductById($id, $type = null);
+    function matchBrandById($id, $type = null);
 
     /**
-     * Match multiple products against the supplied specification
+     * Match multiple brands against the supplied specification
      *
      * @param SpecificationInterface $specification
      * @return mixed
@@ -52,7 +52,7 @@ interface ProductGatewayInterface
     function findAll(SpecificationInterface $specification);
 
     /**
-     * Find one product matching the requested specification
+     * Find one brand matching the requested specification
      *
      * @param SpecificationInterface $specification
      * @return mixed
@@ -65,23 +65,23 @@ interface ProductGatewayInterface
     function flush();
 
     /**
-     * Persist a Product that has been created and optionally flush that link.
+     * Persist a Brand that has been created and optionally flush that link.
      * Systems that allow for a delayed flush can use the $andFlush parameter, other
      * systems would disregard the flag. The success of the process is returned.
      *
-     * @param Vespolina\Entity\Product\ProductInterface $product
+     * @param Vespolina\Entity\Brand\BrandInterface $brand
      * @param boolean $andFlush
      */
-    function persistProduct(ProductInterface $product, $andFlush = false);
+    function persistBrand(BrandInterface $brand, $andFlush = false);
 
     /**
-     * Update a Product that has been persisted and optionally flush that link.
+     * Update a Brand that has been persisted and optionally flush that link.
      * Systems that allow for a delayed flush can use the $andFlush parameter, other
      * systems would disregard the flag. The success of the process is returned.
      *
-     * @param Vespolina\Entity\ProductInterface $product
+     * @param Vespolina\Entity\BrandInterface $brand
      *
      * @param boolean $andFlush
      */
-    function updateProduct(ProductInterface $product, $andFlush = false);
+    function updateBrand(BrandInterface $brand, $andFlush = false);
 }

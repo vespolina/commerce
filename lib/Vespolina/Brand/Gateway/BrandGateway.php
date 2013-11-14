@@ -1,40 +1,40 @@
 <?php
 
 /**
- * (c) 2011 - ∞ Vespolina Project http://www.vespolina-project.org
+ * (c) 2013 - ∞ Vespolina Project http://www.vespolina-project.org
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Product\Gateway;
+namespace Vespolina\Brand\Gateway;
 
-use Vespolina\Entity\Product\ProductInterface;
+use Vespolina\Entity\Brand\BrandInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 use Vespolina\Specification\SpecificationInterface;
-use Vespolina\Product\Specification\SpecificationWalker;
-use Vespolina\Product\Specification\IdSpecification;
+use Vespolina\Brand\Specification\SpecificationWalker;
+use Vespolina\Brand\Specification\IdSpecification;
 
-abstract class ProductGateway implements ProductGatewayInterface
+abstract class BrandGateway implements BrandGatewayInterface
 {
-    protected $productClass;
+    protected $brandClass;
     protected $gatewayName;
     protected $specificationWalker;
 
     /**
      * @param string $managedClass
      */
-    public function __construct($productClass, $gatewayName)
+    public function __construct($brandClass, $gatewayName)
     {
-        if (!class_exists($productClass) || !in_array('Vespolina\Entity\Product\ProductInterface', class_implements($productClass))) {
-            throw new InvalidInterfaceException('Please have your product class implement Vespolina\Entity\Product\ProductInterface');
+        if (!class_exists($brandClass) || !in_array('Vespolina\Entity\Brand\BrandInterface', class_implements($brandClass))) {
+            throw new InvalidInterfaceException('Please have your brand class implement Vespolina\Entity\Brand\BrandInterface');
         }
-        $this->productClass = $productClass;
+        $this->brandClass = $brandClass;
         $this->gatewayName = $gatewayName;
 
     }
 
-    public  function matchProductById($id, $type = null)
+    public  function matchBrandById($id, $type = null)
     {
         return $this->executeSpecification(new IdSpecification($id, $type), true);
     }
@@ -52,7 +52,7 @@ abstract class ProductGateway implements ProductGatewayInterface
     protected function getSpecificationWalker()
     {
         if (null == $this->specificationWalker) {
-            $defaultVisitorClass = 'Vespolina\Product\Specification\\Visitor\\' . $this->gatewayName . 'DefaultSpecificationVisitor';
+            $defaultVisitorClass = 'Vespolina\Brand\Specification\\Visitor\\' . $this->gatewayName . 'DefaultSpecificationVisitor';
             $this->specificationWalker = new SpecificationWalker(array(new $defaultVisitorClass()));
         }
 
