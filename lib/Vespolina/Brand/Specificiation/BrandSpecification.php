@@ -10,6 +10,7 @@
 namespace Vespolina\Brand\Specification;
 
 use Vespolina\Entity\Brand\BrandInterface;
+use Vespolina\Specification\BaseSpecification;
 use Vespolina\Brand\Specification\BrandSpecificationInterface;
 
 /**

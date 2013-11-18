@@ -11,9 +11,9 @@ namespace Vespolina\Brand\Gateway;
 
 use Vespolina\Entity\Brand\BrandInterface;
 use Vespolina\Exception\InvalidInterfaceException;
+use Vespolina\Specification\IdSpecification;
 use Vespolina\Specification\SpecificationInterface;
-use Vespolina\Brand\Specification\SpecificationWalker;
-use Vespolina\Brand\Specification\IdSpecification;
+use Vespolina\Specification\SpecificationWalker;
 
 abstract class BrandGateway implements BrandGatewayInterface
 {
@@ -31,10 +31,14 @@ abstract class BrandGateway implements BrandGatewayInterface
         }
         $this->brandClass = $brandClass;
         $this->gatewayName = $gatewayName;
-
     }
 
-    public  function matchBrandById($id, $type = null)
+    public function createBrand()
+    {
+        return new $this->brandClass;
+    }
+
+    public function matchBrandById($id, $type = null)
     {
         return $this->executeSpecification(new IdSpecification($id, $type), true);
     }
