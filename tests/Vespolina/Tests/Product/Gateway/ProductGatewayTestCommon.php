@@ -108,12 +108,16 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
 
     public function testMatchProductById()
     {
-        $products = $this->createAndPersistProducts(10);
+        $products = $this->createAndPersistProducts();
+        $targetProduct = $products[0];
 
-        $product = $this->productGateway->matchProductById(1);
+        $product = $this->productGateway->matchProductById($targetProduct->getId());
         $this->assertNotNull($product);
-    }
+        $this->assertEquals($targetProduct, $product);
 
+        $this->assertNull($this->productGateway->matchProductById(100000000));
+    }
+    
     public function testMatchProductByTaxonomyNode()
     {
         $this->createAndPersistProducts(10);
@@ -153,14 +157,16 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $count);
     }
 
-    protected function createAndPersistProducts($count)
+    protected function createAndPersistProducts($count = 10)
     {
-        $products = $this->createProducts(10);
+        $products = $this->createProducts($count);
 
         foreach ($products as $product) {
             $this->productGateway->updateProduct($product, false);
         }
         $this->productGateway->flush();
+
+        return $products;
     }
 
     protected function getProductManager()

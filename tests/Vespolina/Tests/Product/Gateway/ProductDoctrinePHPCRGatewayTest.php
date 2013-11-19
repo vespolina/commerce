@@ -28,7 +28,7 @@ class ProductDoctrinePHPCRGatewayTest extends ProductGatewayTestCommon
             'driver'    => 'pdo_mysql',
             'host'      => 'localhost',
             'user'      => 'root',
-            'password'  => '',
+            'password'  => 'testmachine',
             'dbname'    => 'v_products_tests',
         );
 

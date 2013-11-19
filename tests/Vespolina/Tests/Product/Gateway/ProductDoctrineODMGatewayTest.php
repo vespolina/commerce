@@ -49,9 +49,4 @@ class ProductDoctrineODMGatewayTest extends ProductGatewayTestCommon
 
         parent::setUp();
     }
-
-    public function testMatchProductById()
-    {
-
-    }
 }
