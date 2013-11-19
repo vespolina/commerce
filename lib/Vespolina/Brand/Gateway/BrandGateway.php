@@ -56,8 +56,8 @@ abstract class BrandGateway implements BrandGatewayInterface
     protected function getSpecificationWalker()
     {
         if (null == $this->specificationWalker) {
-            $defaultVisitorClass = 'Vespolina\Brand\Specification\\Visitor\\' . $this->gatewayName . 'DefaultSpecificationVisitor';
-            $this->specificationWalker = new SpecificationWalker(array(new $defaultVisitorClass()));
+            $visitor = $this->getVisitor();
+            $this->specificationWalker = new SpecificationWalker(array($visitor));
         }
 
         return $this->specificationWalker;

@@ -37,6 +37,7 @@ abstract class BrandGatewayTestCommon extends \PHPUnit_Framework_TestCase
 
         $brand = $this->brandGateway->matchBrandById($targetBrand->getId());
         $this->assertNotNull($brand);
+        $this->assertEquals($targetBrand, $brand);
 
         $this->assertNull($this->brandGateway->matchBrandById(100000000));
     }

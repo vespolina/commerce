@@ -104,4 +104,9 @@ class BrandDoctrineMongoDBGateway extends BrandGateway
             return $query->execute();
         }
     }
+
+    protected function getVisitor()
+    {
+        return new \Vespolina\Brand\Specification\Visitor\DoctrineMongoDBDefaultSpecificationVisitor();
+    }
 }
