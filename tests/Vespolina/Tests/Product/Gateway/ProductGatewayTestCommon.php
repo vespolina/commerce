@@ -16,14 +16,6 @@ use Vespolina\Taxonomy\Gateway\TaxonomyMemoryGateway;
 use Vespolina\Taxonomy\Manager\TaxonomyManager;
 
 /**
- * (c) 2012 Vespolina Project http://www.vespolina-project.org
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
-
-/**
  * @author Daniel Kucharski <daniel@xerias.be>
  */
 abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase

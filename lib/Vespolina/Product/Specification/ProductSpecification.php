@@ -9,10 +9,12 @@
 
 namespace Vespolina\Product\Specification;
 
+use Vespolina\Entity\Brand\BrandInterface;
 use Vespolina\Entity\Channel\ChannelInterface;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Entity\Taxonomy\TaxonomyNode;
 use Vespolina\Entity\Taxonomy\TaxonomyNodeInterface;
+use Vespolina\Product\Specification\BrandSpecification;
 use Vespolina\Product\Specification\ProductSpecificationInterface;
 use Vespolina\Product\Specification\TaxonomyNodeSpecification;
 use Vespolina\Specification\BaseSpecification;
@@ -44,6 +46,20 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
         return $this;
     }
 
+    public function withBrand(BrandInterface $brand)
+    {
+        $this->addOperand(new BrandSpecification($brand));
+
+        return $this;
+    }
+
+    public function withChannel(ChannelInterface $channel)
+    {
+        $this->addOperand(new ChannelSpecification($channel));
+
+        return $this;
+    }
+
     public function withPriceRange($name, $fromValue, $toValue)
     {
         $this->addOperand(new PriceSpecification($name, $fromValue, $toValue));
@@ -54,13 +70,6 @@ class ProductSpecification extends BaseSpecification implements ProductSpecifica
     public function withTaxonomyNode(TaxonomyNodeInterface $node)
     {
         $this->addOperand(new TaxonomyNodeSpecification($node));
-
-        return $this;
-    }
-
-    public function withChannel(ChannelInterface $channel)
-    {
-        $this->addOperand(new ChannelSpecification($channel));
 
         return $this;
     }

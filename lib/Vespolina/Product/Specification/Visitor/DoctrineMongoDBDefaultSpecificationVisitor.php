@@ -20,6 +20,7 @@ class DoctrineMongoDBDefaultSpecificationVisitor extends BaseDoctrineMongoDBDefa
 {
     protected $methods = array(
         'AndSpecification' => 'visitAnd',
+        'BrandSpecification' => 'visitBrand',
         'FilterSpecification' => 'visitFilter',
         'IdSpecification'   => 'visitId',
         'PriceSpecification' => 'visitPrice',
@@ -55,5 +56,14 @@ class DoctrineMongoDBDefaultSpecificationVisitor extends BaseDoctrineMongoDBDefa
                 $this->visit($operandSpecification, $walker, $query);
             }
         }
+    }
+
+    public function visitBrand(SpecificationInterface $specification, SpecificationWalker $walker, $query)
+    {
+        $id = $specification->getBrand()->getId();
+        $brand = $specification->getBrand();
+        $query->field('brands')->includesReferenceTo($brand);
+//        $query->field('brand.id')->equals(new \MongoId($id));
+
     }
 }
