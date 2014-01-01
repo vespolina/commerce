@@ -7,27 +7,22 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Vespolina\Product\Specification\Visitor;
+namespace Vespolina\Specification\Visitor;
 
-use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Specification\SpecificationVisitorInterface;
 use Vespolina\Specification\SpecificationInterface;
 use Vespolina\Specification\SpecificationWalker;
-use Vespolina\Product\Specification\ProductSpecificationInterface;
 
-class DoctrinePHPCRDefaultSpecificationVisitor implements SpecificationVisitorInterface
+class BaseDoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitorInterface
 {
     protected $methods = array(
         'AndSpecification' => 'visitAnd',
         'FilterSpecification' => 'visitFilter',
         'IdSpecification'   => 'visitId',
-        'PriceSpecification' => 'visitPrice',
-        'ProductSpecification' => 'visitProduct',
-        'TaxonomyNodeSpecification' => 'visitTaxonomyNode',
     );
 
     protected $filterMap = array(
-        '=' => 'eq'
+        '=' => 'equals'
     );
 
     public function supports(SpecificationInterface $specification)
@@ -46,37 +41,13 @@ class DoctrinePHPCRDefaultSpecificationVisitor implements SpecificationVisitorIn
 
     public function visitId(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
-        $query->expr()->eq('id', $specification->getId());
+        $query->field('_id')->equals($specification->getId());
     }
 
     public function visitFilter(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
         $mappedOperator = $this->filterMap[$specification->getOperator()];
-        $query->expr()->$mappedOperator($specification->getField(), $specification->getValue());
-    }
-
-    public function visitTaxonomyNode(SpecificationInterface $specification, SpecificationWalker $walker, $query)
-    {
-        $taxonomyNode = $specification->getTaxonomyNode();
-
-        //Do we already have the taxonomy node?
-        if (null != $taxonomyNode) {
-            $query->from($taxonomyNode);
-        //If not we need to describe the taxonomy node
-        } else {
-            $query->field('taxonomies.name')->equals($specification->getName());
-        }
-    }
-
-    public function visitProduct(ProductSpecificationInterface $specification, SpecificationWalker $walker, $query)
-    {
-        //Retrieve all child specifications of the product
-        foreach($specification->getOperands() as $operandSpecification) {
-
-            if ($this->supports($operandSpecification)) {
-                $this->visit($operandSpecification, $walker, $query);
-            }
-        }
+        $query->field($specification->getField())->$mappedOperator($specification->getValue());
     }
 
     protected function generateParameterId()
@@ -91,5 +62,4 @@ class DoctrinePHPCRDefaultSpecificationVisitor implements SpecificationVisitorIn
         $this->getQueryBuilder()->andWhere(sprintf('%s.%s %s ?%d', $rootAlias, $field, $comparison, $parameterId));
         $this->getQueryBuilder()->setParameter($parameterId, $value);
     }
-
 }

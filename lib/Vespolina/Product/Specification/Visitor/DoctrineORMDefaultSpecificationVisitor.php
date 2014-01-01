@@ -10,9 +10,9 @@
 namespace Vespolina\Product\Specification\Visitor;
 
 use Vespolina\Entity\Product\ProductInterface;
-use Vespolina\Product\Specification\SpecificationVisitorInterface;
+use Vespolina\Specification\SpecificationVisitorInterface;
 use Vespolina\Specification\SpecificationInterface;
-use Vespolina\Product\Specification\SpecificationWalker;
+use Vespolina\Specification\SpecificationWalker;
 use Vespolina\Product\Specification\ProductSpecificationInterface;
 
 class DoctrineORMDefaultSpecificationVisitor implements SpecificationVisitorInterface

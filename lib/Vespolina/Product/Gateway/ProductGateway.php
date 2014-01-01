@@ -12,8 +12,8 @@ namespace Vespolina\Product\Gateway;
 use Vespolina\Entity\Product\ProductInterface;
 use Vespolina\Exception\InvalidInterfaceException;
 use Vespolina\Specification\SpecificationInterface;
-use Vespolina\Product\Specification\SpecificationWalker;
-use Vespolina\Product\Specification\IdSpecification;
+use Vespolina\Specification\SpecificationWalker;
+use Vespolina\Specification\IdSpecification;
 
 abstract class ProductGateway implements ProductGatewayInterface
 {

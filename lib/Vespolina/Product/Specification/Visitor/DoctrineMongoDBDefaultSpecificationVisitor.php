@@ -10,15 +10,17 @@
 namespace Vespolina\Product\Specification\Visitor;
 
 use Vespolina\Entity\Product\ProductInterface;
-use Vespolina\Product\Specification\SpecificationVisitorInterface;
-use Vespolina\Specification\SpecificationInterface;
-use Vespolina\Product\Specification\SpecificationWalker;
 use Vespolina\Product\Specification\ProductSpecificationInterface;
+use Vespolina\Specification\SpecificationVisitorInterface;
+use Vespolina\Specification\SpecificationInterface;
+use Vespolina\Specification\SpecificationWalker;
+use Vespolina\Specification\Visitor\BaseDoctrineMongoDBDefaultSpecificationVisitor;
 
-class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitorInterface
+class DoctrineMongoDBDefaultSpecificationVisitor extends BaseDoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitorInterface
 {
     protected $methods = array(
         'AndSpecification' => 'visitAnd',
+        'BrandSpecification' => 'visitBrand',
         'FilterSpecification' => 'visitFilter',
         'IdSpecification'   => 'visitId',
         'PriceSpecification' => 'visitPrice',
@@ -29,31 +31,6 @@ class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitor
     protected $filterMap = array(
         '=' => 'equals'
     );
-
-    public function supports(SpecificationInterface $specification)
-    {
-        $classPath = explode('\\', get_class($specification));
-
-        return isset($this->methods[end($classPath)]);
-    }
-
-    public function visit(SpecificationInterface $specification, SpecificationWalker $walker, $query)
-    {
-        $classPath = explode('\\', get_class($specification));
-        $method = $this->methods[end($classPath)];
-        $this->$method($specification, $walker, $query);
-    }
-
-    public function visitId(SpecificationInterface $specification, SpecificationWalker $walker, $query)
-    {
-        $query->field('_id')->equals($specification->getId());
-    }
-
-    public function visitFilter(SpecificationInterface $specification, SpecificationWalker $walker, $query)
-    {
-        $mappedOperator = $this->filterMap[$specification->getOperator()];
-        $query->field($specification->getField())->$mappedOperator($specification->getValue());
-    }
 
     public function visitTaxonomyNode(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
@@ -81,17 +58,12 @@ class DoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitor
         }
     }
 
-    protected function generateParameterId()
+    public function visitBrand(SpecificationInterface $specification, SpecificationWalker $walker, $query)
     {
-        return ++$this->lastParameterId;
-    }
+        $id = $specification->getBrand()->getId();
+        $brand = $specification->getBrand();
+        $query->field('brands')->includesReferenceTo($brand);
+//        $query->field('brand.id')->equals(new \MongoId($id));
 
-    private function andWhere($comparison, $field, $value)
-    {
-        $parameterId = $this->generateParameterId();
-        $rootAlias = $this->getQueryBuilder()->getRootAlias();
-        $this->getQueryBuilder()->andWhere(sprintf('%s.%s %s ?%d', $rootAlias, $field, $comparison, $parameterId));
-        $this->getQueryBuilder()->setParameter($parameterId, $value);
     }
-
 }
