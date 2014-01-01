@@ -21,7 +21,9 @@
         "doctrine/phpcr-odm": "1.0.*",
         "doctrine/mongodb-odm": "*",
         "doctrine/orm" : "*",
-        "jackalope/jackalope-doctrine-dbal": "1.0.*"
+        "gedmo/doctrine-extensions": "*",
+        "jackalope/jackalope-doctrine-dbal": "1.0.*",
+        "vespolina/media": "*"
     },
     "minimum-stability": "dev",
     "autoload": {
