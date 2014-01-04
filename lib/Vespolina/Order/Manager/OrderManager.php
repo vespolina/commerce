@@ -205,15 +205,15 @@ class OrderManager implements OrderManagerInterface
     /**
      * @inheritdoc
      */
-    public function setOrderItemState(ItemInterface $cartItem, $state)
+    public function setOrderItemState(ItemInterface $item, $state)
     {
-        $rp = new \ReflectionProperty($cartItem, 'state');
+        $rp = new \ReflectionProperty($item, 'state');
         $rp->setAccessible(true);
-        $rp->setValue($cartItem, $state);
+        $rp->setValue($item, $state);
         $rp->setAccessible(false);
 
         $orderEvents = $this->eventsClass;
-        $this->eventDispatcher->dispatch($orderEvents::UPDATE_ITEM_STATE, $this->eventDispatcher->createEvent($cartItem));
+        $this->eventDispatcher->dispatch($orderEvents::UPDATE_ITEM_STATE, $this->eventDispatcher->createEvent($item));
     }
 
     /**
@@ -365,26 +365,26 @@ class OrderManager implements OrderManagerInterface
 
     protected function doAddProductToOrder(OrderInterface $cart, ProductInterface $product, $options, $quantity, $combine = true)
     {
-        if ($combine && $cartItem = $this->findProductInOrder($cart, $product, $options)) {
-            $quantity = $cartItem->getQuantity() + $quantity;
-            $this->setItemQuantity($cartItem, $quantity);
+        if ($combine && $item = $this->findProductInOrder($cart, $product, $options)) {
+            $quantity = $item->getQuantity() + $quantity;
+            $this->setItemQuantity($item, $quantity);
 
-            return $cartItem;
+            return $item;
         }
 
-        $cartItem = $this->createItem($product, $options);
-        $this->setItemQuantity($cartItem, $quantity);
+        $item = $this->createItem($product, $options);
+        $this->setItemQuantity($item, $quantity);
 
         // add item to cart
         $rm = new \ReflectionMethod($cart, 'addItem');
         $rm->setAccessible(true);
-        $rm->invokeArgs($cart, array($cartItem));
+        $rm->invokeArgs($cart, array($item));
         $rm->setAccessible(false);
 
         $eventsClass = $this->eventsClass;
-        $this->eventDispatcher->dispatch($eventsClass::INIT_ITEM, $this->eventDispatcher->createEvent($cartItem));
+        $this->eventDispatcher->dispatch($eventsClass::INIT_ITEM, $this->eventDispatcher->createEvent($item));
 
-        return $cartItem;
+        return $item;
     }
 
     protected function doRemoveItemFromOrder(OrderInterface $cart, ProductInterface $product, array $options)

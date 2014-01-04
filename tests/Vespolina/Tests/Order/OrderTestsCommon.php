@@ -36,8 +36,7 @@ class OrderTestsCommon
     {
         if (!$classes) {
             $classes = array(
-                'cartClass' => 'Vespolina\Entity\Order\Cart',
-                'eventsClass' => 'Vespolina\Entity\Order\CartEvents',
+                'eventsClass' => 'Vespolina\Entity\Order\OrderEvents',
                 'itemClass' => 'Vespolina\Entity\Order\Item',
                 'orderClass' => 'Vespolina\Entity\Order\Order',
             );
