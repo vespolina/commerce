@@ -8,14 +8,13 @@
         <field name="id" id="true" />
         <field name="descriptions" fieldName="descriptions" type="hash" />
         <field name="name" fieldName="name" type="string" />
+        <field name="price"         fieldName="price"         type="hash" />
         <field name="slug" fieldName="slug" type="string" />
         <field name="type" fieldName="type" type="int" />
         <field name="createdAt" fieldName="createdAt" type="date" />
         <field name="updatedAt" fieldName="updatedAt" type="date" />
 
         <reference-many field="brands" target-document="Vespolina\Entity\Brand\Brand" />
-
-        <embed-one field="pricingSet" target-document="Vespolina\Entity\Pricing\PricingSet" />
 
         <embed-many
                 target-document="Vespolina\Entity\Product\Attribute"
@@ -36,7 +35,6 @@
                 field="taxonomies"
                 fieldName="taxonomies"
                 strategy="set"
-                cascade="persist"
                 />
 
         <lifecycle-callbacks>

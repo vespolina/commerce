@@ -46,7 +46,7 @@ class OrderManager implements OrderManagerInterface
     function  __construct(OrderGatewayInterface $gateway, array $classMapping, array $managerMapping, EventDispatcherInterface $eventDispatcher = null, $autoPersist = true)
     {
         $missingClasses = array();
-        foreach (array('cart', 'events', 'item', 'order') as $class) {
+        foreach (array('events', 'item', 'order') as $class) {
             $class = $class . 'Class';
             if (isset($classMapping[$class])) {
 
@@ -88,10 +88,8 @@ class OrderManager implements OrderManagerInterface
     /**
      * @inheritdoc
      */
-    public function addProductToOrder(OrderInterface $order, ProductInterface $product, array $options = null, $quantity = null, $combine = true)
+    public function addProductToOrder(OrderInterface $order, ProductInterface $product, array $options = null, $quantity = 1, $combine = true)
     {
-        $quantity = $quantity === null ? 1 : $quantity;
-
         $item = $this->doAddProductToOrder($order, $product, $options, $quantity, $combine);
 
         return $item;
@@ -356,30 +354,13 @@ class OrderManager implements OrderManagerInterface
 
     protected function initOrder(OrderInterface $order)
     {
-        $this->setPricing($order);
-
         // Set default state (for now we set it to "open"), do this last since it will persist and flush the cart
-        $cartClass = $this->cartClass;
+        $cartClass = $this->orderClass;
         $this->setOrderState($order, $cartClass::STATE_OPEN);
 
         //Delegate further initialization of the cart to those concerned
         $eventsClass = $this->eventsClass;
         $this->eventDispatcher->dispatch($eventsClass::INIT_ORDER, $this->eventDispatcher->createEvent($order));
-    }
-
-    /**
-     * Set the pricing for an order
-     *
-     * @param \Vespolina\Entity\Order\OrderInterface $cart
-     * @param \Vespolina\Entity\Pricing\PricingSetInterface $pricingSet
-     */
-    protected function setPricing(OrderInterface $order)
-    {
-        $pricing = $this->pricingManager->createPricing();
-        $rp = new \ReflectionProperty($order, 'pricingSet');
-        $rp->setAccessible(true);
-        $rp->setValue($order, $pricing);
-        $rp->setAccessible(false);
     }
 
     protected function doAddProductToOrder(OrderInterface $cart, ProductInterface $product, $options, $quantity, $combine = true)
@@ -416,10 +397,11 @@ class OrderManager implements OrderManagerInterface
         }
     }
 
-    protected function initOrderItem(ItemInterface $cartItem)
+    protected function initOrderItem(ItemInterface $item)
     {
-        if ($product = $cartItem->getProduct()) {
-            $cartItem->setName($product->getName());
+        if ($product = $item->getProduct()) {
+            $item->setName($product->getName());
+            $item->setPrice($product->getPrice());
         }
     }
 
