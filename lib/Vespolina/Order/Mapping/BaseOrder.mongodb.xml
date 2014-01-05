@@ -12,10 +12,11 @@
         <field name="updatedAt"      fieldName="updatedAt"      type="date" />
         <field name="attributes"     fieldName="attributes"     type="hash" strategy="set" />
 
-        <embed-many field="items" target-document="Vespolina\Entity\Order\Item" />
+        <embed-many field="items" target-document="Vespolina\Entity\Order\Item" strategy="set"/>
         <reference-one field="owner"
                        fieldName="owner"
-                       target-document="Vespolina\Entity\Partner\Partner">
+                       target-document="Vespolina\Entity\Partner\Partner"
+                >
             <cascade><all/></cascade>
         </reference-one>
     </mapped-superclass>

@@ -39,11 +39,12 @@ class OrderManager implements OrderManagerInterface
     protected $eventsClass;
     protected $gateway;
     protected $itemClass;
+    protected $localProcessing;
     protected $orderClass;
     /** @var  \Vespolina\Pricing\Manager\PricingManagerInterface */
     protected $pricingManager;
 
-    function  __construct(OrderGatewayInterface $gateway, array $classMapping, array $managerMapping, EventDispatcherInterface $eventDispatcher = null, $autoPersist = true)
+    function  __construct(OrderGatewayInterface $gateway, array $classMapping, array $managerMapping, EventDispatcherInterface $eventDispatcher = null, $autoPersist = true, $localProcessing = true)
     {
         $missingClasses = array();
         foreach (array('events', 'item', 'order') as $class) {
@@ -80,17 +81,18 @@ class OrderManager implements OrderManagerInterface
             $eventDispatcher = new NullDispatcher();
         }
 
-        $this->eventDispatcher = $eventDispatcher;
-        $this->gateway = $gateway;
         $this->autoPersist = $autoPersist;
+        $this->localProcessing = $localProcessing;
+        $this->gateway = $gateway;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
      * @inheritdoc
      */
-    public function addProductToOrder(OrderInterface $order, ProductInterface $product, array $options = null, $quantity = 1, $combine = true)
+    public function addProductToOrder(OrderInterface $order, ProductInterface $product, array $options = null, $quantity = 1, $combine = true, $defer = false)
     {
-        $item = $this->doAddProductToOrder($order, $product, $options, $quantity, $combine);
+        $item = $this->doAddProductToOrder($order, $product, $options, $quantity, $combine, $defer);
 
         return $item;
     }
@@ -186,8 +188,7 @@ class OrderManager implements OrderManagerInterface
     {
         $orderEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch($orderEvents::PRE_PROCESS_ORDER, $this->eventDispatcher->createEvent($order));
-        $this->updateOrderPricing($order, $context);
-        $this->updateOrder($order);
+        $this->updateOrderPrice($order, $context);
         $this->eventDispatcher->dispatch($orderEvents::POST_PROCESS_ORDER, $this->eventDispatcher->createEvent($order));
     }
 
@@ -267,8 +268,19 @@ class OrderManager implements OrderManagerInterface
         $this->gateway->updateOrder($order);
     }
 
-    public function updateOrderPricing(OrderInterface $order, PricingContextInterface $context = null)
+    public function updateOrderPrice(OrderInterface $order, PricingContextInterface $context = null)
     {
+        if ($this->localProcessing) {
+            $cartTotal = 0;
+            foreach($order->getItems() as $item) {
+                $price = $item->getPrice();
+                $subtotal = $price * $item->getQuantity();
+                $item->setPrice($subtotal, 'subtotal');
+                $cartTotal += $subtotal;
+            }
+            $order->setTotalPrice($cartTotal);
+        }
+
         $orderEvents = $this->eventsClass;
         $this->eventDispatcher->dispatch(
             $orderEvents::UPDATE_ORDER_PRICE,
@@ -363,26 +375,27 @@ class OrderManager implements OrderManagerInterface
         $this->eventDispatcher->dispatch($eventsClass::INIT_ORDER, $this->eventDispatcher->createEvent($order));
     }
 
-    protected function doAddProductToOrder(OrderInterface $cart, ProductInterface $product, $options, $quantity, $combine = true)
+    protected function doAddProductToOrder(OrderInterface $order, ProductInterface $product, $options, $quantity, $combine = true, $defer = false)
     {
-        if ($combine && $item = $this->findProductInOrder($cart, $product, $options)) {
+        if ($combine && $item = $this->findProductInOrder($order, $product, $options)) {
             $quantity = $item->getQuantity() + $quantity;
             $this->setItemQuantity($item, $quantity);
+            if (!$defer) {
+                $this->processOrder($order);
+            }
 
             return $item;
         }
 
         $item = $this->createItem($product, $options);
-        $this->setItemQuantity($item, $quantity);
-
-        // add item to cart
-        $rm = new \ReflectionMethod($cart, 'addItem');
-        $rm->setAccessible(true);
-        $rm->invokeArgs($cart, array($item));
-        $rm->setAccessible(false);
-
         $eventsClass = $this->eventsClass;
         $this->eventDispatcher->dispatch($eventsClass::INIT_ITEM, $this->eventDispatcher->createEvent($item));
+
+        $order->addItem($item);
+        $this->setItemQuantity($item, $quantity);
+        if (!$defer) {
+            $this->processOrder($order);
+        }
 
         return $item;
     }

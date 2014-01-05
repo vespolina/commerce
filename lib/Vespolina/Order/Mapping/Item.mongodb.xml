@@ -6,11 +6,11 @@
 
     <embedded-document name="Vespolina\Entity\Order\Item">
         <field name="name"           fieldName="name"           type="string" />
+        <field name="attributes"        fieldName="attributes"        type="hash" />
         <field name="options"        fieldName="options"        type="hash" />
         <field name="price"          fieldName="price"          type="hash" />
         <field name="quantity"       fieldName="quantity"       type="string" />
         <field name="state"          fieldName="state"          type="string" />
         <reference-one fieldName="product" field="product" />
-
     </embedded-document>
 </doctrine-mongo-mapping>

@@ -70,6 +70,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
         $product = new Product();
         $product->setName('test product');
+        $product->setPrice(10);
 
         $mgr->addProductToOrder($order, $product);
 
@@ -78,7 +79,10 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
         $item = $items[0];
         $this->assertSame($product, $item->getProduct());
         $this->assertSame(1, $item->getQuantity());
+        $this->assertSame(10, $item->getPrice());
+        $this->assertSame(10, $item->getPrice('subtotal'));
         $this->assertSame('test product', $item->getName());
+        $this->assertSame(10, $order->getPrice());
 
         // add the same product again to increase the quantity
         $existingItem = $mgr->addProductToOrder($order, $product);
@@ -86,6 +90,8 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
         $items = $order->getItems();
         $this->assertSame(1, count($items));
         $this->assertSame(2, $existingItem->getQuantity());
+        $this->assertSame(20, $item->getPrice('subtotal'));
+        $this->assertSame(20, $order->getPrice());
 
         //$this->assertSame(OrderEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a OrderEvents::UPDATE_ITEM event should be triggered');
         //$event = $mgr->getEventDispatcher()->getLastEvent();
@@ -94,6 +100,8 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
         // specifiy the quantity when adding a product to the order
         $mgr->addProductToOrder($order, $product, array(), 2);
         $this->assertSame(4, $existingItem->getQuantity(), 'passing the quantity should add to the existing quantity');
+        $this->assertSame(40, $item->getPrice('subtotal'));
+        $this->assertSame(40, $order->getPrice());
 
         //$this->assertSame(OrderEvents::UPDATE_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a OrderEvents::UPDATE_ITEM event should be triggered');
         //$event = $mgr->getEventDispatcher()->getLastEvent();
@@ -116,6 +124,11 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
         //$this->assertSame(OrderEvents::INIT_ITEM, $mgr->getEventDispatcher()->getLastEventName(), 'a OrderEvents::INIT_ITEM event should be triggered');
         //$event = $mgr->getEventDispatcher()->getLastEvent();
         //$this->assertInstanceOf('Vespolina\Entity\Order\ItemInterface', $event->getSubject());
+    }
+
+    public function testAddProductToOrderDeferred()
+    {
+        $this->markTestIncomplete('copy testAddProductToOrder, but throw defer flag');
     }
 
     public function testFindProductInOrder()
