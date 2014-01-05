@@ -184,6 +184,21 @@ class OrderManager implements OrderManagerInterface
         return null;
     }
 
+    public function isValidOpenOrder(OrderInterface $order = null, PartnerInterface $owner = null)
+    {
+        if (null == $order) {
+            return false;
+        }
+
+        if (null != $owner && $owner != $order->getOwner()) {
+            return false;
+        }
+
+        // todo: make sure order is still in a usable state
+
+        return true;
+    }
+
     public function processOrder(OrderInterface $order, PricingContextInterface $context = null)
     {
         $orderEvents = $this->eventsClass;
@@ -461,6 +476,5 @@ class OrderManager implements OrderManagerInterface
     public function clearOrder(OrderInterface $order)
     {
         $order->clearAttributes();
-
     }
 }
