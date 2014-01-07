@@ -4,15 +4,14 @@
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
-    <document name="Vespolina\Entity\Order\Order" collection="v_order">
+    <document name="Vespolina\Entity\Payment\Transaction" collection="v_transactions">
         <field name="id" id="true" />
-        <field name="expiresAt"      fieldName="expiresAt"      type="date" />
-        <field name="orderDate"    fieldName="orderDate" type="date" />
-        <reference-one field="transaction"
-                       fieldName="transaction"
-                       target-document="Vespolina\Entity\Payment\Transaction"
-                >
-            <cascade><all/></cascade>
-        </reference-one>
+
+        <field name="credit"       fieldName="credit"       type="float" />
+        <field name="debit"       fieldName="debit"       type="float" />
+        <field name="posted"      fieldName="posted"      type="date" />
+
+        <reference-one field="paymentProfile" />
+        <reference-one field="paymentRequest" target-document="Vespolina\Entity\Payment\PaymentRequest" />
     </document>
 </doctrine-mongo-mapping>
