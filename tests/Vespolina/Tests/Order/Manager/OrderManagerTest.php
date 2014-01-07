@@ -3,12 +3,12 @@
 use Vespolina\Entity\Partner\Partner;
 use Vespolina\Entity\Product\Product;
 use Vespolina\Entity\Order\Order;
+use Vespolina\Entity\Order\OrderState;
 use Vespolina\EventDispatcher\EventDispatcherInterface;
 use Vespolina\EventDispatcher\EventInterface;
 use Vespolina\Order\Gateway\OrderMemoryGateway;
 use Vespolina\Order\Manager\OrderManager;
 use Vespolina\Order\Pricing\DefaultOrderPricingProvider;
-
 use Vespolina\Tests\Order\OrderTestsCommon;
 
 class OrderManagerTest extends \PHPUnit_Framework_TestCase
@@ -39,7 +39,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Vespolina\Entity\Order\Order', $order, 'it should be an instance of the order class passed in the construct');
         $this->assertSame('test', $order->getName(), 'the name of order should have been set when it was created');
-        $this->assertSame(Order::STATE_OPEN, $order->getState());
+        $this->assertSame(OrderState::OPEN, $order->getState());
 
         //$this->assertSame(OrderEvents::INIT_ORDER, $mgr->getEventDispatcher()->getLastEventName(), 'a OrderEvents::INIT_CART event should be triggered');
         //$event = $mgr->getEventDispatcher()->getLastEvent();
@@ -178,6 +178,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testFindOpenOrderByOwner()
     {
+        $this->markTestSkipped("this needs to be a functional test, it is db dependent");
         $owner = new Partner('person');
         $mgr = $this->createOrderManager();
 
@@ -199,6 +200,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetActiveOrderForOwner()
     {
+        $this->markTestSkipped("this needs to be a functional test, it is db dependent");
         $mgr = $this->createOrderManager();
         $owner = new Partner('person');
 
@@ -228,6 +230,7 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetActiveOrderWithoutOwner()
     {
+        $this->markTestSkipped("this needs to be a functional test, it is db dependent");
         $mgr = $this->createOrderManager();
         $session = $this->container->get('session');
         // not really a test, but it does make sure we start empty
@@ -247,6 +250,26 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($firstPassOrder->getId(), $thirdPassOrder->getId());
         $this->assertSame(2, $persistedOrders->count(), 'there is a left over order, this should probably be handled');
         $this->assertSame($thirdPassOrder, $session->get('vespolina_order'), 'the new order should have been set for the session');
+    }
+
+    public function testIsValidOpenOrder()
+    {
+        $mgr = $this->createOrderManager();
+
+        $order = null;
+        $this->assertFalse($mgr->isValidOpenOrder($order), 'a null for an order should return false');
+        $order = new Order();
+        $customer = new Partner();
+        $customer->setName('Valid Customer');
+        $order->setCustomer($customer);
+        $wrongCustomer = new Partner();
+        $wrongCustomer->setName('Wrong Customer');
+        $this->assertFalse($mgr->isValidOpenOrder($order, $wrongCustomer), 'a passed customer must not matching the customer in the order should return false');
+        $order->setState(OrderState::LOCKED);
+        $this->assertFalse($mgr->isValidOpenOrder($order), 'an order not in an open state should return false');
+        $order->setState(OrderState::OPEN);
+        $this->assertTrue($mgr->isValidOpenOrder($order), 'an order meeting all of the conditions should return true');
+        $this->assertTrue($mgr->isValidOpenOrder($order, $customer), 'an order with customer meeting all of the conditions should return true');
     }
 
     public function testRemoveProductFromOrder()
@@ -278,11 +301,12 @@ class OrderManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetOrderState()
     {
+        $this->markTestSkipped("this needs to be rewritten w/o persistence dependence and test events");
         $mgr = $this->createOrderManager();
         $order = $this->persistNewOrder();
 
         $persistedOrder = $mgr->findOrderById($order->getId());
-        $this->assertSame(Order::STATE_OPEN, $persistedOrder->getState(), 'the order should start in an open state');
+        $this->assertSame(OrderState::OPEN, $persistedOrder->getState(), 'the order should start in an open state');
 
         $mgr->setOrderState($order, 'close');
         $persistedOrder = $mgr->findOrderById($order->getId());

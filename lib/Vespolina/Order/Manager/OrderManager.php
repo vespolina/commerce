@@ -10,6 +10,7 @@
 namespace Vespolina\Order\Manager;
 
 use Doctrine\ORM\QueryBuilder;
+use Vespolina\Entity\Order\OrderState;
 use Vespolina\Entity\Pricing\PricingContextInterface;
 use Vespolina\Entity\Order\Item;
 use Vespolina\Entity\Partner\PartnerInterface;
@@ -184,17 +185,19 @@ class OrderManager implements OrderManagerInterface
         return null;
     }
 
-    public function isValidOpenOrder(OrderInterface $order = null, PartnerInterface $owner = null)
+    public function isValidOpenOrder(OrderInterface $order = null, PartnerInterface $customer = null)
     {
         if (null == $order) {
             return false;
         }
 
-        if (null != $owner && $owner != $order->getOwner()) {
+        if (null != $customer && $customer != $order->getCustomer()) {
             return false;
         }
 
-        // todo: make sure order is still in a usable state
+        if ($order->getState() != OrderState::OPEN) {
+            return false;
+        }
 
         return true;
     }
@@ -235,15 +238,12 @@ class OrderManager implements OrderManagerInterface
     /**
      * @inheritdoc
      */
-    public function setOrderState(OrderInterface $cart, $state)
+    public function setOrderState(OrderInterface $order, $state)
     {
-        $rp = new \ReflectionProperty($cart, 'state');
-        $rp->setAccessible(true);
-        $rp->setValue($cart, $state);
-        $rp->setAccessible(false);
+        $order->setState($state);
 
         $eventsClass = $this->eventsClass;
-        $this->eventDispatcher->dispatch($eventsClass::UPDATE_ORDER_STATE, $this->eventDispatcher->createEvent($cart));
+        $this->eventDispatcher->dispatch($eventsClass::UPDATE_ORDER_STATE, $this->eventDispatcher->createEvent($order));
     }
 
     public function setItemQuantity(ItemInterface $item, $quantity)
@@ -382,8 +382,7 @@ class OrderManager implements OrderManagerInterface
     protected function initOrder(OrderInterface $order)
     {
         // Set default state (for now we set it to "open"), do this last since it will persist and flush the cart
-        $cartClass = $this->orderClass;
-        $this->setOrderState($order, $cartClass::STATE_OPEN);
+        $this->setOrderState($order, OrderState::OPEN);
 
         //Delegate further initialization of the cart to those concerned
         $eventsClass = $this->eventsClass;
