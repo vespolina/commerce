@@ -347,37 +347,33 @@ class ProductManager implements ProductManagerInterface
     /**
      * @inheritdoc
      */
-    function deleteOptionGroup(OptionGroupInterface $optionGroup, $andPersist = true)
+    function deleteOptionGroup(OptionGroupInterface $optionGroup, $andFlush = true)
     {
-        if ($andPersist) {
-            $this->doDeleteOptionGroup($optionGroup);
-        }
+        throw new \Exception('Method not implemented');
     }
 
     /**
      * @inheritdoc
      */
-    public function updateOptionGroup(OptionGroupInterface $optionGroup, $andPersist = true)
+    public function updateOptionGroup(OptionGroupInterface $optionGroup, $andFlush = true)
     {
-        if ($andPersist) {
-            $this->doUpdateOptionGroup($optionGroup);
-        }
+        throw new \Exception('Method not implemented');
     }
 
     /**
      * @inheritdoc
      */
-    public function deleteProduct(ProductInterface $product, $andPersist = true)
+    public function deleteProduct(ProductInterface $product, $andFlush = true)
     {
-        $this->resolveGateway($product)->deleteProduct($product);
+        $this->resolveGateway($product)->deleteProduct($product, $andFlush);
     }
 
     /**
      * @inheritdoc
      */
-    public function updateProduct(ProductInterface $product, $andPersist = true)
+    public function updateProduct(ProductInterface $product, $andFlush = true)
     {
-        $this->resolveGateway($product)->updateProduct($product);
+        $this->resolveGateway($product)->updateProduct($product, $andFlush);
     }
 
     public function resolveGateway(ProductInterface $product = null, $name = 'default')
@@ -388,21 +384,6 @@ class ProductManager implements ProductManagerInterface
 
         //Default fallback
         return $this->gateways[$name];
-    }
-
-    protected function doDeleteOptionGroup(OptionGroupInterface $merchandise)
-    {
-
-    }
-
-    protected function doFindProductBySlug($slug)
-    {
-
-    }
-
-    protected function doUpdateOptionGroup(OptionGroupInterface $optionGroup)
-    {
-
     }
 
     public function slugify($text)
