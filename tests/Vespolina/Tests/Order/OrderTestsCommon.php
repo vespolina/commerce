@@ -20,7 +20,9 @@ class OrderTestsCommon
     {
         $manager = self::getOrderManager();
         $order = $manager->createOrder();
-        $product = ProductTestsCommon::createProduct();
+        if (!$product) {
+            $product = ProductTestsCommon::createProduct();
+        }
         $manager->addProductToOrder($order, $product);
 
         return $order;
