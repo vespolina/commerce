@@ -38,7 +38,7 @@ class DefaultJMSPaymentProcess implements PaymentProcessInterface
         $paymentProfile = $billingRequest->getPaymentProfile();
 
         if (null !== $paymentProfile && $paymentProfile instanceof CreditCard) {
-            $totalValue = $billingRequest->getPricingSet()->get('totalValue');
+            $totalValue = $billingRequest->getPrice();
             $ex = new ExtendedData();
             $ex->set('cardId', $paymentProfile->getReference(), false, false);
 

@@ -20,7 +20,6 @@ use Molino\BaseQuery;
 use Vespolina\Entity\Order\OrderEvents;
 use Vespolina\Order\Gateway\OrderGatewayInterface;
 use Vespolina\Order\Manager\OrderManagerInterface;
-use Vespolina\Entity\Pricing\PricingSetInterface;
 use Vespolina\Entity\Order\Order;
 use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;

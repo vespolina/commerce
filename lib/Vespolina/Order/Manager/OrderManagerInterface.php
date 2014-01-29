@@ -13,7 +13,6 @@ use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Partner\PartnerInterface;
 use Vespolina\Entity\Product\ProductInterface;
-use Vespolina\Entity\Pricing\PricingSetInterface;
 
 interface OrderManagerInterface
 {

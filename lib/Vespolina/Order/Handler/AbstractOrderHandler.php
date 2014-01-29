@@ -11,7 +11,6 @@ namespace Vespolina\Order\Handler;
 
 use Vespolina\Order\Handler\CartHandlerInterface;
 use Vespolina\Entity\Order\ItemInterface;
-use Vespolina\Entity\Pricing\PricingSet;
 
 /**
  * This provides a default set of actions for the methods that can be used by any other CartHandler by extending this class
@@ -19,11 +18,6 @@ use Vespolina\Entity\Pricing\PricingSet;
 abstract class AbstractOrderHandler implements OrderHandlerInterface
 {
     protected $taxationManager;
-
-    public function createPricingSet()
-    {
-        return new PricingSet();
-    }
 
     public function determineCartItemPrices(ItemInterface $cartItem, $pricingContext)
     {

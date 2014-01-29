@@ -29,9 +29,7 @@ class DefaultOrderHandler extends  AbstractOrderHandler
 
     public function determineOrderItemPrices(ItemInterface $orderItem, $pricingContext)
     {
-        $pricing = $orderItem->getProduct()->getPricing();
-        $pricingSet = $orderItem->getPricing();
-        $unitNet = $pricing->get('unitPriceTotal');
+        $unitNet = $orderItem->getPrice('unitPriceTotal');
         $upChargeNet = 0;
 
         //Add additional upcharges for a chosen product option
@@ -43,8 +41,8 @@ class DefaultOrderHandler extends  AbstractOrderHandler
         }
 
         $totalNet = ( $orderItem->getQuantity() * $unitNet ) + $upChargeNet;
-        $pricingSet->set('upChargeNet', $upChargeNet);
-        $pricingSet->set('totalNet', $totalNet);
+        $orderItem->setPrice('upChargeNet', $upChargeNet);
+        $orderItem->setPrice('totalNet', $totalNet);
 
         //Determine item level taxes
         $taxationEnabled = $orderItem->getOrder()->getAttribute('taxation_enabled');
@@ -54,11 +52,10 @@ class DefaultOrderHandler extends  AbstractOrderHandler
             $this->determineOrderItemTaxes(
                     $orderItem,
                     array('totalNet' => $totalNet),
-                    $pricingSet,
                     $pricingContext);
         }
 
-        $pricingSet->set('totalGross', $pricingContext['totalNet'] + $pricingContext['totalTax']);
+        $orderItem->setPrice('totalGross', $pricingContext['totalNet'] + $pricingContext['totalTax']);
     }
 
     public function getTypes()
@@ -80,7 +77,7 @@ class DefaultOrderHandler extends  AbstractOrderHandler
         return $upCharge;
     }
 
-    protected function determineOrderItemTaxes(ItemInterface $orderItem, array $pricesToBeTaxed, $orderItemPricingSet, $pricingContext)
+    protected function determineOrderItemTaxes(ItemInterface $orderItem, array $pricesToBeTaxed, $pricingContext)
     {
 
         $rate = 0;
@@ -101,7 +98,7 @@ class DefaultOrderHandler extends  AbstractOrderHandler
             $taxValue = $rate * $value / 100;
             $totalTax += $taxValue;
         }
-        $orderItemPricingSet->set('totalTax', $totalTax);
+        $orderItem->setPrice('totalTax', $totalTax);
   }
 
     protected function determineOrderFulfillmentPrices(OrderInterface $order, $pricingContext)

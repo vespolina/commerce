@@ -50,7 +50,15 @@ class OrderGateway implements OrderGatewayInterface
      */
     public function findOrder(SelectQueryInterface $query)
     {
-        return $query->one();
+        $order = $query->one();
+        /*
+        $items = [];
+        foreach ($order->getItems() as $item) {
+            $items[] = $item;
+        }
+        $order->setItems($items);
+*/
+        return $order;
     }
 
     /**

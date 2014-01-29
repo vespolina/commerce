@@ -11,7 +11,6 @@ namespace Vespolina\Order\Pricing;
 
 use Vespolina\Order\Handler\OrderHandlerInterface;
 use Vespolina\Order\Pricing\OrderPricingProviderInterface;
-use Vespolina\Entity\Pricing\PricingSet;
 use Vespolina\Entity\Order\ItemInterface;
 
 /**
@@ -26,11 +25,6 @@ abstract class AbstractOrderPricingProvider implements OrderPricingProviderInter
     public function __construct()
     {
         $this->handlers = array();
-    }
-
-    public function createPricingSet()
-    {
-        return new PricingSet();
     }
 
     public function addOrderHandler(OrderHandlerInterface $handler)

@@ -13,7 +13,6 @@ use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Entity\Order\ItemInterface;
 use Vespolina\Entity\Pricing\PricingContext;
 use Vespolina\Entity\Pricing\PricingContextInterface;
-use Vespolina\Entity\Pricing\PricingSet;
 use Vespolina\Entity\ProductInterface;
 use Vespolina\Order\Handler\OrderHandlerInterface;
 use Vespolina\Order\Pricing\OrderPricingProviderInterface;
@@ -42,11 +41,6 @@ class DefaultOrderPricingProvider implements OrderPricingProviderInterface
             $pricingContext = new PricingContext();
         }
 
-        if (!$orderPricingSet = $order->getPricing()) {
-            $orderPricingSet = new PricingSet();
-            $order->setPricing($orderPricingSet);
-        }
-
         foreach ($order->getItems() as $item) {
             $this->determineOrderItemPrices($item, $pricingContext);
         }
@@ -57,12 +51,11 @@ class DefaultOrderPricingProvider implements OrderPricingProviderInterface
         // updating prices for each item
         foreach ($order->getItems() as $item) {
             // this is the total value since we want to capture any calculations that happen on a specific item
-            $itemsTotalNet += $item->getPricing()->get('netValue');
+            $itemsTotalNet += $item->getPrice('netValue');
         }
 
-        $orderPricingSet->set('totalNet', $itemsTotalNet);
-        $orderPricingSet->set('totalValue', $itemsTotalNet);
-
+        $order->setPrice('totalNet', $itemsTotalNet);
+        $order->setPrice('totalValue', $itemsTotalNet);
 
         // if pricing context has taxation enabled we calculate the taxes with the percentage set
         // example taxRates : 0.10 for 10%, 0.25 for 25%
@@ -74,21 +67,12 @@ class DefaultOrderPricingProvider implements OrderPricingProviderInterface
                     $paymentProfile = $partner->getPreferredPaymentProfile();
                     $rate = $this->taxProvider->getTaxByState($paymentProfile->getBillingState());
                     $totalTax = $itemsTotalNet * $rate;
-                    $orderPricingSet->set('taxRate', $rate);
-                    $orderPricingSet->set('taxes', $totalTax);
-                    $orderPricingSet->set('totalValue', $itemsTotalNet + $totalTax);
+                    $order->setPrice('taxRate', $rate);
+                    $order->setPrice('taxes', $totalTax);
+                    $order->setPrice('totalValue', $itemsTotalNet + $totalTax);
                 }
             }
         }
-
-        $orderPricingSet->setProcessingState(PricingSet::PROCESSING_FINISHED);
-    }
-
-    function createPricingSet()
-    {
-        $pricingSet = new PricingSet();
-
-        return $pricingSet;
     }
 
     function addOrderHandler(OrderHandlerInterface $handler)
@@ -97,8 +81,6 @@ class DefaultOrderPricingProvider implements OrderPricingProviderInterface
 
     function determineOrderItemPrices(ItemInterface $item, PricingContextInterface $pricingContext)
     {
-        $productPricing = $item->getProduct()->getPricing();
-        $itemPricing = $productPricing->process($pricingContext);
-        $item->setPricing($itemPricing);
+        throw new \Exception('not implemented');
     }
 }

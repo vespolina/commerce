@@ -22,11 +22,6 @@ use Vespolina\Order\Handler\OrderHandlerInterface;
 interface OrderPricingProviderInterface
 {
     /**
-     * Create a pricing set
-     */
-    function createPricingSet();
-
-    /**
      * Add a cart handler for a product to the pricing provider
      *
      * @param \Vespolina\Order\Handler\OrderHandlerInterface $handler

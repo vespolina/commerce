@@ -39,10 +39,7 @@ class OrderHandler implements EntityHandlerInterface
         //Collect items for which a recurring charge exists
         /** @var Item $item **/
         foreach ($entity->getItems() as $item) {
-            $pricingSet = $item->getPricing();
-            $pricingSet->getProcessed();
-
-            if ($pricingSet->get('recurringCharge')) {
+            if ($item->getPrice('recurringCharge')) {
 
                 $recurringItems[] = $item;
             }

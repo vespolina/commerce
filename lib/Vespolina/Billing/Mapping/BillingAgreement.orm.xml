@@ -17,6 +17,7 @@
         <field name="initialBillingDate" type="datetime" />
         <field name="numberCyclesBilled" type="integer" />
         <field name="updatedAt" type="datetime" />
+        <field name="price" type="array" />
 
         <one-to-one field="order" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="billingAgreements">
         </one-to-one>
@@ -25,14 +26,6 @@
         </many-to-one>
 
         <many-to-one field="paymentProfile" target-entity="Vespolina\Entity\Payment\PaymentProfile">
-        </many-to-one>
-
-        <many-to-one field="pricingSet" target-entity="Vespolina\Pricing\Entity\PricingSet">
-            <join-column name="pricingSet_id" referenced-column-name="id" />
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
         </many-to-one>
 
         <many-to-many field="orderItems" target-entity="Vespolina\Entity\Order\ItemInterface" inversed-by="billingAgreements">

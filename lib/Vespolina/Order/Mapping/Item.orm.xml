@@ -9,17 +9,11 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="name"       type="string"   nullable="true"/>
-        <field name="options"    type="array"    nullable="true"/>
+        <field name="name"       type="string"  nullable="true"/>
+        <field name="options"    type="array"   nullable="true"/>
+        <field name="price"      type="array"   nullable="true" />
         <field name="quantity"   type="integer" />
-        <field name="state"      type="string"   nullable="true"/>
-
-        <one-to-one field="pricingSet" target-entity="Vespolina\Entity\Pricing\PricingSetInterface">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-one>
+        <field name="state"      type="string"  nullable="true"/>
 
         <many-to-one field="product" target-entity="Vespolina\Entity\Product\ProductInterface" />
         <many-to-one field="parent" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="items" />

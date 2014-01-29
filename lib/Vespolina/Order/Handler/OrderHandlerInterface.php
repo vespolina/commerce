@@ -13,8 +13,6 @@ use Vespolina\Entity\Order\ItemInterface;
 
 interface OrderHandlerInterface
 {
-    function createPricingSet();
-
     function determineOrderItemPrices(ItemInterface $cartItem, $pricingContext);
 
     function getTypes();
