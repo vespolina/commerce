@@ -21,8 +21,8 @@ use Vespolina\Product\Gateway\ProductGatewayInterface;
 use Vespolina\Product\Handler\MerchandiseHandlerInterface;
 use Vespolina\Product\Handler\ProductHandlerInterface;
 use Vespolina\Product\Manager\ProductManagerInterface;
-use Vespolina\Product\Specification\FilterSpecification;
-use Vespolina\Product\Specification\IdSpecification;
+use Vespolina\Specification\FilterSpecification;
+use Vespolina\Specification\IdSpecification;
 use Vespolina\Specification\SpecificationInterface;
 
 /**
@@ -205,16 +205,15 @@ class ProductManager implements ProductManagerInterface
         return $merchandise;
     }
 
-    public function findAll(SpecificationInterface $specification) {
-
+    public function findAll(SpecificationInterface $specification)
+    {
         return $this->resolveGateway()->findAll($specification);
     }
 
-    public function findOne(SpecificationInterface $specification) {
-
+    public function findOne(SpecificationInterface $specification)
+    {
         return $this->resolveGateway()->findOne($specification);
     }
-
 
     public function findProductById($id)
     {
@@ -223,7 +222,7 @@ class ProductManager implements ProductManagerInterface
 
     public function findProductByIdentifier($name, $code)
     {
-
+        throw new \Exception('method not implemented');
     }
 
     public function findProductBySlug($slug)
