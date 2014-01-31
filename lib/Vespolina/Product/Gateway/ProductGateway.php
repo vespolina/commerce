@@ -26,7 +26,10 @@ abstract class ProductGateway implements ProductGatewayInterface
      */
     public function __construct($productClass, $gatewayName)
     {
-        if (!class_exists($productClass) || !in_array('Vespolina\Entity\Product\ProductInterface', class_implements($productClass))) {
+        if (!class_exists($productClass)) {
+            throw new InvalidInterfaceException($productClass. " doesn't exist. Maybe the namespace is wrong.");
+        }
+        if (!in_array('Vespolina\Entity\Product\ProductInterface', class_implements($productClass))) {
             throw new InvalidInterfaceException('Please have your product class implement Vespolina\Entity\Product\ProductInterface');
         }
         $this->productClass = $productClass;
