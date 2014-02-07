@@ -15,7 +15,7 @@ use Vespolina\Entity\Order\OrderInterface;
 use Vespolina\Order\Manager\OrderManagerInterface;
 
 /**
- * Handles advanced  order manipulations such as:
+ * Handles advanced order manipulations such as:
  *  - create an order from a cart
  *
  * @author Daniel Kucharski <daniel@xerias.be>
@@ -32,10 +32,10 @@ class OrderManipulator
     public function createOrderFromCart(OrderInterface $cart) {
 
         $order = $this->orderManager->createOrder();
-        $order->setOwner($cart->getOwner());
+        $order->setCustomer($cart->getCustomer());
         $order->setOrderDate(new \DateTime());
         $this->orderManager->setOrderState($order, 'unprocessed');
-        $order->setPricing($cart->getPricing());    //TODO: order pricing should be independent from a cart
+        // $order->setPrices($cart->getPrices());    //TODO: order pricing should be independent from a cart
 
         // Copy the (sales) channel if it is provided
         if (null != $cart->getChannel()) {
