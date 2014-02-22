@@ -14,8 +14,6 @@
         <field name="createdAt" fieldName="createdAt" type="date" />
         <field name="updatedAt" fieldName="updatedAt" type="date" />
 
-        <reference-many field="brands" target-document="Vespolina\Entity\Brand\Brand" />
-
         <embed-many
                 target-document="Vespolina\Entity\Product\Attribute"
                 field="attributes"
@@ -34,6 +32,17 @@
                 target-document="Vespolina\Entity\Taxonomy\TaxonomyNode"
                 field="taxonomies"
                 fieldName="taxonomies"
+                strategy="set"
+                />
+
+        <reference-many
+                field="brands"
+                target-document="Vespolina\Entity\Brand\Brand"
+                />
+
+        <reference-many
+                field="variations"
+                fieldName="variations"
                 strategy="set"
                 />
 
