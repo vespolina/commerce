@@ -24,6 +24,12 @@
                 />
 
         <embed-many
+                field="identifiers"
+                fieldName="identifiers"
+                strategy="set"
+                />
+
+        <embed-many
                 target-document="Vespolina\Entity\Product\OptionGroup"
                 field="optionGroups"
                 fieldName="optionGroups"
