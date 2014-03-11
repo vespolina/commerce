@@ -27,48 +27,6 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
     protected $taxonomyRootNode;
     protected $taxonomyNodes;
 
-    protected function createProducts($max = 10)
-    {
-        $manager = $this->getProductManager();
-        $products = array();
-
-        for ($i = 0; $i < $max; $i++) {
-            $product = $manager->createProduct();
-            $product->setName('product' . $i);
-
-            //Attach each product to all known taxonomy nodes
-            foreach ($this->taxonomyNodes as $node) {
-                $product->addTaxonomy($node);
-            }
-            $products[] = $product;
-        }
-
-        return $products;
-    }
-
-    protected function setUp()
-    {
-        $this->setupTaxonomyNodes();
-    }
-
-
-    protected function setupTaxonomyNodes()
-    {
-        $taxonomyManager = $this->getTaxonomyManager();
-        $this->taxonomyNodes = $taxonomyManager->matchAll(new TaxonomyNodeSpecification());
-
-        if (null == $this->taxonomyNodes || count($this->taxonomyNodes) == 0) {
-
-            $node1 = $taxonomyManager->createTaxonomyNode('category1', $this->taxonomyRootNode);
-            $node2 = $taxonomyManager->createTaxonomyNode('category2', $this->taxonomyRootNode);
-            $taxonomyManager->updateTaxonomyNode($node1);
-            $taxonomyManager->updateTaxonomyNode($node2);
-
-            $this->taxonomyGateway->flush();
-            $this->taxonomyNodes = array($node1, $node2);
-        }
-    }
-
     public function testCreateAndFindProducts()
     {
         $products = $this->createProducts(10);
@@ -149,6 +107,44 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $count);
     }
 
+    public function testPersistence()
+    {
+        $productData = [
+            'Name' => 'Product Name',
+        ];
+        $manager = $this->getProductManager();
+        $product = $manager->createProduct();
+        foreach ($productData as $name => $data) {
+            $method = 'set' . $name;
+            $product->$method($data);
+        }
+        // variations
+
+        $this->productGateway->updateProduct($product, false);
+
+        $this->productGateway->flush();
+
+    }
+
+    protected function createProducts($max = 10)
+    {
+        $manager = $this->getProductManager();
+        $products = array();
+
+        for ($i = 0; $i < $max; $i++) {
+            $product = $manager->createProduct();
+            $product->setName('product' . $i);
+
+            //Attach each product to all known taxonomy nodes
+            foreach ($this->taxonomyNodes as $node) {
+                $product->addTaxonomy($node);
+            }
+            $products[] = $product;
+        }
+
+        return $products;
+    }
+
     protected function createAndPersistProducts($count = 10)
     {
         $products = $this->createProducts($count);
@@ -184,5 +180,27 @@ abstract class ProductGatewayTestCommon extends \PHPUnit_Framework_TestCase
         }
 
         return $this->taxonomyManager;
+    }
+
+    protected function setUp()
+    {
+        $this->setupTaxonomyNodes();
+    }
+
+    protected function setupTaxonomyNodes()
+    {
+        $taxonomyManager = $this->getTaxonomyManager();
+        $this->taxonomyNodes = $taxonomyManager->matchAll(new TaxonomyNodeSpecification());
+
+        if (null == $this->taxonomyNodes || count($this->taxonomyNodes) == 0) {
+
+            $node1 = $taxonomyManager->createTaxonomyNode('category1', $this->taxonomyRootNode);
+            $node2 = $taxonomyManager->createTaxonomyNode('category2', $this->taxonomyRootNode);
+            $taxonomyManager->updateTaxonomyNode($node1);
+            $taxonomyManager->updateTaxonomyNode($node2);
+
+            $this->taxonomyGateway->flush();
+            $this->taxonomyNodes = array($node1, $node2);
+        }
     }
 }
