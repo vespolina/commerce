@@ -44,6 +44,13 @@ class BaseSpecification
         return $this->operands;
     }
 
+    public function withHydration($value)
+    {
+        $this->addOperand(new HydrationSpecification($value));
+
+        return $this;
+    }
+
     protected function addOperand(SpecificationInterface $spec)
     {
         $this->operands[] = $spec;
