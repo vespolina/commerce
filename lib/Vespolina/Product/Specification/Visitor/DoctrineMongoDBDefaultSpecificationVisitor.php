@@ -19,12 +19,13 @@ use Vespolina\Specification\Visitor\BaseDoctrineMongoDBDefaultSpecificationVisit
 class DoctrineMongoDBDefaultSpecificationVisitor extends BaseDoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitorInterface
 {
     protected $methods = array(
-        'AndSpecification' => 'visitAnd',
-        'BrandSpecification' => 'visitBrand',
-        'FilterSpecification' => 'visitFilter',
-        'IdSpecification'   => 'visitId',
-        'PriceSpecification' => 'visitPrice',
-        'ProductSpecification' => 'visitProduct',
+        'AndSpecification'          => 'visitAnd',
+        'BrandSpecification'        => 'visitBrand',
+        'FilterSpecification'       => 'visitFilter',
+        'IdSpecification'           => 'visitId',
+        'HydrationSpecification'    => 'visitHydration',
+        'PriceSpecification'        => 'visitPrice',
+        'ProductSpecification'      => 'visitProduct',
         'TaxonomyNodeSpecification' => 'visitTaxonomyNode',
     );
 

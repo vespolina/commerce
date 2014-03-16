@@ -16,9 +16,9 @@ use Vespolina\Specification\SpecificationWalker;
 class BaseDoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVisitorInterface
 {
     protected $methods = array(
-        'AndSpecification' => 'visitAnd',
-        'FilterSpecification' => 'visitFilter',
-        'IdSpecification'   => 'visitId',
+        'AndSpecification'      => 'visitAnd',
+        'FilterSpecification'   => 'visitFilter',
+        'IdSpecification'       => 'visitId',
     );
 
     protected $filterMap = array(
@@ -48,6 +48,11 @@ class BaseDoctrineMongoDBDefaultSpecificationVisitor implements SpecificationVis
     {
         $mappedOperator = $this->filterMap[$specification->getOperator()];
         $query->field($specification->getField())->$mappedOperator($specification->getValue());
+    }
+
+    public function visitHydration(SpecificationInterface $specification, SpecificationWalker $walker, $query)
+    {
+        $query->hydrate($specification->getValue());
     }
 
     protected function generateParameterId()
