@@ -56,9 +56,9 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
     /**
      * @inheritdoc
      */
-    public function flush()
+    public function flush(ProductInterface $product = null)
     {
-        $this->dm->flush();
+        $this->dm->flush($product);
     }
 
     /**
@@ -79,7 +79,7 @@ class ProductDoctrineMongoDBGateway extends ProductGateway
     {
         $this->dm->persist($product);
         if ($andFlush) {
-            $this->flush();
+            $this->flush($product);
         }
     }
 

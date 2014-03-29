@@ -6,13 +6,13 @@
 
     <mapped-superclass name="Vespolina\Entity\Product\BaseProduct">
         <field name="id" id="true" />
-        <field name="descriptions" fieldName="descriptions" type="hash" />
-        <field name="name" fieldName="name" type="string" />
-        <field name="price"         fieldName="price"         type="hash" />
-        <field name="slug" fieldName="slug" type="string" />
-        <field name="type" fieldName="type" type="int" />
-        <field name="createdAt" fieldName="createdAt" type="date" />
-        <field name="updatedAt" fieldName="updatedAt" type="date" />
+        <field name="descriptions"  fieldName="descriptions"    type="hash" />
+        <field name="name"          fieldName="name"            type="string" />
+        <field name="prices"        fieldName="prices"          type="hash" />
+        <field name="slug"          fieldName="slug"            type="string" />
+        <field name="type"          fieldName="type"            type="int" />
+        <field name="createdAt"     fieldName="createdAt"       type="date" />
+        <field name="updatedAt"     fieldName="updatedAt"       type="date" />
 
         <embed-many
                 target-document="Vespolina\Entity\Product\Attribute"
