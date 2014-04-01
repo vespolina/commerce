@@ -7,7 +7,7 @@
     <mapped-superclass name="Vespolina\Entity\Order\BaseOrder" table="vespolina_base_order">
         <field name="attributes"  type="array"      nullable="true" />
         <field name="state"       type="string" />
-        <field name="price"       type="array"      nullable="true" />
+        <field name="prices"      type="array"      nullable="true" />
         <field name="createdAt"   type="datetime"   nullable="true"/>
         <field name="expiresAt"   type="datetime"   nullable="true" />
         <field name="updatedAt"   type="date"       nullable="true"/>

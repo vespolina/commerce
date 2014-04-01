@@ -17,7 +17,7 @@
         <field name="initialBillingDate" type="datetime" />
         <field name="numberCyclesBilled" type="integer" />
         <field name="updatedAt" type="datetime" />
-        <field name="price" type="array" />
+        <field name="prices" type="array" />
 
         <one-to-one field="order" target-entity="Vespolina\Entity\Order\OrderInterface" inversed-by="billingAgreements">
         </one-to-one>

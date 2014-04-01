@@ -11,7 +11,7 @@
 
         <field name="name"       type="string"  nullable="true"/>
         <field name="options"    type="array"   nullable="true"/>
-        <field name="price"      type="array"   nullable="true" />
+        <field name="prices"     type="array"   nullable="true" />
         <field name="quantity"   type="integer" />
         <field name="state"      type="string"  nullable="true"/>
 

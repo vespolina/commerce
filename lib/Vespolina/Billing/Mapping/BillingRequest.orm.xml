@@ -14,7 +14,7 @@
         <field name="initialBillingDate"    type="datetime" />
         <field name="periodStartDate"       type="datetime" />
         <field name="periodEndDate"         type="datetime" />
-        <field name="price"                 type="array" nullable="true" />
+        <field name="prices"                type="array" nullable="true" />
         <field name="state"                 type="string" />
         <field name="updatedAt"             type="datetime" />
 

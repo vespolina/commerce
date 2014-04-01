@@ -7,9 +7,10 @@
     <document name="Vespolina\Entity\Payment\Transaction" collection="v_transactions">
         <field name="id" id="true" />
 
-        <field name="credit"       fieldName="credit"       type="float" />
-        <field name="debit"       fieldName="debit"       type="float" />
-        <field name="posted"      fieldName="posted"      type="date" />
+        <field name="credit"        fieldName="credit"      type="float" />
+        <field name="debit"         fieldName="debit"       type="float" />
+        <field name="posted"        fieldName="posted"      type="date" />
+        <field name="reference"     fieldName="reference"   type="string" />
 
         <reference-one field="paymentProfile" />
         <reference-one field="paymentRequest" target-document="Vespolina\Entity\Payment\PaymentRequest" />
