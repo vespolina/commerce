@@ -44,6 +44,11 @@
                 />
 
         <reference-many
+                field="variations"
+                fieldName="variations"
+                />
+
+        <reference-many
                 field="brands"
                 target-document="Vespolina\Entity\Brand\Brand"
                 />
