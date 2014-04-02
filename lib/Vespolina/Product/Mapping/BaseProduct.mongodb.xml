@@ -44,8 +44,8 @@
                 />
 
         <reference-many
-                field="variations"
-                fieldName="variations"
+                field="assets"
+                fieldName="assets"
                 />
 
         <reference-many
