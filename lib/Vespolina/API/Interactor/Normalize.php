@@ -1,24 +1,31 @@
 <?php
 
-namespace Vespolina\API\Interactor;
+namespace Vespolina\Api\Interactor;
 
-/**
- * Class Serialize
- * @package Vespolina\API\Interactor
- */
-class Serialize 
+class Normalize
 {
-    protected $serializer;
-
-    public function __construct($serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
     public function process($data)
     {
-        if (is_object($data)) {
-            $this->serializer->
+        foreach ($data as $key => $value) {
+            if ($key === 'prices') {
+                $data[$key] = $this->handleTypeValues($value);
+                continue;
+            }
+            if (is_array($value)) {
+                $data[$key] = $this->process($value);
+            }
         }
+
+        return $data;
+    }
+
+    protected function handleTypeValues($data)
+    {
+        $response = [];
+        foreach ($data as $set) {
+            $response[$set['type']] = $set['value'];
+        }
+
+        return $response;
     }
 } 
