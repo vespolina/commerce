@@ -427,7 +427,7 @@ class OrderManager implements OrderManagerInterface
     {
         if ($product = $item->getProduct()) {
             $item->setName($product->getName());
-            $item->setPrice($product->getPrice());
+            $item->setPrices($product->getPrices());
         }
     }
 
