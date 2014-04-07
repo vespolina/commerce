@@ -22,8 +22,7 @@
         "doctrine/mongodb-odm": "*",
         "doctrine/orm" : "*",
         "gedmo/doctrine-extensions": "*",
-        "jackalope/jackalope-doctrine-dbal": "1.0.*",
-        "vespolina/media": "*"
+        "jackalope/jackalope-doctrine-dbal": "1.0.*"
     },
     "minimum-stability": "dev",
     "autoload": {
