@@ -5,6 +5,9 @@ namespace Vespolina\Brand\Manager;
 use Vespolina\Brand\Gateway\BrandGatewayInterface;
 use Vespolina\Entity\Brand\BrandInterface;
 
+use Vespolina\Specification\SpecificationInterface;
+
+
 class BrandManager 
 {
     protected $gateway;
@@ -12,6 +15,11 @@ class BrandManager
     public function __construct(BrandGatewayInterface $gateway)
     {
         $this->gateway = $gateway;
+    }
+
+    public function findAll(SpecificationInterface $specification)
+    {
+        return $this->gateway->findAll($specification);
     }
 
     /**
