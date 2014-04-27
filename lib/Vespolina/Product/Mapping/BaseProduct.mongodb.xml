@@ -36,7 +36,7 @@
                 strategy="set"
                 />
 
-        <embed-many
+        <reference-many
                 target-document="Vespolina\Entity\Taxonomy\TaxonomyNode"
                 field="taxonomies"
                 fieldName="taxonomies"
