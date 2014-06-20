@@ -158,7 +158,7 @@ class ProductManager implements ProductManagerInterface
         $optionClass = $this->getOptionClass();
         $option = new $optionClass;
         $option->setType($type);
-        $option->setValue($value);
+        $option->setIndex($value);
 
         return $option;
     }
