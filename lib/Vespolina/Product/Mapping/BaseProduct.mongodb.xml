@@ -36,7 +36,7 @@
                 strategy="set"
                 />
 
-        <embed-many
+        <reference-many
                 target-document="Vespolina\Entity\Taxonomy\TaxonomyNode"
                 field="taxonomies"
                 fieldName="taxonomies"
@@ -57,7 +57,11 @@
                 field="variations"
                 fieldName="variations"
                 strategy="set"
-                />
+                >
+            <cascade>
+                <all/>
+            </cascade>
+        </reference-many>
 
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />
