@@ -57,7 +57,11 @@
                 field="variations"
                 fieldName="variations"
                 strategy="set"
-                />
+                >
+            <cascade>
+                <all/>
+            </cascade>
+        </reference-many>
 
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="autoSetCreatedAt" />

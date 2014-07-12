@@ -5,10 +5,9 @@
                         http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
 
     <embedded-document name="Vespolina\Entity\Product\OptionGroup">
-        <field name="id" id="true" />
-        <field name="name" fieldName="name" type="string" />
-        <field name="display" fieldName="display" type="string" />
-
-        <!--<embed-many target-document="Vespolina\ProductBundle\Document\Option" field="options" fieldName="options" />-->
+        <field name="display"   fieldName="display"     type="string" />
+        <field name="required"  fieldName="required"    type="boolean" />
+        <field name="type"      fieldName="type"        type="string" />
+        <embed-many field="options" fieldName="options" />
     </embedded-document>
 </doctrine-mongo-mapping>
