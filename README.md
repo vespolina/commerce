@@ -23,7 +23,7 @@ Pull requests are welcome. Please see our
 guide.
 
 Unit and/or functional tests exist for this library. See the
-[Testing documentation]((http://vespolina.org/contributing/testing)
+[Testing documentation](http://vespolina.org/contributing/testing)
 for a guide to running the tests.
 
 Thanks to
